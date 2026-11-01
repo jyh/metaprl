@@ -1,0 +1,954 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir3/whole_slice_wf";;
+# /vir/vir3/whole_slice_wf : string
+=== STEP 2 [ok] 0.01s :: refine (rw (sweepDnC unfold_whole_slice) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ WireBuf
+====
+[1m[m<Γ> [1m⊢[m wholeSlice(b) ∈ Slice
+
+[1mBY [m(rw (sweepDnC unfold_whole_slice) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 2: 
+=== STEP 3 [ok] 0.00s :: cd "/vir/vir3/validframe_type";;
+# /vir/vir3/validframe_type : string
+=== STEP 4 [ok] 0.00s :: refine (rw (sweepDnC unfold_validframe) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m ValidFrame Type
+
+[1mBY [m(rw (sweepDnC unfold_validframe) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 4: 
+=== STEP 5 [ok] 0.00s :: cd "/vir/vir3/validframe_wirebuf";;
+# /vir/vir3/validframe_wirebuf : string
+=== STEP 6 [ok] 0.00s :: refine (genT << 'b in validframe >> thenLT [autoT; rw (sweepDnC unfold_validframe) (-1) thenT dT (-1) thenT autoT]);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+====
+[1m[m<Γ> [1m⊢[m b ∈ WireBuf
+
+[1mBY [m(genT << 'b in validframe >> thenLT [autoT; rw (sweepDnC unfold_validframe) (-1) thenT dT (-1) thenT autoT])
+
+() : unit
+=== CHILDREN 6: 
+=== STEP 7 [ok] 0.00s :: cd "/vir/vir3/frame_sender_wf";;
+# /vir/vir3/frame_sender_wf : string
+=== STEP 8 [ok] 0.00s :: refine (rw (sweepDnC unfold_frame_sender) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ WireBuf
+====
+[1m[m<Γ> [1m⊢[m frame_sender(b) ∈ int
+
+[1mBY [m(rw (sweepDnC unfold_frame_sender) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 8: 
+=== STEP 9 [ok] 0.00s :: cd "/vir/vir3/frame_topic_wf";;
+# /vir/vir3/frame_topic_wf : string
+=== STEP 10 [ok] 0.00s :: refine (rw (sweepDnC unfold_frame_topic) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ WireBuf
+====
+[1m[m<Γ> [1m⊢[m frame_topic(b) ∈ int
+
+[1mBY [m(rw (sweepDnC unfold_frame_topic) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 10: 
+=== STEP 11 [ok] 0.00s :: cd "/vir/vir3/isrouted_type";;
+# /vir/vir3/isrouted_type : string
+=== STEP 12 [ok] 0.00s :: refine (rw (sweepDnC unfold_isrouted) 0 thenT genT << 'o in vresult >> thenLT [autoT; rw (sweepDnC unfold_vresult) (-1) thenT autoT]);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m o ∈ Result
+====
+[1m[m<Γ> [1m⊢[m IsRouted(o) Type
+
+[1mBY [m(rw (sweepDnC unfold_isrouted) 0 thenT genT << 'o in vresult >> thenLT [autoT; rw (sweepDnC unfold_vresult) (-1) thenT autoT])
+
+() : unit
+=== CHILDREN 12: 
+=== STEP 13 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe";;
+# /vir/vir3/route_acl_safe : string
+=== STEP 14 [ok] 0.00s :: refine (assumT 3 thenT moveToConclT (-1) thenT genT << 'b in validframe >>);;
+# [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m[m<Γ> [1m⊢[m ↑can_access(frame_sender(b), frame_topic(b))
+
+[1mBY [m(assumT 3 thenT moveToConclT (-1) thenT genT << 'b in validframe >>)
+
+[1m1. [[1m?[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+[1m2. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: ValidFrame
+   [1m⊢[m IsRouted(F2(wholeSlice(vv), st))
+     ═⇒ ↑can_access(frame_sender(vv), frame_topic(vv))
+[1m====[m
+[1m3. [1m?[m[m
+   ....wf....
+   [1m[m<Γ> [1m⊢[m ValidFrame Type
+
+[1m====[m
+[1m4. [1m?[m[m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: ValidFrame
+   [1m⊢[m ∀st:Top
+        (IsRouted(F2(wholeSlice(b), st))
+         ═⇒ ↑can_access(frame_sender(b), frame_topic(b)))
+
+() : unit
+=== CHILDREN 14: assertion main
+=== STEP 15 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2 : string
+=== STEP 16 [ok] 0.00s :: refine (rw (sweepDnC unfold_validframe) 2);;
+# [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: ValidFrame
+[1m⊢[m IsRouted(F2(wholeSlice(vv), st))
+  ═⇒ ↑can_access(frame_sender(vv), frame_topic(vv))
+
+[1mBY [m(rw (sweepDnC unfold_validframe) 2)
+
+[1m1. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv:
+      {b:WireBuf |
+       (len(wholeSlice(b))≥24) ∧ read_u32{wholeSlice(b); 0; v. v} = MAGIC ∈ int}
+   [1m⊢[m IsRouted(F2(wholeSlice(vv), st))
+     ═⇒ ↑can_access(frame_sender(vv), frame_topic(vv))
+() : unit
+=== CHILDREN 16: main
+=== STEP 17 [ok] 0.00s :: cd "1";;
+# /vir/vir3/route_acl_safe/2/1 : string
+=== STEP 18 [ok] 0.00s :: refine (dT 2);;
+# [1m?[m [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv:
+   {b:WireBuf |
+    (len(wholeSlice(b))≥24) ∧ read_u32{wholeSlice(b); 0; v. v} = MAGIC ∈ int}
+[1m⊢[m IsRouted(F2(wholeSlice(vv), st))
+  ═⇒ ↑can_access(frame_sender(vv), frame_topic(vv))
+
+[1mBY [m(dT 2)
+
+[1m1. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m
+   [1m⊢[m IsRouted(F2(wholeSlice(vv), st))
+     ═⇒ ↑can_access(frame_sender(vv), frame_topic(vv))
+() : unit
+=== CHILDREN 18: main
+=== STEP 19 [ok] 0.00s :: cd "1";;
+# /vir/vir3/route_acl_safe/2/1/1 : string
+=== STEP 20 [ok] 0.00s :: refine (assumT 2 thenT dT 0);;
+# [1m?[m [1m?[m [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m
+[1m⊢[m IsRouted(F2(wholeSlice(vv), st))
+  ═⇒ ↑can_access(frame_sender(vv), frame_topic(vv))
+
+[1mBY [m(assumT 2 thenT dT 0)
+
+[1m1. [[1m?[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State
+   [1m⊢[m IsRouted(F2(wholeSlice(vv), st)) Type
+[1m2. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [mIsRouted(F2(wholeSlice(vv), st))
+   [1m⊢[m ↑can_access(frame_sender(vv), frame_topic(vv))
+() : unit
+=== CHILDREN 20: wf main
+=== STEP 21 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2/1/1/2 : string
+=== STEP 22 [ok] 0.00s :: refine (rw (repeatC (higherC (unfold_isrouted orelseC unfold_vir_F2 orelseC unfold_vguard orelseC unfold_vdrop orelseC unfold_read_u32 orelseC unfold_whole_slice))) 5);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [mIsRouted(F2(wholeSlice(vv), st))
+[1m⊢[m ↑can_access(frame_sender(vv), frame_topic(vv))
+
+[1mBY [m(rw (repeatC (higherC (unfold_isrouted orelseC unfold_vir_F2 orelseC unfold_vguard orelseC unfold_vdrop orelseC unfold_read_u32 orelseC unfold_whole_slice))) 5)
+
+[1m1. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m (if len((vv,0)) ≥⒝ 24 then
+                 (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+                     ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                        ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+                     let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+                     (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                         ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                         advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                         take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                         return{(st2,q)}}}
+                      else
+                         inr ERR_BAD_PAYLOAD)}
+                  else
+                     inr ERR_UNAUTHORIZED_OR_RATE_LIMITED)
+              else
+                 inr ERR_TRUNCATED_FRAME) [1mwith[m
+          inl x -> true
+        | inr y -> false
+   [1m⊢[m ↑can_access(frame_sender(vv), frame_topic(vv))
+() : unit
+=== CHILDREN 22: main
+=== STEP 23 [ok] 0.00s :: cd "1";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1 : string
+=== STEP 24 [ok] 0.00s :: refine (rw (repeatC (higherC (unfold_frame_sender orelseC unfold_frame_topic orelseC unfold_read_u32 orelseC unfold_whole_slice))) 0);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m (if len((vv,0)) ≥⒝ 24 then
+              (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+                  ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                     ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+                  let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+                  (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                      ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                      advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                      take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                      return{(st2,q)}}}
+                   else
+                      inr ERR_BAD_PAYLOAD)}
+               else
+                  inr ERR_UNAUTHORIZED_OR_RATE_LIMITED)
+           else
+              inr ERR_TRUNCATED_FRAME) [1mwith[m
+       inl x -> true
+     | inr y -> false
+[1m⊢[m ↑can_access(frame_sender(vv), frame_topic(vv))
+
+[1mBY [m(rw (repeatC (higherC (unfold_frame_sender orelseC unfold_frame_topic orelseC unfold_read_u32 orelseC unfold_whole_slice))) 0)
+
+[1m1. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m (if len((vv,0)) ≥⒝ 24 then
+                 (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+                     ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                        ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+                     let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+                     (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                         ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                         advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                         take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                         return{(st2,q)}}}
+                      else
+                         inr ERR_BAD_PAYLOAD)}
+                  else
+                     inr ERR_UNAUTHORIZED_OR_RATE_LIMITED)
+              else
+                 inr ERR_TRUNCATED_FRAME) [1mwith[m
+          inl x -> true
+        | inr y -> false
+   [1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+() : unit
+=== CHILDREN 24: main
+=== STEP 25 [ok] 0.00s :: cd "1";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1 : string
+=== STEP 26 [ok] 0.00s :: refine (splitITE 5);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m (if len((vv,0)) ≥⒝ 24 then
+              (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+                  ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                     ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+                  let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+                  (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                      ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                      advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                      take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                      return{(st2,q)}}}
+                   else
+                      inr ERR_BAD_PAYLOAD)}
+               else
+                  inr ERR_UNAUTHORIZED_OR_RATE_LIMITED)
+           else
+              inr ERR_TRUNCATED_FRAME) [1mwith[m
+       inl x -> true
+     | inr y -> false
+[1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+
+[1mBY [m(splitITE 5)
+
+[1m1. [[1m?[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m (if len((vv,0)) ≥⒝ 24 then
+                 (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+                     ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                        ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+                     let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+                     (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                         ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                         advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                         take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                         return{(st2,q)}}}
+                      else
+                         inr ERR_BAD_PAYLOAD)}
+                  else
+                     inr ERR_UNAUTHORIZED_OR_RATE_LIMITED)
+              else
+                 inr ERR_TRUNCATED_FRAME) [1mwith[m
+          inl x -> true
+        | inr y -> false
+   [1m⊢[m (len((vv,0)) ≥⒝ 24) ∈ Bool
+[1m2. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+                 ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                    ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+                 let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+                 (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                     ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                     advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                     take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                     return{(st2,q)}}}
+                  else
+                     inr ERR_BAD_PAYLOAD)}
+              else
+                 inr ERR_UNAUTHORIZED_OR_RATE_LIMITED) [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   6. [m↑(len((vv,0)) ≥⒝ 24)
+   [1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+[1m3. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m inr ERR_TRUNCATED_FRAME [1mwith[m inl x -> true | inr y -> false[1m
+   6. [m↑(¬⒝(len((vv,0)) ≥⒝ 24))
+   [1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+() : unit
+=== CHILDREN 26: wf main main
+=== STEP 27 [ok] 0.00s :: cd "3";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/3 : string
+=== STEP 28 [ok] 0.00s :: refine (rw (higherC reduceDecideInr) 5 thenT dT 5);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m inr ERR_TRUNCATED_FRAME [1mwith[m inl x -> true | inr y -> false[1m
+6. [m↑(¬⒝(len((vv,0)) ≥⒝ 24))
+[1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+
+[1mBY [m(rw (higherC reduceDecideInr) 5 thenT dT 5)
+
+() : unit
+=== CHILDREN 28: 
+=== STEP 29 [ok] 0.00s :: cd "../2";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/2 : string
+=== STEP 30 [ok] 0.00s :: refine (splitITE 5);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+              ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                 ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+              let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+              (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                  ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                  advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                  take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                  return{(st2,q)}}}
+               else
+                  inr ERR_BAD_PAYLOAD)}
+           else
+              inr ERR_UNAUTHORIZED_OR_RATE_LIMITED) [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+6. [m↑(len((vv,0)) ≥⒝ 24)
+[1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+
+[1mBY [m(splitITE 5)
+
+[1m1. [[1m?[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+                 ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                    ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+                 let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+                 (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                     ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                     advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                     take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                     return{(st2,q)}}}
+                  else
+                     inr ERR_BAD_PAYLOAD)}
+              else
+                 inr ERR_UNAUTHORIZED_OR_RATE_LIMITED) [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   6. [m↑(len((vv,0)) ≥⒝ 24)
+   [1m⊢[m ((wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+      ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+         ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4))) ∈
+     Bool
+[1m2. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+             (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                 ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                 advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                 take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+              else
+                 inr ERR_BAD_PAYLOAD)} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+   7. [m↑((wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+        ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+           ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)))
+   [1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+[1m3. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m inr ERR_UNAUTHORIZED_OR_RATE_LIMITED [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+   7. [m↑(¬⒝((wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+           ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+              ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4))))
+   [1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+() : unit
+=== CHILDREN 30: wf main main
+=== STEP 31 [ok] 0.00s :: cd "3";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/2/3 : string
+=== STEP 32 [ok] 0.00s :: refine (rw (higherC reduceDecideInr) 5 thenT dT 5);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m inr ERR_UNAUTHORIZED_OR_RATE_LIMITED [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+7. [m↑(¬⒝((wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+        ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+           ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4))))
+[1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+
+[1mBY [m(rw (higherC reduceDecideInr) 5 thenT dT 5)
+
+() : unit
+=== CHILDREN 32: 
+=== STEP 33 [ok] 0.00s :: cd "../2";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2 : string
+=== STEP 34 [ok] 0.00s :: refine (dT 7);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+          (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+              ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+              advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+              take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+           else
+              inr ERR_BAD_PAYLOAD)} [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+7. [m↑((wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+     ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+        ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)))
+[1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+
+[1mBY [m(dT 7)
+
+[1m1. [[1m?[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+             (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                 ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                 advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                 take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+              else
+                 inr ERR_BAD_PAYLOAD)} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+   7. [m↑((wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+        ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+           ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)))
+   [1m⊢[m (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC) ∈ Bool
+[1m2. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+             (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                 ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                 advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                 take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+              else
+                 inr ERR_BAD_PAYLOAD)} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+   7. [m↑(wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)[1m
+   8. [m↑(can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+        ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)))
+   [1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+() : unit
+=== CHILDREN 34: wf main
+=== STEP 35 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2/2 : string
+=== STEP 36 [ok] 0.00s :: refine (dT 8);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+          (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+              ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+              advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+              take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+           else
+              inr ERR_BAD_PAYLOAD)} [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+7. [m↑(wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)[1m
+8. [m↑(can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+     ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)))
+[1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+
+[1mBY [m(dT 8)
+
+[1m1. [[1m?[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+             (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                 ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                 advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                 take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+              else
+                 inr ERR_BAD_PAYLOAD)} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+   7. [m↑(wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)[1m
+   8. [m↑(can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+        ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)))
+   [1m⊢[m can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+     ∈
+     Bool
+[1m2. [[1m?[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mvv: WireBuf[1m
+   3. [m[1m[[m(len(wholeSlice(vv))≥24)
+       ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+   4. [mst ∈ State[1m
+   5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+             (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                 ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                 advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                 take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+              else
+                 inr ERR_BAD_PAYLOAD)} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+   7. [m↑(wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)[1m
+   8. [m↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))[1m
+   9. [m↑has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4))
+   [1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+() : unit
+=== CHILDREN 36: wf main
+=== STEP 37 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2/2/2 : string
+=== STEP 38 [ok] 0.00s :: refine (nthHypT 8);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+          (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+              ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+              advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+              take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+           else
+              inr ERR_BAD_PAYLOAD)} [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+7. [m↑(wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)[1m
+8. [m↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))[1m
+9. [m↑has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4))
+[1m⊢[m ↑can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+
+[1mBY [m(nthHypT 8)
+
+() : unit
+=== CHILDREN 38: 
+=== STEP 39 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe/1";;
+# /vir/vir3/route_acl_safe/1 : string
+=== STEP 40 [ok] 0.00s :: refine (autoT);;
+# [1m?[m [1m*[m <[1m*[m>
+....assertion....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+
+[1mBY [m(autoT)
+
+() : unit
+=== CHILDREN 40: 
+=== STEP 41 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe/2/1/1/1";;
+# /vir/vir3/route_acl_safe/2/1/1/1 : string
+=== STEP 42 [ok] 0.00s :: refine (autoT);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m*[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State
+[1m⊢[m IsRouted(F2(wholeSlice(vv), st)) Type
+
+[1mBY [m(autoT)
+
+() : unit
+=== CHILDREN 42: 
+=== STEP 43 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe/2/1/1/2/1/1/1";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/1 : string
+=== STEP 44 [ok] 0.00s :: refine (autoT);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m*[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m (if len((vv,0)) ≥⒝ 24 then
+              (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+                  ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                     ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+                  let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+                  (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                      ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                      advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                      take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                      return{(st2,q)}}}
+                   else
+                      inr ERR_BAD_PAYLOAD)}
+               else
+                  inr ERR_UNAUTHORIZED_OR_RATE_LIMITED)
+           else
+              inr ERR_TRUNCATED_FRAME) [1mwith[m
+       inl x -> true
+     | inr y -> false
+[1m⊢[m (len((vv,0)) ≥⒝ 24) ∈ Bool
+
+[1mBY [m(autoT)
+
+() : unit
+=== CHILDREN 44: 
+=== STEP 45 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe/2/1/1/2/1/1/2/1";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/2/1 : string
+=== STEP 46 [ok] 0.00s :: refine (autoT);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m*[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m (if (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+              ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+                 ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)) then
+              let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+              (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+                  ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+                  advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+                  take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q.
+                  return{(st2,q)}}}
+               else
+                  inr ERR_BAD_PAYLOAD)}
+           else
+              inr ERR_UNAUTHORIZED_OR_RATE_LIMITED) [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+6. [m↑(len((vv,0)) ≥⒝ 24)
+[1m⊢[m ((wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+   ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+      ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4))) ∈
+  Bool
+
+[1mBY [m(autoT)
+
+() : unit
+=== CHILDREN 46: 
+=== STEP 47 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2/1";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2/1 : string
+=== STEP 48 [ok] 0.00s :: refine (autoT);;
+# [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m?[m [1m*[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+          (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+              ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+              advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+              take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+           else
+              inr ERR_BAD_PAYLOAD)} [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+7. [m↑((wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)
+     ∧⒝ can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+        ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)))
+[1m⊢[m (wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC) ∈ Bool
+
+[1mBY [m(autoT)
+
+() : unit
+=== CHILDREN 48: 
+=== STEP 49 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2/2/1";;
+# /vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2/2/1 : string
+=== STEP 50 [ok] 0.00s :: refine (autoT);;
+# [1m*[m [1m*[m [1m*[m [1m*[m [1m*[m [1m*[m [1m*[m [1m*[m [1m*[m [1m*[m [1m*[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m b ∈ ValidFrame
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+3. [1m[m<Γ> [1m⊢[m IsRouted(F2(wholeSlice(b), st))
+====
+[1m
+1. [m<Γ>[1m
+2. [mvv: WireBuf[1m
+3. [m[1m[[m(len(wholeSlice(vv))≥24) ∧ read_u32{wholeSlice(vv); 0; v. v} = MAGIC ∈ int[1m][m[1m
+4. [mst ∈ State[1m
+5. [m↑[1mmatch[m let_lin{dec_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)); st2.
+          (if (wire_u32((vv,0).1, (vv,0).2 + 12) ≥⒝ 24)
+              ∧⒝ (len((vv,0)) ≥⒝ (wire_u32((vv,0).1, (vv,0).2 + 12) + wire_u32((vv,0).1, (vv,0).2 + 16))) then
+              advance{(vv,0); wire_u32((vv,0).1, (vv,0).2 + 12); p.
+              take{p; wire_u32((vv,0).1, (vv,0).2 + 16); q. return{(st2,q)}}}
+           else
+              inr ERR_BAD_PAYLOAD)} [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+6. [m↑(len((vv,0)) ≥⒝ 24)[1m
+7. [m↑(wire_u32((vv,0).1, (vv,0).2 + 0) =⒝ MAGIC)[1m
+8. [m↑(can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+     ∧⒝ has_tokens(st, wire_u32((vv,0).1, (vv,0).2 + 4)))
+[1m⊢[m can_access(wire_u32((vv,0).1, (vv,0).2 + 4), wire_u32((vv,0).1, (vv,0).2 + 8))
+  ∈
+  Bool
+
+[1mBY [m(autoT)
+
+() : unit
+=== CHILDREN 50: 
+=== STEP 51 [ok] 0.00s :: cd "/vir/vir3";;
+# /vir/vir3 : string
+=== STEP 52 [ok] 0.03s :: export ();;
+# Exporting vir3
+() : unit
+=== END steps=52 ok=52 err=0 rc=0 cmoz-written=0

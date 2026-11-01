@@ -1,0 +1,433 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir/state_type";;
+# Module: /vir
+/vir/vir/state_type : string
+=== STEP 2 [ok] 0.01s :: refine (univTypeT << univ[1:l] >> thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m State Type
+
+[1mBY [m(univTypeT << univ[1:l] >> thenT autoT)
+
+() : unit
+=== CHILDREN 2: 
+=== STEP 3 [ok] 0.00s :: cd "/vir/vir/verr_type";;
+# /vir/vir/verr_type : string
+=== STEP 4 [ok] 0.00s :: refine (univTypeT << univ[1:l] >> thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m Err Type
+
+[1mBY [m(univTypeT << univ[1:l] >> thenT autoT)
+
+() : unit
+=== CHILDREN 4: 
+=== STEP 5 [ok] 0.00s :: cd "/vir/vir/wirebuf_univ";;
+# /vir/vir/wirebuf_univ : string
+=== STEP 6 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m WireBuf ∈ Ů_'i
+
+[1mBY [m(rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 6: 
+=== STEP 7 [ok] 0.00s :: cd "/vir/vir/wirebuf_type";;
+# /vir/vir/wirebuf_type : string
+=== STEP 8 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m WireBuf Type
+
+[1mBY [m(rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 8: 
+=== STEP 9 [ok] 0.00s :: cd "/vir/vir/vslice_univ";;
+# /vir/vir/vslice_univ : string
+=== STEP 10 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m Slice ∈ Ů_'i
+
+[1mBY [m(rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 10: 
+=== STEP 11 [ok] 0.00s :: cd "/vir/vir/vslice_type";;
+# /vir/vir/vslice_type : string
+=== STEP 12 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m Slice Type
+
+[1mBY [m(rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 12: 
+=== STEP 13 [ok] 0.00s :: cd "/vir/vir/vresult_univ";;
+# /vir/vir/vresult_univ : string
+=== STEP 14 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m Result ∈ Ů_'i
+
+[1mBY [m(rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 14: 
+=== STEP 15 [ok] 0.00s :: cd "/vir/vir/vresult_type";;
+# /vir/vir/vresult_type : string
+=== STEP 16 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m Result Type
+
+[1mBY [m(rw (sweepDnC (unfold_vresult orelseC unfold_vslice orelseC unfold_wirebuf)) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 16: 
+=== STEP 17 [ok] 0.00s :: cd "/vir/vir/vslice_pair_wf";;
+# /vir/vir/vslice_pair_wf : string
+=== STEP 18 [ok] 0.00s :: refine (rw (sweepDnC unfold_vslice) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ WireBuf
+2. [1m[m<Γ> [1m⊢[m o ∈ int
+====
+[1m[m<Γ> [1m⊢[m (b,o) ∈ Slice
+
+[1mBY [m(rw (sweepDnC unfold_vslice) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 18: 
+=== STEP 19 [ok] 0.00s :: cd "/vir/vir/vslice_fst_wf";;
+# /vir/vir/vslice_fst_wf : string
+=== STEP 20 [ok] 0.00s :: refine (genT << 's in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf) thenC reduceC) 0 thenT autoT]);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m s ∈ Slice
+====
+[1m[m<Γ> [1m⊢[m s.1 ∈ WireBuf
+
+[1mBY [m(genT << 's in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf) thenC reduceC) 0 thenT autoT])
+
+() : unit
+=== CHILDREN 20: 
+=== STEP 21 [ok] 0.00s :: cd "/vir/vir/vslice_snd_wf";;
+# /vir/vir/vslice_snd_wf : string
+=== STEP 22 [ok] 0.00s :: refine (genT << 's in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf) thenC reduceC) 0 thenT autoT]);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m s ∈ Slice
+====
+[1m[m<Γ> [1m⊢[m s.2 ∈ int
+
+[1mBY [m(genT << 's in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf) thenC reduceC) 0 thenT autoT])
+
+() : unit
+=== CHILDREN 22: 
+=== STEP 23 [ok] 0.00s :: cd "/vir/vir/wirebuf_length_wf";;
+# /vir/vir/wirebuf_length_wf : string
+=== STEP 24 [ok] 0.00s :: refine (genT << 'b in wirebuf >> thenLT [autoT; rw (sweepDnC unfold_wirebuf) (-1) thenT autoT]);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b ∈ WireBuf
+====
+[1m[m<Γ> [1m⊢[m |b| ∈ int
+
+[1mBY [m(genT << 'b in wirebuf >> thenLT [autoT; rw (sweepDnC unfold_wirebuf) (-1) thenT autoT])
+
+() : unit
+=== CHILDREN 24: 
+=== STEP 25 [ok] 0.00s :: cd "/vir/vir/vir_magic_wf";;
+# /vir/vir/vir_magic_wf : string
+=== STEP 26 [ok] 0.00s :: refine (rw (sweepDnC unfold_vir_magic) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m MAGIC ∈ int
+
+[1mBY [m(rw (sweepDnC unfold_vir_magic) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 26: 
+=== STEP 27 [ok] 0.00s :: cd "/vir/vir/vlen_wf";;
+# /vir/vir/vlen_wf : string
+=== STEP 28 [ok] 0.00s :: refine (genT << 's in vslice >> thenLT [autoT; rw (sweepDnC unfold_vslice) (-1) thenT dT (-1) thenT rw (sweepDnC unfold_vlen thenC reduceC) 0 thenT autoT]);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m s ∈ Slice
+====
+[1m[m<Γ> [1m⊢[m len(s) ∈ int
+
+[1mBY [m(genT << 's in vslice >> thenLT [autoT; rw (sweepDnC unfold_vslice) (-1) thenT dT (-1) thenT rw (sweepDnC unfold_vlen thenC reduceC) 0 thenT autoT])
+
+() : unit
+=== CHILDREN 28: 
+=== STEP 29 [ok] 0.00s :: cd "/vir/vir/let_atom_wf";;
+# /vir/vir/let_atom_wf : string
+=== STEP 30 [ok] 0.00s :: refine (rw (sweepDnC unfold_let_atom) 0 thenT genT << 'a in 'A >> thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m a ∈ A
+2. [1m[m<Γ>[1m; [mv: A [1m⊢[m e[v] ∈ T
+====
+[1m[m<Γ> [1m⊢[m let_atom{a; v. e[v]} ∈ T
+
+[1mBY [m(rw (sweepDnC unfold_let_atom) 0 thenT genT << 'a in 'A >> thenT autoT)
+
+() : unit
+=== CHILDREN 30: 
+=== STEP 31 [ok] 0.00s :: cd "/vir/vir/let_lin_wf";;
+# /vir/vir/let_lin_wf : string
+=== STEP 32 [ok] 0.00s :: refine (rw (sweepDnC unfold_let_lin) 0 thenT genT << 'op in state >> thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m op ∈ State
+2. [1m[m<Γ>[1m; [mv: State [1m⊢[m e[v] ∈ T
+====
+[1m[m<Γ> [1m⊢[m let_lin{op; v. e[v]} ∈ T
+
+[1mBY [m(rw (sweepDnC unfold_let_lin) 0 thenT genT << 'op in state >> thenT autoT)
+
+() : unit
+=== CHILDREN 32: 
+=== STEP 33 [ok] 0.00s :: cd "/vir/vir/advance_wf";;
+# /vir/vir/advance_wf : string
+=== STEP 34 [ok] 0.00s :: refine (rw (sweepDnC unfold_advance) 0 thenT genT << pair{fst{'b}; snd{'b} +@ 'i} in vslice >> thenLT [(genT << 'b in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf) thenC reduceC) 0 thenT autoT thenT tryT (rw (sweepDnC unfold_wirebuf) 0 thenT autoT)]); autoT]);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ Slice
+2. [1m[m<Γ> [1m⊢[m i ∈ int
+3. [1m[m<Γ>[1m; [ms: Slice [1m⊢[m e[s] ∈ T
+====
+[1m[m<Γ> [1m⊢[m advance{b; i; s. e[s]} ∈ T
+
+[1mBY [m(rw (sweepDnC unfold_advance) 0 thenT genT << pair{fst{'b}; snd{'b} +@ 'i} in vslice >> thenLT [(genT << 'b in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf) thenC reduceC) 0 thenT autoT thenT tryT (rw (sweepDnC unfold_wirebuf) 0 thenT autoT)]); autoT])
+
+() : unit
+=== CHILDREN 34: 
+=== STEP 35 [ok] 0.00s :: cd "/vir/vir/read_u32_wf";;
+# /vir/vir/read_u32_wf : string
+=== STEP 36 [ok] 0.00s :: refine (rw (sweepDnC unfold_read_u32) 0 thenT genT << wire_u32{fst{'b}; snd{'b} +@ 'j} in int >> thenLT [(genT << 'b in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf) thenC reduceC) 0 thenT autoT thenT tryT (rw (sweepDnC unfold_wirebuf) 0 thenT autoT)]); autoT]);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ Slice
+2. [1m[m<Γ> [1m⊢[m j ∈ int
+3. [1m[m<Γ>[1m; [mv: int [1m⊢[m e[v] ∈ T
+====
+[1m[m<Γ> [1m⊢[m read_u32{b; j; v. e[v]} ∈ T
+
+[1mBY [m(rw (sweepDnC unfold_read_u32) 0 thenT genT << wire_u32{fst{'b}; snd{'b} +@ 'j} in int >> thenLT [(genT << 'b in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf) thenC reduceC) 0 thenT autoT thenT tryT (rw (sweepDnC unfold_wirebuf) 0 thenT autoT)]); autoT])
+
+() : unit
+=== CHILDREN 36: 
+=== STEP 37 [ok] 0.00s :: cd "/vir/vir/vguard_wf";;
+# /vir/vir/vguard_wf : string
+=== STEP 38 [ok] 0.00s :: refine (rw (sweepDnC unfold_vguard) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m c ∈ Bool
+2. [1m[m<Γ> [1m⊢[m e1 ∈ T
+3. [1m[m<Γ> [1m⊢[m e2 ∈ T
+====
+[1m[m<Γ> [1m⊢[m guard{c; e1; e2} ∈ T
+
+[1mBY [m(rw (sweepDnC unfold_vguard) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 38: 
+=== STEP 39 [ok] 0.00s :: cd "/vir/vir/vreturn_wf";;
+# /vir/vir/vreturn_wf : string
+=== STEP 40 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vreturn orelseC unfold_vresult)) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m a ∈ (State ╳ Slice)
+====
+[1m[m<Γ> [1m⊢[m return{a} ∈ Result
+
+[1mBY [m(rw (sweepDnC (unfold_vreturn orelseC unfold_vresult)) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 40: 
+=== STEP 41 [ok] 0.00s :: cd "/vir/vir/vdrop_wf";;
+# /vir/vir/vdrop_wf : string
+=== STEP 42 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vdrop orelseC unfold_vresult)) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m c ∈ Err
+====
+[1m[m<Γ> [1m⊢[m drop{c} ∈ Result
+
+[1mBY [m(rw (sweepDnC (unfold_vdrop orelseC unfold_vresult)) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 42: 
+=== STEP 43 [ok] 0.00s :: cd "/vir/vir/parse_header_wf";;
+# /vir/vir/parse_header_wf : string
+=== STEP 44 [ok] 0.00s :: refine (rw (sweepDnC unfold_parse_header) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ Slice
+2. [1m[m<Γ>[1m; [ms: Slice[1m; [msender: int[1m; [mtopic: int [1m⊢[m k[s; sender; topic] ∈ Result
+====
+[1m[m<Γ> [1m⊢[m parse_header{b0; s, sender, topic. k[s; sender; topic]} ∈ Result
+
+[1mBY [m(rw (sweepDnC unfold_parse_header) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 44: 
+=== STEP 45 [ok] 0.00s :: cd "/vir/vir/check_rate_limit_wf";;
+# /vir/vir/check_rate_limit_wf : string
+=== STEP 46 [ok] 0.00s :: refine (rw (sweepDnC unfold_check_rate_limit) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m st ∈ State
+2. [1m[m<Γ> [1m⊢[m p ∈ int
+3. [1m[m<Γ>[1m; [mst2: State [1m⊢[m k[st2] ∈ Result
+====
+[1m[m<Γ> [1m⊢[m check_rate_limit{st; p; st2. k[st2]} ∈ Result
+
+[1mBY [m(rw (sweepDnC unfold_check_rate_limit) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 46: 
+=== STEP 47 [ok] 0.00s :: cd "/vir/vir/verify_acl_wf";;
+# /vir/vir/verify_acl_wf : string
+=== STEP 48 [ok] 0.00s :: refine (rw (sweepDnC unfold_verify_acl) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m p ∈ int
+2. [1m[m<Γ> [1m⊢[m t ∈ int
+3. [1m[m<Γ> [1m⊢[m k ∈ Result
+====
+[1m[m<Γ> [1m⊢[m verify_acl{p; t; k} ∈ Result
+
+[1mBY [m(rw (sweepDnC unfold_verify_acl) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 48: 
+=== STEP 49 [ok] 0.00s :: cd "/vir/vir/emit_payload_wf";;
+# /vir/vir/emit_payload_wf : string
+=== STEP 50 [ok] 0.00s :: refine (rw (sweepDnC unfold_emit_payload) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m s ∈ Slice
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+====
+[1m[m<Γ> [1m⊢[m emit_payload{s; st} ∈ Result
+
+[1mBY [m(rw (sweepDnC unfold_emit_payload) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 50: 
+=== STEP 51 [ok] 0.00s :: cd "/vir/vir/vir_U_wf";;
+# /vir/vir/vir_U_wf : string
+=== STEP 52 [ok] 0.00s :: refine (rw (sweepDnC unfold_vir_U) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ Slice
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+====
+[1m[m<Γ> [1m⊢[m U(b0, st) ∈ Result
+
+[1mBY [m(rw (sweepDnC unfold_vir_U) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 52: 
+=== STEP 53 [ok] 0.00s :: cd "/vir/vir/vir_F_wf";;
+# /vir/vir/vir_F_wf : string
+=== STEP 54 [ok] 0.00s :: refine (rw (sweepDnC unfold_vir_F) 0 thenT autoT);;
+# [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ Slice
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+====
+[1m[m<Γ> [1m⊢[m F(b0, st) ∈ Result
+
+[1mBY [m(rw (sweepDnC unfold_vir_F) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 54: 
+=== STEP 55 [ok] 0.00s :: cd "/vir/vir/slice_fuse_c";;
+# /vir/vir/slice_fuse_c : string
+=== STEP 56 [ok] 0.00s :: refine (genT << 'b in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (repeatC (higherC unfold_advance) thenC reduceC) 0 thenT rw (higherC add_Assoc2C) 0 thenT autoT]);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b ∈ Slice
+2. [1m[m<Γ> [1m⊢[m i ∈ int
+3. [1m[m<Γ> [1m⊢[m j ∈ int
+====
+[1m
+1. [m<Γ>
+[1m⊢[m advance{b; i; s1. advance{s1; j; s2. e[s2]}} ≡ advance{b; i + j; s2. e[s2]}
+
+[1mBY [m(genT << 'b in vslice >> thenLT [autoT; rw (sweepDnC (unfold_vslice orelseC unfold_wirebuf)) (-1) thenT dT (-1) thenT rw (repeatC (higherC unfold_advance) thenC reduceC) 0 thenT rw (higherC add_Assoc2C) 0 thenT autoT])
+
+() : unit
+=== CHILDREN 56: 
+=== STEP 57 [ok] 0.00s :: cd "/vir/vir/router_fuse";;
+# /vir/vir/router_fuse : string
+=== STEP 58 [ok] 0.00s :: refine (rw (sweepDnC (unfold_vir_U orelseC unfold_vir_F)) 0 thenT rw (sweepDnC (unfold_parse_header orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload)) 0 thenT rw (addrC [1;2;3;2;3;3] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;3] beta_lin) 0 thenT rw (addrC [1;2;3;2;3;3;2] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;2] slice_fuse_c) 0 thenMT rw (addrC [1;2;3;2;3;3;2;2;2] reduceC) 0 thenMT rw (repeatC (higherC unfold_read_u32)) 0 thenMT rw (addrC [1;2;2] aux_guard_swap) 0 thenMT rw (addrC [1;2;2] guard_merge_c) 0 thenMT rw (addrC [1;2] guard_merge_c) 0 thenMT rw (higherC beta_lin) 0 thenT assumT 1 thenT assumT 2 thenT autoT);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ Slice
+2. [1m[m<Γ> [1m⊢[m st ∈ State
+====
+[1m[m<Γ> [1m⊢[m U(b0, st) ≡ F(b0, st)
+
+[1mBY [m(rw (sweepDnC (unfold_vir_U orelseC unfold_vir_F)) 0 thenT rw (sweepDnC (unfold_parse_header orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload)) 0 thenT rw (addrC [1;2;3;2;3;3] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;3] beta_lin) 0 thenT rw (addrC [1;2;3;2;3;3;2] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;2] slice_fuse_c) 0 thenMT rw (addrC [1;2;3;2;3;3;2;2;2] reduceC) 0 thenMT rw (repeatC (higherC unfold_read_u32)) 0 thenMT rw (addrC [1;2;2] aux_guard_swap) 0 thenMT rw (addrC [1;2;2] guard_merge_c) 0 thenMT rw (addrC [1;2] guard_merge_c) 0 thenMT rw (higherC beta_lin) 0 thenT assumT 1 thenT assumT 2 thenT autoT)
+
+[1m====[m
+[1m1. [1m?[m[m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32(x, k) ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access(x, y) ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens(st, x) ∈ Bool)
+   [1m⊢[m wire_u32(b0.1, b0.2 + 0) ∈ int
+
+[1m====[m
+[1m2. [1m?[m[m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32(x, k) ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access(x, y) ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens(st, x) ∈ Bool)
+   [1m⊢[m MAGIC ∈ int
+
+[1m====[m
+[1m3. [1m?[m[m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32(x, k) ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access(x, y) ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens(st, x) ∈ Bool)
+   [1m⊢[m has_tokens(st, wire_u32(b0.1, b0.2 + 4)) ∈ Bool
+
+[1m====[m
+[1m4. [1m?[m[m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32(x, k) ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access(x, y) ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens(st, x) ∈ Bool)
+   [1m⊢[m can_access(wire_u32(b0.1, b0.2 + 4), wire_u32(b0.1, b0.2 + 8)) ∈ Bool
+
+() : unit
+=== CHILDREN 58: 
+=== STEP 59 [ok] 0.00s :: cd "/vir/vir";;
+# /vir/vir : string
+=== STEP 60 [ok] 0.02s :: export ();;
+# Exporting vir
+() : unit
+=== END steps=60 ok=60 err=0 rc=0 cmoz-written=0

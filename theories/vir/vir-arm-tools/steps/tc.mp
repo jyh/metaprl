@@ -1,0 +1,23 @@
+# O95 transcription check: each tc rule proved by unfolding its one definition, nothing else
+cd "/vir/virtc/tc_parse_header";;
+refine (rw (sweepDnC unfold_parse_header) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_check_rate_limit";;
+refine (rw (sweepDnC unfold_check_rate_limit) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_verify_acl";;
+refine (rw (sweepDnC unfold_verify_acl) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_emit_payload";;
+refine (rw (sweepDnC unfold_emit_payload) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_U";;
+refine (rw (sweepDnC unfold_vir_U) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_F";;
+refine (rw (sweepDnC unfold_vir_F) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_parse_header2";;
+refine (rw (sweepDnC unfold_parse_header2) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_emit_payload2";;
+refine (rw (sweepDnC unfold_emit_payload2) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_U2";;
+refine (rw (sweepDnC unfold_vir_U2) 0 thenT logicAutoT);;
+cd "/vir/virtc/tc_F2";;
+refine (rw (sweepDnC unfold_vir_F2) 0 thenT logicAutoT);;
+cd "/vir/virtc";;
+export ();;

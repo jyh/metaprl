@@ -1,0 +1,55 @@
+Module: /virtc
+? <?>
+....main....
+1. <Γ>
+⊢ parse_header{b0; s1, sender, topic.
+  check_rate_limit{st; sender; st_p.
+  verify_acl{sender; topic; emit_payload{s1; st_p}}}} ≡
+  U(b0, st)
+? <?>
+....main....
+1. <Γ>
+⊢ guard{len(b0) ≥⒝ 24;
+    read_u32{b0; 0; magic.
+    read_u32{b0; 4; sender.
+    read_u32{b0; 8; topic.
+    guard{(magic =⒝ MAGIC)
+          ∧⒝ can_access(sender, topic) ∧⒝ has_tokens(st, sender);
+      let_lin{dec_tokens(st, sender); bucket_st_p.
+      advance{b0; 24; payload_slice. return{(bucket_st_p,payload_slice)}}};
+      drop{ERR_UNAUTHORIZED_OR_RATE_LIMITED}}}}};
+    drop{ERR_TRUNCATED_FRAME}} ≡
+  F(b0, st)
+? <?>
+....main....
+1. <Γ>
+⊢ parse_header2{b0; s1, sender, topic, off, n.
+  check_rate_limit{st; sender; st_p.
+  verify_acl{sender; topic; emit_payload2{s1; off; n; st_p}}}} ≡
+  U2(b0, st)
+? <?>
+....main....
+1. <Γ>
+⊢ guard{len(b0) ≥⒝ 24;
+    read_u32{b0; 0; magic.
+    read_u32{b0; 4; sender.
+    read_u32{b0; 8; topic.
+    read_u32{b0; 12; off.
+    read_u32{b0; 16; n.
+    guard{(magic =⒝ MAGIC)
+          ∧⒝ can_access(sender, topic) ∧⒝ has_tokens(st, sender);
+      let_lin{dec_tokens(st, sender); bucket_st_p.
+      guard{(off ≥⒝ 24) ∧⒝ (len(b0) ≥⒝ (off + n));
+        advance{b0; off; p. take{p; n; q. return{(bucket_st_p,q)}}};
+        drop{ERR_BAD_PAYLOAD}}};
+      drop{ERR_UNAUTHORIZED_OR_RATE_LIMITED}}}}}}};
+    drop{ERR_TRUNCATED_FRAME}} ≡
+  F2(b0, st)
+Module: /vir3
+? <?>
+....main....
+1. <Γ> ⊢ b ∈ ValidFrame
+2. <Γ> ⊢ st ∈ State
+3. <Γ> ⊢ IsRouted(F2(wholeSlice(b), st))
+====
+<Γ> ⊢ ↑can_access(frame_sender(b), frame_topic(b))

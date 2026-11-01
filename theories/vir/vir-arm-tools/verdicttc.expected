@@ -1,0 +1,10 @@
+tc_parse_header complete 1
+tc_check_rate_limit complete 1
+tc_verify_acl complete 1
+tc_emit_payload complete 1
+tc_U complete 1
+tc_F complete 1
+tc_parse_header2 complete 1
+tc_emit_payload2 complete 1
+tc_U2 complete 1
+tc_F2 complete 1

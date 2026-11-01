@@ -1,0 +1,56 @@
+# O95 B' (council 2026-11-01 sA): program 3 module vir3. route_acl_safe is a rule with premises [wf] b, [wf] st, the routed premise.
+# Opening (B': premise 3 to the conclusion, 'b generalized, st's premise as hyp 4 so hypothesis numbers equal B's); then B's main path verbatim.
+# vir3 wf rules (B')
+cd "/vir/vir3/whole_slice_wf";;
+refine (rw (sweepDnC unfold_whole_slice) 0 thenT autoT);;
+cd "/vir/vir3/validframe_type";;
+refine (rw (sweepDnC unfold_validframe) 0 thenT autoT);;
+cd "/vir/vir3/validframe_wirebuf";;
+refine (genT << 'b in validframe >> thenLT [autoT; rw (sweepDnC unfold_validframe) (-1) thenT dT (-1) thenT autoT]);;
+cd "/vir/vir3/frame_sender_wf";;
+refine (rw (sweepDnC unfold_frame_sender) 0 thenT autoT);;
+cd "/vir/vir3/frame_topic_wf";;
+refine (rw (sweepDnC unfold_frame_topic) 0 thenT autoT);;
+cd "/vir/vir3/isrouted_type";;
+refine (rw (sweepDnC unfold_isrouted) 0 thenT genT << 'o in vresult >> thenLT [autoT; rw (sweepDnC unfold_vresult) (-1) thenT autoT]);;
+cd "/vir/vir3/route_acl_safe";;
+refine (assumT 3 thenT moveToConclT (-1) thenT genT << 'b in validframe >>);;
+cd "2";;
+refine (rw (sweepDnC unfold_validframe) 2);;
+cd "1";;
+refine (dT 2);;
+cd "1";;
+refine (assumT 2 thenT dT 0);;
+cd "2";;
+refine (rw (repeatC (higherC (unfold_isrouted orelseC unfold_vir_F2 orelseC unfold_vguard orelseC unfold_vdrop orelseC unfold_read_u32 orelseC unfold_whole_slice))) 5);;
+cd "1";;
+refine (rw (repeatC (higherC (unfold_frame_sender orelseC unfold_frame_topic orelseC unfold_read_u32 orelseC unfold_whole_slice))) 0);;
+cd "1";;
+refine (splitITE 5);;
+cd "3";;
+refine (rw (higherC reduceDecideInr) 5 thenT dT 5);;
+cd "../2";;
+refine (splitITE 5);;
+cd "3";;
+refine (rw (higherC reduceDecideInr) 5 thenT dT 5);;
+cd "../2";;
+refine (dT 7);;
+cd "2";;
+refine (dT 8);;
+cd "2";;
+refine (nthHypT 8);;
+# well-formedness children: each closed by autoT through intro (B: seven bespoke refines)
+cd "/vir/vir3/route_acl_safe/1";;
+refine (autoT);;
+cd "/vir/vir3/route_acl_safe/2/1/1/1";;
+refine (autoT);;
+cd "/vir/vir3/route_acl_safe/2/1/1/2/1/1/1";;
+refine (autoT);;
+cd "/vir/vir3/route_acl_safe/2/1/1/2/1/1/2/1";;
+refine (autoT);;
+cd "/vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2/1";;
+refine (autoT);;
+cd "/vir/vir3/route_acl_safe/2/1/1/2/1/1/2/2/2/1";;
+refine (autoT);;
+cd "/vir/vir3";;
+export ();;

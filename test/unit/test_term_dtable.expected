@@ -1,0 +1,12 @@
+pairs of terms up to depth 1: 576; the table and the model agree on 576
+lookups that answer: 104
+rules that answer some pair as the outermost step: pair, ab, bc, set, ab2, cross
+rules that answer no pair: void
+answers whose derivation concludes a different pair than the one asked: 92
+  first: s{a} <= b answered by set[s{a} <= a]
+lookup v <= a: Not_found
+lookup v <= 'X: void[v <= 'X]
+lookup s{a} <= a: set[s{a} <= a]
+lookup s{a} <= c: set[s{a} <= a]
+lookup a <= b: ab2[a <= b]
+lookup a <= c: Not_found

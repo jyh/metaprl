@@ -16,6 +16,18 @@
   when `F` is a tautology (Glivenko), and LJ and LJmc agree: 383 of 383
   checked. The 17 on which LJ did not finish in 10 s are skipped and
   counted (see Known not to work).
+- `Term_dtable`, the table behind the intro step for subtype goals
+  (`Itt_subtype`), against a model (`test/unit/test_term_dtable.ml`): a
+  small subtyping system inserted the three ways itt theories insert one,
+  looked up on all 576 pairs of ground terms up to depth 1; the table and
+  the model give the same derivation on all 576 (a mutant that lets older
+  entries win makes 4 differ; one that stops at the first matching entry
+  whose subgoals fail makes 2 differ). The test records two behaviours
+  that may be bugs: a left-to-right entry answers every goal whose left
+  side matches, with the derivation of a different pair (92 of 104
+  answers; `Itt_set`'s set rule is one), and a right-to-left entry whose
+  right side is a variable answers no ground goal (`Itt_void`'s void
+  rule). Both rules also carry their own intro annotation.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`

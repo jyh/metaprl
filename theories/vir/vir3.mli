@@ -7,7 +7,6 @@ extends Vir2
 open Tactic_type.Tactic
 
 (* K2 *)
-declare wirebuf
 declare whole_slice{'b}
 declare validframe
 declare frame_sender{'b}
@@ -16,7 +15,6 @@ declare frame_topic{'b}
 (* K3 *)
 declare isrouted{'o}
 
-topval unfold_wirebuf : conv
 topval unfold_whole_slice : conv
 topval unfold_validframe : conv
 topval unfold_frame_sender : conv

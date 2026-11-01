@@ -1,12 +1,21 @@
 (*
  * O95, the MetaPRL arm: the VIR of the frozen object (vir cd64c9fd, appendix A.2-A.3)
  * with the shared inputs (vir 8a73bc8c, inputs/router-inputs.md I1-I5).
+ * Amendment B' (council 2026-11-01 sA): typed carriers, the I1 operators as prims,
+ * a wf rule in intro for every declared or defined term.
  *)
 extends Itt_theory
 
 open Tactic_type.Tactic
 
-(* I1: uninterpreted operators of the VIR *)
+(* Carriers *)
+declare wirebuf
+declare vslice
+declare state
+declare verr
+declare vresult
+
+(* I1: uninterpreted operators of the VIR (axiomatized by prim wf rules) *)
 declare has_tokens{'st; 'p}
 declare can_access{'p; 't}
 declare dec_tokens{'st; 'p}
@@ -35,6 +44,9 @@ declare emit_payload{'s; 'st}
 declare vir_U{'b0; 'st}
 declare vir_F{'b0; 'st}
 
+topval unfold_wirebuf : conv
+topval unfold_vslice : conv
+topval unfold_vresult : conv
 topval unfold_vir_magic : conv
 topval unfold_vlen : conv
 topval unfold_let_atom : conv

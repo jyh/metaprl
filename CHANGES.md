@@ -4,6 +4,16 @@
 
 ### Fixed
 
+- A module whose id is 2^30 or more could not be built from its proof
+  archive (`.prla`): the filter refused it with `Filter_summary.dest_id:
+  not an int`. The id is an OCaml int written as a decimal; reading it,
+  `Lm_num` makes a decimal at or above 2^30 a big number, and `dest_id`
+  asked whether it fits `Lm_num`'s 30-bit range. Such ids occur on 64-bit
+  (the hash is seeded with bit 30 set); no committed archive has one, and a
+  new module was the first. `dest_id` now reads the decimal as an OCaml
+  int. Test: `test/filter_prla_id/run.sh` (a CI step after the build)
+  compiles a copied theory with ids 1,511,842,520, 609,661,056 and
+  -1,000,750,977; before the fix the first was refused.
 - term_std (`TERMS = std`; term_ds, which the refiner uses, was right) put
   context hypotheses and contexts lists where term_ds does not: its
   addressing indexed them (#56), `map_down`, `map_up`, `iter_down` and

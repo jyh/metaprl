@@ -182,6 +182,12 @@ jobs:
           echo "rc=$rc after $(( $(date +%s) - start )) s (124 = timed out)"
           tail -70 "$RUNNER_TEMP/census.log"
           exit $rc
+      # With the census input, THEORIES = all: no rule's grounded check names the
+      # rule itself (the Linux proofs job runs the same script).
+      - name: no rule depends on itself in the grounded check (editor/ml/tests/no_self_dependency.sh)
+        if: ${{ always() && env.CENSUS == 'true' }}
+        working-directory: metaprl
+        run: timeout 3600 opam exec -- sh editor/ml/tests/no_self_dependency.sh
       - name: summarise the build log
         if: always()
         run: |

@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+### Fixed
+
+- term_std (`TERMS = std`; term_ds, which the refiner uses, was right) put
+  context hypotheses and contexts lists where term_ds does not: its
+  addressing indexed them (#56), `map_down`, `map_up`, `iter_down` and
+  `iter_up` visited them (#57), and `find_subterm` walked into them (#58).
+  A `TERMS = std` proof census lost 8 proofs to these; it now loses none.
+  term_std's `all_vars` also left out contexts-list names and `is_fo_term`
+  called a sequent first-order (#72).
+- term_ds's `match_terms` let a bound variable of the pattern match any
+  subterm, so `lam x.f{'x}` matched `lam y.f{c}` (#63), and its `all_vars`
+  left out the variables a bound term binds (#67).
+- `Tactic_boot` compared one argument's term-list attributes with
+  themselves, so the proof editor could reattach a stored sub-proof to a
+  subgoal whose term-list attribute differs (#59).
+- `Unify_mm.unifiable` said true for a variable equated with a term that
+  contains it (`'d = f{..'d..}`): the occurs check was skipped (#64).
+- `Ctime.parse_time` read every HTTP date as 0, in all three forms a server
+  must accept; it now reads them, in UTC (#71).
+- Hash-consing could give one term two live indices after a subterm was
+  collected, so `Term_eq_table` missed keys it held (#76).
+- `Supinf`'s `isNumber` compared unreduced fractions with polymorphic
+  compare, so a zero coefficient such as 0/4 counted as nonzero and the
+  SUP-INF procedure could miss a bound it had derived; it could only lose
+  proofs, not admit false ones (#78).
+
 ### Tests
 
 - Unit tests for MetaPRL's OCaml libraries (`test/unit/`, #51): each

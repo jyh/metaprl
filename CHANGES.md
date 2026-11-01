@@ -74,6 +74,13 @@
   that must be accepted, including a Term where a Dform is taken (perv
   declares `Dform <- Term`). A mutant whose subtype check accepts makes
   the three type errors pass.
+- Display forms (`editor/ml/tests/dform_golden.sh`, a CI step after the
+  build): `mp -batch` prints 59 goals, one per itt/core module (its first
+  rule with a stored complete proof), and the text is compared with
+  `dform_golden.expected`. Until now nothing pinned printed output; the
+  proof census reads rule statuses. A mutant that changes one bracket in
+  `itt_record_renaming`'s `rename_df` changes 10 lines of the output.
+  ASCII display mode only, at mp's default width of 80.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`

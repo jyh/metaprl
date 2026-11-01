@@ -226,7 +226,10 @@ _EMPLOYER = ["lo" + "ca", "ho" + "ll", "pcc-" + "bios", "safe_" + "dav1d", "safe
 #   watched by the public gates, never its contents; scrub-roots-census UNWATCHED 6 pairs → 0), an ordinary word ⇒ qualified forms only.
 # tutor ADDED 2026-10-20 (the coaching tree, O87, born 2026-10-19 at council ⑩; local-only; the fleet map lists it private;
 #   scrub-roots-census UNWATCHED 6 pairs → 0), an ordinary word ⇒ qualified forms only.
-_LOCALONLY = ["ho" + "me", "soc" + "ial", "con" + "tent", "stu" + "dio", "jag" + "uar", "tu" + "tor"]
+# vir ADDED 2026-10-31 (the Verification IR campaign tree, O95, born 2026-10-31 at council; local-only, no remote yet; the fleet
+#   map lists it private; scrub-roots-census UNWATCHED 8 pairs → 0). Three letters inside common words (virtual, environment)
+#   ⇒ qualified forms only, and the qualified form's trailing boundary keeps `.../claude/virtual` out.
+_LOCALONLY = ["ho" + "me", "soc" + "ial", "con" + "tent", "stu" + "dio", "jag" + "uar", "tu" + "tor", "v" + "ir"]
 _PRIVATE_PROJ = ["soc" + "ial-run", "si" + "la", "mor" + "pho", "eman" + "uensis", "ver" + "so"]
 # ⛔⛔ ROW XK (2026-09-24) — A PRIVATE TREE THAT IS A *FAMILY*, WATCHED BY PATTERN, NEVER BY LIST. The Captain,
 #   council 2026-09-23, "Yes (a)": the benchmark harness tree and every worktree of it are a PRIVATE RECORD. Its
@@ -256,9 +259,9 @@ _BUS = "FLEET" + r"\.md"
 #   AUTHORITY for this list; when a tree is born or turns private there, it belongs here.
 #   ⇒ EDIT ALL THREE OF THESE TOGETHER WITH THE ROOTS ABOVE. A reconcile that moves the list and
 #     not the date leaves the next reader trusting a stale stamp -- which is this row's own defect.
-ROOTS_RECONCILED = "2026-10-20"
+ROOTS_RECONCILED = "2026-10-31"
 ROOTS_OWNER = "evidence (PM)"
-ROOTS_REMEASURE_DUE = "2026-11-20"
+ROOTS_REMEASURE_DUE = "2026-11-30"
 
 _ROOTS = [_SEAT] + _EMPLOYER + _PRIVATE_PROJ
 _ROOT_ALT = "|".join(_ROOTS + _FAMILY_RE)   # ROW XK: the family joins as a PATTERN
@@ -821,6 +824,10 @@ def self_test() -> int:
         ("tu-tutor", "see projects/claude/" + "tut" + "or" + "/log/x.md"),
         ("tu-tutor-bs", "see projects" + chr(92) + "claude" + chr(92) + "tut" + "or" + chr(92) + "x.md"),
         ("tu-tutor-repo", "pushed to Saltworks/" + "tut" + "or" + ".git"),
+        # 2026-10-31: vir (the Verification IR tree), qualified forms only. Split differently from `_LOCALONLY`.
+        ("vi-vir", "see projects/claude/" + "vi" + "r" + "/frozen/x.lean"),
+        ("vi-vir-bs", "see projects" + chr(92) + "claude" + chr(92) + "vi" + "r" + chr(92) + "x.md"),
+        ("vi-vir-repo", "pushed to Saltworks/" + "vi" + "r" + ".git"),
         ("vd-run", "receipts in ~/" + "so" + "cial-run" + "/receipts.tsv"),
         # ROW XK (2026-09-24): the family, the bare tree and three real worktree shapes. Split differently from
         #   `_FAMILY` so the plant never shares a constant with the pattern.
@@ -885,6 +892,11 @@ def self_test() -> int:
         # 2026-10-20: tutor is an ordinary word and must never fire unqualified.
         ("tu-c-tutor", "a maths " + "tutor" + " after school"),
         ("tu-c-tutor-dir", "docs/" + "tutor" + "/x.md nests a PUBLIC dir"),
+        # 2026-10-31: vir is three letters inside ordinary words and must never fire unqualified, nor as a prefix.
+        ("vi-c-words", "a " + "vir" + "tual machine and an en" + "vir" + "onment variable"),
+        ("vi-c-dir", "docs/" + "vir" + "/x.md nests a PUBLIC dir"),
+        ("vi-c-prefix", "see projects/claude/" + "vir" + "tual/x.md, a different tree"),
+        ("vi-c-repo-suffix", "pushed to Saltworks/en" + "vir" + ".git"),
         # ROW XK: the PUBLIC benchmark repo, and the family name in prose, must never fire.
         ("xk-c-public", "see " + "saltbench" + "/harness/systems-v3/x.md"),
         ("xk-c-prose", "the " + "saltbench-sys" + "tems" + " harness runs the cells"),

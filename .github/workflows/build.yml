@@ -146,3 +146,6 @@ jobs:
       - name: no rule depends on itself in the grounded check (editor/ml/tests/no_self_dependency.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/no_self_dependency.sh
+      - name: absolute paths resolve theory before module (editor/ml/tests/dir_of_path_precedence.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/dir_of_path_precedence.sh

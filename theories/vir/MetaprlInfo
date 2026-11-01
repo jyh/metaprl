@@ -1,0 +1,8 @@
+THEORYNAME = vir
+THEORYDESCR = O95 VIR (MetaPRL arm)
+
+THEORY_DEPS[] +=
+    itt/core
+
+MPFILES[] =
+    vir

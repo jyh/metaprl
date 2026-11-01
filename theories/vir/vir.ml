@@ -113,3 +113,14 @@ interactive_rw aux_read_hoist :
 interactive_rw aux_guard_swap :
    ('c1 in bool) --> ('c2 in bool) -->
    vguard{'c1; vguard{'c2; 'e; 'd}; 'd} <--> vguard{'c2; vguard{'c1; 'e; 'd}; 'd}
+
+(*
+ * I4: U == F. The conditions are the typing of the I1 operators and of the slice;
+ * they are HYPOTHESES of the goal, not rules of the VIR (C4 does not count them).
+ *)
+interactive_rw router_fuse :
+   ('b0 in top * int) -->
+   (all x: top. all k: int. wire_u32{'x; 'k} in int) -->
+   (all x: int. all y: int. can_access{'x; 'y} in bool) -->
+   (all x: int. has_tokens{'st; 'x} in bool) -->
+   vir_U{'b0; 'st} <--> vir_F{'b0; 'st}

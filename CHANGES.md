@@ -60,10 +60,11 @@
   the ds term built from the same description, revert gives the std term,
   and revert of convert is the identity, on all 2,000 (a mutant that
   reverses subterms in the copy's header makes the first two 1,604; the
-  round trip cannot see a defect that is undone on the way back). Not
-  checked: whether two copies of one term convert to one shared term,
-  which holds for 1,961 to 1,980 of the 2,000 depending on when the GC
-  runs.
+  round trip cannot see a defect that is undone on the way back). Two
+  copies of one term convert to one shared term on all 2,000, with a full
+  GC between the two converts (#84). The 1,961 to 1,980 first reported
+  here was not reproduced on this code; built against `Weak_memo` from
+  before #76 the same check reads 1,038 of 2,000.
 - The filter's term-type checking (`term_ty_infer`) on seven small theories
   (`test/filter_types/`, a CI step after the build, Linux only): building
   the theories shows that well-typed declarations are accepted, and these
@@ -73,6 +74,13 @@
   that must be accepted, including a Term where a Dform is taken (perv
   declares `Dform <- Term`). A mutant whose subtype check accepts makes
   the three type errors pass.
+- Display forms (`editor/ml/tests/dform_golden.sh`, a CI step after the
+  build): `mp -batch` prints 59 goals, one per itt/core module (its first
+  rule with a stored complete proof), and the text is compared with
+  `dform_golden.expected`. Until now nothing pinned printed output; the
+  proof census reads rule statuses. A mutant that changes one bracket in
+  `itt_record_renaming`'s `rename_df` changes 10 lines of the output.
+  ASCII display mode only, at mp's default width of 80.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`

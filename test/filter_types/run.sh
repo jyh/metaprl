@@ -8,6 +8,9 @@
 #   <name> REFUSED Failure: <message>                       (refused earlier)
 # The builds of the theories show only that well-typed declarations are
 # accepted; these fixtures check that ill-typed ones are refused, and why.
+# Statements covered: prim_rw (check_rewrite), interactive (check_rule),
+# dform (check_dform), iform (check_iform). Not covered: productions
+# (check_production) and type rewrites (check_type_rewrite).
 # Usage (from the metaprl root, after omake): sh test/filter_types/run.sh
 # Exit 0 = the same as expected.txt.
 set -u

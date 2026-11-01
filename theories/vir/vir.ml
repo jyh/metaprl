@@ -74,6 +74,11 @@ interactive vslice_snd_wf {| intro [] |} :
    [wf] sequent { <H> >- 's in vslice } -->
    sequent { <H> >- snd{'s} in int }
 
+(* The wire's length (vlen reads it). *)
+interactive wirebuf_length_wf {| intro [] |} :
+   [wf] sequent { <H> >- 'b in wirebuf } -->
+   sequent { <H> >- length{'b} in int }
+
 (************************************************************************
  * I1: the uninterpreted operators, axiomatized by their typing alone.
  *)

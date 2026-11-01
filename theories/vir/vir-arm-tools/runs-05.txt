@@ -1,0 +1,51 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir/slice_fuse_c";;
+# /vir/vir/slice_fuse_c : string
+=== STEP 2 [ok] 0.01s :: refine (sqSubstT << 'b ~ pair{fst{'b}; snd{'b}} >> 0 thenLT [autoT; rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT sqSubstT << (snd{'b} +@ 'i) +@ 'j ~ snd{'b} +@ ('i +@ 'j) >> 0 thenT autoT]);;
+# [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m i ∈ int
+3. [1m[m<Γ> [1m⊢[m j ∈ int
+====
+[1m
+1. [m<Γ>
+[1m⊢[m advance{b; i; s1. advance{s1; j; s2. e[s2]}} ≡ advance{b; i + j; s2. e[s2]}
+
+[1mBY [m(sqSubstT << 'b ~ pair{fst{'b}; snd{'b}} >> 0 thenLT [autoT; rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT sqSubstT << (snd{'b} +@ 'i) +@ 'j ~ snd{'b} +@ ('i +@ 'j) >> 0 thenT autoT])
+
+[1m1. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m b ≡ (b.1,b.2)
+[1m2. [[1m#[m][m
+   ....main....
+   [1m[m<Γ> [1m⊢[m b.2 ∈ int
+[1m3. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m (b.2 + i) + j ≡ b.2 + i + j
+() : unit
+=== STEP 3 [ok] 0.00s :: ls "";;
+# [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m i ∈ int
+3. [1m[m<Γ> [1m⊢[m j ∈ int
+====
+[1m
+1. [m<Γ>
+[1m⊢[m advance{b; i; s1. advance{s1; j; s2. e[s2]}} ≡ advance{b; i + j; s2. e[s2]}
+
+[1mBY [m(sqSubstT << 'b ~ pair{fst{'b}; snd{'b}} >> 0 thenLT [autoT; rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT sqSubstT << (snd{'b} +@ 'i) +@ 'j ~ snd{'b} +@ ('i +@ 'j) >> 0 thenT autoT])
+
+[1m1. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m b ≡ (b.1,b.2)
+[1m2. [[1m#[m][m
+   ....main....
+   [1m[m<Γ> [1m⊢[m b.2 ∈ int
+[1m3. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m (b.2 + i) + j ≡ b.2 + i + j
+() : unit
+=== END steps=3 ok=3 err=0 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir.cmoz

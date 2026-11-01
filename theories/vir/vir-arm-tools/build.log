@@ -1,0 +1,16 @@
+*** omake: reading OMakefiles
+*** omake: finished reading OMakefiles (0.08 sec)
+- build theories/vir vir2.cmoz
++ Shell.prlcomp(lib/camlp5n -o vir2.ppo vir2.ml)
+Warning: Quotation.upsert: overwriting the quotation "xrule"
+Warning: Quotation.upsert: overwriting the quotation "xterm"
+Warning: Quotation.upsert: overwriting the quotation "xmterm"
+Warning: Quotation.upsert: overwriting the quotation "xrewrite"
+- build editor/ml <done>
+
+******
+****** MetaPRL (native code and bytecode) compiled successfully!
+****** Run ./editor/ml/mp to start the interactive prover.
+******
+
+*** omake: done (0.47 sec, 0/845 scans, 2/2328 rules, 2/601 digests)

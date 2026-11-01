@@ -1,0 +1,12 @@
+cd "/vir/vir/beta_lin";;
+refine (rwh unfold_let_lin 0 thenT logicAutoT);;
+ls "";;
+cd "../dce_atom";;
+refine (rwh unfold_let_atom 0 thenT logicAutoT);;
+ls "";;
+cd "../guard_true";;
+refine (rwh unfold_vguard 0 thenT rw reduceC 0 thenT logicAutoT);;
+ls "";;
+cd "..";;
+status_all ();;
+export ();;

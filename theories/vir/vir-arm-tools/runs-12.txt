@@ -1,0 +1,52 @@
+=== START [ok] 0.2s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir/router_fuse";;
+# /vir/vir/router_fuse : string
+=== STEP 2 [ok] 0.01s :: refine (rw (sweepDnC (unfold_vir_U orelseC unfold_parse_header orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload orelseC unfold_vir_F)) 0);;
+# [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m[m<Γ> [1m⊢[m vir_U{b0; st} ≡ vir_F{b0; st}
+
+[1mBY [m(rw (sweepDnC (unfold_vir_U orelseC unfold_parse_header orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload orelseC unfold_vir_F)) 0)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m parse_header
+         {b0;
+          s1, sender, topic. vguard
+       {has_tokens{st; sender};
+        let_lin
+            {dec_tokens{st; sender};
+             st2. vguard
+                      {can_access{sender; topic};
+                       advance{s1; 12; payload. vreturn{(st2,payload)}};
+                       vdrop{err_unauthorized_or_rate_limited}}};
+        vdrop{err_unauthorized_or_rate_limited}}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. read_u32
+{b0;
+ 4;
+ sender. read_u32
+             {b0;
+              8;
+              topic. vguard
+                         {(magic =⒝ vir_magic)
+∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+let_lin
+    {dec_tokens{st; sender};
+     st2. advance{b0; 24; payload_slice. vreturn{(st2,payload_slice)}}};
+vdrop{err_unauthorized_or_rate_limited}}}}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== END steps=2 ok=2 err=0 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir.cmoz

@@ -1,0 +1,209 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir/router_fuse";;
+# /vir/vir/router_fuse : string
+=== STEP 2 [ok] 0.01s :: refine (rw (sweepDnC (unfold_vir_U orelseC unfold_vir_F)) 0 thenT rw (sweepDnC (unfold_parse_header orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload)) 0 thenT rw (addrC [1;2;3;2;3;3] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;3] beta_lin) 0 thenT rw (addrC [1;2;3;2;3;3;2] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;2] slice_fuse_c) 0 thenMT rw (addrC [1;2;3;2;3;3;2;2;2] reduceC) 0 thenMT rw (repeatC (higherC unfold_read_u32)) 0 thenMT rw (addrC [1;2;2] aux_guard_swap) 0 thenMT rw (addrC [1;2;2] guard_merge_c) 0 thenMT rw (addrC [1;2] guard_merge_c) 0 thenMT rw (higherC beta_lin) 0 thenT assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT autoT);;
+# [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m[m<Γ> [1m⊢[m vir_U{b0; st} ≡ vir_F{b0; st}
+
+[1mBY [m(rw (sweepDnC (unfold_vir_U orelseC unfold_vir_F)) 0 thenT rw (sweepDnC (unfold_parse_header orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload)) 0 thenT rw (addrC [1;2;3;2;3;3] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;3] beta_lin) 0 thenT rw (addrC [1;2;3;2;3;3;2] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;2] slice_fuse_c) 0 thenMT rw (addrC [1;2;3;2;3;3;2;2;2] reduceC) 0 thenMT rw (repeatC (higherC unfold_read_u32)) 0 thenMT rw (addrC [1;2;2] aux_guard_swap) 0 thenMT rw (addrC [1;2;2] guard_merge_c) 0 thenMT rw (addrC [1;2] guard_merge_c) 0 thenMT rw (higherC beta_lin) 0 thenT assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT autoT)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m wire_u32{b0.1; b0.2 + 0} ∈ int
+[1m2. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m vir_magic ∈ int
+[1m3. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m has_tokens{st; wire_u32{b0.1; b0.2 + 4}} ∈ Bool
+[1m4. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}} ∈ Bool
+() : unit
+=== STEP 3 [ok] 0.00s :: cd "1";;
+# /vir/vir/router_fuse/1 : string
+=== STEP 4 [ok] 0.00s :: refine (backThruHypT 3 thenT autoT);;
+# [1m#[m [1m#[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>[1m
+2. [mb0 ∈ (Top ╳ int)[1m
+3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+[1m⊢[m wire_u32{b0.1; b0.2 + 0} ∈ int
+
+[1mBY [m(backThruHypT 3 thenT autoT)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x4:Top. ∀k:int. (wire_u32{x4; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m b0.2 ∈ int
+() : unit
+=== STEP 5 [ok] 0.00s :: cd "../2";;
+# /vir/vir/router_fuse/2 : string
+=== STEP 6 [ERR] 0.00s :: refine (rw unfold_vir_magic 0 thenT autoT);;
+# Refine error:
+    Rewrite.apply_rewrite: StringError: opnames do not match
+=== STEP 7 [ok] 0.00s :: cd "../3";;
+# /vir/vir/router_fuse/3 : string
+=== STEP 8 [ok] 0.00s :: refine (backThruHypT 5 thenT autoT);;
+# [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>[1m
+2. [mb0 ∈ (Top ╳ int)[1m
+3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+[1m⊢[m has_tokens{st; wire_u32{b0.1; b0.2 + 4}} ∈ Bool
+
+[1mBY [m(backThruHypT 5 thenT autoT)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x4:int. (has_tokens{st; x4} ∈ Bool)
+   [1m⊢[m wire_u32{b0.1; b0.2 + 4} ∈ int
+() : unit
+=== STEP 9 [ok] 0.00s :: cd "../4";;
+# /vir/vir/router_fuse/4 : string
+=== STEP 10 [ok] 0.00s :: refine (backThruHypT 4 thenT autoT);;
+# [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>[1m
+2. [mb0 ∈ (Top ╳ int)[1m
+3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+[1m⊢[m can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}} ∈ Bool
+
+[1mBY [m(backThruHypT 4 thenT autoT)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x4:int. ∀y:int. (can_access{x4; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m wire_u32{b0.1; b0.2 + 4} ∈ int
+[1m2. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x4:int. ∀y:int. (can_access{x4; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m wire_u32{b0.1; b0.2 + 8} ∈ int
+() : unit
+=== STEP 11 [ok] 0.00s :: cd "..";;
+# /vir/vir/router_fuse : string
+=== STEP 12 [ok] 0.00s :: ls "";;
+# [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m[m<Γ> [1m⊢[m vir_U{b0; st} ≡ vir_F{b0; st}
+
+[1mBY [m(rw (sweepDnC (unfold_vir_U orelseC unfold_vir_F)) 0 thenT rw (sweepDnC (unfold_parse_header orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload)) 0 thenT rw (addrC [1;2;3;2;3;3] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;3] beta_lin) 0 thenT rw (addrC [1;2;3;2;3;3;2] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;2] slice_fuse_c) 0 thenMT rw (addrC [1;2;3;2;3;3;2;2;2] reduceC) 0 thenMT rw (repeatC (higherC unfold_read_u32)) 0 thenMT rw (addrC [1;2;2] aux_guard_swap) 0 thenMT rw (addrC [1;2;2] guard_merge_c) 0 thenMT rw (addrC [1;2] guard_merge_c) 0 thenMT rw (higherC beta_lin) 0 thenT assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT autoT)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m wire_u32{b0.1; b0.2 + 0} ∈ int
+[1m2. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m vir_magic ∈ int
+[1m3. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m has_tokens{st; wire_u32{b0.1; b0.2 + 4}} ∈ Bool
+[1m4. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (Top ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)[1m
+   5. [m∀x:int. (has_tokens{st; x} ∈ Bool)
+   [1m⊢[m can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}} ∈ Bool
+() : unit
+=== END steps=12 ok=12 err=1 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir.cmoz

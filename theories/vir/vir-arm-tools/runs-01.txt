@@ -1,0 +1,37 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.05s :: cd "/vir/vir";;
+# Module: /vir
+/vir/vir : string
+=== STEP 2 [ok] 0.00s :: cd "beta_lin";;
+# /vir/vir/beta_lin : string
+=== STEP 3 [ok] 0.00s :: ls "";;
+# [1m?[m <[1m?[m>
+....main....
+[1m[m<Γ> [1m⊢[m let_lin{v1; v2. e[v2]} ≡ e[v1]
+
+[1mBY [m<Incomplete>
+() : unit
+=== STEP 4 [ok] 0.00s :: refine (rwh unfold_let_lin 0);;
+# [1m#[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m let_lin{v1; v2. e[v2]} ≡ e[v1]
+
+[1mBY [m(rwh unfold_let_lin 0)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m[m<Γ> [1m⊢[m e[v1] ≡ e[v1]
+() : unit
+=== STEP 5 [ok] 0.00s :: ls "";;
+# [1m#[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m let_lin{v1; v2. e[v2]} ≡ e[v1]
+
+[1mBY [m(rwh unfold_let_lin 0)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m[m<Γ> [1m⊢[m e[v1] ≡ e[v1]
+() : unit
+=== END steps=5 ok=5 err=0 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir.cmoz

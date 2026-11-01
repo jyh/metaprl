@@ -1,0 +1,1134 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe";;
+# /vir/vir3/route_acl_safe : string
+=== STEP 2 [ok] 0.01s :: refine (dT 0);;
+# [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>
+[1m⊢[m ∀b:validframe
+     ∀st:Top
+        (isrouted{vir_F2{whole_slice{b}; st}}
+         ═⇒ ↑can_access{frame_sender{b}; frame_topic{b}})
+
+[1mBY [m(dT 0)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m[m<Γ> [1m⊢[m validframe Type
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe
+   [1m⊢[m ∀st:Top
+        (isrouted{vir_F2{whole_slice{b}; st}}
+         ═⇒ ↑can_access{frame_sender{b}; frame_topic{b}})
+() : unit
+=== CHILDREN 2: wf main
+=== STEP 3 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2 : string
+=== STEP 4 [ok] 0.00s :: refine (dT 0);;
+# [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe
+[1m⊢[m ∀st:Top
+     (isrouted{vir_F2{whole_slice{b}; st}}
+      ═⇒ ↑can_access{frame_sender{b}; frame_topic{b}})
+
+[1mBY [m(dT 0)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m[m<Γ>[1m; [mvalidframe [1m⊢[m Top Type
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top
+   [1m⊢[m isrouted{vir_F2{whole_slice{b}; st}}
+     ═⇒ ↑can_access{frame_sender{b}; frame_topic{b}}
+() : unit
+=== CHILDREN 4: wf main
+=== STEP 5 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2/2 : string
+=== STEP 6 [ok] 0.00s :: refine (dT 0);;
+# [1m#[m [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top
+[1m⊢[m isrouted{vir_F2{whole_slice{b}; st}}
+  ═⇒ ↑can_access{frame_sender{b}; frame_topic{b}}
+
+[1mBY [m(dT 0)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m[m<Γ>[1m; [mb: validframe[1m; [mst: Top [1m⊢[m isrouted{vir_F2{whole_slice{b}; st}} Type
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [misrouted{vir_F2{whole_slice{b}; st}}
+   [1m⊢[m ↑can_access{frame_sender{b}; frame_topic{b}}
+() : unit
+=== CHILDREN 6: wf main
+=== STEP 7 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2/2/2 : string
+=== STEP 8 [ok] 0.00s :: refine (rw (repeatC (higherC (unfold_isrouted orelseC unfold_vir_F2 orelseC unfold_vguard orelseC unfold_vdrop orelseC unfold_read_u32 orelseC unfold_whole_slice))) 4);;
+# [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top[1m
+4. [misrouted{vir_F2{whole_slice{b}; st}}
+[1m⊢[m ↑can_access{frame_sender{b}; frame_topic{b}}
+
+[1mBY [m(rw (repeatC (higherC (unfold_isrouted orelseC unfold_vir_F2 orelseC unfold_vguard orelseC unfold_vdrop orelseC unfold_read_u32 orelseC unfold_whole_slice))) 4)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m (if vlen{(b,0)} ≥⒝ 24 then
+                 (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+                     ∧⒝ can_access
+  {wire_u32{(b,0).1; (b,0).2 + 4};
+   wire_u32{(b,0).1; (b,0).2 + 8}}
+                        ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                     let_lin
+                         {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+        ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+              {(b,0).1;
+               (b,0).2 + 16})) then
+        advance
+            {(b,0);
+             wire_u32{(b,0).1; (b,0).2 + 12};
+             p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+     else
+        inr err_bad_payload}
+                  else
+                     inr err_unauthorized_or_rate_limited)
+              else
+                 inr err_truncated_frame) [1mwith[m
+          inl x -> true
+        | inr y -> false
+   [1m⊢[m ↑can_access{frame_sender{b}; frame_topic{b}}
+() : unit
+=== CHILDREN 8: main
+=== STEP 9 [ok] 0.00s :: cd "1";;
+# /vir/vir3/route_acl_safe/2/2/2/1 : string
+=== STEP 10 [ok] 0.00s :: refine (rw (repeatC (higherC (unfold_frame_sender orelseC unfold_frame_topic orelseC unfold_read_u32 orelseC unfold_whole_slice))) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top[1m
+4. [m↑[1mmatch[m (if vlen{(b,0)} ≥⒝ 24 then
+              (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+                  ∧⒝ can_access
+                         {wire_u32{(b,0).1; (b,0).2 + 4};
+wire_u32{(b,0).1; (b,0).2 + 8}}
+                     ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                  let_lin
+                      {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                       st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+     ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+           {(b,0).1;
+            (b,0).2 + 16})) then
+     advance
+         {(b,0);
+          wire_u32{(b,0).1; (b,0).2 + 12};
+          p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+  else
+     inr err_bad_payload}
+               else
+                  inr err_unauthorized_or_rate_limited)
+           else
+              inr err_truncated_frame) [1mwith[m
+       inl x -> true
+     | inr y -> false
+[1m⊢[m ↑can_access{frame_sender{b}; frame_topic{b}}
+
+[1mBY [m(rw (repeatC (higherC (unfold_frame_sender orelseC unfold_frame_topic orelseC unfold_read_u32 orelseC unfold_whole_slice))) 0)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m (if vlen{(b,0)} ≥⒝ 24 then
+                 (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+                     ∧⒝ can_access
+  {wire_u32{(b,0).1; (b,0).2 + 4};
+   wire_u32{(b,0).1; (b,0).2 + 8}}
+                        ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                     let_lin
+                         {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+        ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+              {(b,0).1;
+               (b,0).2 + 16})) then
+        advance
+            {(b,0);
+             wire_u32{(b,0).1; (b,0).2 + 12};
+             p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+     else
+        inr err_bad_payload}
+                  else
+                     inr err_unauthorized_or_rate_limited)
+              else
+                 inr err_truncated_frame) [1mwith[m
+          inl x -> true
+        | inr y -> false
+   [1m⊢[m ↑can_access
+          {wire_u32{(b,0).1; (b,0).2 + 4};
+           wire_u32{(b,0).1; (b,0).2 + 8}}
+() : unit
+=== CHILDREN 10: main
+=== STEP 11 [ok] 0.00s :: cd "1";;
+# /vir/vir3/route_acl_safe/2/2/2/1/1 : string
+=== STEP 12 [ok] 0.00s :: refine (splitITE 4);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top[1m
+4. [m↑[1mmatch[m (if vlen{(b,0)} ≥⒝ 24 then
+              (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+                  ∧⒝ can_access
+                         {wire_u32{(b,0).1; (b,0).2 + 4};
+wire_u32{(b,0).1; (b,0).2 + 8}}
+                     ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                  let_lin
+                      {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                       st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+     ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+           {(b,0).1;
+            (b,0).2 + 16})) then
+     advance
+         {(b,0);
+          wire_u32{(b,0).1; (b,0).2 + 12};
+          p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+  else
+     inr err_bad_payload}
+               else
+                  inr err_unauthorized_or_rate_limited)
+           else
+              inr err_truncated_frame) [1mwith[m
+       inl x -> true
+     | inr y -> false
+[1m⊢[m ↑can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+
+[1mBY [m(splitITE 4)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m (if vlen{(b,0)} ≥⒝ 24 then
+                 (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+                     ∧⒝ can_access
+  {wire_u32{(b,0).1; (b,0).2 + 4};
+   wire_u32{(b,0).1; (b,0).2 + 8}}
+                        ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                     let_lin
+                         {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+        ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+              {(b,0).1;
+               (b,0).2 + 16})) then
+        advance
+            {(b,0);
+             wire_u32{(b,0).1; (b,0).2 + 12};
+             p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+     else
+        inr err_bad_payload}
+                  else
+                     inr err_unauthorized_or_rate_limited)
+              else
+                 inr err_truncated_frame) [1mwith[m
+          inl x -> true
+        | inr y -> false
+   [1m⊢[m (vlen{(b,0)} ≥⒝ 24) ∈ Bool
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+                 ∧⒝ can_access
+                        {wire_u32{(b,0).1; (b,0).2 + 4};
+                         wire_u32{(b,0).1; (b,0).2 + 8}}
+                    ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                 let_lin
+                     {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                      st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+    ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+          {(b,0).1;
+           (b,0).2 + 16})) then
+    advance
+        {(b,0);
+         wire_u32{(b,0).1; (b,0).2 + 12};
+         p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+ else
+    inr err_bad_payload}
+              else
+                 inr err_unauthorized_or_rate_limited) [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   5. [m↑(vlen{(b,0)} ≥⒝ 24)
+   [1m⊢[m ↑can_access
+          {wire_u32{(b,0).1; (b,0).2 + 4};
+           wire_u32{(b,0).1; (b,0).2 + 8}}
+[1m3. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mTop[1m
+   4. [m↑[1mmatch[m inr err_truncated_frame [1mwith[m inl x -> true | inr y -> false[1m
+   5. [m↑(¬⒝(vlen{(b,0)} ≥⒝ 24))
+   [1m⊢[m ↑can_access
+          {wire_u32{(b,0).1; (b,0).2 + 4};
+           wire_u32{(b,0).1; (b,0).2 + 8}}
+() : unit
+=== CHILDREN 12: wf main main
+=== STEP 13 [ok] 0.00s :: cd "3";;
+# /vir/vir3/route_acl_safe/2/2/2/1/1/3 : string
+=== STEP 14 [ok] 0.00s :: refine (rw (higherC reduceDecideInr) 4 thenT dT 4);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mTop[1m
+4. [m↑[1mmatch[m inr err_truncated_frame [1mwith[m inl x -> true | inr y -> false[1m
+5. [m↑(¬⒝(vlen{(b,0)} ≥⒝ 24))
+[1m⊢[m ↑can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+
+[1mBY [m(rw (higherC reduceDecideInr) 4 thenT dT 4)
+
+() : unit
+=== CHILDREN 14: 
+=== STEP 15 [ok] 0.00s :: cd "../2";;
+# /vir/vir3/route_acl_safe/2/2/2/1/1/2 : string
+=== STEP 16 [ok] 0.00s :: refine (splitITE 4);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top[1m
+4. [m↑[1mmatch[m (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+              ∧⒝ can_access
+                     {wire_u32{(b,0).1; (b,0).2 + 4};
+                      wire_u32{(b,0).1; (b,0).2 + 8}}
+                 ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+              let_lin
+                  {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                   st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+ ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+       {(b,0).1;
+        (b,0).2 + 16})) then
+ advance
+     {(b,0);
+      wire_u32{(b,0).1; (b,0).2 + 12};
+      p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                        else
+ inr err_bad_payload}
+           else
+              inr err_unauthorized_or_rate_limited) [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+5. [m↑(vlen{(b,0)} ≥⒝ 24)
+[1m⊢[m ↑can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+
+[1mBY [m(splitITE 4)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+                 ∧⒝ can_access
+                        {wire_u32{(b,0).1; (b,0).2 + 4};
+                         wire_u32{(b,0).1; (b,0).2 + 8}}
+                    ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                 let_lin
+                     {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                      st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+    ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+          {(b,0).1;
+           (b,0).2 + 16})) then
+    advance
+        {(b,0);
+         wire_u32{(b,0).1; (b,0).2 + 12};
+         p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+ else
+    inr err_bad_payload}
+              else
+                 inr err_unauthorized_or_rate_limited) [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   5. [m↑(vlen{(b,0)} ≥⒝ 24)
+   [1m⊢[m ((wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+      ∧⒝ can_access
+             {wire_u32{(b,0).1; (b,0).2 + 4};
+              wire_u32{(b,0).1; (b,0).2 + 8}}
+         ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}}) ∈
+     Bool
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m let_lin
+                 {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                  st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+      {(b,0).1;
+       (b,0).2 + 16})) then
+advance
+    {(b,0);
+     wire_u32{(b,0).1; (b,0).2 + 12};
+     p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                       else
+inr err_bad_payload} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+   6. [m↑((wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+        ∧⒝ can_access
+               {wire_u32{(b,0).1; (b,0).2 + 4};
+                wire_u32{(b,0).1; (b,0).2 + 8}}
+           ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}})
+   [1m⊢[m ↑can_access
+          {wire_u32{(b,0).1; (b,0).2 + 4};
+           wire_u32{(b,0).1; (b,0).2 + 8}}
+[1m3. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m inr err_unauthorized_or_rate_limited [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+   6. [m↑(¬⒝((wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+           ∧⒝ can_access
+                  {wire_u32{(b,0).1; (b,0).2 + 4};
+                   wire_u32{(b,0).1; (b,0).2 + 8}}
+              ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}}))
+   [1m⊢[m ↑can_access
+          {wire_u32{(b,0).1; (b,0).2 + 4};
+           wire_u32{(b,0).1; (b,0).2 + 8}}
+() : unit
+=== CHILDREN 16: wf main main
+=== STEP 17 [ok] 0.00s :: cd "3";;
+# /vir/vir3/route_acl_safe/2/2/2/1/1/2/3 : string
+=== STEP 18 [ok] 0.00s :: refine (rw (higherC reduceDecideInr) 4 thenT dT 4);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top[1m
+4. [m↑[1mmatch[m inr err_unauthorized_or_rate_limited [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+6. [m↑(¬⒝((wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+        ∧⒝ can_access
+               {wire_u32{(b,0).1; (b,0).2 + 4};
+                wire_u32{(b,0).1; (b,0).2 + 8}}
+           ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}}))
+[1m⊢[m ↑can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+
+[1mBY [m(rw (higherC reduceDecideInr) 4 thenT dT 4)
+
+() : unit
+=== CHILDREN 18: 
+=== STEP 19 [ok] 0.00s :: cd "../2";;
+# /vir/vir3/route_acl_safe/2/2/2/1/1/2/2 : string
+=== STEP 20 [ok] 0.00s :: refine (dT 6);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top[1m
+4. [m↑[1mmatch[m let_lin
+              {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+               st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                       ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+   {(b,0).1;
+    (b,0).2 + 16})) then
+                       advance
+ {(b,0);
+  wire_u32{(b,0).1; (b,0).2 + 12};
+  p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                    else
+                       inr err_bad_payload} [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+6. [m↑((wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+     ∧⒝ can_access
+            {wire_u32{(b,0).1; (b,0).2 + 4};
+             wire_u32{(b,0).1; (b,0).2 + 8}}
+        ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}})
+[1m⊢[m ↑can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+
+[1mBY [m(dT 6)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m let_lin
+                 {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                  st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+      {(b,0).1;
+       (b,0).2 + 16})) then
+advance
+    {(b,0);
+     wire_u32{(b,0).1; (b,0).2 + 12};
+     p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                       else
+inr err_bad_payload} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+   6. [m↑((wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)
+        ∧⒝ can_access
+               {wire_u32{(b,0).1; (b,0).2 + 4};
+                wire_u32{(b,0).1; (b,0).2 + 8}}
+           ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}})
+   [1m⊢[m (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic) ∈ Bool
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m let_lin
+                 {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                  st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+      {(b,0).1;
+       (b,0).2 + 16})) then
+advance
+    {(b,0);
+     wire_u32{(b,0).1; (b,0).2 + 12};
+     p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                       else
+inr err_bad_payload} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+   6. [m↑(wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)[1m
+   7. [m↑(can_access
+            {wire_u32{(b,0).1; (b,0).2 + 4};
+             wire_u32{(b,0).1; (b,0).2 + 8}}
+        ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}})
+   [1m⊢[m ↑can_access
+          {wire_u32{(b,0).1; (b,0).2 + 4};
+           wire_u32{(b,0).1; (b,0).2 + 8}}
+() : unit
+=== CHILDREN 20: wf main
+=== STEP 21 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2/2/2/1/1/2/2/2 : string
+=== STEP 22 [ok] 0.00s :: refine (dT 7);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top[1m
+4. [m↑[1mmatch[m let_lin
+              {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+               st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                       ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+   {(b,0).1;
+    (b,0).2 + 16})) then
+                       advance
+ {(b,0);
+  wire_u32{(b,0).1; (b,0).2 + 12};
+  p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                    else
+                       inr err_bad_payload} [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+6. [m↑(wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)[1m
+7. [m↑(can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+     ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}})
+[1m⊢[m ↑can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+
+[1mBY [m(dT 7)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m let_lin
+                 {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                  st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+      {(b,0).1;
+       (b,0).2 + 16})) then
+advance
+    {(b,0);
+     wire_u32{(b,0).1; (b,0).2 + 12};
+     p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                       else
+inr err_bad_payload} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+   6. [m↑(wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)[1m
+   7. [m↑(can_access
+            {wire_u32{(b,0).1; (b,0).2 + 4};
+             wire_u32{(b,0).1; (b,0).2 + 8}}
+        ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}})
+   [1m⊢[m can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+     ∈
+     Bool
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [m↑[1mmatch[m let_lin
+                 {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+                  st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+      {(b,0).1;
+       (b,0).2 + 16})) then
+advance
+    {(b,0);
+     wire_u32{(b,0).1; (b,0).2 + 12};
+     p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                       else
+inr err_bad_payload} [1mwith[m
+          inl x -> true
+        | inr y -> false[1m
+   5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+   6. [m↑(wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)[1m
+   7. [m↑can_access
+           {wire_u32{(b,0).1; (b,0).2 + 4};
+            wire_u32{(b,0).1; (b,0).2 + 8}}[1m
+   8. [m↑has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}}
+   [1m⊢[m ↑can_access
+          {wire_u32{(b,0).1; (b,0).2 + 4};
+           wire_u32{(b,0).1; (b,0).2 + 8}}
+() : unit
+=== CHILDREN 22: wf main
+=== STEP 23 [ok] 0.00s :: cd "2";;
+# /vir/vir3/route_acl_safe/2/2/2/1/1/2/2/2/2 : string
+=== STEP 24 [ok] 0.00s :: refine (nthHypT 7);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m*[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top[1m
+4. [m↑[1mmatch[m let_lin
+              {dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}};
+               st2. if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                       ∧⒝ (vlen{(b,0)} ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+   {(b,0).1;
+    (b,0).2 + 16})) then
+                       advance
+ {(b,0);
+  wire_u32{(b,0).1; (b,0).2 + 12};
+  p. take{p; wire_u32{(b,0).1; (b,0).2 + 16}; q. vreturn{(st2,q)}}}
+                    else
+                       inr err_bad_payload} [1mwith[m
+       inl x -> true
+     | inr y -> false[1m
+5. [m↑(vlen{(b,0)} ≥⒝ 24)[1m
+6. [m↑(wire_u32{(b,0).1; (b,0).2 + 0} =⒝ vir_magic)[1m
+7. [m↑can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}[1m
+8. [m↑has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}}
+[1m⊢[m ↑can_access{wire_u32{(b,0).1; (b,0).2 + 4}; wire_u32{(b,0).1; (b,0).2 + 8}}
+
+[1mBY [m(nthHypT 7)
+
+() : unit
+=== CHILDREN 24: 
+=== STEP 25 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe/1";;
+# /vir/vir3/route_acl_safe/1 : string
+=== STEP 26 [ok] 0.00s :: refine (rw (repeatC (higherC (unfold_validframe orelseC unfold_wirebuf orelseC unfold_whole_slice orelseC unfold_vlen orelseC unfold_read_u32 orelseC unfold_vir_magic))) 0 thenT autoT);;
+# [1m#[m [1m*[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m[m<Γ> [1m⊢[m validframe Type
+
+[1mBY [m(rw (repeatC (higherC (unfold_validframe orelseC unfold_wirebuf orelseC unfold_whole_slice orelseC unfold_vlen orelseC unfold_read_u32 orelseC unfold_vir_magic))) 0 thenT autoT)
+
+() : unit
+=== CHILDREN 26: 
+=== STEP 27 [ok] 0.00s :: cd "/vir/vir3/route_acl_safe/2/2/1";;
+# /vir/vir3/route_acl_safe/2/2/1 : string
+=== STEP 28 [ok] 0.00s :: refine (rw (repeatC (higherC (unfold_isrouted orelseC unfold_vir_F2 orelseC unfold_vguard orelseC unfold_vdrop orelseC unfold_read_u32 orelseC unfold_whole_slice orelseC unfold_let_lin orelseC unfold_advance orelseC unfold_vlen orelseC unfold_vir_magic))) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m[m<Γ>[1m; [mb: validframe[1m; [mst: Top [1m⊢[m isrouted{vir_F2{whole_slice{b}; st}} Type
+
+[1mBY [m(rw (repeatC (higherC (unfold_isrouted orelseC unfold_vir_F2 orelseC unfold_vguard orelseC unfold_vdrop orelseC unfold_read_u32 orelseC unfold_whole_slice orelseC unfold_let_lin orelseC unfold_advance orelseC unfold_vlen orelseC unfold_vir_magic))) 0)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top
+   [1m⊢[m (↑[1mmatch[m (if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+                 (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+                     ∧⒝ can_access
+  {wire_u32{(b,0).1; (b,0).2 + 4};
+   wire_u32{(b,0).1; (b,0).2 + 8}}
+                        ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                     (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                         ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+       {(b,0).1;
+        (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                         take
+   {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+    wire_u32{(b,0).1; (b,0).2 + 16};
+    q. vreturn{(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                      else
+                         inr err_bad_payload)
+                  else
+                     inr err_unauthorized_or_rate_limited)
+              else
+                 inr err_truncated_frame) [1mwith[m
+          inl x -> true
+        | inr y -> false) Type
+() : unit
+=== CHILDREN 28: wf
+=== STEP 29 [ok] 0.00s :: cd "1";;
+# /vir/vir3/route_acl_safe/2/2/1/1 : string
+=== STEP 30 [ok] 0.00s :: refine (dT 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top
+[1m⊢[m (↑[1mmatch[m (if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+              (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+                  ∧⒝ can_access
+                         {wire_u32{(b,0).1; (b,0).2 + 4};
+wire_u32{(b,0).1; (b,0).2 + 8}}
+                     ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                  (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                      ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+    {(b,0).1;
+     (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                      take
+{((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+ wire_u32{(b,0).1; (b,0).2 + 16};
+ q. vreturn{(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                   else
+                      inr err_bad_payload)
+               else
+                  inr err_unauthorized_or_rate_limited)
+           else
+              inr err_truncated_frame) [1mwith[m
+       inl x -> true
+     | inr y -> false) Type
+
+[1mBY [m(dT 0)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top
+   [1m⊢[m [1mmatch[m (if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+               (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+                   ∧⒝ can_access
+{wire_u32{(b,0).1; (b,0).2 + 4};
+ wire_u32{(b,0).1; (b,0).2 + 8}}
+                      ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                   (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                       ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+     {(b,0).1;
+      (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                       take
+ {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+  wire_u32{(b,0).1; (b,0).2 + 16};
+  q. vreturn{(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                    else
+                       inr err_bad_payload)
+                else
+                   inr err_unauthorized_or_rate_limited)
+            else
+               inr err_truncated_frame) [1mwith[m
+        inl x -> true
+      | inr y -> false ∈
+     Bool
+() : unit
+=== CHILDREN 30: wf
+=== STEP 31 [ok] 0.00s :: cd "1";;
+# /vir/vir3/route_acl_safe/2/2/1/1/1 : string
+=== STEP 32 [ok] 0.00s :: refine (decideEquality << bind{z. bool} >> << top + top >>);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top
+[1m⊢[m [1mmatch[m (if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+            (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+                ∧⒝ can_access
+                       {wire_u32{(b,0).1; (b,0).2 + 4};
+                        wire_u32{(b,0).1; (b,0).2 + 8}}
+                   ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                    ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+  {(b,0).1;
+   (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                    take
+                        {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+                         wire_u32{(b,0).1; (b,0).2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                 else
+                    inr err_bad_payload)
+             else
+                inr err_unauthorized_or_rate_limited)
+         else
+            inr err_truncated_frame) [1mwith[m
+     inl x -> true
+   | inr y -> false ∈
+  Bool
+
+[1mBY [m(decideEquality << bind{z. bool} >> << top + top >>)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top
+   [1m⊢[m ((if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+          (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+              ∧⒝ can_access
+                     {wire_u32{(b,0).1; (b,0).2 + 4};
+                      wire_u32{(b,0).1; (b,0).2 + 8}}
+                 ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+              (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                  ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+        {(b,0).1;
+         (b,0).2 + 16})) then
+                  take
+                      {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+                       wire_u32{(b,0).1; (b,0).2 + 16};
+                       q. vreturn
+    {(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+               else
+                  inr err_bad_payload)
+           else
+              inr err_unauthorized_or_rate_limited)
+       else
+          inr err_truncated_frame)) ∈
+     (Top + Top)
+[1m2. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [mu: Top[1m
+   5. [m((if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+           (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+               ∧⒝ can_access
+                      {wire_u32{(b,0).1; (b,0).2 + 4};
+                       wire_u32{(b,0).1; (b,0).2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+               (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                   ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+ {(b,0).1;
+  (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                   take
+                       {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+                        wire_u32{(b,0).1; (b,0).2 + 16};
+                        q. vreturn
+     {(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                else
+                   inr err_bad_payload)
+            else
+               inr err_unauthorized_or_rate_limited)
+        else
+           inr err_truncated_frame)) = (inl u) ∈ (Top + Top)
+   [1m⊢[m true ∈ Bool
+[1m3. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [mv: Top[1m
+   5. [m((if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+           (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+               ∧⒝ can_access
+                      {wire_u32{(b,0).1; (b,0).2 + 4};
+                       wire_u32{(b,0).1; (b,0).2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+               (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                   ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+ {(b,0).1;
+  (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                   take
+                       {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+                        wire_u32{(b,0).1; (b,0).2 + 16};
+                        q. vreturn
+     {(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                else
+                   inr err_bad_payload)
+            else
+               inr err_unauthorized_or_rate_limited)
+        else
+           inr err_truncated_frame)) = (inr v) ∈ (Top + Top)
+   [1m⊢[m false ∈ Bool
+() : unit
+=== CHILDREN 32: wf wf wf
+=== STEP 33 [ok] 0.00s :: ls "";;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....wf....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>[1m
+2. [mb: validframe[1m
+3. [mst: Top
+[1m⊢[m [1mmatch[m (if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+            (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+                ∧⒝ can_access
+                       {wire_u32{(b,0).1; (b,0).2 + 4};
+                        wire_u32{(b,0).1; (b,0).2 + 8}}
+                   ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+                (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                    ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+  {(b,0).1;
+   (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                    take
+                        {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+                         wire_u32{(b,0).1; (b,0).2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                 else
+                    inr err_bad_payload)
+             else
+                inr err_unauthorized_or_rate_limited)
+         else
+            inr err_truncated_frame) [1mwith[m
+     inl x -> true
+   | inr y -> false ∈
+  Bool
+
+[1mBY [m(decideEquality << bind{z. bool} >> << top + top >>)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top
+   [1m⊢[m ((if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+          (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+              ∧⒝ can_access
+                     {wire_u32{(b,0).1; (b,0).2 + 4};
+                      wire_u32{(b,0).1; (b,0).2 + 8}}
+                 ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+              (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                  ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32{(b,0).1; (b,0).2 + 12} + wire_u32
+        {(b,0).1;
+         (b,0).2 + 16})) then
+                  take
+                      {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+                       wire_u32{(b,0).1; (b,0).2 + 16};
+                       q. vreturn
+    {(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+               else
+                  inr err_bad_payload)
+           else
+              inr err_unauthorized_or_rate_limited)
+       else
+          inr err_truncated_frame)) ∈
+     (Top + Top)
+[1m2. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [mu: Top[1m
+   5. [m((if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+           (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+               ∧⒝ can_access
+                      {wire_u32{(b,0).1; (b,0).2 + 4};
+                       wire_u32{(b,0).1; (b,0).2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+               (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                   ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+ {(b,0).1;
+  (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                   take
+                       {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+                        wire_u32{(b,0).1; (b,0).2 + 16};
+                        q. vreturn
+     {(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                else
+                   inr err_bad_payload)
+            else
+               inr err_unauthorized_or_rate_limited)
+        else
+           inr err_truncated_frame)) = (inl u) ∈ (Top + Top)
+   [1m⊢[m true ∈ Bool
+[1m3. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe[1m
+   3. [mst: Top[1m
+   4. [mv: Top[1m
+   5. [m((if (|(b,0).1| - (b,0).2) ≥⒝ 24 then
+           (if (wire_u32{(b,0).1; (b,0).2 + 0} =⒝ 1297303345)
+               ∧⒝ can_access
+                      {wire_u32{(b,0).1; (b,0).2 + 4};
+                       wire_u32{(b,0).1; (b,0).2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}} then
+               (if (wire_u32{(b,0).1; (b,0).2 + 12} ≥⒝ 24)
+                   ∧⒝ ((|(b,0).1| - (b,0).2) ≥⒝ (wire_u32
+ {(b,0).1;
+  (b,0).2 + 12} + wire_u32{(b,0).1; (b,0).2 + 16})) then
+                   take
+                       {((b,0).1,(b,0).2 + wire_u32{(b,0).1; (b,0).2 + 12});
+                        wire_u32{(b,0).1; (b,0).2 + 16};
+                        q. vreturn
+     {(dec_tokens{st; wire_u32{(b,0).1; (b,0).2 + 4}},q)}}
+                else
+                   inr err_bad_payload)
+            else
+               inr err_unauthorized_or_rate_limited)
+        else
+           inr err_truncated_frame)) = (inr v) ∈ (Top + Top)
+   [1m⊢[m false ∈ Bool
+() : unit
+=== END steps=33 ok=33 err=0 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir3.cmoz

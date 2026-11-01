@@ -1,0 +1,44 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.05s :: cd "/vir/vir";;
+# Module: /vir
+/vir/vir : string
+=== STEP 2 [ok] 0.00s :: pwd ();;
+# /vir/vir : string
+=== STEP 3 [ok] 0.00s :: cd "/vir/vir1b";;
+# ! File ../../theories/vir/vir1b.prla has a wrong magic number.
+! This means that is is either not a MetaPRL file
+! or is not compatible with the version of the MetaPRL you are trying to use.
+! If you are sure this file does not contain any unsaved data, delete it.
+! If it does contain unsaved data, you might need to get a different version of MetaPRL
+! and possibly export the data to a different format.
+=== STEP 4 [ok] 0.00s :: pwd ();;
+# /vir/vir : string
+=== STEP 5 [ok] 0.01s :: status_all ();;
+# Expanding `beta_lin':
+Status: `beta_lin' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `dce_atom':
+Status: `dce_atom' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_true':
+Status: `guard_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `guard_merge':
+Status: `guard_merge' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `slice_fuse':
+Status: `slice_fuse' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `read_comm':
+Status: `read_comm' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_merge_c':
+Status: `guard_merge_c' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `slice_fuse_c':
+Status: `slice_fuse_c' is a derived object with a complete proof (1 rule boxes, 43 primitive steps)
+Expanding `aux_advance_sink_guard':
+Status: `aux_advance_sink_guard' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `aux_read_hoist':
+Status: `aux_read_hoist' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `aux_guard_swap':
+Status: `aux_guard_swap' is a derived object with a complete proof (1 rule boxes, 66 primitive steps)
+Expanding `router_fuse':
+Status: `router_fuse' is a derived object with a complete proof (5 rule boxes, 516 primitive steps)
+User time 0.009769; System time 0.000257; Real time 0.010026
+() : unit
+=== END steps=5 ok=5 err=0 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir.cmoz

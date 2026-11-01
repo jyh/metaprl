@@ -1,0 +1,76 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir/beta_lin";;
+# /vir/vir/beta_lin : string
+=== STEP 2 [ok] 0.01s :: refine (rwh unfold_let_lin 0 thenT logicAutoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m let_lin{v1; v2. e[v2]} ≡ e[v1]
+
+[1mBY [m(rwh unfold_let_lin 0 thenT logicAutoT)
+
+() : unit
+=== STEP 3 [ok] 0.00s :: ls "";;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m let_lin{v1; v2. e[v2]} ≡ e[v1]
+
+[1mBY [m(rwh unfold_let_lin 0 thenT logicAutoT)
+
+() : unit
+=== STEP 4 [ok] 0.00s :: cd "../dce_atom";;
+# /vir/vir/dce_atom : string
+=== STEP 5 [ok] 0.00s :: refine (rwh unfold_let_atom 0 thenT logicAutoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m let_atom{a; v. e} ≡ e
+
+[1mBY [m(rwh unfold_let_atom 0 thenT logicAutoT)
+
+() : unit
+=== STEP 6 [ok] 0.00s :: ls "";;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m let_atom{a; v. e} ≡ e
+
+[1mBY [m(rwh unfold_let_atom 0 thenT logicAutoT)
+
+() : unit
+=== STEP 7 [ok] 0.00s :: cd "../guard_true";;
+# /vir/vir/guard_true : string
+=== STEP 8 [ok] 0.00s :: refine (rwh unfold_vguard 0 thenT rw reduceC 0 thenT logicAutoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m vguard{true; e1; e2} ≡ e1
+
+[1mBY [m(rwh unfold_vguard 0 thenT rw reduceC 0 thenT logicAutoT)
+
+() : unit
+=== STEP 9 [ok] 0.00s :: ls "";;
+# [1m*[m <[1m*[m>
+....main....
+[1m[m<Γ> [1m⊢[m vguard{true; e1; e2} ≡ e1
+
+[1mBY [m(rwh unfold_vguard 0 thenT rw reduceC 0 thenT logicAutoT)
+
+() : unit
+=== STEP 10 [ok] 0.00s :: cd "..";;
+# /vir/vir : string
+=== STEP 11 [ok] 0.00s :: status_all ();;
+# Expanding `beta_lin':
+Status: `beta_lin' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `dce_atom':
+Status: `dce_atom' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_true':
+Status: `guard_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `guard_merge':
+Status: `guard_merge' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `slice_fuse':
+Status: `slice_fuse' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `read_comm':
+Status: `read_comm' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+User time 0.000861; System time 0.000017; Real time 0.000875
+() : unit
+=== STEP 12 [ok] 0.00s :: export ();;
+# Exporting vir
+() : unit
+=== END steps=12 ok=12 err=0 rc=0 cmoz-written=0

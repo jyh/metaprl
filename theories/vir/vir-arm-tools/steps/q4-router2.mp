@@ -1,0 +1,14 @@
+cd "/vir/vir2/router2_fuse";;
+refine (rw (sweepDnC (unfold_vir_U2 orelseC unfold_vir_F2)) 0);;
+cd "1";;
+refine (rw (sweepDnC (unfold_parse_header2 orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload2)) 0);;
+cd "1";;
+refine (rw (addrC [1;2;3;2;3;3;3;3] aux_advance_sink_guard) 0);;
+cd "1";;
+refine (rw (addrC [1;2;3;2;3;3;3;3;2;3] beta_lin) 0);;
+cd "1";;
+refine (rw (addrC [1;2;3;2;3;3;3;3;2] aux_advance_sink_guard) 0);;
+cd "1";;
+refine (rw (addrC [1;2;3;2;3;3;3;3;2;2] unfold_advance) 0);;
+cd "1";;
+refine (rw (addrC [1;2;3;2;3;3;3;3] aux_guard_swap) 0);;

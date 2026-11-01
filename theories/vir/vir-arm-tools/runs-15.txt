@@ -1,0 +1,8 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir/router_fuse";;
+# /vir/vir/router_fuse : string
+=== STEP 2 [ERR] 0.00s :: refine (rw (sweepDnC (unfold_vir_U orelseC unfold_vir_F)) 0 thenT rw (sweepDnC (unfold_parse_header orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload)) 0 thenT rw (addrC [1;2;3;2;3;3] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;3] beta_lin) 0 thenT rw (addrC [1;2;3;2;3;3;2] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;2;2] slice_fuse_c) 0 thenMT rw (addrC [1;2;3;2;3;3;2;2;2] reduceC) 0 thenMT rw (sweepDnC unfold_read_u32) 0 thenMT rw (addrC [1;2;2] aux_guard_swap) 0 thenMT rw (addrC [1;2;2] guard_merge_c) 0 thenMT rw (addrC [1;2] guard_merge_c) 0 thenMT rw (higherC beta_lin) 0);;
+# Refine error:
+    apply_crwaddr: [1; 2; 2] 
+       Rewrite.apply_rewrite: StringError: opnames do not match
+=== END steps=2 ok=2 err=1 rc=0 cmoz-written=0

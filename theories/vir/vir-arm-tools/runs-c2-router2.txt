@@ -1,0 +1,2229 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir2/router2_fuse";;
+# /vir/vir2/router2_fuse : string
+=== STEP 2 [ok] 0.01s :: refine (rw (sweepDnC (unfold_vir_U2 orelseC unfold_vir_F2)) 0);;
+# [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m[m<Γ> [1m⊢[m vir_U2{b0; st} ≡ vir_F2{b0; st}
+
+[1mBY [m(rw (sweepDnC (unfold_vir_U2 orelseC unfold_vir_F2)) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m parse_header2
+         {b0;
+          s1, sender, topic, off, n. check_rate_limit
+               {st;
+                sender;
+                st2. verify_acl{sender; topic; emit_payload2{s1; off; n; st2}}}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. read_u32
+{b0;
+ 4;
+ sender. read_u32
+             {b0;
+              8;
+              topic. read_u32
+                         {b0;
+12;
+off. read_u32
+         {b0;
+          16;
+          n. vguard
+                 {(magic =⒝ vir_magic)
+                  ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+                  let_lin
+                      {dec_tokens{st; sender};
+                       st2. vguard
+      {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+       advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+       vdrop{err_bad_payload}}};
+                  vdrop{err_unauthorized_or_rate_limited}}}}}}};
+          vdrop{err_truncated_frame}}
+[1m====[m
+[1m2. [1m?[m[m
+   ....main....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ (((|b0.1| - (b0.2 + 12)) + 12) ≥⒝ (wire_u32
+          {b0.1;
+           b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12);
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                        {b0.1;
+                         b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+
+[1m====[m
+[1m3. [1m?[m[m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m 12 ∈ int
+
+[1m====[m
+[1m4. [1m?[m[m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m (wire_u32{b0.1; b0.2 + 12} - 12) ∈ int
+
+[1m====[m
+[1m5. [1m?[m[m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m b0.2 ∈ int
+
+[1m====[m
+[1m6. [1m?[m[m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m (wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic) ∈ Bool
+
+[1m====[m
+[1m7. [1m?[m[m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m has_tokens{st; wire_u32{b0.1; b0.2 + 4}} ∈ Bool
+
+[1m====[m
+[1m8. [1m?[m[m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}} ∈ Bool
+
+() : unit
+=== CHILDREN 2: -
+=== STEP 3 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1 : string
+=== STEP 4 [ok] 0.00s :: refine (rw (sweepDnC (unfold_parse_header2 orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload2)) 0);;
+# [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m parse_header2
+      {b0;
+       s1, sender, topic, off, n. check_rate_limit
+            {st;
+             sender;
+             st2. verify_acl{sender; topic; emit_payload2{s1; off; n; st2}}}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. read_u32
+                       {b0;
+                        4;
+                        sender. read_u32
+          {b0;
+           8;
+           topic. read_u32
+                      {b0;
+                       12;
+                       off. read_u32
+      {b0;
+       16;
+       n. vguard
+              {(magic =⒝ vir_magic)
+               ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+               let_lin
+                   {dec_tokens{st; sender};
+                    st2. vguard
+   {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+    advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}}}}}}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (sweepDnC (unfold_parse_header2 orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload2)) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. vguard
+{magic =⒝ vir_magic;
+ read_u32
+     {b0;
+      4;
+      sender. read_u32
+                  {b0;
+                   8;
+                   topic. read_u32
+    {b0;
+     12;
+     off. read_u32
+              {b0;
+               16;
+               n. advance
+                      {b0;
+                       12;
+                       s1. vguard
+     {has_tokens{st; sender};
+      let_lin
+          {dec_tokens{st; sender};
+           st2. vguard
+                    {can_access{sender; topic};
+                     vguard
+                         {(off ≥⒝ 24) ∧⒝ ((vlen{s1} + 12) ≥⒝ (off + n));
+advance{s1; off - 12; p. take{p; n; q. vreturn{(st2,q)}}};
+vdrop{err_bad_payload}};
+                     vdrop{err_unauthorized_or_rate_limited}}};
+      vdrop{err_unauthorized_or_rate_limited}}}}}}};
+ vdrop{err_unauthorized_or_rate_limited}}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. read_u32
+{b0;
+ 4;
+ sender. read_u32
+             {b0;
+              8;
+              topic. read_u32
+                         {b0;
+12;
+off. read_u32
+         {b0;
+          16;
+          n. vguard
+                 {(magic =⒝ vir_magic)
+                  ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+                  let_lin
+                      {dec_tokens{st; sender};
+                       st2. vguard
+      {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+       advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+       vdrop{err_bad_payload}}};
+                  vdrop{err_unauthorized_or_rate_limited}}}}}}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 4: -
+=== STEP 5 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1 : string
+=== STEP 6 [ok] 0.00s :: refine (rw (addrC [1;2;3;2;3;3;3;3] aux_advance_sink_guard) 0);;
+# [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. vguard
+                       {magic =⒝ vir_magic;
+                        read_u32
+  {b0;
+   4;
+   sender. read_u32
+               {b0;
+                8;
+                topic. read_u32
+ {b0;
+  12;
+  off. read_u32
+           {b0;
+            16;
+            n. advance
+                   {b0;
+                    12;
+                    s1. vguard
+  {has_tokens{st; sender};
+   let_lin
+       {dec_tokens{st; sender};
+        st2. vguard
+                 {can_access{sender; topic};
+                  vguard
+                      {(off ≥⒝ 24) ∧⒝ ((vlen{s1} + 12) ≥⒝ (off + n));
+                       advance
+ {s1;
+  off - 12;
+  p. take{p; n; q. vreturn{(st2,q)}}};
+                       vdrop{err_bad_payload}};
+                  vdrop{err_unauthorized_or_rate_limited}}};
+   vdrop{err_unauthorized_or_rate_limited}}}}}}};
+                        vdrop{err_unauthorized_or_rate_limited}}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. read_u32
+                       {b0;
+                        4;
+                        sender. read_u32
+          {b0;
+           8;
+           topic. read_u32
+                      {b0;
+                       12;
+                       off. read_u32
+      {b0;
+       16;
+       n. vguard
+              {(magic =⒝ vir_magic)
+               ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+               let_lin
+                   {dec_tokens{st; sender};
+                    st2. vguard
+   {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+    advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}}}}}}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (addrC [1;2;3;2;3;3;3;3] aux_advance_sink_guard) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. vguard
+{magic =⒝ vir_magic;
+ read_u32
+     {b0;
+      4;
+      sender. read_u32
+                  {b0;
+                   8;
+                   topic. read_u32
+    {b0;
+     12;
+     off. read_u32
+              {b0;
+               16;
+               n. vguard
+                      {has_tokens{st; sender};
+                       advance
+ {b0;
+  12;
+  s1. let_lin
+          {dec_tokens{st; sender};
+           st2. vguard
+                    {can_access{sender; topic};
+                     vguard
+                         {(off ≥⒝ 24) ∧⒝ ((vlen{s1} + 12) ≥⒝ (off + n));
+advance{s1; off - 12; p. take{p; n; q. vreturn{(st2,q)}}};
+vdrop{err_bad_payload}};
+                     vdrop{err_unauthorized_or_rate_limited}}}};
+                       vdrop{err_unauthorized_or_rate_limited}}}}}};
+ vdrop{err_unauthorized_or_rate_limited}}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. read_u32
+{b0;
+ 4;
+ sender. read_u32
+             {b0;
+              8;
+              topic. read_u32
+                         {b0;
+12;
+off. read_u32
+         {b0;
+          16;
+          n. vguard
+                 {(magic =⒝ vir_magic)
+                  ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+                  let_lin
+                      {dec_tokens{st; sender};
+                       st2. vguard
+      {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+       advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+       vdrop{err_bad_payload}}};
+                  vdrop{err_unauthorized_or_rate_limited}}}}}}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 6: -
+=== STEP 7 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1 : string
+=== STEP 8 [ok] 0.00s :: refine (rw (addrC [1;2;3;2;3;3;3;3;2;3] beta_lin) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. vguard
+                       {magic =⒝ vir_magic;
+                        read_u32
+  {b0;
+   4;
+   sender. read_u32
+               {b0;
+                8;
+                topic. read_u32
+ {b0;
+  12;
+  off. read_u32
+           {b0;
+            16;
+            n. vguard
+                   {has_tokens{st; sender};
+                    advance
+                        {b0;
+                         12;
+                         s1. let_lin
+       {dec_tokens{st; sender};
+        st2. vguard
+                 {can_access{sender; topic};
+                  vguard
+                      {(off ≥⒝ 24) ∧⒝ ((vlen{s1} + 12) ≥⒝ (off + n));
+                       advance
+ {s1;
+  off - 12;
+  p. take{p; n; q. vreturn{(st2,q)}}};
+                       vdrop{err_bad_payload}};
+                  vdrop{err_unauthorized_or_rate_limited}}}};
+                    vdrop{err_unauthorized_or_rate_limited}}}}}};
+                        vdrop{err_unauthorized_or_rate_limited}}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. read_u32
+                       {b0;
+                        4;
+                        sender. read_u32
+          {b0;
+           8;
+           topic. read_u32
+                      {b0;
+                       12;
+                       off. read_u32
+      {b0;
+       16;
+       n. vguard
+              {(magic =⒝ vir_magic)
+               ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+               let_lin
+                   {dec_tokens{st; sender};
+                    st2. vguard
+   {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+    advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}}}}}}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (addrC [1;2;3;2;3;3;3;3;2;3] beta_lin) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. vguard
+{magic =⒝ vir_magic;
+ read_u32
+     {b0;
+      4;
+      sender. read_u32
+                  {b0;
+                   8;
+                   topic. read_u32
+    {b0;
+     12;
+     off. read_u32
+              {b0;
+               16;
+               n. vguard
+                      {has_tokens{st; sender};
+                       advance
+ {b0;
+  12;
+  s1. vguard
+          {can_access{sender; topic};
+           vguard
+               {(off ≥⒝ 24) ∧⒝ ((vlen{s1} + 12) ≥⒝ (off + n));
+                advance
+                    {s1;
+                     off - 12;
+                     p. take{p; n; q. vreturn{(dec_tokens{st; sender},q)}}};
+                vdrop{err_bad_payload}};
+           vdrop{err_unauthorized_or_rate_limited}}};
+                       vdrop{err_unauthorized_or_rate_limited}}}}}};
+ vdrop{err_unauthorized_or_rate_limited}}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. read_u32
+{b0;
+ 4;
+ sender. read_u32
+             {b0;
+              8;
+              topic. read_u32
+                         {b0;
+12;
+off. read_u32
+         {b0;
+          16;
+          n. vguard
+                 {(magic =⒝ vir_magic)
+                  ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+                  let_lin
+                      {dec_tokens{st; sender};
+                       st2. vguard
+      {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+       advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+       vdrop{err_bad_payload}}};
+                  vdrop{err_unauthorized_or_rate_limited}}}}}}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 8: -
+=== STEP 9 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1 : string
+=== STEP 10 [ok] 0.00s :: refine (rw (addrC [1;2;3;2;3;3;3;3;2] aux_advance_sink_guard) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. vguard
+                       {magic =⒝ vir_magic;
+                        read_u32
+  {b0;
+   4;
+   sender. read_u32
+               {b0;
+                8;
+                topic. read_u32
+ {b0;
+  12;
+  off. read_u32
+           {b0;
+            16;
+            n. vguard
+                   {has_tokens{st; sender};
+                    advance
+                        {b0;
+                         12;
+                         s1. vguard
+       {can_access{sender; topic};
+        vguard
+            {(off ≥⒝ 24) ∧⒝ ((vlen{s1} + 12) ≥⒝ (off + n));
+             advance
+                 {s1;
+                  off - 12;
+                  p. take{p; n; q. vreturn{(dec_tokens{st; sender},q)}}};
+             vdrop{err_bad_payload}};
+        vdrop{err_unauthorized_or_rate_limited}}};
+                    vdrop{err_unauthorized_or_rate_limited}}}}}};
+                        vdrop{err_unauthorized_or_rate_limited}}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. read_u32
+                       {b0;
+                        4;
+                        sender. read_u32
+          {b0;
+           8;
+           topic. read_u32
+                      {b0;
+                       12;
+                       off. read_u32
+      {b0;
+       16;
+       n. vguard
+              {(magic =⒝ vir_magic)
+               ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+               let_lin
+                   {dec_tokens{st; sender};
+                    st2. vguard
+   {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+    advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}}}}}}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (addrC [1;2;3;2;3;3;3;3;2] aux_advance_sink_guard) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. vguard
+{magic =⒝ vir_magic;
+ read_u32
+     {b0;
+      4;
+      sender. read_u32
+                  {b0;
+                   8;
+                   topic. read_u32
+    {b0;
+     12;
+     off. read_u32
+              {b0;
+               16;
+               n. vguard
+                      {has_tokens{st; sender};
+                       vguard
+ {can_access{sender; topic};
+  advance
+      {b0;
+       12;
+       s1. vguard
+               {(off ≥⒝ 24) ∧⒝ ((vlen{s1} + 12) ≥⒝ (off + n));
+                advance
+                    {s1;
+                     off - 12;
+                     p. take{p; n; q. vreturn{(dec_tokens{st; sender},q)}}};
+                vdrop{err_bad_payload}}};
+  vdrop{err_unauthorized_or_rate_limited}};
+                       vdrop{err_unauthorized_or_rate_limited}}}}}};
+ vdrop{err_unauthorized_or_rate_limited}}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. read_u32
+{b0;
+ 4;
+ sender. read_u32
+             {b0;
+              8;
+              topic. read_u32
+                         {b0;
+12;
+off. read_u32
+         {b0;
+          16;
+          n. vguard
+                 {(magic =⒝ vir_magic)
+                  ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+                  let_lin
+                      {dec_tokens{st; sender};
+                       st2. vguard
+      {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+       advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+       vdrop{err_bad_payload}}};
+                  vdrop{err_unauthorized_or_rate_limited}}}}}}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 10: -
+=== STEP 11 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1 : string
+=== STEP 12 [ok] 0.00s :: refine (rw (addrC [1;2;3;2;3;3;3;3;2;2] unfold_advance) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. vguard
+                       {magic =⒝ vir_magic;
+                        read_u32
+  {b0;
+   4;
+   sender. read_u32
+               {b0;
+                8;
+                topic. read_u32
+ {b0;
+  12;
+  off. read_u32
+           {b0;
+            16;
+            n. vguard
+                   {has_tokens{st; sender};
+                    vguard
+                        {can_access{sender; topic};
+                         advance
+   {b0;
+    12;
+    s1. vguard
+            {(off ≥⒝ 24) ∧⒝ ((vlen{s1} + 12) ≥⒝ (off + n));
+             advance
+                 {s1;
+                  off - 12;
+                  p. take{p; n; q. vreturn{(dec_tokens{st; sender},q)}}};
+             vdrop{err_bad_payload}}};
+                         vdrop{err_unauthorized_or_rate_limited}};
+                    vdrop{err_unauthorized_or_rate_limited}}}}}};
+                        vdrop{err_unauthorized_or_rate_limited}}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. read_u32
+                       {b0;
+                        4;
+                        sender. read_u32
+          {b0;
+           8;
+           topic. read_u32
+                      {b0;
+                       12;
+                       off. read_u32
+      {b0;
+       16;
+       n. vguard
+              {(magic =⒝ vir_magic)
+               ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+               let_lin
+                   {dec_tokens{st; sender};
+                    st2. vguard
+   {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+    advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}}}}}}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (addrC [1;2;3;2;3;3;3;3;2;2] unfold_advance) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. vguard
+{magic =⒝ vir_magic;
+ read_u32
+     {b0;
+      4;
+      sender. read_u32
+                  {b0;
+                   8;
+                   topic. read_u32
+    {b0;
+     12;
+     off. read_u32
+              {b0;
+               16;
+               n. vguard
+                      {has_tokens{st; sender};
+                       vguard
+ {can_access{sender; topic};
+  vguard
+      {(off ≥⒝ 24) ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (off + n));
+       advance
+           {(b0.1,b0.2 + 12);
+            off - 12;
+            p. take{p; n; q. vreturn{(dec_tokens{st; sender},q)}}};
+       vdrop{err_bad_payload}};
+  vdrop{err_unauthorized_or_rate_limited}};
+                       vdrop{err_unauthorized_or_rate_limited}}}}}};
+ vdrop{err_unauthorized_or_rate_limited}}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          read_u32
+              {b0;
+               0;
+               magic. read_u32
+{b0;
+ 4;
+ sender. read_u32
+             {b0;
+              8;
+              topic. read_u32
+                         {b0;
+12;
+off. read_u32
+         {b0;
+          16;
+          n. vguard
+                 {(magic =⒝ vir_magic)
+                  ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+                  let_lin
+                      {dec_tokens{st; sender};
+                       st2. vguard
+      {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+       advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+       vdrop{err_bad_payload}}};
+                  vdrop{err_unauthorized_or_rate_limited}}}}}}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 12: -
+=== STEP 13 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1 : string
+=== STEP 14 [ok] 0.00s :: refine (rw (repeatC (higherC unfold_read_u32)) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. vguard
+                       {magic =⒝ vir_magic;
+                        read_u32
+  {b0;
+   4;
+   sender. read_u32
+               {b0;
+                8;
+                topic. read_u32
+ {b0;
+  12;
+  off. read_u32
+           {b0;
+            16;
+            n. vguard
+                   {has_tokens{st; sender};
+                    vguard
+                        {can_access{sender; topic};
+                         vguard
+   {(off ≥⒝ 24) ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (off + n));
+    advance
+        {(b0.1,b0.2 + 12);
+         off - 12;
+         p. take{p; n; q. vreturn{(dec_tokens{st; sender},q)}}};
+    vdrop{err_bad_payload}};
+                         vdrop{err_unauthorized_or_rate_limited}};
+                    vdrop{err_unauthorized_or_rate_limited}}}}}};
+                        vdrop{err_unauthorized_or_rate_limited}}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       read_u32
+           {b0;
+            0;
+            magic. read_u32
+                       {b0;
+                        4;
+                        sender. read_u32
+          {b0;
+           8;
+           topic. read_u32
+                      {b0;
+                       12;
+                       off. read_u32
+      {b0;
+       16;
+       n. vguard
+              {(magic =⒝ vir_magic)
+               ∧⒝ can_access{sender; topic} ∧⒝ has_tokens{st; sender};
+               let_lin
+                   {dec_tokens{st; sender};
+                    st2. vguard
+   {(off ≥⒝ 24) ∧⒝ (vlen{b0} ≥⒝ (off + n));
+    advance{b0; off; p. take{p; n; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}}}}}}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (repeatC (higherC unfold_read_u32)) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic;
+               vguard
+                   {has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                    vguard
+                        {can_access
+   {wire_u32{b0.1; b0.2 + 4};
+    wire_u32{b0.1; b0.2 + 8}};
+                         vguard
+   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+    ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                      {b0.1;
+                       b0.2 + 16}));
+    advance
+        {(b0.1,b0.2 + 12);
+         wire_u32{b0.1; b0.2 + 12} - 12;
+         p. take
+                {p;
+                 wire_u32{b0.1; b0.2 + 16};
+                 q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+    vdrop{err_bad_payload}};
+                         vdrop{err_unauthorized_or_rate_limited}};
+                    vdrop{err_unauthorized_or_rate_limited}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               let_lin
+                   {dec_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                    st2. vguard
+   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+    ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+    advance
+        {b0;
+         wire_u32{b0.1; b0.2 + 12};
+         p. take{p; wire_u32{b0.1; b0.2 + 16}; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 14: -
+=== STEP 15 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1 : string
+=== STEP 16 [ok] 0.00s :: refine (rw (addrC [1;2;2] aux_guard_swap) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic;
+            vguard
+                {has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                 vguard
+                     {can_access
+{wire_u32{b0.1; b0.2 + 4};
+ wire_u32{b0.1; b0.2 + 8}};
+                      vguard
+{(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+ ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                   {b0.1;
+                    b0.2 + 16}));
+ advance
+     {(b0.1,b0.2 + 12);
+      wire_u32{b0.1; b0.2 + 12} - 12;
+      p. take
+             {p;
+              wire_u32{b0.1; b0.2 + 16};
+              q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+ vdrop{err_bad_payload}};
+                      vdrop{err_unauthorized_or_rate_limited}};
+                 vdrop{err_unauthorized_or_rate_limited}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            let_lin
+                {dec_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                 st2. vguard
+{(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+ ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+ advance
+     {b0;
+      wire_u32{b0.1; b0.2 + 12};
+      p. take{p; wire_u32{b0.1; b0.2 + 16}; q. vreturn{(st2,q)}}};
+ vdrop{err_bad_payload}}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (addrC [1;2;2] aux_guard_swap) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic;
+               vguard
+                   {can_access
+                        {wire_u32{b0.1; b0.2 + 4};
+                         wire_u32{b0.1; b0.2 + 8}};
+                    vguard
+                        {has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                         vguard
+   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+    ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                      {b0.1;
+                       b0.2 + 16}));
+    advance
+        {(b0.1,b0.2 + 12);
+         wire_u32{b0.1; b0.2 + 12} - 12;
+         p. take
+                {p;
+                 wire_u32{b0.1; b0.2 + 16};
+                 q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+    vdrop{err_bad_payload}};
+                         vdrop{err_unauthorized_or_rate_limited}};
+                    vdrop{err_unauthorized_or_rate_limited}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               let_lin
+                   {dec_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                    st2. vguard
+   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+    ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+    advance
+        {b0;
+         wire_u32{b0.1; b0.2 + 12};
+         p. take{p; wire_u32{b0.1; b0.2 + 16}; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+[1m2. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m has_tokens{st; wire_u32{b0.1; b0.2 + 4}} ∈ Bool
+[1m3. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}} ∈ Bool
+() : unit
+=== CHILDREN 16: - assertion assertion
+=== STEP 17 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1 : string
+=== STEP 18 [ok] 0.00s :: refine (rw (addrC [1;2;2] guard_merge_c) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic;
+            vguard
+                {can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}};
+                 vguard
+                     {has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                      vguard
+{(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+ ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                   {b0.1;
+                    b0.2 + 16}));
+ advance
+     {(b0.1,b0.2 + 12);
+      wire_u32{b0.1; b0.2 + 12} - 12;
+      p. take
+             {p;
+              wire_u32{b0.1; b0.2 + 16};
+              q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+ vdrop{err_bad_payload}};
+                      vdrop{err_unauthorized_or_rate_limited}};
+                 vdrop{err_unauthorized_or_rate_limited}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            let_lin
+                {dec_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                 st2. vguard
+{(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+ ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+ advance
+     {b0;
+      wire_u32{b0.1; b0.2 + 12};
+      p. take{p; wire_u32{b0.1; b0.2 + 16}; q. vreturn{(st2,q)}}};
+ vdrop{err_bad_payload}}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (addrC [1;2;2] guard_merge_c) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic;
+               vguard
+                   {can_access
+                        {wire_u32{b0.1; b0.2 + 4};
+                         wire_u32{b0.1; b0.2 + 8}}
+                    ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                    vguard
+                        {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                         ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+               {b0.1;
+                b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                         advance
+   {(b0.1,b0.2 + 12);
+    wire_u32{b0.1; b0.2 + 12} - 12;
+    p. take
+           {p;
+            wire_u32{b0.1; b0.2 + 16};
+            q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+                         vdrop{err_bad_payload}};
+                    vdrop{err_unauthorized_or_rate_limited}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               let_lin
+                   {dec_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                    st2. vguard
+   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+    ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+    advance
+        {b0;
+         wire_u32{b0.1; b0.2 + 12};
+         p. take{p; wire_u32{b0.1; b0.2 + 16}; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+[1m2. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}} ∈ Bool
+() : unit
+=== CHILDREN 18: - assertion
+=== STEP 19 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1 : string
+=== STEP 20 [ok] 0.00s :: refine (rw (addrC [1;2] guard_merge_c) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic;
+            vguard
+                {can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+                 ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                 vguard
+                     {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                      ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+            {b0.1;
+             b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                      advance
+{(b0.1,b0.2 + 12);
+ wire_u32{b0.1; b0.2 + 12} - 12;
+ p. take
+        {p;
+         wire_u32{b0.1; b0.2 + 16};
+         q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+                      vdrop{err_bad_payload}};
+                 vdrop{err_unauthorized_or_rate_limited}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            let_lin
+                {dec_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                 st2. vguard
+{(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+ ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+ advance
+     {b0;
+      wire_u32{b0.1; b0.2 + 12};
+      p. take{p; wire_u32{b0.1; b0.2 + 16}; q. vreturn{(st2,q)}}};
+ vdrop{err_bad_payload}}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (addrC [1;2] guard_merge_c) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+          {b0.1;
+           b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                    advance
+                        {(b0.1,b0.2 + 12);
+                         wire_u32{b0.1; b0.2 + 12} - 12;
+                         p. take
+      {p;
+       wire_u32{b0.1; b0.2 + 16};
+       q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               let_lin
+                   {dec_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                    st2. vguard
+   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+    ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+    advance
+        {b0;
+         wire_u32{b0.1; b0.2 + 12};
+         p. take{p; wire_u32{b0.1; b0.2 + 16}; q. vreturn{(st2,q)}}};
+    vdrop{err_bad_payload}}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+[1m2. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m (wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic) ∈ Bool
+() : unit
+=== CHILDREN 20: - assertion
+=== STEP 21 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1 : string
+=== STEP 22 [ok] 0.00s :: refine (rw (higherC beta_lin) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+       {b0.1;
+        b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                 advance
+                     {(b0.1,b0.2 + 12);
+                      wire_u32{b0.1; b0.2 + 12} - 12;
+                      p. take
+   {p;
+    wire_u32{b0.1; b0.2 + 16};
+    q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            let_lin
+                {dec_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+                 st2. vguard
+{(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+ ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+ advance
+     {b0;
+      wire_u32{b0.1; b0.2 + 12};
+      p. take{p; wire_u32{b0.1; b0.2 + 16}; q. vreturn{(st2,q)}}};
+ vdrop{err_bad_payload}}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (higherC beta_lin) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+          {b0.1;
+           b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                    advance
+                        {(b0.1,b0.2 + 12);
+                         wire_u32{b0.1; b0.2 + 12} - 12;
+                         p. take
+      {p;
+       wire_u32{b0.1; b0.2 + 16};
+       q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                 {b0.1;
+                  b0.2 + 16}));
+                    advance
+                        {b0;
+                         wire_u32{b0.1; b0.2 + 12};
+                         p. take
+      {p;
+       wire_u32{b0.1; b0.2 + 16};
+       q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 22: -
+=== STEP 23 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1 : string
+=== STEP 24 [ok] 0.00s :: refine (rw (repeatC (higherC unfold_advance)) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+       {b0.1;
+        b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                 advance
+                     {(b0.1,b0.2 + 12);
+                      wire_u32{b0.1; b0.2 + 12} - 12;
+                      p. take
+   {p;
+    wire_u32{b0.1; b0.2 + 16};
+    q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+              {b0.1;
+               b0.2 + 16}));
+                 advance
+                     {b0;
+                      wire_u32{b0.1; b0.2 + 12};
+                      p. take
+   {p;
+    wire_u32{b0.1; b0.2 + 16};
+    q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (repeatC (higherC unfold_advance)) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+          {b0.1;
+           b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                    take
+                        {((b0.1,b0.2 + 12).1,(b0.1,b0.2 + 12).2 + wire_u32
+                  {b0.1;
+                   b0.2 + 12} - 12);
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                 {b0.1;
+                  b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 24: -
+=== STEP 25 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1 : string
+=== STEP 26 [ok] 0.00s :: refine (rw reduceC 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+       {b0.1;
+        b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                 take
+                     {((b0.1,b0.2 + 12).1,(b0.1,b0.2 + 12).2 + wire_u32
+               {b0.1;
+                b0.2 + 12} - 12);
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2 + 0} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+              {b0.1;
+               b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw reduceC 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+          {b0.1;
+           b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12);
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {vlen{b0} ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                 {b0.1;
+                  b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+[1m2. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m b0.2 ∈ int
+[1m3. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m 12 ∈ int
+[1m4. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m (wire_u32{b0.1; b0.2 + 12} - 12) ∈ int
+[1m5. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m b0.2 ∈ int
+[1m6. [[1m#[m][m
+   ....assertion....
+   [1m[m<Γ> [1m⊢[m b0.2 ∈ int
+() : unit
+=== CHILDREN 26: - assertion assertion assertion assertion assertion
+=== STEP 27 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1/1 : string
+=== STEP 28 [ok] 0.00s :: refine (rw (sweepDnC unfold_vlen) 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ ((vlen{(b0.1,b0.2 + 12)} + 12) ≥⒝ (wire_u32
+       {b0.1;
+        b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12);
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {vlen{b0} ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ (vlen{b0} ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+              {b0.1;
+               b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw (sweepDnC unfold_vlen) 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ (((|(b0.1,b0.2 + 12).1| - (b0.1,b0.2 + 12).2) + 12) ≥⒝ (wire_u32
+     {b0.1;
+      b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12);
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                        {b0.1;
+                         b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 28: -
+=== STEP 29 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1/1/1 : string
+=== STEP 30 [ok] 0.00s :: refine (rw reduceC 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {(|b0.1| - b0.2) ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ (((|(b0.1,b0.2 + 12).1| - (b0.1,b0.2 + 12).2) + 12) ≥⒝ (wire_u32
+  {b0.1;
+   b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12);
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {(|b0.1| - b0.2) ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                     {b0.1;
+                      b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(rw reduceC 0)
+
+[1m1. [[1m#[m][m
+   ........
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ (((|b0.1| - (b0.2 + 12)) + 12) ≥⒝ (wire_u32
+          {b0.1;
+           b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12);
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                        {b0.1;
+                         b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 30: -
+=== STEP 31 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1 : string
+=== STEP 32 [ok] 0.00s :: refine (sqSubstT << snd{'b0} +@ (12 +@ (wire_u32{fst{'b0}; snd{'b0} +@ 12} -@ 12)) ~ snd{'b0} +@ wire_u32{fst{'b0}; snd{'b0} +@ 12} >> 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {(|b0.1| - b0.2) ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ (((|b0.1| - (b0.2 + 12)) + 12) ≥⒝ (wire_u32
+       {b0.1;
+        b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12);
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {(|b0.1| - b0.2) ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                     {b0.1;
+                      b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(sqSubstT << snd{'b0} +@ (12 +@ (wire_u32{fst{'b0}; snd{'b0} +@ 12} -@ 12)) ~ snd{'b0} +@ wire_u32{fst{'b0}; snd{'b0} +@ 12} >> 0)
+
+[1m1. [[1m#[m][m
+   ....equality....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12 ≡
+     b0.2 + wire_u32{b0.1; b0.2 + 12}
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ (((|b0.1| - (b0.2 + 12)) + 12) ≥⒝ (wire_u32
+          {b0.1;
+           b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                        {b0.1;
+                         b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 32: equality main
+=== STEP 33 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1 : string
+=== STEP 34 [ok] 0.00s :: refine (sqsimple_sq <<int>>);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....equality....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12 ≡ b0.2 + wire_u32{b0.1; b0.2 + 12}
+
+[1mBY [m(sqsimple_sq <<int>>)
+
+[1m1. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m sqsimple{int}
+[1m2. [[1m#[m][m
+   ....equality....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m (b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12)
+     = (b0.2 + wire_u32{b0.1; b0.2 + 12}) ∈ int
+() : unit
+=== CHILDREN 34: equality equality
+=== STEP 35 [ok] 0.00s :: cd "2";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/2 : string
+=== STEP 36 [ok] 0.01s :: refine (assumT 1 thenT assumT 2 thenT omegaT);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....equality....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m (b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12)
+  = (b0.2 + wire_u32{b0.1; b0.2 + 12}) ∈ int
+
+[1mBY [m(assumT 1 thenT assumT 2 thenT omegaT)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+   [1m⊢[m (b0.2 + 12 + wire_u32{b0.1; b0.2 + 12} - 12) ∈ int
+[1m2. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+   [1m⊢[m (b0.2 + wire_u32{b0.1; b0.2 + 12}) ∈ int
+[1m3. [[1m#[m][m
+   ....assertion....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m(-1 + b0.2 + (-1 * b0.2))≥0
+   [1m⊢[m b0.2 ∈ int
+[1m4. [[1m#[m][m
+   ....assertion....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m(b0.2 + -1 + (-1 * b0.2))≥0
+   [1m⊢[m b0.2 ∈ int
+[1m5. [[1m#[m][m
+   ....assertion....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m(b0.2 + -1 + (-1 * b0.2))≥0
+   [1m⊢[m -1 ∈ int
+
+   ...   
+
+<<104 subgoals (output suppressed -- to see the full list run:  set_debug "show_all_subgoals" true )>>
+() : unit
+=== CHILDREN 36: wf wf assertion assertion assertion
+=== STEP 37 [ok] 0.00s :: cd "../../2";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/2 : string
+=== STEP 38 [ok] 0.00s :: refine (sqSubstT << (length{fst{'b0}} -@ (snd{'b0} +@ 12)) +@ 12 ~ length{fst{'b0}} -@ snd{'b0} >> 0);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m
+1. [m<Γ>
+[1m⊢[m vguard
+      {(|b0.1| - b0.2) ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ (((|b0.1| - (b0.2 + 12)) + 12) ≥⒝ (wire_u32
+       {b0.1;
+        b0.2 + 12} + wire_u32{b0.1; b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}} ≡
+  vguard
+      {(|b0.1| - b0.2) ≥⒝ 24;
+       vguard
+           {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+            ∧⒝ can_access{wire_u32{b0.1; b0.2 + 4}; wire_u32{b0.1; b0.2 + 8}}
+               ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+            vguard
+                {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                 ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                     {b0.1;
+                      b0.2 + 16}));
+                 take
+                     {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                      wire_u32{b0.1; b0.2 + 16};
+                      q. vreturn{(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                 vdrop{err_bad_payload}};
+            vdrop{err_unauthorized_or_rate_limited}};
+       vdrop{err_truncated_frame}}
+
+[1mBY [m(sqSubstT << (length{fst{'b0}} -@ (snd{'b0} +@ 12)) +@ 12 ~ length{fst{'b0}} -@ snd{'b0} >> 0)
+
+[1m1. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m (|b0.1| - (b0.2 + 12)) + 12 ≡ |b0.1| - b0.2
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                        {b0.1;
+                         b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}} ≡
+     vguard
+         {(|b0.1| - b0.2) ≥⒝ 24;
+          vguard
+              {(wire_u32{b0.1; b0.2} =⒝ vir_magic)
+               ∧⒝ can_access
+                      {wire_u32{b0.1; b0.2 + 4};
+                       wire_u32{b0.1; b0.2 + 8}}
+                  ∧⒝ has_tokens{st; wire_u32{b0.1; b0.2 + 4}};
+               vguard
+                   {(wire_u32{b0.1; b0.2 + 12} ≥⒝ 24)
+                    ∧⒝ ((|b0.1| - b0.2) ≥⒝ (wire_u32{b0.1; b0.2 + 12} + wire_u32
+                        {b0.1;
+                         b0.2 + 16}));
+                    take
+                        {(b0.1,b0.2 + wire_u32{b0.1; b0.2 + 12});
+                         wire_u32{b0.1; b0.2 + 16};
+                         q. vreturn
+      {(dec_tokens{st; wire_u32{b0.1; b0.2 + 4}},q)}};
+                    vdrop{err_bad_payload}};
+               vdrop{err_unauthorized_or_rate_limited}};
+          vdrop{err_truncated_frame}}
+() : unit
+=== CHILDREN 38: equality main
+=== STEP 39 [ok] 0.00s :: cd "1";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/2/1 : string
+=== STEP 40 [ok] 0.00s :: refine (sqsimple_sq <<int>>);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....equality....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m[m<Γ> [1m⊢[m (|b0.1| - (b0.2 + 12)) + 12 ≡ |b0.1| - b0.2
+
+[1mBY [m(sqsimple_sq <<int>>)
+
+[1m1. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m sqsimple{int}
+[1m2. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m ((|b0.1| - (b0.2 + 12)) + 12) = (|b0.1| - b0.2) ∈ int
+() : unit
+=== CHILDREN 40: equality equality
+=== STEP 41 [ok] 0.00s :: cd "2";;
+# /vir/vir2/router2_fuse/1/1/1/1/1/1/1/1/1/1/1/1/1/1/1/2/1/2 : string
+=== STEP 42 [ok] 0.01s :: refine (assumT 1 thenT assumT 2 thenT omegaT);;
+# [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m [1m#[m <[1m*[m>
+....equality....
+1. [1m[m<Γ> [1m⊢[m b0 ∈ (List ╳ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+3. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀x:int. (has_tokens{st; x} ∈ Bool)
+====
+[1m[m<Γ> [1m⊢[m ((|b0.1| - (b0.2 + 12)) + 12) = (|b0.1| - b0.2) ∈ int
+
+[1mBY [m(assumT 1 thenT assumT 2 thenT omegaT)
+
+[1m1. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+   [1m⊢[m ((|b0.1| - (b0.2 + 12)) + 12) ∈ int
+[1m2. [[1m#[m][m
+   ....wf....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+   [1m⊢[m (|b0.1| - b0.2) ∈ int
+[1m3. [[1m#[m][m
+   ....assertion....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m(-1 + |b0.1| + (-1 * |b0.1|))≥0
+   [1m⊢[m |b0.1| ∈ int
+[1m4. [[1m#[m][m
+   ....assertion....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m(|b0.1| + -1 + (-1 * |b0.1|))≥0
+   [1m⊢[m |b0.1| ∈ int
+[1m5. [[1m#[m][m
+   ....assertion....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb0 ∈ (List ╳ int)[1m
+   3. [m∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)[1m
+   4. [m(|b0.1| + -1 + (-1 * |b0.1|))≥0
+   [1m⊢[m -1 ∈ int
+
+   ...   
+
+<<136 subgoals (output suppressed -- to see the full list run:  set_debug "show_all_subgoals" true )>>
+() : unit
+=== CHILDREN 42: wf wf assertion assertion assertion
+=== END steps=42 ok=42 err=0 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir2.cmoz

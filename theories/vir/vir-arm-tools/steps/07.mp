@@ -1,0 +1,10 @@
+cd "/vir/vir/slice_fuse_c";;
+refine (rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT rw (higherC add_Assoc2C) 0);;
+ls "";;
+cd "../aux_advance_sink_guard";;
+refine (rw (sweepDnC unfold_advance) 0 thenT logicAutoT);;
+cd "../aux_read_hoist";;
+refine (rw (sweepDnC unfold_read_u32) 0 thenT logicAutoT);;
+cd "..";;
+export ();;
+status_all ();;

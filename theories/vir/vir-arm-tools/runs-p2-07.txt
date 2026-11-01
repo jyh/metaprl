@@ -1,0 +1,3020 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir2/router2_fuse";;
+# Invalid Argument:
+    Filter_summary.dest_id: not an int
+=== STEP 2 [ERR] 0.00s :: refine (rw (sweepDnC (unfold_vir_U2 orelseC unfold_vir_F2)) 0 thenT rw (sweepDnC (unfold_parse_header2 orelseC unfold_check_rate_limit orelseC unfold_verify_acl orelseC unfold_emit_payload2)) 0 thenT rw (addrC [1;2;3;2;3;3;3;3] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;3;3;2;3] beta_lin) 0 thenT rw (addrC [1;2;3;2;3;3;3;3;2] aux_advance_sink_guard) 0 thenT rw (addrC [1;2;3;2;3;3;3;3;2;2] unfold_advance) 0 thenT rw (repeatC (higherC unfold_read_u32)) 0 thenMT rw (addrC [1;2;2] aux_guard_swap) 0 thenMT rw (addrC [1;2;2] guard_merge_c) 0 thenMT rw (addrC [1;2] guard_merge_c) 0 thenMT rw (higherC beta_lin) 0 thenMT rw (repeatC (higherC unfold_advance)) 0 thenMT rw reduceC 0 thenMT rw (sweepDnC unfold_vlen) 0 thenMT rw reduceC 0);;
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 3, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 2, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 471-471: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 485-485: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+=== CHILDREN 2: 
+=== STEP 3 [ERR] 0.00s :: cd "1";;
+# Failure:
+    Shell_core.dir_of_path: module 1 does not exist
+=== STEP 4 [ERR] 0.00s :: refine (sqSubstT << snd{'b0} +@ (12 +@ (wire_u32{fst{'b0}; snd{'b0} +@ 12} -@ 12)) ~ snd{'b0} +@ wire_u32{fst{'b0}; snd{'b0} +@ 12} >> 0 thenLT [sqsimple_sq <<int>> thenLT [autoT; assumT 1 thenT assumT 2 thenT omegaT thenT autoT thenT tryT (backThruHypT 3 thenT autoT) thenT tryT (rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT) thenT tryT (rwh unfoldFst 0 thenT spreadEquality <<bind{q. list{top}}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT)]; sqSubstT << (length{fst{'b0}} -@ (snd{'b0} +@ 12)) +@ 12 ~ length{fst{'b0}} -@ snd{'b0} >> 0 thenLT [sqsimple_sq <<int>> thenLT [autoT; assumT 1 thenT assumT 2 thenT omegaT thenT autoT thenT tryT (backThruHypT 3 thenT autoT) thenT tryT (rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT) thenT tryT (rwh unfoldFst 0 thenT spreadEquality <<bind{q. list{top}}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT)]; logicAutoT]]);;
+# While expanding quotation "term" for string " snd{'b0} +@ (12 +@ (wire_u32{fst{'b0}; snd{'b0} +@ 12} -@ 12)) ~ snd{'b0} +@ wire_u32{fst{'b0}; snd{'b0} +@ 12} ":
+Line 2, characters 25-27: 
+   Failure: Shell_state: no current package, can not parse terms
+# While expanding quotation "term" for string "bind{q. int}":
+Line 1, characters 780-782: 
+   Failure: Shell_state: no current package, can not parse terms
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 791-791: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# Line 1, characters 792-793: 
+   Stream.Error("illegal begin of top_phrase")
+# While expanding quotation "term" for string "bind{q. int}":
+Line 1, characters 828-830: 
+   Failure: Shell_state: no current package, can not parse terms
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 882-882: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+=== CHILDREN 4: 
+=== STEP 5 [ok] 0.01s :: ls "";;
+# [1mRoot Theories Listing:[m
+    [1mTheory "[mbase[1m": [mBasic Meta-Theory
+    [1mTheory "[mitt_core[1m": [mComputational Type Theory (Core Logic)
+    [1mTheory "[msupport[1m": [mMetaPRL Internal "Helper" Modules
+    [1mTheory "[mvir[1m": [mO95 VIR (MetaPRL arm)
+    [1mTheory "[mfs[1m": [mBrowse MetaPRL Source Code
+[1mend[m() : unit
+=== STEP 6 [ok] 0.00s :: cd "/vir/vir2/router2_fuse/2";;
+# Invalid Argument:
+    Filter_summary.dest_id: not an int
+=== STEP 7 [ERR] 0.00s :: refine (assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT tryT (backThruHypT 5) thenT tryT (backThruHypT 4) thenT tryT (rwh unfold_vir_magic 0) thenT autoT thenT tryT (backThruHypT 3 thenT autoT) thenT tryT (rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT) thenT tryT (rwh unfoldFst 0 thenT spreadEquality <<bind{q. list{top}}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT));;
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 3, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 1156-1156: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 1166-1166: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+=== CHILDREN 7: 
+=== STEP 8 [ok] 0.00s :: cd "/vir/vir2/router2_fuse/3";;
+# Invalid Argument:
+    Filter_summary.dest_id: not an int
+=== STEP 9 [ERR] 0.00s :: refine (assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT tryT (backThruHypT 5) thenT tryT (backThruHypT 4) thenT tryT (rwh unfold_vir_magic 0) thenT autoT thenT tryT (backThruHypT 3 thenT autoT) thenT tryT (rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT) thenT tryT (rwh unfoldFst 0 thenT spreadEquality <<bind{q. list{top}}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT));;
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 3, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 1423-1423: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 1433-1433: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+=== CHILDREN 9: 
+=== STEP 10 [ok] 0.00s :: cd "/vir/vir2/router2_fuse/4";;
+# Invalid Argument:
+    Filter_summary.dest_id: not an int
+=== STEP 11 [ERR] 0.00s :: refine (assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT tryT (backThruHypT 5) thenT tryT (backThruHypT 4) thenT tryT (rwh unfold_vir_magic 0) thenT autoT thenT tryT (backThruHypT 3 thenT autoT) thenT tryT (rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT) thenT tryT (rwh unfoldFst 0 thenT spreadEquality <<bind{q. list{top}}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT));;
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 3, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 1690-1690: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 1700-1700: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+=== CHILDREN 11: 
+=== STEP 12 [ok] 0.00s :: cd "/vir/vir2/router2_fuse/5";;
+# Invalid Argument:
+    Filter_summary.dest_id: not an int
+=== STEP 13 [ERR] 0.00s :: refine (assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT tryT (backThruHypT 5) thenT tryT (backThruHypT 4) thenT tryT (rwh unfold_vir_magic 0) thenT autoT thenT tryT (backThruHypT 3 thenT autoT) thenT tryT (rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT) thenT tryT (rwh unfoldFst 0 thenT spreadEquality <<bind{q. list{top}}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT));;
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 3, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 1957-1957: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 1967-1967: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+=== CHILDREN 13: 
+=== STEP 14 [ok] 0.00s :: cd "/vir/vir2/router2_fuse/6";;
+# Invalid Argument:
+    Filter_summary.dest_id: not an int
+=== STEP 15 [ERR] 0.00s :: refine (assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT tryT (backThruHypT 5) thenT tryT (backThruHypT 4) thenT tryT (rwh unfold_vir_magic 0) thenT autoT thenT tryT (backThruHypT 3 thenT autoT) thenT tryT (rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT) thenT tryT (rwh unfoldFst 0 thenT spreadEquality <<bind{q. list{top}}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT));;
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 3, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 2224-2224: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 2234-2234: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+=== CHILDREN 15: 
+=== STEP 16 [ok] 0.01s :: cd "/vir/vir2/router2_fuse/7";;
+# Invalid Argument:
+    Filter_summary.dest_id: not an int
+=== STEP 17 [ERR] 0.00s :: refine (assumT 1 thenT assumT 2 thenT assumT 3 thenT assumT 4 thenT tryT (backThruHypT 5) thenT tryT (backThruHypT 4) thenT tryT (rwh unfold_vir_magic 0) thenT autoT thenT tryT (backThruHypT 3 thenT autoT) thenT tryT (rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT) thenT tryT (rwh unfoldFst 0 thenT spreadEquality <<bind{q. list{top}}>> <<x: list{top} * int>> thenT tryT (rwh unfold_prod 2) thenT autoT));;
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 3, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 2491-2491: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 2501-2501: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+=== CHILDREN 17: 
+=== STEP 18 [ok] 0.00s :: cd "/vir/vir2";;
+# Invalid Argument:
+    Filter_summary.dest_id: not an int
+=== STEP 19 [ok] 5.19s :: status_all ();;
+# Entering base_grammar
+Module: /base_grammar
+Entering base_meta
+Module: /base_meta
+Entering base_operator
+Module: /base_operator
+Entering base_reflection
+Module: /base_reflection
+Expanding `reduce_ifbterm1':
+Status: `reduce_ifbterm1' is a primitive axiom
+Expanding `reduce_subterms1':
+Status: `reduce_subterms1' is a primitive axiom
+Expanding `reduce_make_bterm1':
+Status: `reduce_make_bterm1' is a primitive axiom
+Expanding `reduce_if_simple_bterm1':
+Status: `reduce_if_simple_bterm1' is a primitive axiom
+Expanding `reduce_if_simple_bterm2':
+Status: `reduce_if_simple_bterm2' is a primitive axiom
+Expanding `reduce_if_var_bterm1':
+Status: `reduce_if_var_bterm1' is a primitive axiom
+Expanding `reduce_subst':
+Status: `reduce_subst' is a primitive axiom
+Entering base_rewrite
+Module: /base_rewrite
+Expanding `rewriteAxiom1':
+Status: `rewriteAxiom1' is a primitive axiom
+Expanding `rewriteAxiom2':
+Status: `rewriteAxiom2' is a primitive axiom
+Expanding `rewriteSym':
+Status: `rewriteSym' is a derived object with a complete proof (3 rule boxes, 8 primitive steps)
+Entering base_theory
+Module: /base_theory
+Entering base_trivial
+Module: /base_trivial
+Entering itt_algebra_df
+Module: /itt_algebra_df
+Entering itt_atom
+Module: /itt_atom
+Expanding `atomEquality':
+Status: `atomEquality' is a primitive axiom
+Expanding `atomType':
+Status: `atomType' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `tokenEquality':
+Status: `tokenEquality' is a primitive axiom
+Expanding `tokenFormation':
+Status: `tokenFormation' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `atomSqequal':
+Status: `atomSqequal' is a primitive axiom
+Entering itt_atom_bool
+Module: /itt_atom_bool
+Expanding `reduce_eq_atom'':
+Status: `reduce_eq_atom'' is a primitive axiom
+Expanding `eq_atom_wf':
+Status: `eq_atom_wf' is a primitive axiom
+Expanding `eq_atom_assert_intro':
+Status: `eq_atom_assert_intro' is a primitive axiom
+Expanding `assert_implies_eq_atom':
+Status: `assert_implies_eq_atom' is a primitive axiom
+Expanding `eq_atom_assert_elim':
+Status: `eq_atom_assert_elim' is a derived object with a complete proof (1 rule boxes, 25 primitive steps)
+Expanding `eq_atom_elim':
+Status: `eq_atom_elim' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Entering itt_bisect
+Module: /itt_bisect
+Expanding `bisectEquality':
+Status: `bisectEquality' is a derived object with a complete proof (2 rule boxes, 21 primitive steps)
+Expanding `bisectType':
+Status: `bisectType' is a derived object with a complete proof (2 rule boxes, 21 primitive steps)
+Expanding `bisectFormation':
+Status: `bisectFormation' is a derived object with a complete proof (1 rule boxes, 4 primitive steps)
+Expanding `bisectMemberEquality':
+Status: `bisectMemberEquality' is a derived object with a complete proof (2 rule boxes, 21 primitive steps)
+Expanding `bisectElimination_eq':
+Status: `bisectElimination_eq' is a derived object with a complete proof (4 rule boxes, 49 primitive steps)
+Expanding `bisectElimination':
+Status: `bisectElimination' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `bisectEliminationLeft':
+Status: `bisectEliminationLeft' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `bisectEliminationRight':
+Status: `bisectEliminationRight' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `bisectEqualityElim':
+Status: `bisectEqualityElim' is a derived object with a complete proof (3 rule boxes, 43 primitive steps)
+Expanding `bisectSubtypeLeft':
+Status: `bisectSubtypeLeft' is a derived object with a complete proof (3 rule boxes, 48 primitive steps)
+Expanding `bisectSubtypeRight':
+Status: `bisectSubtypeRight' is a derived object with a complete proof (4 rule boxes, 51 primitive steps)
+Expanding `bisectSubtypeBelow':
+Status: `bisectSubtypeBelow' is a derived object with a complete proof (1 rule boxes, 39 primitive steps)
+Expanding `bisectTrivial1':
+Status: `bisectTrivial1' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `bisectTrivial2':
+Status: `bisectTrivial2' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `bisectSubtype1':
+Status: `bisectSubtype1' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `bisectSubtype2':
+Status: `bisectSubtype2' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Entering itt_bool
+Module: /itt_bool
+Expanding `reduce_ifthenelse_true':
+Status: `reduce_ifthenelse_true' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_ifthenelse_false':
+Status: `reduce_ifthenelse_false' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_bnot_true':
+Status: `reduce_bnot_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `reduce_bnot_false':
+Status: `reduce_bnot_false' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `reduce_bor_true':
+Status: `reduce_bor_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `reduce_bor_false':
+Status: `reduce_bor_false' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `reduce_band_true':
+Status: `reduce_band_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `reduce_band_false':
+Status: `reduce_band_false' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `reduce_bimplies_true':
+Status: `reduce_bimplies_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `reduce_bimplies_false':
+Status: `reduce_bimplies_false' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `boolEquality':
+Status: `boolEquality' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `boolType':
+Status: `boolType' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `btrue_member':
+Status: `btrue_member' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `bfalse_member':
+Status: `bfalse_member' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `boolElimination2':
+Status: `boolElimination2' is a derived object with a complete proof (1 rule boxes, 20 primitive steps)
+Expanding `reduce_bor_true2':
+Status: `reduce_bor_true2' is a derived object with a complete proof (1 rule boxes, 35 primitive steps)
+Expanding `ifthenelse_type2':
+Status: `ifthenelse_type2' is a derived object with a complete proof (8 rule boxes, 204 primitive steps)
+Expanding `boolContradiction1':
+Status: `boolContradiction1' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `boolContradiction2':
+Status: `boolContradiction2' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `boolSqequal':
+Status: `boolSqequal' is a derived object with a complete proof (2 rule boxes, 58 primitive steps)
+Expanding `sqsimple_bool':
+Status: `sqsimple_bool' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `ifthenelse_equality':
+Status: `ifthenelse_equality' is a derived object with a complete proof (4 rule boxes, 186 primitive steps)
+Expanding `bor_member':
+Status: `bor_member' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `band_member':
+Status: `band_member' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `bimplies_member':
+Status: `bimplies_member' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `bnot_equal':
+Status: `bnot_equal' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `assert_type':
+Status: `assert_type' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `assert_univ':
+Status: `assert_univ' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `assert_true':
+Status: `assert_true' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `assert_false':
+Status: `assert_false' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `assert_true_elim':
+Status: `assert_true_elim' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `bool_subst_concl':
+Status: `bool_subst_concl' is a derived object with a complete proof (6 rule boxes, 164 primitive steps)
+Expanding `bool_subst_hyp':
+Status: `bool_subst_hyp' is a derived object with a complete proof (17 rule boxes, 167 primitive steps)
+Expanding `bool_ext_equality':
+Status: `bool_ext_equality' is a derived object with a complete proof (4 rule boxes, 177 primitive steps)
+Expanding `assertSquashElim':
+Status: `assertSquashElim' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `assert_bnot_intro':
+Status: `assert_bnot_intro' is a derived object with a complete proof (6 rule boxes, 90 primitive steps)
+Expanding `assert_bnot_elim':
+Status: `assert_bnot_elim' is a derived object with a complete proof (9 rule boxes, 116 primitive steps)
+Expanding `assert_magic':
+Status: `assert_magic' is a derived object with a complete proof (4 rule boxes, 113 primitive steps)
+Expanding `assert_is_decidable':
+Status: `assert_is_decidable' is a derived object with a complete proof (4 rule boxes, 59 primitive steps)
+Expanding `assert_bor_elim':
+Status: `assert_bor_elim' is a derived object with a complete proof (3 rule boxes, 43 primitive steps)
+Expanding `assert_band_elim':
+Status: `assert_band_elim' is a derived object with a complete proof (5 rule boxes, 46 primitive steps)
+Expanding `assert_bimplies_elim':
+Status: `assert_bimplies_elim' is a derived object with a complete proof (6 rule boxes, 91 primitive steps)
+Expanding `assert_bor_intro_left':
+Status: `assert_bor_intro_left' is a derived object with a complete proof (5 rule boxes, 34 primitive steps)
+Expanding `assert_bor_intro_right':
+Status: `assert_bor_intro_right' is a derived object with a complete proof (1 rule boxes, 25 primitive steps)
+Expanding `assert_band_intro':
+Status: `assert_band_intro' is a derived object with a complete proof (4 rule boxes, 35 primitive steps)
+Expanding `assert_bimplies_intro':
+Status: `assert_bimplies_intro' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `reduce_bnot_bnot':
+Status: `reduce_bnot_bnot' is a derived object with a complete proof (1 rule boxes, 43 primitive steps)
+Expanding `eq_bfalse2assert':
+Status: `eq_bfalse2assert' is a derived object with a complete proof (5 rule boxes, 59 primitive steps)
+Expanding `eq_bfalse2assert_elim':
+Status: `eq_bfalse2assert_elim' is a derived object with a complete proof (3 rule boxes, 25 primitive steps)
+Expanding `assert2eq_bfalse':
+Status: `assert2eq_bfalse' is a derived object with a complete proof (5 rule boxes, 63 primitive steps)
+Expanding `not_bnot_elim':
+Status: `not_bnot_elim' is a derived object with a complete proof (3 rule boxes, 34 primitive steps)
+Expanding `not_assert_intro':
+Status: `not_assert_intro' is a derived object with a complete proof (3 rule boxes, 26 primitive steps)
+Expanding `reduce_band_same':
+Status: `reduce_band_same' is a derived object with a complete proof (1 rule boxes, 58 primitive steps)
+Expanding `reduce_bor_same':
+Status: `reduce_bor_same' is a derived object with a complete proof (1 rule boxes, 58 primitive steps)
+Expanding `bandSym':
+Status: `bandSym' is a derived object with a complete proof (1 rule boxes, 50 primitive steps)
+Expanding `boolMoveToConcl':
+Status: `boolMoveToConcl' is a derived object with a complete proof (2 rule boxes, 31 primitive steps)
+Expanding `xor_property':
+Status: `xor_property' is a derived object with a complete proof (4 rule boxes, 144 primitive steps)
+Expanding `xor_property_rw':
+Status: `xor_property_rw' is a derived object with a complete proof (3 rule boxes, 19 primitive steps)
+Expanding `boolFormation':
+Status: `boolFormation' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `bool_trueFormation':
+Status: `bool_trueFormation' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `bool_falseFormation':
+Status: `bool_falseFormation' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Entering itt_bunion
+Module: /itt_bunion
+Expanding `bunionEquality':
+Status: `bunionEquality' is a derived object with a complete proof (2 rule boxes, 21 primitive steps)
+Expanding `bunionType':
+Status: `bunionType' is a derived object with a complete proof (2 rule boxes, 21 primitive steps)
+Expanding `bunionFormation':
+Status: `bunionFormation' is a derived object with a complete proof (1 rule boxes, 4 primitive steps)
+Expanding `bunionMemberEqualityLeft':
+Status: `bunionMemberEqualityLeft' is a derived object with a complete proof (2 rule boxes, 31 primitive steps)
+Expanding `bunionMemberEqualityRight':
+Status: `bunionMemberEqualityRight' is a derived object with a complete proof (2 rule boxes, 31 primitive steps)
+Expanding `bunionElimination':
+Status: `bunionElimination' is a derived object with a complete proof (2 rule boxes, 22 primitive steps)
+Expanding `bunionElimination_eq':
+Status: `bunionElimination_eq' is a derived object with an incomplete proof (2 rule boxes, 31 primitive steps)
+Entering itt_comment
+Module: /itt_comment
+Entering itt_decidable
+Module: /itt_decidable
+Expanding `fold_decidable':
+Status: `fold_decidable' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `assert_decidable':
+Status: `assert_decidable' is a derived object with a complete proof (3 rule boxes, 16 primitive steps)
+Expanding `dec_false':
+Status: `dec_false' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `dec_true':
+Status: `dec_true' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `dec_squash':
+Status: `dec_squash' is a derived object with a complete proof (4 rule boxes, 82 primitive steps)
+Entering itt_dfun
+Module: /itt_dfun
+Expanding `reduce_beta':
+Status: `reduce_beta' is a primitive axiom
+Expanding `reduce_let':
+Status: `reduce_let' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_ycomb':
+Status: `reduce_ycomb' is a derived object with a complete proof (2 rule boxes, 14 primitive steps)
+Expanding `reduce_fix':
+Status: `reduce_fix' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `functionEquality':
+Status: `functionEquality' is a primitive axiom
+Expanding `functionType':
+Status: `functionType' is a primitive axiom
+Expanding `lambdaFormation':
+Status: `lambdaFormation' is a primitive axiom
+Expanding `lambdaEquality':
+Status: `lambdaEquality' is a primitive axiom
+Expanding `functionExtensionality':
+Status: `functionExtensionality' is a primitive axiom
+Expanding `functionElimination':
+Status: `functionElimination' is a primitive axiom
+Expanding `independentFunctionElimination':
+Status: `independentFunctionElimination' is a derived object with a complete proof (1 rule boxes, 27 primitive steps)
+Expanding `applyEquality':
+Status: `applyEquality' is a primitive axiom
+Expanding `functionSubtype':
+Status: `functionSubtype' is a derived object with a complete proof (6 rule boxes, 130 primitive steps)
+Expanding `functionFormation':
+Status: `functionFormation' is a derived object with a complete proof (5 rule boxes, 41 primitive steps)
+Entering itt_disect
+Module: /itt_disect
+Expanding `dintersectionFormation':
+Status: `dintersectionFormation' is a primitive axiom
+Expanding `dintersectionEquality':
+Status: `dintersectionEquality' is a primitive axiom
+Expanding `dintersectionType':
+Status: `dintersectionType' is a primitive axiom
+Expanding `dintersectionMemberEquality':
+Status: `dintersectionMemberEquality' is a primitive axiom
+Expanding `dintersectionMemberFormation':
+Status: `dintersectionMemberFormation' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `disectElimination':
+Status: `disectElimination' is a primitive axiom
+Expanding `disect_mem1':
+Status: `disect_mem1' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `disect_mem2':
+Status: `disect_mem2' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `disectMemberCaseEquality1':
+Status: `disectMemberCaseEquality1' is a derived object with a complete proof (2 rule boxes, 20 primitive steps)
+Expanding `disectMemberCaseEquality2':
+Status: `disectMemberCaseEquality2' is a derived object with a complete proof (2 rule boxes, 13 primitive steps)
+Expanding `disectElimination_eq':
+Status: `disectElimination_eq' is a derived object with a complete proof (6 rule boxes, 45 primitive steps)
+Expanding `disectEliminationLeft':
+Status: `disectEliminationLeft' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `disectEliminationRight':
+Status: `disectEliminationRight' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `dintersectionSubtype':
+Status: `dintersectionSubtype' is a derived object with a complete proof (3 rule boxes, 79 primitive steps)
+Expanding `dinter_associativity':
+Status: `dinter_associativity' is a derived object with a complete proof (17 rule boxes, 292 primitive steps)
+Expanding `set_is_disect':
+Status: `set_is_disect' is a derived object with a complete proof (2 rule boxes, 87 primitive steps)
+Entering itt_dprod
+Module: /itt_dprod
+Expanding `reduceSpread':
+Status: `reduceSpread' is a primitive axiom
+Expanding `reduceFst':
+Status: `reduceFst' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduceSnd':
+Status: `reduceSnd' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `productFormation':
+Status: `productFormation' is a primitive axiom
+Expanding `productEquality':
+Status: `productEquality' is a primitive axiom
+Expanding `productType':
+Status: `productType' is a primitive axiom
+Expanding `pairEquality':
+Status: `pairEquality' is a primitive axiom
+Expanding `pairFormation':
+Status: `pairFormation' is a derived object with a complete proof (1 rule boxes, 31 primitive steps)
+Expanding `productElimination':
+Status: `productElimination' is a primitive axiom
+Expanding `spreadEquality':
+Status: `spreadEquality' is a primitive axiom
+Expanding `spreadEquality_simple':
+Status: `spreadEquality_simple' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `productEqElimination':
+Status: `productEqElimination' is a derived object with a complete proof (5 rule boxes, 76 primitive steps)
+Expanding `productSubtype':
+Status: `productSubtype' is a derived object with a complete proof (1 rule boxes, 49 primitive steps)
+Entering itt_equal
+Module: /itt_equal
+Expanding `trueIntro':
+Status: `trueIntro' is a primitive axiom
+Expanding `equalityAxiom':
+Status: `equalityAxiom' is a primitive axiom
+Expanding `equalityRef':
+Status: `equalityRef' is a primitive axiom
+Expanding `equalitySym':
+Status: `equalitySym' is a primitive axiom
+Expanding `equalityTrans':
+Status: `equalityTrans' is a primitive axiom
+Expanding `equalityFormation':
+Status: `equalityFormation' is a primitive axiom
+Expanding `equalityEquality':
+Status: `equalityEquality' is a primitive axiom
+Expanding `equalityType':
+Status: `equalityType' is a primitive axiom
+Expanding `axiomMember':
+Status: `axiomMember' is a primitive axiom
+Expanding `equalityElimination':
+Status: `equalityElimination' is a primitive axiom
+Expanding `type_axiomMember':
+Status: `type_axiomMember' is a primitive axiom
+Expanding `typeEquality':
+Status: `typeEquality' is a primitive axiom
+Expanding `type_type':
+Status: `type_type' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `universeMember':
+Status: `universeMember' is a primitive axiom
+Expanding `universeCumulativity':
+Status: `universeCumulativity' is a primitive axiom
+Expanding `universeMemberType':
+Status: `universeMemberType' is a primitive axiom
+Expanding `universeAssumType':
+Status: `universeAssumType' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `universeType':
+Status: `universeType' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `universeFormation':
+Status: `universeFormation' is a primitive axiom
+Entering itt_esquash
+Module: /itt_esquash
+Expanding `esquash_type':
+Status: `esquash_type' is a primitive axiom
+Expanding `esquash_equal':
+Status: `esquash_equal' is a primitive axiom
+Expanding `esquash_univ':
+Status: `esquash_univ' is a primitive axiom
+Expanding `esquash_intro':
+Status: `esquash_intro' is a primitive axiom
+Expanding `esquash_elim':
+Status: `esquash_elim' is a primitive axiom
+Expanding `esquash_mem':
+Status: `esquash_mem' is a derived object with a complete proof (3 rule boxes, 32 primitive steps)
+Expanding `esquash_intro2':
+Status: `esquash_intro2' is a derived object with a complete proof (1 rule boxes, 27 primitive steps)
+Expanding `esquash_elim2':
+Status: `esquash_elim2' is a primitive axiom
+Expanding `unesquash':
+Status: `unesquash' is a derived object with a complete proof (3 rule boxes, 28 primitive steps)
+Expanding `esquash':
+Status: `esquash' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `esquash_void_elim':
+Status: `esquash_void_elim' is a derived object with a complete proof (1 rule boxes, 24 primitive steps)
+Expanding `esquash_equal_intro':
+Status: `esquash_equal_intro' is a derived object with a complete proof (1 rule boxes, 89 primitive steps)
+Entering itt_ext_equal
+Module: /itt_ext_equal
+Expanding `type_def':
+Status: `type_def' is a primitive axiom
+Expanding `extEqualMember':
+Status: `extEqualMember' is a derived object with a complete proof (3 rule boxes, 31 primitive steps)
+Expanding `extEqualSymmetry':
+Status: `extEqualSymmetry' is a derived object with a complete proof (2 rule boxes, 33 primitive steps)
+Expanding `extEqualSymmetry2':
+Status: `extEqualSymmetry2' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `extEqualEquality1':
+Status: `extEqualEquality1' is a derived object with a complete proof (3 rule boxes, 23 primitive steps)
+Expanding `extEqualEquality2':
+Status: `extEqualEquality2' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Entering itt_fun2
+Module: /itt_fun2
+Expanding `reduce_compose':
+Status: `reduce_compose' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `compose_wf3':
+Status: `compose_wf3' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `compose_wf':
+Status: `compose_wf' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `compose_wf2':
+Status: `compose_wf2' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `comp_assoc':
+Status: `comp_assoc' is a derived object with a complete proof (1 rule boxes, 36 primitive steps)
+Expanding `id_reduce':
+Status: `id_reduce' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `id_wf':
+Status: `id_wf' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `funexp_reduce_base':
+Status: `funexp_reduce_base' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `funexp_reduce_step':
+Status: `funexp_reduce_step' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `funexp_wf':
+Status: `funexp_wf' is a derived object with a complete proof (1 rule boxes, 64 primitive steps)
+Entering itt_image
+Module: /itt_image
+Expanding `img_type':
+Status: `img_type' is a primitive axiom
+Expanding `img_univ':
+Status: `img_univ' is a primitive axiom
+Expanding `img_univ_eq':
+Status: `img_univ_eq' is a derived object with a complete proof (2 rule boxes, 32 primitive steps)
+Expanding `img_mem':
+Status: `img_mem' is a primitive axiom
+Expanding `img_eq':
+Status: `img_eq' is a derived object with a complete proof (4 rule boxes, 33 primitive steps)
+Expanding `img_intro':
+Status: `img_intro' is a derived object with a complete proof (2 rule boxes, 25 primitive steps)
+Expanding `img_elim':
+Status: `img_elim' is a primitive axiom
+Expanding `img_elim1':
+Status: `img_elim1' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Entering itt_image2
+Module: /itt_image2
+Expanding `img_elim2':
+Status: `img_elim2' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `img_elim3':
+Status: `img_elim3' is a derived object with a complete proof (8 rule boxes, 145 primitive steps)
+Expanding `img_sqsimple':
+Status: `img_sqsimple' is a derived object with a complete proof (9 rule boxes, 160 primitive steps)
+Expanding `img_monotone':
+Status: `img_monotone' is a derived object with a complete proof (1 rule boxes, 35 primitive steps)
+Expanding `img_monotone_subset':
+Status: `img_monotone_subset' is a derived object with a complete proof (5 rule boxes, 231 primitive steps)
+Entering itt_int_arith
+Module: /itt_int_arith
+Expanding `lt2ge':
+Status: `lt2ge' is a derived object with a complete proof (12 rule boxes, 173 primitive steps)
+Expanding `eq2ge':
+Status: `eq2ge' is a derived object with a complete proof (2 rule boxes, 83 primitive steps)
+Expanding `assert_beq2ge':
+Status: `assert_beq2ge' is a derived object with a complete proof (4 rule boxes, 136 primitive steps)
+Expanding `eq2ge1':
+Status: `eq2ge1' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `eq2ge2':
+Status: `eq2ge2' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `notge2ge_elim':
+Status: `notge2ge_elim' is a derived object with a complete proof (2 rule boxes, 56 primitive steps)
+Expanding `notlt2ge_elim':
+Status: `notlt2ge_elim' is a derived object with a complete proof (3 rule boxes, 34 primitive steps)
+Expanding `noteq2ge_elim':
+Status: `noteq2ge_elim' is a derived object with a complete proof (3 rule boxes, 73 primitive steps)
+Expanding `notneq2ge_elim':
+Status: `notneq2ge_elim' is a derived object with a complete proof (1 rule boxes, 204 primitive steps)
+Expanding `nequal_elim':
+Status: `nequal_elim' is a derived object with a complete proof (11 rule boxes, 157 primitive steps)
+Expanding `nequal_elim2':
+Status: `nequal_elim2' is a derived object with a complete proof (1 rule boxes, 58 primitive steps)
+Expanding `ltInConcl2ge':
+Status: `ltInConcl2ge' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `geInConcl2ge':
+Status: `geInConcl2ge' is a derived object with a complete proof (3 rule boxes, 58 primitive steps)
+Expanding `eqInConcl2ge':
+Status: `eqInConcl2ge' is a derived object with a complete proof (1 rule boxes, 50 primitive steps)
+Expanding `neqInConcl2ge':
+Status: `neqInConcl2ge' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `mul_BubblePrimitive_rw':
+Status: `mul_BubblePrimitive_rw' is a derived object with a complete proof (2 rule boxes, 25 primitive steps)
+Expanding `sum_same_products1_rw':
+Status: `sum_same_products1_rw' is a derived object with a complete proof (2 rule boxes, 42 primitive steps)
+Expanding `sum_same_products2_rw':
+Status: `sum_same_products2_rw' is a derived object with a complete proof (2 rule boxes, 14 primitive steps)
+Expanding `sum_same_products3_rw':
+Status: `sum_same_products3_rw' is a derived object with a complete proof (3 rule boxes, 24 primitive steps)
+Expanding `sum_same_products4_rw':
+Status: `sum_same_products4_rw' is a derived object with a complete proof (2 rule boxes, 20 primitive steps)
+Expanding `add_BubblePrimitive_rw':
+Status: `add_BubblePrimitive_rw' is a derived object with a complete proof (2 rule boxes, 25 primitive steps)
+Expanding `sub_elim_rw':
+Status: `sub_elim_rw' is a derived object with a complete proof (2 rule boxes, 22 primitive steps)
+Expanding `ge_addContract_rw':
+Status: `ge_addContract_rw' is a derived object with a complete proof (5 rule boxes, 40 primitive steps)
+Expanding `ge_addContract_rw1':
+Status: `ge_addContract_rw1' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `ge_addContract_rw2':
+Status: `ge_addContract_rw2' is a derived object with a complete proof (5 rule boxes, 27 primitive steps)
+Expanding `ge_addContract_rw3':
+Status: `ge_addContract_rw3' is a derived object with a complete proof (3 rule boxes, 18 primitive steps)
+Expanding `ge_addMono2':
+Status: `ge_addMono2' is a derived object with a complete proof (3 rule boxes, 28 primitive steps)
+Expanding `ge_addMono2_rw':
+Status: `ge_addMono2_rw' is a derived object with a complete proof (2 rule boxes, 17 primitive steps)
+Expanding `sumGe':
+Status: `sumGe' is a derived object with a complete proof (2 rule boxes, 22 primitive steps)
+Expanding `eq2ineq':
+Status: `eq2ineq' is a derived object with a complete proof (2 rule boxes, 28 primitive steps)
+Expanding `beq2ineq_rw':
+Status: `beq2ineq_rw' is a derived object with a complete proof (19 rule boxes, 272 primitive steps)
+Entering itt_int_base
+Module: /itt_int_base
+Expanding `reduce_numeral':
+Status: `reduce_numeral' is a primitive axiom
+Expanding `reduce_add_meta':
+Status: `reduce_add_meta' is a primitive axiom
+Expanding `reduce_minus_meta':
+Status: `reduce_minus_meta' is a primitive axiom
+Expanding `reduce_sub_meta':
+Status: `reduce_sub_meta' is a primitive axiom
+Expanding `reduce_lt_meta':
+Status: `reduce_lt_meta' is a primitive axiom
+Expanding `reduce_beq_int_meta':
+Status: `reduce_beq_int_meta' is a primitive axiom
+Expanding `int_sqequal':
+Status: `int_sqequal' is a primitive axiom
+Expanding `int_sqequal_rw':
+Status: `int_sqequal_rw' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `intEquality':
+Status: `intEquality' is a primitive axiom
+Expanding `intType':
+Status: `intType' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `int_sqsimple':
+Status: `int_sqsimple' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `intFormation':
+Status: `intFormation' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `numberFormation':
+Status: `numberFormation' is a primitive axiom
+Expanding `add_wf':
+Status: `add_wf' is a primitive axiom
+Expanding `minus_wf':
+Status: `minus_wf' is a primitive axiom
+Expanding `sub_wf':
+Status: `sub_wf' is a derived object with a complete proof (2 rule boxes, 12 primitive steps)
+Expanding `lt_bool_wf':
+Status: `lt_bool_wf' is a primitive axiom
+Expanding `beq_wf':
+Status: `beq_wf' is a primitive axiom
+Expanding `lt_squashStable':
+Status: `lt_squashStable' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `lt_wf':
+Status: `lt_wf' is a derived object with a complete proof (2 rule boxes, 12 primitive steps)
+Expanding `lt_univ':
+Status: `lt_univ' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `beq_int2prop':
+Status: `beq_int2prop' is a primitive axiom
+Expanding `eq_int_assert_elim':
+Status: `eq_int_assert_elim' is a derived object with a complete proof (3 rule boxes, 28 primitive steps)
+Expanding `beq_int_is_true':
+Status: `beq_int_is_true' is a primitive axiom
+Expanding `beq_int_is_true_rw':
+Status: `beq_int_is_true_rw' is a derived object with a complete proof (3 rule boxes, 12 primitive steps)
+Expanding `eq_2beq_int':
+Status: `eq_2beq_int' is a derived object with a complete proof (3 rule boxes, 9 primitive steps)
+Expanding `eq_2beq_int2':
+Status: `eq_2beq_int2' is a derived object with a complete proof (1 rule boxes, 38 primitive steps)
+Expanding `lt_bool_member':
+Status: `lt_bool_member' is a derived object with a complete proof (2 rule boxes, 10 primitive steps)
+Expanding `lt_decidable':
+Status: `lt_decidable' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `eq_int_decidable':
+Status: `eq_int_decidable' is a derived object with a complete proof (3 rule boxes, 91 primitive steps)
+Expanding `numberEquality':
+Status: `numberEquality' is a primitive axiom
+Expanding `lt_Reflex':
+Status: `lt_Reflex' is a primitive axiom
+Expanding `lt_Reflex_rw':
+Status: `lt_Reflex_rw' is a derived object with a complete proof (3 rule boxes, 14 primitive steps)
+Expanding `lt_irreflex_rw':
+Status: `lt_irreflex_rw' is a derived object with a complete proof (1 rule boxes, 29 primitive steps)
+Expanding `irrefl_Elimination':
+Status: `irrefl_Elimination' is a derived object with a complete proof (3 rule boxes, 30 primitive steps)
+Expanding `irreflElim':
+Status: `irreflElim' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `lt_Asym':
+Status: `lt_Asym' is a derived object with a complete proof (3 rule boxes, 30 primitive steps)
+Expanding `lt_Trichot':
+Status: `lt_Trichot' is a primitive axiom
+Expanding `lt_Trichot_rw':
+Status: `lt_Trichot_rw' is a derived object with a complete proof (3 rule boxes, 14 primitive steps)
+Expanding `splitInt':
+Status: `splitInt' is a derived object with a complete proof (5 rule boxes, 117 primitive steps)
+Expanding `lt_Transit':
+Status: `lt_Transit' is a primitive axiom
+Expanding `lt_Transit_rw':
+Status: `lt_Transit_rw' is a derived object with a complete proof (3 rule boxes, 18 primitive steps)
+Expanding `ltDissect':
+Status: `ltDissect' is a derived object with a complete proof (3 rule boxes, 36 primitive steps)
+Expanding `lt_Discret':
+Status: `lt_Discret' is a primitive axiom
+Expanding `lt_Discret_rw':
+Status: `lt_Discret_rw' is a derived object with a complete proof (3 rule boxes, 14 primitive steps)
+Expanding `intEliminationLast':
+Status: `intEliminationLast' is a primitive axiom
+Expanding `intElimination':
+Status: `intElimination' is a derived object with a complete proof (1 rule boxes, 27 primitive steps)
+Expanding `reduce_ind_down':
+Status: `reduce_ind_down' is a primitive axiom
+Expanding `reduce_ind_up':
+Status: `reduce_ind_up' is a primitive axiom
+Expanding `reduce_ind_base':
+Status: `reduce_ind_base' is a primitive axiom
+Expanding `unfold_ind':
+Status: `unfold_ind' is a derived object with a complete proof (12 rule boxes, 210 primitive steps)
+Expanding `unfold_ind_number':
+Status: `unfold_ind_number' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `add_Commut':
+Status: `add_Commut' is a primitive axiom
+Expanding `add_Commut_rw':
+Status: `add_Commut_rw' is a derived object with a complete proof (3 rule boxes, 14 primitive steps)
+Expanding `add_Assoc':
+Status: `add_Assoc' is a primitive axiom
+Expanding `add_Assoc_rw':
+Status: `add_Assoc_rw' is a derived object with a complete proof (3 rule boxes, 16 primitive steps)
+Expanding `add_Assoc2_rw':
+Status: `add_Assoc2_rw' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `add_Id':
+Status: `add_Id' is a primitive axiom
+Expanding `add_Id_rw':
+Status: `add_Id_rw' is a derived object with a complete proof (3 rule boxes, 12 primitive steps)
+Expanding `add_Id2_rw':
+Status: `add_Id2_rw' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `add_Id3_rw':
+Status: `add_Id3_rw' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `add_Id4_rw':
+Status: `add_Id4_rw' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `lt_addMono':
+Status: `lt_addMono' is a primitive axiom
+Expanding `lt_bool_addMono_rw':
+Status: `lt_bool_addMono_rw' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `lt_addMono_rw1':
+Status: `lt_addMono_rw1' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `lt_addMono_rw2':
+Status: `lt_addMono_rw2' is a derived object with a complete proof (1 rule boxes, 24 primitive steps)
+Expanding `lt_addMono_rw':
+Status: `lt_addMono_rw' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `lt_const':
+Status: `lt_const' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `lt_add_lt':
+Status: `lt_add_lt' is a derived object with a complete proof (1 rule boxes, 42 primitive steps)
+Expanding `minus_add_inverse':
+Status: `minus_add_inverse' is a primitive axiom
+Expanding `minus_add_inverse_rw':
+Status: `minus_add_inverse_rw' is a derived object with a complete proof (2 rule boxes, 13 primitive steps)
+Expanding `add_Functionality':
+Status: `add_Functionality' is a derived object with a complete proof (10 rule boxes, 67 primitive steps)
+Expanding `add_Functionality_rw':
+Status: `add_Functionality_rw' is a derived object with a complete proof (3 rule boxes, 18 primitive steps)
+Expanding `minus_minus_reduce':
+Status: `minus_minus_reduce' is a derived object with a complete proof (3 rule boxes, 51 primitive steps)
+Expanding `minus_minus_reduce_rw':
+Status: `minus_minus_reduce_rw' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `minus_same_rw':
+Status: `minus_same_rw' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `minus_same_rw2':
+Status: `minus_same_rw2' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `plus_minus_rw':
+Status: `plus_minus_rw' is a derived object with a complete proof (1 rule boxes, 25 primitive steps)
+Expanding `minus_plus_rw':
+Status: `minus_plus_rw' is a derived object with a complete proof (1 rule boxes, 34 primitive steps)
+Expanding `minus_add_Distrib':
+Status: `minus_add_Distrib' is a derived object with a complete proof (6 rule boxes, 118 primitive steps)
+Expanding `minus_add_Distrib_rw':
+Status: `minus_add_Distrib_rw' is a derived object with a complete proof (2 rule boxes, 107 primitive steps)
+Expanding `indEquality':
+Status: `indEquality' is a derived object with a complete proof (31 rule boxes, 908 primitive steps)
+Entering itt_int_ext
+Module: /itt_int_ext
+Expanding `reduce_mul_meta':
+Status: `reduce_mul_meta' is a primitive axiom
+Expanding `reduce_div_meta':
+Status: `reduce_div_meta' is a primitive axiom
+Expanding `reduce_rem_meta':
+Status: `reduce_rem_meta' is a primitive axiom
+Expanding `le_bool_wf':
+Status: `le_bool_wf' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `ge_bool_wf':
+Status: `ge_bool_wf' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `neq_wf':
+Status: `neq_wf' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `le_wf':
+Status: `le_wf' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `ge_wf':
+Status: `ge_wf' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `beq_int_is_false':
+Status: `beq_int_is_false' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `beq_int_is_false_rw':
+Status: `beq_int_is_false_rw' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `not_equal':
+Status: `not_equal' is a derived object with a complete proof (1 rule boxes, 43 primitive steps)
+Expanding `elim_nequal':
+Status: `elim_nequal' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `not_nequal':
+Status: `not_nequal' is a derived object with a complete proof (1 rule boxes, 49 primitive steps)
+Expanding `le_refl':
+Status: `le_refl' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `ge_refl':
+Status: `ge_refl' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `ge_sqstable':
+Status: `ge_sqstable' is a derived object with a complete proof (2 rule boxes, 28 primitive steps)
+Expanding `lt_sqstable':
+Status: `lt_sqstable' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `ne_sqstable':
+Status: `ne_sqstable' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `ge_decidable':
+Status: `ge_decidable' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `ge_addWeakMono':
+Status: `ge_addWeakMono' is a derived object with a complete proof (7 rule boxes, 43 primitive steps)
+Expanding `ge_addWeakMono2':
+Status: `ge_addWeakMono2' is a derived object with a complete proof (1 rule boxes, 21 primitive steps)
+Expanding `ge_Transit':
+Status: `ge_Transit' is a derived object with a complete proof (18 rule boxes, 187 primitive steps)
+Expanding `ge_addMono':
+Status: `ge_addMono' is a derived object with a complete proof (4 rule boxes, 83 primitive steps)
+Expanding `ge_to_left_rw':
+Status: `ge_to_left_rw' is a derived object with a complete proof (3 rule boxes, 55 primitive steps)
+Expanding `lt_bool2le_bool_rw':
+Status: `lt_bool2le_bool_rw' is a derived object with a complete proof (23 rule boxes, 574 primitive steps)
+Expanding `intElimination2':
+Status: `intElimination2' is a derived object with a complete proof (20 rule boxes, 366 primitive steps)
+Expanding `guarded_ind_down':
+Status: `guarded_ind_down' is a derived object with a complete proof (2 rule boxes, 44 primitive steps)
+Expanding `guarded_ind_up':
+Status: `guarded_ind_up' is a derived object with a complete proof (3 rule boxes, 61 primitive steps)
+Expanding `min_wf':
+Status: `min_wf' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `max_wf':
+Status: `max_wf' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `max_self1':
+Status: `max_self1' is a derived object with a complete proof (3 rule boxes, 100 primitive steps)
+Expanding `max_self2':
+Status: `max_self2' is a derived object with a complete proof (1 rule boxes, 53 primitive steps)
+Expanding `min_self1':
+Status: `min_self1' is a derived object with a complete proof (1 rule boxes, 53 primitive steps)
+Expanding `min_self2':
+Status: `min_self2' is a derived object with a complete proof (3 rule boxes, 100 primitive steps)
+Expanding `min_add':
+Status: `min_add' is a derived object with a complete proof (1 rule boxes, 54 primitive steps)
+Expanding `max_add':
+Status: `max_add' is a derived object with a complete proof (1 rule boxes, 54 primitive steps)
+Expanding `max_commut':
+Status: `max_commut' is a derived object with a complete proof (5 rule boxes, 120 primitive steps)
+Expanding `max_reduce1':
+Status: `max_reduce1' is a derived object with a complete proof (4 rule boxes, 74 primitive steps)
+Expanding `max_reduce2':
+Status: `max_reduce2' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `min_commut':
+Status: `min_commut' is a derived object with a complete proof (5 rule boxes, 121 primitive steps)
+Expanding `min_reduce1':
+Status: `min_reduce1' is a derived object with a complete proof (4 rule boxes, 74 primitive steps)
+Expanding `min_reduce2':
+Status: `min_reduce2' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `min_reduce':
+Status: `min_reduce' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `max_reduce':
+Status: `max_reduce' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `max_ge_left':
+Status: `max_ge_left' is a derived object with a complete proof (3 rule boxes, 108 primitive steps)
+Expanding `max_ge_right':
+Status: `max_ge_right' is a derived object with a complete proof (6 rule boxes, 154 primitive steps)
+Expanding `max_le':
+Status: `max_le' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `min_ge_left':
+Status: `min_ge_left' is a derived object with a complete proof (6 rule boxes, 154 primitive steps)
+Expanding `min_ge_right':
+Status: `min_ge_right' is a derived object with a complete proof (3 rule boxes, 107 primitive steps)
+Expanding `min_le':
+Status: `min_le' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `mul_wf':
+Status: `mul_wf' is a derived object with a complete proof (1 rule boxes, 29 primitive steps)
+Expanding `mul_add_Distrib':
+Status: `mul_add_Distrib' is a derived object with a complete proof (6 rule boxes, 447 primitive steps)
+Expanding `mul_add_Distrib_rw':
+Status: `mul_add_Distrib_rw' is a derived object with a complete proof (3 rule boxes, 16 primitive steps)
+Expanding `mul_Id':
+Status: `mul_Id' is a derived object with a complete proof (1 rule boxes, 28 primitive steps)
+Expanding `mul_Id_rw':
+Status: `mul_Id_rw' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `mul_Id2':
+Status: `mul_Id2' is a derived object with a complete proof (1 rule boxes, 57 primitive steps)
+Expanding `mul_Id2_rw':
+Status: `mul_Id2_rw' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `mul_Id3':
+Status: `mul_Id3' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `mul_Id3_rw':
+Status: `mul_Id3_rw' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `mul_Zero':
+Status: `mul_Zero' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `mul_Zero_rw':
+Status: `mul_Zero_rw' is a derived object with a complete proof (1 rule boxes, 4 primitive steps)
+Expanding `mul_Zero2':
+Status: `mul_Zero2' is a derived object with a complete proof (1 rule boxes, 75 primitive steps)
+Expanding `mul_Zero2_rw':
+Status: `mul_Zero2_rw' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `mul_Zero3C':
+Status: `mul_Zero3C' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `negative1_2uniC':
+Status: `negative1_2uniC' is a derived object with a complete proof (3 rule boxes, 143 primitive steps)
+Expanding `negative1_2uni2C':
+Status: `negative1_2uni2C' is a derived object with a complete proof (1 rule boxes, 105 primitive steps)
+Expanding `uni2negative1C':
+Status: `uni2negative1C' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `mul_Commut':
+Status: `mul_Commut' is a derived object with a complete proof (14 rule boxes, 1890 primitive steps)
+Expanding `mul_Commut_rw':
+Status: `mul_Commut_rw' is a derived object with a complete proof (3 rule boxes, 14 primitive steps)
+Expanding `mul_add_Distrib2C':
+Status: `mul_add_Distrib2C' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `mul_add_Distrib3C':
+Status: `mul_add_Distrib3C' is a derived object with a complete proof (1 rule boxes, 34 primitive steps)
+Expanding `minus_mul_assoc_rw':
+Status: `minus_mul_assoc_rw' is a derived object with a complete proof (3 rule boxes, 225 primitive steps)
+Expanding `mul_Assoc':
+Status: `mul_Assoc' is a derived object with a complete proof (3 rule boxes, 213 primitive steps)
+Expanding `mul_Assoc_rw':
+Status: `mul_Assoc_rw' is a derived object with a complete proof (3 rule boxes, 16 primitive steps)
+Expanding `mul_Assoc2_rw':
+Status: `mul_Assoc2_rw' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `lt_mulPositMonoEq':
+Status: `lt_mulPositMonoEq' is a derived object with a complete proof (21 rule boxes, 650 primitive steps)
+Expanding `lt_mulPositMono':
+Status: `lt_mulPositMono' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `lt_mulPositMono_rw':
+Status: `lt_mulPositMono_rw' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `mul_uni_Assoc':
+Status: `mul_uni_Assoc' is a derived object with a complete proof (1 rule boxes, 32 primitive steps)
+Expanding `mul_uni_Assoc_rw':
+Status: `mul_uni_Assoc_rw' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `lt_reverse_rw':
+Status: `lt_reverse_rw' is a derived object with a complete proof (3 rule boxes, 69 primitive steps)
+Expanding `lt_mulNegMono':
+Status: `lt_mulNegMono' is a derived object with a complete proof (7 rule boxes, 116 primitive steps)
+Expanding `lt_mulNegMono_rw':
+Status: `lt_mulNegMono_rw' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `beq_mulMono':
+Status: `beq_mulMono' is a derived object with a complete proof (38 rule boxes, 537 primitive steps)
+Expanding `beq_mulMonoSq':
+Status: `beq_mulMonoSq' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `beq_mulMono_rw':
+Status: `beq_mulMono_rw' is a derived object with a complete proof (3 rule boxes, 17 primitive steps)
+Expanding `div_baseReduce':
+Status: `div_baseReduce' is a derived object with a complete proof (3 rule boxes, 449 primitive steps)
+Expanding `div_baseReduce_rw':
+Status: `div_baseReduce_rw' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `div_neg':
+Status: `div_neg' is a derived object with a complete proof (20 rule boxes, 1740 primitive steps)
+Expanding `div_neg_rw':
+Status: `div_neg_rw' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `div_indReduce':
+Status: `div_indReduce' is a derived object with an incomplete proof (21 rule boxes, 1123 primitive steps)
+Expanding `div_indReduce_rw':
+Status: `div_indReduce_rw' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `div_wf':
+Status: `div_wf' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `div_remProperty':
+Status: `div_remProperty' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `lt_divMono':
+Status: `lt_divMono' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `add_divReduce':
+Status: `add_divReduce' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `div_Assoc':
+Status: `div_Assoc' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `div_Assoc_rw':
+Status: `div_Assoc_rw' is a derived object with a complete proof (1 rule boxes, 21 primitive steps)
+Expanding `rem_baseReduce':
+Status: `rem_baseReduce' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rem_baseReduce_rw':
+Status: `rem_baseReduce_rw' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `rem_neg':
+Status: `rem_neg' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rem_neg_rw':
+Status: `rem_neg_rw' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rem_indReduce':
+Status: `rem_indReduce' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rem_indReduce_rw':
+Status: `rem_indReduce_rw' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `rem_wf':
+Status: `rem_wf' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `intSegUniv':
+Status: `intSegUniv' is a derived object with a complete proof (1 rule boxes, 37 primitive steps)
+Expanding `intSegType':
+Status: `intSegType' is a derived object with a complete proof (1 rule boxes, 33 primitive steps)
+Expanding `intSegMemberEquality':
+Status: `intSegMemberEquality' is a derived object with a complete proof (1 rule boxes, 59 primitive steps)
+Expanding `intSegElimination':
+Status: `intSegElimination' is a derived object with a complete proof (1 rule boxes, 27 primitive steps)
+Expanding `intSegIsInt':
+Status: `intSegIsInt' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Entering itt_inv_typing
+Module: /itt_inv_typing
+Expanding `dintersectionTypeElimination':
+Status: `dintersectionTypeElimination' is a primitive axiom
+Expanding `independentProductTypeElimination':
+Status: `independentProductTypeElimination' is a primitive axiom
+Expanding `functionTypeElimination':
+Status: `functionTypeElimination' is a primitive axiom
+Entering itt_isect
+Module: /itt_isect
+Expanding `intersectionFormation':
+Status: `intersectionFormation' is a primitive axiom
+Expanding `intersectionEquality':
+Status: `intersectionEquality' is a primitive axiom
+Expanding `intersectionType':
+Status: `intersectionType' is a primitive axiom
+Expanding `topUniv':
+Status: `topUniv' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `topType':
+Status: `topType' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `intersectionMemberEquality':
+Status: `intersectionMemberEquality' is a primitive axiom
+Expanding `topMemberEquality':
+Status: `topMemberEquality' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `intersectionMemberFormation':
+Status: `intersectionMemberFormation' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `intersectionMemberFormation2':
+Status: `intersectionMemberFormation2' is a derived object with a complete proof (2 rule boxes, 43 primitive steps)
+Expanding `topMemberFormation':
+Status: `topMemberFormation' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `intersectionElimination':
+Status: `intersectionElimination' is a primitive axiom
+Expanding `intersectionElimination_eq':
+Status: `intersectionElimination_eq' is a derived object with a complete proof (2 rule boxes, 19 primitive steps)
+Expanding `intersectionElimination2':
+Status: `intersectionElimination2' is a derived object with a complete proof (5 rule boxes, 47 primitive steps)
+Expanding `intersectionMemberCaseEquality':
+Status: `intersectionMemberCaseEquality' is a derived object with a complete proof (3 rule boxes, 29 primitive steps)
+Expanding `intersectionEqualityElim':
+Status: `intersectionEqualityElim' is a derived object with a complete proof (2 rule boxes, 14 primitive steps)
+Expanding `intersectionEliminationFromCaseEquality':
+Status: `intersectionEliminationFromCaseEquality' is a derived object with a complete proof (5 rule boxes, 27 primitive steps)
+Expanding `intersectionSubtype':
+Status: `intersectionSubtype' is a derived object with a complete proof (2 rule boxes, 57 primitive steps)
+Expanding `intersectionSubtype2':
+Status: `intersectionSubtype2' is a derived object with a complete proof (4 rule boxes, 51 primitive steps)
+Expanding `intersectionSubtype3':
+Status: `intersectionSubtype3' is a derived object with a complete proof (2 rule boxes, 33 primitive steps)
+Expanding `topSubtype':
+Status: `topSubtype' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Entering itt_labels
+Module: /itt_labels
+Entering itt_list
+Module: /itt_list
+Expanding `reduce_listindNil':
+Status: `reduce_listindNil' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `reduce_listindCons':
+Status: `reduce_listindCons' is a derived object with a complete proof (1 rule boxes, 23 primitive steps)
+Expanding `listnType':
+Status: `listnType' is a derived object with a complete proof (1 rule boxes, 70 primitive steps)
+Expanding `listnEquality':
+Status: `listnEquality' is a derived object with a complete proof (2 rule boxes, 123 primitive steps)
+Expanding `listType':
+Status: `listType' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `listEquality':
+Status: `listEquality' is a derived object with a complete proof (1 rule boxes, 19 primitive steps)
+Expanding `nilEquality':
+Status: `nilEquality' is a derived object with a complete proof (2 rule boxes, 47 primitive steps)
+Expanding `nilFormation':
+Status: `nilFormation' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `consEquality':
+Status: `consEquality' is a derived object with a complete proof (4 rule boxes, 183 primitive steps)
+Expanding `consSquiggleEq':
+Status: `consSquiggleEq' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `listEliminationLast':
+Status: `listEliminationLast' is a derived object with a complete proof (23 rule boxes, 1155 primitive steps)
+Expanding `listElimination':
+Status: `listElimination' is a derived object with a complete proof (1 rule boxes, 25 primitive steps)
+Expanding `list_indEquality':
+Status: `list_indEquality' is a derived object with a complete proof (10 rule boxes, 175 primitive steps)
+Expanding `nil_neq_cons':
+Status: `nil_neq_cons' is a derived object with a complete proof (5 rule boxes, 44 primitive steps)
+Expanding `cons_neq_nil':
+Status: `cons_neq_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `nilEquality2':
+Status: `nilEquality2' is a derived object with a complete proof (6 rule boxes, 153 primitive steps)
+Expanding `nilEquality3':
+Status: `nilEquality3' is a derived object with a complete proof (1 rule boxes, 21 primitive steps)
+Expanding `consEqElimination':
+Status: `consEqElimination' is a derived object with a complete proof (8 rule boxes, 118 primitive steps)
+Expanding `nilSqequal':
+Status: `nilSqequal' is a derived object with a complete proof (3 rule boxes, 76 primitive steps)
+Expanding `listSubtype':
+Status: `listSubtype' is a derived object with a complete proof (2 rule boxes, 50 primitive steps)
+Expanding `listFormation':
+Status: `listFormation' is a derived object with a complete proof (2 rule boxes, 26 primitive steps)
+Expanding `consFormation':
+Status: `consFormation' is a derived object with a complete proof (2 rule boxes, 46 primitive steps)
+Entering itt_list2
+Module: /itt_list2
+Expanding `reduce_hd':
+Status: `reduce_hd' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_tl':
+Status: `reduce_tl' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_all_list_nil':
+Status: `reduce_all_list_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_all_list_cons':
+Status: `reduce_all_list_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_all_list_witness_nil':
+Status: `reduce_all_list_witness_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_all_list_witness_cons':
+Status: `reduce_all_list_witness_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_exists_list_nil':
+Status: `reduce_exists_list_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_exists_list_cons':
+Status: `reduce_exists_list_cons' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_bexists_list_nil':
+Status: `reduce_bexists_list_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_bexists_list_cons':
+Status: `reduce_bexists_list_cons' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_is_nil_nil':
+Status: `reduce_is_nil_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_is_nil_cons':
+Status: `reduce_is_nil_cons' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_mem_nil':
+Status: `reduce_mem_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_mem_cons':
+Status: `reduce_mem_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_subset_nil':
+Status: `reduce_subset_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_subset_cons':
+Status: `reduce_subset_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_append_nil':
+Status: `reduce_append_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_append_cons':
+Status: `reduce_append_cons' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `append_nil':
+Status: `append_nil' is a derived object with a complete proof (1 rule boxes, 40 primitive steps)
+Expanding `append_assoc':
+Status: `append_assoc' is a derived object with a complete proof (1 rule boxes, 46 primitive steps)
+Expanding `reduce_all2_nil_nil':
+Status: `reduce_all2_nil_nil' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_all2_nil_cons':
+Status: `reduce_all2_nil_cons' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_all2_cons_nil':
+Status: `reduce_all2_cons_nil' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_all2_cons_cons':
+Status: `reduce_all2_cons_cons' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `reduce_ball2_nil_nil':
+Status: `reduce_ball2_nil_nil' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_ball2_nil_cons':
+Status: `reduce_ball2_nil_cons' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_ball2_cons_nil':
+Status: `reduce_ball2_cons_nil' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_ball2_cons_cons':
+Status: `reduce_ball2_cons_cons' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_assoc_nil':
+Status: `reduce_assoc_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_assoc_cons':
+Status: `reduce_assoc_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_rev_assoc_nil':
+Status: `reduce_rev_assoc_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_rev_assoc_cons':
+Status: `reduce_rev_assoc_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_fold_left_nil':
+Status: `reduce_fold_left_nil' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_fold_left_cons':
+Status: `reduce_fold_left_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_length_nil':
+Status: `reduce_length_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_length_cons':
+Status: `reduce_length_cons' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_nth_zero':
+Status: `reduce_nth_zero' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `reduce_nth_succ':
+Status: `reduce_nth_succ' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `reduce_nth_cons':
+Status: `reduce_nth_cons' is a derived object with a complete proof (2 rule boxes, 443 primitive steps)
+Expanding `reduce_nth_cons_succ':
+Status: `reduce_nth_cons_succ' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_replace_nth_zero':
+Status: `reduce_replace_nth_zero' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `reduce_replace_nth_succ':
+Status: `reduce_replace_nth_succ' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `reduce_replace_nth_cons':
+Status: `reduce_replace_nth_cons' is a derived object with a complete proof (2 rule boxes, 445 primitive steps)
+Expanding `reduce_replace_nth_cons_succ':
+Status: `reduce_replace_nth_cons_succ' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `insert_at_base':
+Status: `insert_at_base' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `insert_at_step':
+Status: `insert_at_step' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `insert_at_cons':
+Status: `insert_at_cons' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_rev_nil':
+Status: `reduce_rev_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_rev_cons':
+Status: `reduce_rev_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `reduce_map_nil':
+Status: `reduce_map_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_map_cons':
+Status: `reduce_map_cons' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_map2_nil':
+Status: `reduce_map2_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_map2_cons':
+Status: `reduce_map2_cons' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `reduce_map_id':
+Status: `reduce_map_id' is a derived object with a complete proof (2 rule boxes, 42 primitive steps)
+Expanding `length_map':
+Status: `length_map' is a derived object with a complete proof (1 rule boxes, 48 primitive steps)
+Expanding `length_map2':
+Status: `length_map2' is a derived object with a complete proof (1 rule boxes, 48 primitive steps)
+Expanding `map_append':
+Status: `map_append' is a derived object with a complete proof (1 rule boxes, 52 primitive steps)
+Expanding `index_map':
+Status: `index_map' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `index_map2':
+Status: `index_map2' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `listelim':
+Status: `listelim' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `hd_wf':
+Status: `hd_wf' is a derived object with a complete proof (1 rule boxes, 87 primitive steps)
+Expanding `hd_wf1':
+Status: `hd_wf1' is a derived object with a complete proof (2 rule boxes, 127 primitive steps)
+Expanding `tl_wf':
+Status: `tl_wf' is a derived object with a complete proof (1 rule boxes, 87 primitive steps)
+Expanding `tl_wf1':
+Status: `tl_wf1' is a derived object with a complete proof (2 rule boxes, 127 primitive steps)
+Expanding `tl_hd_rw':
+Status: `tl_hd_rw' is a derived object with a complete proof (1 rule boxes, 72 primitive steps)
+Expanding `is_nil_wf':
+Status: `is_nil_wf' is a derived object with a complete proof (1 rule boxes, 37 primitive steps)
+Expanding `mem_univ_wf':
+Status: `mem_univ_wf' is a derived object with a complete proof (7 rule boxes, 102 primitive steps)
+Expanding `mem_wf':
+Status: `mem_wf' is a derived object with a complete proof (1 rule boxes, 49 primitive steps)
+Expanding `subset_wf':
+Status: `subset_wf' is a derived object with a complete proof (1 rule boxes, 49 primitive steps)
+Expanding `sameset_wf':
+Status: `sameset_wf' is a derived object with a complete proof (1 rule boxes, 23 primitive steps)
+Expanding `append_wf2':
+Status: `append_wf2' is a derived object with a complete proof (4 rule boxes, 45 primitive steps)
+Expanding `ball2_wf2':
+Status: `ball2_wf2' is a derived object with a complete proof (8 rule boxes, 125 primitive steps)
+Expanding `assoc_wf':
+Status: `assoc_wf' is a derived object with a complete proof (8 rule boxes, 91 primitive steps)
+Expanding `rev_assoc_wf':
+Status: `rev_assoc_wf' is a derived object with a complete proof (8 rule boxes, 90 primitive steps)
+Expanding `fold_left_wf':
+Status: `fold_left_wf' is a derived object with a complete proof (2 rule boxes, 81 primitive steps)
+Expanding `length_wf':
+Status: `length_wf' is a derived object with a complete proof (1 rule boxes, 41 primitive steps)
+Expanding `length_nonneg':
+Status: `length_nonneg' is a derived object with a complete proof (1 rule boxes, 198 primitive steps)
+Expanding `length_wf2':
+Status: `length_wf2' is a derived object with a complete proof (2 rule boxes, 165 primitive steps)
+Expanding `length_wf1':
+Status: `length_wf1' is a derived object with a complete proof (1 rule boxes, 20 primitive steps)
+Expanding `length_cons_pos':
+Status: `length_cons_pos' is a derived object with a complete proof (1 rule boxes, 143 primitive steps)
+Expanding `listTop':
+Status: `listTop' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `listTop2':
+Status: `listTop2' is a derived object with a complete proof (1 rule boxes, 39 primitive steps)
+Expanding `listTop_nil':
+Status: `listTop_nil' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `listTop_cons':
+Status: `listTop_cons' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `index_wf':
+Status: `index_wf' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `index_mem':
+Status: `index_mem' is a derived object with a complete proof (1 rule boxes, 59 primitive steps)
+Expanding `index_elim':
+Status: `index_elim' is a derived object with a complete proof (2 rule boxes, 21 primitive steps)
+Expanding `index_is_int':
+Status: `index_is_int' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `index_is_nat':
+Status: `index_is_nat' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `index_nil_elim':
+Status: `index_nil_elim' is a derived object with a complete proof (1 rule boxes, 83 primitive steps)
+Expanding `nth_wf':
+Status: `nth_wf' is a derived object with a complete proof (1 rule boxes, 844 primitive steps)
+Expanding `index_rev_wf':
+Status: `index_rev_wf' is a derived object with a complete proof (1 rule boxes, 1003 primitive steps)
+Expanding `replace_nth_wf':
+Status: `replace_nth_wf' is a derived object with a complete proof (18 rule boxes, 2948 primitive steps)
+Expanding `insert_at_wf':
+Status: `insert_at_wf' is a derived object with a complete proof (11 rule boxes, 1283 primitive steps)
+Expanding `nth_map':
+Status: `nth_map' is a derived object with a complete proof (2 rule boxes, 854 primitive steps)
+Expanding `nth_map2':
+Status: `nth_map2' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `nth_eq':
+Status: `nth_eq' is a derived object with a complete proof (2 rule boxes, 955 primitive steps)
+Expanding `nth_of_append':
+Status: `nth_of_append' is a derived object with a complete proof (7 rule boxes, 1302 primitive steps)
+Expanding `length_of_append':
+Status: `length_of_append' is a derived object with a complete proof (7 rule boxes, 848 primitive steps)
+Expanding `index_cons_elim':
+Status: `index_cons_elim' is a derived object with a complete proof (1 rule boxes, 96 primitive steps)
+Expanding `rev_wf':
+Status: `rev_wf' is a derived object with a complete proof (1 rule boxes, 50 primitive steps)
+Expanding `rev_append':
+Status: `rev_append' is a derived object with a complete proof (1 rule boxes, 56 primitive steps)
+Expanding `rev2':
+Status: `rev2' is a derived object with a complete proof (2 rule boxes, 68 primitive steps)
+Expanding `mem_nil':
+Status: `mem_nil' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `mem_cons2':
+Status: `mem_cons2' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `mem_cons1':
+Status: `mem_cons1' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `restrict_list':
+Status: `restrict_list' is a derived object with a complete proof (2 rule boxes, 163 primitive steps)
+Expanding `reduce_list_of_fun_base':
+Status: `reduce_list_of_fun_base' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `reduce_list_of_fun_step':
+Status: `reduce_list_of_fun_step' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `reduce_length_lof':
+Status: `reduce_length_lof' is a derived object with a complete proof (4 rule boxes, 107 primitive steps)
+Expanding `list_of_fun_id':
+Status: `list_of_fun_id' is a derived object with a complete proof (10 rule boxes, 984 primitive steps)
+Expanding `nth_of_list_of_fun':
+Status: `nth_of_list_of_fun' is a derived object with a complete proof (7 rule boxes, 1006 primitive steps)
+Expanding `list_elements_id':
+Status: `list_elements_id' is a derived object with a complete proof (2 rule boxes, 383 primitive steps)
+Expanding `map_list_of_fun':
+Status: `map_list_of_fun' is a derived object with a complete proof (2 rule boxes, 96 primitive steps)
+Expanding `list_of_fun_wf':
+Status: `list_of_fun_wf' is a derived object with a complete proof (5 rule boxes, 1075 primitive steps)
+Expanding `list_of_fun_wf2':
+Status: `list_of_fun_wf2' is a derived object with a complete proof (2 rule boxes, 49 primitive steps)
+Expanding `tail_reduce1':
+Status: `tail_reduce1' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `tail_reduce2':
+Status: `tail_reduce2' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `length_of_tail':
+Status: `length_of_tail' is a derived object with a complete proof (1 rule boxes, 49 primitive steps)
+Expanding `tail_does_not_depend_on_the_head':
+Status: `tail_does_not_depend_on_the_head' is a derived object with a complete proof (7 rule boxes, 2741 primitive steps)
+Expanding `list_is_its_own_tail':
+Status: `list_is_its_own_tail' is a derived object with a complete proof (2 rule boxes, 90 primitive steps)
+Expanding `tail_squiggle':
+Status: `tail_squiggle' is a derived object with a complete proof (6 rule boxes, 124 primitive steps)
+Expanding `tail_wf':
+Status: `tail_wf' is a derived object with a complete proof (4 rule boxes, 2041 primitive steps)
+Expanding `listSquiggle':
+Status: `listSquiggle' is a derived object with a complete proof (3 rule boxes, 103 primitive steps)
+Expanding `reduce_lof_append_lof':
+Status: `reduce_lof_append_lof' is a derived object with a complete proof (3 rule boxes, 2111 primitive steps)
+Expanding `tail_induction':
+Status: `tail_induction' is a derived object with a complete proof (7 rule boxes, 560 primitive steps)
+Expanding `tail_induction2':
+Status: `tail_induction2' is a derived object with a complete proof (10 rule boxes, 1162 primitive steps)
+Expanding `all_list_wf':
+Status: `all_list_wf' is a derived object with a complete proof (9 rule boxes, 1008 primitive steps)
+Expanding `all_list_intro_nil':
+Status: `all_list_intro_nil' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `all_list_intro_cons':
+Status: `all_list_intro_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `all_list_intro':
+Status: `all_list_intro' is a derived object with a complete proof (9 rule boxes, 1008 primitive steps)
+Expanding `all_list_intro1':
+Status: `all_list_intro1' is a derived object with a complete proof (14 rule boxes, 748 primitive steps)
+Expanding `all_list_elim':
+Status: `all_list_elim' is a derived object with a complete proof (19 rule boxes, 4439 primitive steps)
+Expanding `all_list_and_intro':
+Status: `all_list_and_intro' is a derived object with a complete proof (3 rule boxes, 55 primitive steps)
+Expanding `all_list_and_elim':
+Status: `all_list_and_elim' is a derived object with a complete proof (1 rule boxes, 57 primitive steps)
+Expanding `all_list_map':
+Status: `all_list_map' is a derived object with a complete proof (3 rule boxes, 118 primitive steps)
+Expanding `all_list_witness_wf':
+Status: `all_list_witness_wf' is a derived object with a complete proof (13 rule boxes, 729 primitive steps)
+Expanding `all_list_witness_wf2':
+Status: `all_list_witness_wf2' is a derived object with a complete proof (14 rule boxes, 1031 primitive steps)
+Expanding `exists_list_wf1':
+Status: `exists_list_wf1' is a derived object with a complete proof (2 rule boxes, 44 primitive steps)
+Expanding `exists_list_wf2':
+Status: `exists_list_wf2' is a derived object with a complete proof (9 rule boxes, 1010 primitive steps)
+Expanding `exists_list_intro_cons':
+Status: `exists_list_intro_cons' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `exists_list_intro':
+Status: `exists_list_intro' is a derived object with a complete proof (38 rule boxes, 12035 primitive steps)
+Expanding `exists_list_elim':
+Status: `exists_list_elim' is a derived object with a complete proof (19 rule boxes, 1486 primitive steps)
+Expanding `bexists_list_wf1':
+Status: `bexists_list_wf1' is a derived object with a complete proof (1 rule boxes, 46 primitive steps)
+Expanding `bexists_list_wf2':
+Status: `bexists_list_wf2' is a derived object with a complete proof (1 rule boxes, 52 primitive steps)
+Expanding `bexists_list_intro':
+Status: `bexists_list_intro' is a derived object with a complete proof (31 rule boxes, 10884 primitive steps)
+Expanding `bexists_list_elim':
+Status: `bexists_list_elim' is a derived object with a complete proof (17 rule boxes, 5700 primitive steps)
+Expanding `map_wf':
+Status: `map_wf' is a derived object with a complete proof (6 rule boxes, 61 primitive steps)
+Expanding `map_wf4':
+Status: `map_wf4' is a derived object with a complete proof (1 rule boxes, 52 primitive steps)
+Expanding `map_wf2':
+Status: `map_wf2' is a derived object with a complete proof (5 rule boxes, 1037 primitive steps)
+Expanding `list_wf2':
+Status: `list_wf2' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `map_wf3':
+Status: `map_wf3' is a derived object with a complete proof (1 rule boxes, 38 primitive steps)
+Expanding `subset_cons':
+Status: `subset_cons' is a derived object with a complete proof (1 rule boxes, 99 primitive steps)
+Expanding `subset_ref':
+Status: `subset_ref' is a derived object with a complete proof (1 rule boxes, 53 primitive steps)
+Expanding `subset_trans':
+Status: `subset_trans' is a derived object with a complete proof (4 rule boxes, 251 primitive steps)
+Expanding `sameset_ref':
+Status: `sameset_ref' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `sameset_sym':
+Status: `sameset_sym' is a derived object with a complete proof (1 rule boxes, 25 primitive steps)
+Expanding `sameset_trans':
+Status: `sameset_trans' is a derived object with a complete proof (3 rule boxes, 83 primitive steps)
+Expanding `reduce_find_nil':
+Status: `reduce_find_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_find_cons':
+Status: `reduce_find_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `find_wf':
+Status: `find_wf' is a derived object with a complete proof (1 rule boxes, 93 primitive steps)
+Expanding `find_wf2':
+Status: `find_wf2' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `find_when_found_wf':
+Status: `find_when_found_wf' is a derived object with a complete proof (5 rule boxes, 331 primitive steps)
+Expanding `find_correct_when_found':
+Status: `find_correct_when_found' is a derived object with a complete proof (4 rule boxes, 203 primitive steps)
+Expanding `find_when_not_found_wf':
+Status: `find_when_not_found_wf' is a derived object with a complete proof (2 rule boxes, 199 primitive steps)
+Expanding `diff_list_wf':
+Status: `diff_list_wf' is a derived object with a complete proof (1 rule boxes, 43 primitive steps)
+Expanding `diff_list_mem':
+Status: `diff_list_mem' is a derived object with a complete proof (1 rule boxes, 66 primitive steps)
+Expanding `diff_list_elim':
+Status: `diff_list_elim' is a derived object with a complete proof (2 rule boxes, 128 primitive steps)
+Expanding `difflist':
+Status: `difflist' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `reduce_list_max_nil':
+Status: `reduce_list_max_nil' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_list_max_cons':
+Status: `reduce_list_max_cons' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `list_max_wf':
+Status: `list_max_wf' is a derived object with a complete proof (1 rule boxes, 43 primitive steps)
+Expanding `list_max_wf2':
+Status: `list_max_wf2' is a derived object with a complete proof (1 rule boxes, 43 primitive steps)
+Expanding `list_max1':
+Status: `list_max1' is a derived object with a complete proof (4 rule boxes, 969 primitive steps)
+Expanding `list_max2':
+Status: `list_max2' is a derived object with a complete proof (1 rule boxes, 122 primitive steps)
+Expanding `list_continuous':
+Status: `list_continuous' is a derived object with a complete proof (16 rule boxes, 1564 primitive steps)
+Expanding `mem_sqstable':
+Status: `mem_sqstable' is a derived object with a complete proof (4 rule boxes, 226 primitive steps)
+Expanding `listmem_set_wf':
+Status: `listmem_set_wf' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `listmem_set_intro':
+Status: `listmem_set_intro' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `listmem_set_elim':
+Status: `listmem_set_elim' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `listmem_set_elim_nil':
+Status: `listmem_set_elim_nil' is a derived object with a complete proof (3 rule boxes, 24 primitive steps)
+Expanding `listmem_set_elim2':
+Status: `listmem_set_elim2' is a derived object with a complete proof (6 rule boxes, 143 primitive steps)
+Expanding `all2_wf2':
+Status: `all2_wf2' is a derived object with a complete proof (6 rule boxes, 109 primitive steps)
+Expanding `all2_univ':
+Status: `all2_univ' is a derived object with a complete proof (1 rule boxes, 110 primitive steps)
+Expanding `all2_sqstable':
+Status: `all2_sqstable' is a derived object with a complete proof (2 rule boxes, 222 primitive steps)
+Expanding `all2_length_elim':
+Status: `all2_length_elim' is a derived object with a complete proof (14 rule boxes, 226 primitive steps)
+Expanding `all2_index_elim':
+Status: `all2_index_elim' is a derived object with a complete proof (27 rule boxes, 1125 primitive steps)
+Expanding `all2_intro2':
+Status: `all2_intro2' is a derived object with a complete proof (28 rule boxes, 2959 primitive steps)
+Expanding `list_sqsimple':
+Status: `list_sqsimple' is a derived object with a complete proof (5 rule boxes, 169 primitive steps)
+Entering itt_list3
+Module: /itt_list3
+Expanding `reduce_nth_prefix_zero':
+Status: `reduce_nth_prefix_zero' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `reduce_nth_suffix_zero':
+Status: `reduce_nth_suffix_zero' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `reduce_nth_prefix_cons':
+Status: `reduce_nth_prefix_cons' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `reduce_nth_suffix_cons':
+Status: `reduce_nth_suffix_cons' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `nth_suffix_swap_tl':
+Status: `nth_suffix_swap_tl' is a derived object with a complete proof (5 rule boxes, 95 primitive steps)
+Expanding `reduce_nth_nth_prefix':
+Status: `reduce_nth_nth_prefix' is a derived object with a complete proof (15 rule boxes, 2145 primitive steps)
+Expanding `reduce_length_of_nth_prefix':
+Status: `reduce_length_of_nth_prefix' is a derived object with a complete proof (10 rule boxes, 947 primitive steps)
+Expanding `nth_prefix_wf':
+Status: `nth_prefix_wf' is a derived object with a complete proof (11 rule boxes, 955 primitive steps)
+Expanding `list_elements_id_elem':
+Status: `list_elements_id_elem' is a derived object with a complete proof (2 rule boxes, 48 primitive steps)
+Expanding `list_of_fun_nth_succ':
+Status: `list_of_fun_nth_succ' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `list_of_fun_nth_succ2':
+Status: `list_of_fun_nth_succ2' is a derived object with a complete proof (1 rule boxes, 52 primitive steps)
+Expanding `reduce_nth_prefix_append_lof':
+Status: `reduce_nth_prefix_append_lof' is a derived object with a complete proof (3 rule boxes, 94 primitive steps)
+Expanding `reduce_nth_suffix_append_lof':
+Status: `reduce_nth_suffix_append_lof' is a derived object with a complete proof (3 rule boxes, 85 primitive steps)
+Expanding `split_list':
+Status: `split_list' is a derived object with a complete proof (12 rule boxes, 940 primitive steps)
+Expanding `split_list_sqequal':
+Status: `split_list_sqequal' is a derived object with a complete proof (12 rule boxes, 969 primitive steps)
+Expanding `split_list_pair':
+Status: `split_list_pair' is a derived object with a complete proof (4 rule boxes, 30 primitive steps)
+Expanding `reduce_last_suffix_list':
+Status: `reduce_last_suffix_list' is a derived object with a complete proof (9 rule boxes, 206 primitive steps)
+Expanding `nth_prefix_lof':
+Status: `nth_prefix_lof' is a derived object with a complete proof (13 rule boxes, 743 primitive steps)
+Expanding `nth_suffix_lof':
+Status: `nth_suffix_lof' is a derived object with a complete proof (18 rule boxes, 2010 primitive steps)
+Expanding `hd_lof':
+Status: `hd_lof' is a derived object with a complete proof (2 rule boxes, 76 primitive steps)
+Expanding `tl_lof':
+Status: `tl_lof' is a derived object with a complete proof (1 rule boxes, 85 primitive steps)
+Expanding `singleton_lof':
+Status: `singleton_lof' is a derived object with a complete proof (1 rule boxes, 23 primitive steps)
+Expanding `cons_lof':
+Status: `cons_lof' is a derived object with a complete proof (6 rule boxes, 222 primitive steps)
+Expanding `append_lof':
+Status: `append_lof' is a derived object with a complete proof (3 rule boxes, 2111 primitive steps)
+Entering itt_list_set
+Module: /itt_list_set
+Expanding `mem_append_left':
+Status: `mem_append_left' is a derived object with a complete proof (2 rule boxes, 119 primitive steps)
+Expanding `mem_append_right':
+Status: `mem_append_right' is a derived object with a complete proof (1 rule boxes, 74 primitive steps)
+Expanding `subset_elim':
+Status: `subset_elim' is a derived object with a complete proof (6 rule boxes, 178 primitive steps)
+Expanding `exists_list_mem':
+Status: `exists_list_mem' is a derived object with a complete proof (6 rule boxes, 131 primitive steps)
+Entering itt_logic
+Module: /itt_logic
+Expanding `true_univ':
+Status: `true_univ' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `true_type':
+Status: `true_type' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `true_intro':
+Status: `true_intro' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `true_elim':
+Status: `true_elim' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `false_univ':
+Status: `false_univ' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `false_type':
+Status: `false_type' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `false_elim':
+Status: `false_elim' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `false_esquash_elim':
+Status: `false_esquash_elim' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `not_univ':
+Status: `not_univ' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `not_type':
+Status: `not_type' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `not_intro':
+Status: `not_intro' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `not_elim':
+Status: `not_elim' is a derived object with a complete proof (3 rule boxes, 26 primitive steps)
+Expanding `squash_not_elim':
+Status: `squash_not_elim' is a derived object with a complete proof (1 rule boxes, 60 primitive steps)
+Expanding `and_univ':
+Status: `and_univ' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `and_type':
+Status: `and_type' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `and_intro':
+Status: `and_intro' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `and_squash_intro':
+Status: `and_squash_intro' is a derived object with a complete proof (1 rule boxes, 33 primitive steps)
+Expanding `and_elim':
+Status: `and_elim' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `and_squash_elim':
+Status: `and_squash_elim' is a derived object with a complete proof (1 rule boxes, 34 primitive steps)
+Expanding `or_univ':
+Status: `or_univ' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `or_type':
+Status: `or_type' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `or_intro_left':
+Status: `or_intro_left' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `or_intro_right':
+Status: `or_intro_right' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `or_elim':
+Status: `or_elim' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `implies_univ':
+Status: `implies_univ' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `implies_type':
+Status: `implies_type' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `implies_intro':
+Status: `implies_intro' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `implies_elim':
+Status: `implies_elim' is a derived object with a complete proof (1 rule boxes, 20 primitive steps)
+Expanding `iff_univ':
+Status: `iff_univ' is a derived object with a complete proof (1 rule boxes, 26 primitive steps)
+Expanding `iff_type':
+Status: `iff_type' is a derived object with a complete proof (1 rule boxes, 26 primitive steps)
+Expanding `iff_intro':
+Status: `iff_intro' is a derived object with a complete proof (1 rule boxes, 20 primitive steps)
+Expanding `iff_elim':
+Status: `iff_elim' is a derived object with a complete proof (2 rule boxes, 18 primitive steps)
+Expanding `cand_univ':
+Status: `cand_univ' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `cand_type':
+Status: `cand_type' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `cand_intro':
+Status: `cand_intro' is a derived object with a complete proof (3 rule boxes, 40 primitive steps)
+Expanding `cand_elim':
+Status: `cand_elim' is a derived object with a complete proof (2 rule boxes, 8 primitive steps)
+Expanding `cor_univ':
+Status: `cor_univ' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `cor_type':
+Status: `cor_type' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `cor_intro_left':
+Status: `cor_intro_left' is a derived object with a complete proof (4 rule boxes, 22 primitive steps)
+Expanding `cor_intro_right':
+Status: `cor_intro_right' is a derived object with a complete proof (3 rule boxes, 16 primitive steps)
+Expanding `cor_elim':
+Status: `cor_elim' is a derived object with a complete proof (2 rule boxes, 16 primitive steps)
+Expanding `all_univ':
+Status: `all_univ' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `all_type':
+Status: `all_type' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `all_intro':
+Status: `all_intro' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `all_elim':
+Status: `all_elim' is a derived object with a complete proof (3 rule boxes, 27 primitive steps)
+Expanding `exists_univ':
+Status: `exists_univ' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `exists_type':
+Status: `exists_type' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `exists_intro':
+Status: `exists_intro' is a derived object with a complete proof (4 rule boxes, 14 primitive steps)
+Expanding `exists_elim':
+Status: `exists_elim' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Entering itt_match
+Module: /itt_match
+Entering itt_nat
+Module: /itt_nat
+Expanding `reduce_ind_up':
+Status: `reduce_ind_up' is a derived object with a complete proof (1 rule boxes, 234 primitive steps)
+Expanding `reduce_ind_base':
+Status: `reduce_ind_base' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `natType':
+Status: `natType' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `natUniv':
+Status: `natUniv' is a derived object with a complete proof (1 rule boxes, 24 primitive steps)
+Expanding `natMemberEquality':
+Status: `natMemberEquality' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `natMemberZero':
+Status: `natMemberZero' is a derived object with a complete proof (1 rule boxes, 23 primitive steps)
+Expanding `nat_is_int':
+Status: `nat_is_int' is a derived object with a complete proof (1 rule boxes, 23 primitive steps)
+Expanding `nat_is_int_left':
+Status: `nat_is_int_left' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `nat_is_int_right':
+Status: `nat_is_int_right' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `eq_2beq_nat':
+Status: `eq_2beq_nat' is a derived object with a complete proof (1 rule boxes, 45 primitive steps)
+Expanding `nat_is_int2':
+Status: `nat_is_int2' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `nat_is_subtype_of_int':
+Status: `nat_is_subtype_of_int' is a derived object with a complete proof (1 rule boxes, 20 primitive steps)
+Expanding `nat_sqsimple':
+Status: `nat_sqsimple' is a derived object with a complete proof (2 rule boxes, 20 primitive steps)
+Expanding `eq_nat_decidable':
+Status: `eq_nat_decidable' is a derived object with a complete proof (3 rule boxes, 144 primitive steps)
+Expanding `natElimination':
+Status: `natElimination' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `nat2ge':
+Status: `nat2ge' is a derived object with a complete proof (2 rule boxes, 12 primitive steps)
+Expanding `nat2ge2':
+Status: `nat2ge2' is a derived object with a complete proof (1 rule boxes, 71 primitive steps)
+Expanding `nat2ge3':
+Status: `nat2ge3' is a derived object with a complete proof (1 rule boxes, 657 primitive steps)
+Expanding `ge2nat':
+Status: `ge2nat' is a derived object with a complete proof (1 rule boxes, 200 primitive steps)
+Expanding `ge_eq2nat':
+Status: `ge_eq2nat' is a derived object with a complete proof (5 rule boxes, 794 primitive steps)
+Expanding `noteq2ge_elim':
+Status: `noteq2ge_elim' is a derived object with a complete proof (2 rule boxes, 73 primitive steps)
+Expanding `nat_plusone':
+Status: `nat_plusone' is a derived object with a complete proof (1 rule boxes, 206 primitive steps)
+Expanding `nat_plus':
+Status: `nat_plus' is a derived object with a complete proof (1 rule boxes, 352 primitive steps)
+Expanding `natInduction':
+Status: `natInduction' is a derived object with a complete proof (5 rule boxes, 279 primitive steps)
+Expanding `natInduction2':
+Status: `natInduction2' is a derived object with a complete proof (5 rule boxes, 1033 primitive steps)
+Expanding `natFullInduction':
+Status: `natFullInduction' is a derived object with a complete proof (6 rule boxes, 919 primitive steps)
+Expanding `natBasedFullInduction':
+Status: `natBasedFullInduction' is a derived object with a complete proof (5 rule boxes, 707 primitive steps)
+Expanding `natBackInduction':
+Status: `natBackInduction' is a derived object with a complete proof (12 rule boxes, 1043 primitive steps)
+Expanding `indEquality':
+Status: `indEquality' is a derived object with a complete proof (10 rule boxes, 905 primitive steps)
+Expanding `splitNat':
+Status: `splitNat' is a derived object with a complete proof (3 rule boxes, 396 primitive steps)
+Expanding `reduce_ind_up2':
+Status: `reduce_ind_up2' is a derived object with a complete proof (1 rule boxes, 211 primitive steps)
+Expanding `finiteNatType':
+Status: `finiteNatType' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `finiteNatUniv':
+Status: `finiteNatUniv' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `finiteNatMemberEquality':
+Status: `finiteNatMemberEquality' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `finiteNatElimination':
+Status: `finiteNatElimination' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `finiteNat_ge_elim':
+Status: `finiteNat_ge_elim' is a derived object with a complete proof (3 rule boxes, 245 primitive steps)
+Expanding `finiteNat_ge_elim2':
+Status: `finiteNat_ge_elim2' is a derived object with a complete proof (1 rule boxes, 544 primitive steps)
+Expanding `finiteNat_ge_elim3':
+Status: `finiteNat_ge_elim3' is a derived object with a complete proof (1 rule boxes, 1140 primitive steps)
+Expanding `finiteNatIsInt':
+Status: `finiteNatIsInt' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `finiteNatIsNat':
+Status: `finiteNatIsNat' is a derived object with a complete proof (1 rule boxes, 43 primitive steps)
+Expanding `finiteNatIsSmall':
+Status: `finiteNatIsSmall' is a derived object with a complete proof (1 rule boxes, 28 primitive steps)
+Expanding `finiteNatIsInt2':
+Status: `finiteNatIsInt2' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `finiteNatIsNat2':
+Status: `finiteNatIsNat2' is a derived object with a complete proof (1 rule boxes, 32 primitive steps)
+Expanding `finiteNatIsSmall2':
+Status: `finiteNatIsSmall2' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `max_nat_wf':
+Status: `max_nat_wf' is a derived object with a complete proof (1 rule boxes, 28 primitive steps)
+Expanding `min_nat_wf':
+Status: `min_nat_wf' is a derived object with a complete proof (1 rule boxes, 28 primitive steps)
+Expanding `int_div_rem':
+Status: `int_div_rem' is a derived object with a complete proof (17 rule boxes, 4895 primitive steps)
+Expanding `positive_rule1':
+Status: `positive_rule1' is a derived object with a complete proof (22 rule boxes, 3527 primitive steps)
+Expanding `smallest_positive':
+Status: `smallest_positive' is a derived object with a complete proof (4 rule boxes, 187 primitive steps)
+Expanding `nat_plus_one_eq_zero_elim':
+Status: `nat_plus_one_eq_zero_elim' is a derived object with a complete proof (1 rule boxes, 145 primitive steps)
+Expanding `nat_plus_one_eq_nat_plus_one_elim':
+Status: `nat_plus_one_eq_nat_plus_one_elim' is a derived object with a complete proof (3 rule boxes, 96 primitive steps)
+Entering itt_nequal
+Module: /itt_nequal
+Expanding `neq_type':
+Status: `neq_type' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `neq_univ':
+Status: `neq_univ' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `neq_intro':
+Status: `neq_intro' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `neq_sym':
+Status: `neq_sym' is a derived object with a complete proof (1 rule boxes, 45 primitive steps)
+Expanding `neq_elim':
+Status: `neq_elim' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Entering itt_omega
+Module: /itt_omega
+Expanding `ge_mulMonoPosit_rw':
+Status: `ge_mulMonoPosit_rw' is a derived object with a complete proof (3 rule boxes, 18 primitive steps)
+Expanding `ge_mulMonoPosit2_rw':
+Status: `ge_mulMonoPosit2_rw' is a derived object with a complete proof (2 rule boxes, 21 primitive steps)
+Expanding `ge_scaleAndWeaken':
+Status: `ge_scaleAndWeaken' is a derived object with a complete proof (7 rule boxes, 807 primitive steps)
+Expanding `ge_scaleAndWeaken2':
+Status: `ge_scaleAndWeaken2' is a derived object with a complete proof (1 rule boxes, 19 primitive steps)
+Expanding `ge_scaleAndWeaken3':
+Status: `ge_scaleAndWeaken3' is a derived object with a complete proof (1 rule boxes, 25 primitive steps)
+Expanding `var_elim':
+Status: `var_elim' is a derived object with a complete proof (10 rule boxes, 433 primitive steps)
+Expanding `factor_out':
+Status: `factor_out' is a derived object with a complete proof (4 rule boxes, 451 primitive steps)
+Expanding `var_elim2':
+Status: `var_elim2' is a derived object with a complete proof (5 rule boxes, 189 primitive steps)
+Expanding `var_elim3':
+Status: `var_elim3' is a derived object with a complete proof (1 rule boxes, 33 primitive steps)
+Expanding `zero_ge_to_left_rw':
+Status: `zero_ge_to_left_rw' is a derived object with a complete proof (1 rule boxes, 96 primitive steps)
+Entering itt_pairwise
+Module: /itt_pairwise
+Expanding `let_rule':
+Status: `let_rule' is a primitive axiom
+Expanding `splitHyp':
+Status: `splitHyp' is a derived object with a complete proof (1 rule boxes, 21 primitive steps)
+Expanding `gen_hyp':
+Status: `gen_hyp' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Entering itt_pairwise2
+Module: /itt_pairwise2
+Expanding `supertype':
+Status: `supertype' is a derived object with a complete proof (1 rule boxes, 28 primitive steps)
+Expanding `supertypeHyp':
+Status: `supertypeHyp' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Entering itt_prec
+Module: /itt_prec
+Expanding `reducePrecind':
+Status: `reducePrecind' is a primitive axiom
+Expanding `precEquality':
+Status: `precEquality' is a primitive axiom
+Expanding `precMemberFormation':
+Status: `precMemberFormation' is a primitive axiom
+Expanding `precMemberEquality':
+Status: `precMemberEquality' is a primitive axiom
+Expanding `precElimination':
+Status: `precElimination' is a primitive axiom
+Expanding `precUnrollElimination':
+Status: `precUnrollElimination' is a primitive axiom
+Expanding `precindEquality':
+Status: `precindEquality' is a primitive axiom
+Entering itt_prod
+Module: /itt_prod
+Expanding `unfold_prod':
+Status: `unfold_prod' is a primitive axiom
+Expanding `independentProductEquality':
+Status: `independentProductEquality' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `independentProductType':
+Status: `independentProductType' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `independentProductFormation':
+Status: `independentProductFormation' is a derived object with a complete proof (5 rule boxes, 43 primitive steps)
+Expanding `independentProductElimination':
+Status: `independentProductElimination' is a derived object with a complete proof (3 rule boxes, 18 primitive steps)
+Expanding `independentProductEqElimination':
+Status: `independentProductEqElimination' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `independentPairEquality':
+Status: `independentPairEquality' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `independentPairFormation':
+Status: `independentPairFormation' is a derived object with a complete proof (3 rule boxes, 45 primitive steps)
+Expanding `independentProductSubtype':
+Status: `independentProductSubtype' is a derived object with a complete proof (1 rule boxes, 20 primitive steps)
+Entering itt_prop_decide
+Module: /itt_prop_decide
+Expanding `imp_and_rule':
+Status: `imp_and_rule' is a derived object with a complete proof (12 rule boxes, 36 primitive steps)
+Expanding `imp_or_rule':
+Status: `imp_or_rule' is a derived object with a complete proof (20 rule boxes, 60 primitive steps)
+Expanding `imp_imp_rule':
+Status: `imp_imp_rule' is a derived object with a complete proof (10 rule boxes, 30 primitive steps)
+Entering itt_quotient
+Module: /itt_quotient
+Expanding `quotientType':
+Status: `quotientType' is a primitive axiom
+Expanding `quotientEquality':
+Status: `quotientEquality' is a primitive axiom
+Expanding `quotient_memberWeakEquality':
+Status: `quotient_memberWeakEquality' is a primitive axiom
+Expanding `quotient_memberFormation':
+Status: `quotient_memberFormation' is a derived object with a complete proof (2 rule boxes, 30 primitive steps)
+Expanding `quotient_memberEquality':
+Status: `quotient_memberEquality' is a primitive axiom
+Expanding `quotientElimination1':
+Status: `quotientElimination1' is a primitive axiom
+Expanding `quotientElimination1_eq':
+Status: `quotientElimination1_eq' is a derived object with a complete proof (19 rule boxes, 114 primitive steps)
+Expanding `quotientElimination2':
+Status: `quotientElimination2' is a derived object with a complete proof (2 rule boxes, 25 primitive steps)
+Expanding `quotientElimination3_sqeq':
+Status: `quotientElimination3_sqeq' is a derived object with a complete proof (2 rule boxes, 60 primitive steps)
+Expanding `quotient_equalityElimination':
+Status: `quotient_equalityElimination' is a primitive axiom
+Expanding `quotientSubtype':
+Status: `quotientSubtype' is a derived object with a complete proof (2 rule boxes, 64 primitive steps)
+Entering itt_record
+Module: /itt_record
+Expanding `recordTypeS':
+Status: `recordTypeS' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `field_member':
+Status: `field_member' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `recordTypeL':
+Status: `recordTypeL' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `recordTypeR':
+Status: `recordTypeR' is a derived object with a complete proof (1 rule boxes, 36 primitive steps)
+Expanding `recordTypeI':
+Status: `recordTypeI' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `recordTypeS_univ':
+Status: `recordTypeS_univ' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `recordTypeL_univ':
+Status: `recordTypeL_univ' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `recordTypeR_univ':
+Status: `recordTypeR_univ' is a derived object with a complete proof (1 rule boxes, 39 primitive steps)
+Expanding `recordTypeI_univ':
+Status: `recordTypeI_univ' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `record_beta1':
+Status: `record_beta1' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `record_beta2':
+Status: `record_beta2' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `record_beta':
+Status: `record_beta' is a derived object with a complete proof (2 rule boxes, 64 primitive steps)
+Expanding `record_eta':
+Status: `record_eta' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `record_eta_rw':
+Status: `record_eta_rw' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `record_exchange':
+Status: `record_exchange' is a derived object with a complete proof (2 rule boxes, 68 primitive steps)
+Expanding `record_same_reduce':
+Status: `record_same_reduce' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `recordIntroE1':
+Status: `recordIntroE1' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `recordIntroE2':
+Status: `recordIntroE2' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `recordEqualS1':
+Status: `recordEqualS1' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `recordEqualS2':
+Status: `recordEqualS2' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `recordEqualS3':
+Status: `recordEqualS3' is a derived object with a complete proof (1 rule boxes, 29 primitive steps)
+Expanding `recordEqualS4':
+Status: `recordEqualS4' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `recordEqualS5':
+Status: `recordEqualS5' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `recordTypeEliminationS':
+Status: `recordTypeEliminationS' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `recordTypeEliminationL':
+Status: `recordTypeEliminationL' is a derived object with a complete proof (3 rule boxes, 22 primitive steps)
+Expanding `recordTypeEliminationR':
+Status: `recordTypeEliminationR' is a derived object with a complete proof (4 rule boxes, 22 primitive steps)
+Expanding `recordEqualL':
+Status: `recordEqualL' is a derived object with a complete proof (3 rule boxes, 44 primitive steps)
+Expanding `recordEqualR':
+Status: `recordEqualR' is a derived object with a complete proof (2 rule boxes, 35 primitive steps)
+Expanding `recordEqualI':
+Status: `recordEqualI' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `recordMemberOrt':
+Status: `recordMemberOrt' is a derived object with a complete proof (4 rule boxes, 50 primitive steps)
+Expanding `recordEqualOrt1':
+Status: `recordEqualOrt1' is a derived object with a complete proof (10 rule boxes, 71 primitive steps)
+Expanding `recordEqualOrt2':
+Status: `recordEqualOrt2' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `recordEliminationS':
+Status: `recordEliminationS' is a derived object with a complete proof (2 rule boxes, 39 primitive steps)
+Expanding `recordEliminationL2':
+Status: `recordEliminationL2' is a derived object with a complete proof (3 rule boxes, 24 primitive steps)
+Expanding `recordEliminationL1':
+Status: `recordEliminationL1' is a derived object with a complete proof (6 rule boxes, 40 primitive steps)
+Expanding `recordEliminationL':
+Status: `recordEliminationL' is a derived object with a complete proof (8 rule boxes, 84 primitive steps)
+Expanding `recordEliminationR2':
+Status: `recordEliminationR2' is a derived object with a complete proof (3 rule boxes, 26 primitive steps)
+Expanding `recordEliminationR1':
+Status: `recordEliminationR1' is a derived object with a complete proof (6 rule boxes, 40 primitive steps)
+Expanding `recordEliminationR':
+Status: `recordEliminationR' is a derived object with a complete proof (12 rule boxes, 100 primitive steps)
+Expanding `recordEliminationI2':
+Status: `recordEliminationI2' is a derived object with a complete proof (2 rule boxes, 26 primitive steps)
+Expanding `recordEliminationI1':
+Status: `recordEliminationI1' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `recordEliminationI':
+Status: `recordEliminationI' is a derived object with a complete proof (1 rule boxes, 37 primitive steps)
+Expanding `functionOrtDinter':
+Status: `functionOrtDinter' is a derived object with a complete proof (8 rule boxes, 101 primitive steps)
+Expanding `recordOrtIntro0':
+Status: `recordOrtIntro0' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `recordOrtIntroT':
+Status: `recordOrtIntroT' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `recordOrtIntroTop':
+Status: `recordOrtIntroTop' is a derived object with a complete proof (2 rule boxes, 21 primitive steps)
+Expanding `recordOrtIntroS1':
+Status: `recordOrtIntroS1' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `recordOrtIntroS2':
+Status: `recordOrtIntroS2' is a derived object with a complete proof (4 rule boxes, 25 primitive steps)
+Expanding `recordOrtIntroL':
+Status: `recordOrtIntroL' is a derived object with a complete proof (1 rule boxes, 38 primitive steps)
+Expanding `recordOrtIntroR':
+Status: `recordOrtIntroR' is a derived object with a complete proof (1 rule boxes, 49 primitive steps)
+Expanding `recordOrtIntroI':
+Status: `recordOrtIntroI' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `recordOrtSetIntro':
+Status: `recordOrtSetIntro' is a derived object with a complete proof (7 rule boxes, 76 primitive steps)
+Expanding `recordOrtBisectIntro':
+Status: `recordOrtBisectIntro' is a derived object with a complete proof (3 rule boxes, 74 primitive steps)
+Expanding `recordLSubtype':
+Status: `recordLSubtype' is a derived object with a complete proof (3 rule boxes, 33 primitive steps)
+Expanding `recordRSubtype':
+Status: `recordRSubtype' is a derived object with a complete proof (3 rule boxes, 44 primitive steps)
+Expanding `recordSubtype1':
+Status: `recordSubtype1' is a derived object with a complete proof (1 rule boxes, 25 primitive steps)
+Expanding `recordSubtype2':
+Status: `recordSubtype2' is a derived object with a complete proof (4 rule boxes, 38 primitive steps)
+Entering itt_record0
+Module: /itt_record0
+Expanding `baseRecord':
+Status: `baseRecord' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `stepRecord':
+Status: `stepRecord' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `stepRecord_rw':
+Status: `stepRecord_rw' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `baseRcrd':
+Status: `baseRcrd' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `stepRcrd':
+Status: `stepRcrd' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `stepRcrd_rw':
+Status: `stepRcrd_rw' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `baseField':
+Status: `baseField' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `stepField':
+Status: `stepField' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `stepField_rw':
+Status: `stepField_rw' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `recordType':
+Status: `recordType' is a derived object with a complete proof (2 rule boxes, 48 primitive steps)
+Expanding `emptyRecordType':
+Status: `emptyRecordType' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `recordTopType':
+Status: `recordTopType' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `record_elim1':
+Status: `record_elim1' is a derived object with a complete proof (3 rule boxes, 27 primitive steps)
+Expanding `recordTypeElimination':
+Status: `recordTypeElimination' is a derived object with a complete proof (10 rule boxes, 43 primitive steps)
+Expanding `recordType_univ':
+Status: `recordType_univ' is a derived object with a complete proof (3 rule boxes, 56 primitive steps)
+Expanding `emptyRecordType_univ':
+Status: `emptyRecordType_univ' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `recordTopType_univ':
+Status: `recordTopType_univ' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `emptyRecordIntro':
+Status: `emptyRecordIntro' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `record_beta1':
+Status: `record_beta1' is a derived object with a complete proof (3 rule boxes, 80 primitive steps)
+Expanding `record_beta2':
+Status: `record_beta2' is a derived object with a complete proof (3 rule boxes, 283 primitive steps)
+Expanding `record_eta':
+Status: `record_eta' is a derived object with a complete proof (5 rule boxes, 151 primitive steps)
+Expanding `record_eta_rw':
+Status: `record_eta_rw' is a derived object with a complete proof (3 rule boxes, 19 primitive steps)
+Expanding `record_cover':
+Status: `record_cover' is a derived object with a complete proof (6 rule boxes, 139 primitive steps)
+Expanding `record_exchange':
+Status: `record_exchange' is a derived object with a complete proof (5 rule boxes, 326 primitive steps)
+Expanding `recordEqualS5':
+Status: `recordEqualS5' is a derived object with a complete proof (6 rule boxes, 176 primitive steps)
+Expanding `recordEqualS1':
+Status: `recordEqualS1' is a derived object with a complete proof (12 rule boxes, 720 primitive steps)
+Expanding `recordEqualS4':
+check_sentinal: failed itt_record0!recordEqualS4
+check_sentinal: failed itt_record0!recordEqualS2
+Status: `recordEqualS4' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `recordEqualS2':
+Status: `recordEqualS2' is a derived object with a complete proof (1 rule boxes, 19 primitive steps)
+Expanding `recordTEqualIntro':
+Status: `recordTEqualIntro' is a derived object with a complete proof (2 rule boxes, 57 primitive steps)
+Expanding `recordTIntro1':
+Status: `recordTIntro1' is a derived object with a complete proof (2 rule boxes, 50 primitive steps)
+Expanding `recordTIntro2':
+Status: `recordTIntro2' is a derived object with a complete proof (3 rule boxes, 81 primitive steps)
+Expanding `field_member':
+Status: `field_member' is a derived object with a complete proof (4 rule boxes, 119 primitive steps)
+Entering itt_record_exm
+Module: /itt_record_exm
+Expanding `planeType':
+Status: `planeType' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `spaceType':
+Status: `spaceType' is a derived object with a complete proof (1 rule boxes, 19 primitive steps)
+Expanding `oInSpace':
+Status: `oInSpace' is a derived object with a complete proof (1 rule boxes, 99 primitive steps)
+Expanding `oInPlane':
+Status: `oInPlane' is a derived object with a complete proof (1 rule boxes, 74 primitive steps)
+Expanding `spacePlane':
+Status: `spacePlane' is a derived object with a complete proof (1 rule boxes, 21 primitive steps)
+Expanding `aInSpace':
+Status: `aInSpace' is a derived object with a complete proof (1 rule boxes, 99 primitive steps)
+Expanding `bInSpace':
+Status: `bInSpace' is a derived object with a complete proof (1 rule boxes, 99 primitive steps)
+Expanding `abInPlane':
+Status: `abInPlane' is a derived object with a complete proof (1 rule boxes, 87 primitive steps)
+Expanding `abInSpace':
+Status: `abInSpace' is a derived object with a complete proof (7 rule boxes, 90 primitive steps)
+Expanding `a_rw':
+Status: `a_rw' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `cover_rw':
+Status: `cover_rw' is a derived object with a complete proof (2 rule boxes, 8 primitive steps)
+Expanding `a_z_rw':
+Status: `a_z_rw' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `planeIntro':
+Status: `planeIntro' is a derived object with a complete proof (1 rule boxes, 46 primitive steps)
+Expanding `spaceIntro':
+Status: `spaceIntro' is a derived object with a complete proof (1 rule boxes, 96 primitive steps)
+Expanding `point_beta1_rw':
+Status: `point_beta1_rw' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `point_beta2_rw':
+Status: `point_beta2_rw' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `point_eta':
+Status: `point_eta' is a derived object with a complete proof (3 rule boxes, 49 primitive steps)
+Expanding `planeElim':
+Status: `planeElim' is a derived object with a complete proof (2 rule boxes, 58 primitive steps)
+Expanding `spaceElim':
+Status: `spaceElim' is a derived object with a complete proof (2 rule boxes, 115 primitive steps)
+Expanding `reduce_length':
+Status: `reduce_length' is a derived object with a complete proof (2 rule boxes, 16 primitive steps)
+Expanding `length_A':
+Status: `length_A' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `length_wf':
+Status: `length_wf' is a derived object with a complete proof (4 rule boxes, 42 primitive steps)
+Expanding `redAInCSpace':
+Status: `redAInCSpace' is a derived object with a complete proof (4 rule boxes, 105 primitive steps)
+Expanding `cspaceElim':
+Status: `cspaceElim' is a derived object with a complete proof (3 rule boxes, 103 primitive steps)
+Expanding `integers_add_semigroup':
+Status: `integers_add_semigroup' is a derived object with a complete proof (2 rule boxes, 377 primitive steps)
+Expanding `integers_mul_semigroup':
+Status: `integers_mul_semigroup' is a derived object with a complete proof (2 rule boxes, 356 primitive steps)
+Expanding `morphisms_semigroup':
+Status: `morphisms_semigroup' is a derived object with a complete proof (2 rule boxes, 357 primitive steps)
+Expanding `semigroupAssos4':
+Status: `semigroupAssos4' is a derived object with a complete proof (6 rule boxes, 483 primitive steps)
+Expanding `stack_as_list_wf':
+Status: `stack_as_list_wf' is a derived object with a complete proof (5 rule boxes, 1312 primitive steps)
+Expanding `foo_eval':
+Status: `foo_eval' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `fee_eval':
+Status: `fee_eval' is a derived object with a complete proof (1 rule boxes, 24 primitive steps)
+Expanding `example_of_evaluation':
+Status: `example_of_evaluation' is a derived object with a complete proof (2 rule boxes, 54 primitive steps)
+Entering itt_record_label
+Module: /itt_record_label
+Expanding `labelMember':
+Status: `labelMember' is a primitive axiom
+Expanding `reduce_eq_label_true':
+Status: `reduce_eq_label_true' is a primitive axiom
+Expanding `reduce_eq_label_false':
+Status: `reduce_eq_label_false' is a primitive axiom
+Expanding `reduce_eq_label_true_rw':
+Status: `reduce_eq_label_true_rw' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `reduce_eq_label_false_rw':
+Status: `reduce_eq_label_false_rw' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `reduce_eq_label_trivial_rw':
+Status: `reduce_eq_label_trivial_rw' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `eq_label_false':
+Status: `eq_label_false' is a derived object with a complete proof (1 rule boxes, 31 primitive steps)
+Expanding `eq_label_true':
+Status: `eq_label_true' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `not_eq_label':
+Status: `not_eq_label' is a derived object with a complete proof (2 rule boxes, 36 primitive steps)
+Entering itt_record_label0
+Module: /itt_record_label0
+Expanding `reduce_ind_up':
+Status: `reduce_ind_up' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `reduce_ind_base':
+Status: `reduce_ind_base' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `labelType':
+Status: `labelType' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `labelType_univ':
+Status: `labelType_univ' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `zeroMember':
+Status: `zeroMember' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `nextMember':
+Status: `nextMember' is a derived object with a complete proof (2 rule boxes, 196 primitive steps)
+Expanding `labelInduction':
+Status: `labelInduction' is a derived object with a complete proof (1 rule boxes, 33 primitive steps)
+Expanding `labelBackInduction':
+Status: `labelBackInduction' is a derived object with a complete proof (4 rule boxes, 28 primitive steps)
+Expanding `label_sqequal':
+Status: `label_sqequal' is a derived object with a complete proof (2 rule boxes, 30 primitive steps)
+Expanding `decide_eq_label':
+Status: `decide_eq_label' is a derived object with a complete proof (3 rule boxes, 56 primitive steps)
+Expanding `decide_eq_label2':
+Status: `decide_eq_label2' is a derived object with a complete proof (2 rule boxes, 23 primitive steps)
+Entering itt_record_renaming
+Module: /itt_record_renaming
+Expanding `rename_rcrd_reduce':
+Status: `rename_rcrd_reduce' is a derived object with a complete proof (14 rule boxes, 396 primitive steps)
+Expanding `rename_rcrd_reduce1':
+Status: `rename_rcrd_reduce1' is a derived object with a complete proof (8 rule boxes, 138 primitive steps)
+Expanding `rename_rcrd_reduce2':
+Status: `rename_rcrd_reduce2' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rename_rcrd_reduce3':
+Status: `rename_rcrd_reduce3' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rename_empty_rcrd':
+Status: `rename_empty_rcrd' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rename_rw':
+Status: `rename_rw' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `rename_rw1':
+Status: `rename_rw1' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rename_rw2':
+Status: `rename_rw2' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rename_rw3':
+Status: `rename_rw3' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `rename_id':
+Status: `rename_id' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `rename_cancel1':
+Status: `rename_cancel1' is a derived object with a complete proof (4 rule boxes, 135 primitive steps)
+Expanding `rename_sym':
+Status: `rename_sym' is a derived object with a complete proof (4 rule boxes, 80 primitive steps)
+Expanding `rename_cancel2':
+Status: `rename_cancel2' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `rename_exchange':
+Status: `rename_exchange' is a derived object with a complete proof (6 rule boxes, 204 primitive steps)
+Expanding `rename_fields':
+Status: `rename_fields' is a derived object with an incomplete proof (1 rule boxes, 9 primitive steps)
+Expanding `mul_add_cancel':
+Status: `mul_add_cancel' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `add_mul_cancel':
+Status: `add_mul_cancel' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `additive_reduce':
+Status: `additive_reduce' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `use_as_additive':
+Status: `use_as_additive' is a derived object with a complete proof (2 rule boxes, 9 primitive steps)
+Expanding `mult_is_power':
+Status: `mult_is_power' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `power_is_mult':
+Status: `power_is_mult' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `reverse_order_cancel':
+Status: `reverse_order_cancel' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `reverse_order_rw':
+Status: `reverse_order_rw' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `max_rev_rw':
+Status: `max_rev_rw' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `min_rev_rw':
+Status: `min_rev_rw' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `example':
+Status: `example' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Entering itt_set
+Module: /itt_set
+Expanding `setEquality':
+Status: `setEquality' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `setType':
+Status: `setType' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `setMemberEquality':
+Status: `setMemberEquality' is a derived object with a complete proof (3 rule boxes, 59 primitive steps)
+Expanding `setMemberFormation':
+Status: `setMemberFormation' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `setElimination':
+Status: `setElimination' is a derived object with a complete proof (1 rule boxes, 79 primitive steps)
+Expanding `set_member':
+Status: `set_member' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `set_subtype':
+Status: `set_subtype' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `set_monotone':
+Status: `set_monotone' is a derived object with a complete proof (1 rule boxes, 52 primitive steps)
+Entering itt_simple_singleton
+Module: /itt_simple_singleton
+Expanding `singleton_univ':
+Status: `singleton_univ' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `singleton_wf':
+Status: `singleton_wf' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `singleton_intro':
+Status: `singleton_intro' is a derived object with a complete proof (3 rule boxes, 29 primitive steps)
+Expanding `singleton_rw':
+Status: `singleton_rw' is a derived object with a complete proof (2 rule boxes, 49 primitive steps)
+Expanding `singleton_elim':
+Status: `singleton_elim' is a derived object with a complete proof (1 rule boxes, 18 primitive steps)
+Expanding `singleton_equal':
+Status: `singleton_equal' is a derived object with a complete proof (1 rule boxes, 19 primitive steps)
+Expanding `singleton_contrexample':
+Status: `singleton_contrexample' is a derived object with a complete proof (5 rule boxes, 114 primitive steps)
+Expanding `singleton_example':
+Status: `singleton_example' is a derived object with a complete proof (3 rule boxes, 11 primitive steps)
+Expanding `singleton_example2':
+Status: `singleton_example2' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Entering itt_singleton
+Module: /itt_singleton
+Expanding `singletonEquality':
+Status: `singletonEquality' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `singleton_wf':
+Status: `singleton_wf' is a derived object with a complete proof (1 rule boxes, 20 primitive steps)
+Expanding `singleton_intro':
+Status: `singleton_intro' is a derived object with a complete proof (1 rule boxes, 27 primitive steps)
+Expanding `singleton_elim':
+Status: `singleton_elim' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `singleton_equal':
+Status: `singleton_equal' is a derived object with a complete proof (3 rule boxes, 72 primitive steps)
+Entering itt_sqsimple
+Module: /itt_sqsimple
+Expanding `sqsimple_intro':
+Status: `sqsimple_intro' is a derived object with a complete proof (1 rule boxes, 25 primitive steps)
+Expanding `sqsimple_elim':
+Status: `sqsimple_elim' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `sqsimple_elim2':
+Status: `sqsimple_elim2' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `sqsimple_sq':
+Status: `sqsimple_sq' is a derived object with a complete proof (1 rule boxes, 35 primitive steps)
+Expanding `sqsimple':
+Status: `sqsimple' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `sqsimple_unit':
+Status: `sqsimple_unit' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `sqsimple_prod':
+Status: `sqsimple_prod' is a derived object with a complete proof (5 rule boxes, 100 primitive steps)
+Expanding `sqsimple_union':
+Status: `sqsimple_union' is a derived object with a complete proof (16 rule boxes, 186 primitive steps)
+Entering itt_squash
+Module: /itt_squash
+Expanding `squashEquality':
+Status: `squashEquality' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `squashType':
+Status: `squashType' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `squashMemberFormation':
+Status: `squashMemberFormation' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `unsquashEqualWeak':
+Status: `unsquashEqualWeak' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `squashElim':
+Status: `squashElim' is a derived object with a complete proof (3 rule boxes, 42 primitive steps)
+Expanding `unsquashEqual':
+Status: `unsquashEqual' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `unsquashWWitness':
+Status: `unsquashWWitness' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `squashMemberEquality':
+Status: `squashMemberEquality' is a derived object with a complete proof (3 rule boxes, 28 primitive steps)
+Expanding `squashStable':
+Status: `squashStable' is a derived object with a complete proof (2 rule boxes, 15 primitive steps)
+Expanding `unsquashHypEqual':
+Status: `unsquashHypEqual' is a derived object with a complete proof (2 rule boxes, 16 primitive steps)
+Expanding `unsquash':
+Status: `unsquash' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `unsquashStableGoal':
+Status: `unsquashStableGoal' is a derived object with a complete proof (2 rule boxes, 15 primitive steps)
+Expanding `unsquashHypGoalStable':
+Status: `unsquashHypGoalStable' is a derived object with a complete proof (2 rule boxes, 14 primitive steps)
+Expanding `unsquashStable':
+Status: `unsquashStable' is a derived object with a complete proof (3 rule boxes, 17 primitive steps)
+Expanding `squashAssert':
+Status: `squashAssert' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `assertSquash':
+Status: `assertSquash' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `squashFormation':
+Status: `squashFormation' is a derived object with a complete proof (2 rule boxes, 25 primitive steps)
+Entering itt_squiggle
+Module: /itt_squiggle
+Expanding `squiggleEquality':
+Status: `squiggleEquality' is a primitive axiom
+Expanding `squiggleType':
+Status: `squiggleType' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `squiggleElimination':
+Status: `squiggleElimination' is a primitive axiom
+Expanding `squiggle_memberEquality':
+Status: `squiggle_memberEquality' is a derived object with a complete proof (2 rule boxes, 29 primitive steps)
+Expanding `squiggleRef':
+Status: `squiggleRef' is a primitive axiom
+Expanding `squiggleHypSubstitution':
+Status: `squiggleHypSubstitution' is a primitive axiom
+Expanding `squiggleSubstitution':
+Status: `squiggleSubstitution' is a derived object with a complete proof (4 rule boxes, 33 primitive steps)
+Expanding `squiggleSym':
+Status: `squiggleSym' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `squiggleTrans':
+Status: `squiggleTrans' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `sq_subst_forward':
+Status: `sq_subst_forward' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `sq_subst_backward':
+Status: `sq_subst_backward' is a derived object with a complete proof (1 rule boxes, 26 primitive steps)
+Expanding `squiggleFormation':
+Status: `squiggleFormation' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Entering itt_srec
+Module: /itt_srec
+Expanding `unfold_srecind':
+Status: `unfold_srecind' is a primitive axiom
+Expanding `srecFormation':
+Status: `srecFormation' is a primitive axiom
+Expanding `srecEquality':
+Status: `srecEquality' is a primitive axiom
+Expanding `srecType':
+Status: `srecType' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `srec_memberFormation':
+Status: `srec_memberFormation' is a primitive axiom
+Expanding `srec_memberEquality':
+Status: `srec_memberEquality' is a primitive axiom
+Expanding `srecElimination':
+Status: `srecElimination' is a primitive axiom
+Expanding `srecUnrollElimination':
+Status: `srecUnrollElimination' is a primitive axiom
+Expanding `srecindEquality':
+Status: `srecindEquality' is a primitive axiom
+Entering itt_struct
+Module: /itt_struct
+Expanding `thin_many':
+Status: `thin_many' is a primitive axiom
+Expanding `thin':
+Status: `thin' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `exchange':
+Status: `exchange' is a primitive axiom
+Expanding `cut':
+Status: `cut' is a primitive axiom
+Expanding `dup':
+Status: `dup' is a derived object with a complete proof (1 rule boxes, 3 primitive steps)
+Expanding `introduction':
+Status: `introduction' is a primitive axiom
+Expanding `hypothesis':
+Status: `hypothesis' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `hypothesisType':
+Status: `hypothesisType' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `hypMem':
+Status: `hypMem' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `hypMemType':
+Status: `hypMemType' is a derived object with a complete proof (1 rule boxes, 4 primitive steps)
+Expanding `equalitySymHyp':
+Status: `equalitySymHyp' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `equalityRefHyp':
+Status: `equalityRefHyp' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `equalityRefHyp2':
+Status: `equalityRefHyp2' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `dup_hyp':
+Status: `dup_hyp' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `universeType':
+Status: `universeType' is a derived object with a complete proof (1 rule boxes, 5 primitive steps)
+Expanding `substitution':
+Status: `substitution' is a primitive axiom
+Expanding `hypReplacement':
+Status: `hypReplacement' is a primitive axiom
+Expanding `hypSubstitution':
+Status: `hypSubstitution' is a primitive axiom
+Expanding `equalityTypeIsTypeHyp':
+Status: `equalityTypeIsTypeHyp' is a derived object with a complete proof (1 rule boxes, 6 primitive steps)
+Expanding `equalityTypeIsType':
+Status: `equalityTypeIsType' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Entering itt_struct2
+Module: /itt_struct2
+Expanding `substitution2':
+Status: `substitution2' is a derived object with a complete proof (9 rule boxes, 132 primitive steps)
+Expanding `hypSubstitution2':
+Status: `hypSubstitution2' is a derived object with a complete proof (6 rule boxes, 129 primitive steps)
+Expanding `substitutionInType':
+Status: `substitutionInType' is a derived object with a complete proof (3 rule boxes, 325 primitive steps)
+Expanding `fun_sqeq_elim':
+Status: `fun_sqeq_elim' is a derived object with a complete proof (2 rule boxes, 18 primitive steps)
+Expanding `lambda_sqsubst_concl':
+Status: `lambda_sqsubst_concl' is a derived object with a complete proof (2 rule boxes, 29 primitive steps)
+Expanding `lambda_sqsubst_hyp':
+Status: `lambda_sqsubst_hyp' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `cutMem':
+Status: `cutMem' is a derived object with a complete proof (5 rule boxes, 61 primitive steps)
+Expanding `cutEq0':
+Status: `cutEq0' is a derived object with a complete proof (9 rule boxes, 98 primitive steps)
+Expanding `cutEq':
+Status: `cutEq' is a derived object with a complete proof (6 rule boxes, 39 primitive steps)
+Expanding `applyFun':
+Status: `applyFun' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `variable_elim':
+Status: `variable_elim' is a derived object with a complete proof (1 rule boxes, 78 primitive steps)
+Expanding `variable_elim2':
+Status: `variable_elim2' is a derived object with a complete proof (1 rule boxes, 50 primitive steps)
+Expanding `var_eq_rev':
+Status: `var_eq_rev' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `is_var_eq':
+Status: `is_var_eq' is a derived object with a complete proof (1 rule boxes, 4 primitive steps)
+Expanding `prod_rev_elim':
+Status: `prod_rev_elim' is a derived object with a complete proof (2 rule boxes, 129 primitive steps)
+Expanding `reduceForallProd':
+Status: `reduceForallProd' is a derived object with a complete proof (1 rule boxes, 33 primitive steps)
+Expanding `setEqualityElim':
+Status: `setEqualityElim' is a derived object with a complete proof (6 rule boxes, 105 primitive steps)
+Expanding `unionEqElimination1':
+Status: `unionEqElimination1' is a derived object with a complete proof (3 rule boxes, 83 primitive steps)
+Expanding `unionEqElimination2':
+Status: `unionEqElimination2' is a derived object with a complete proof (3 rule boxes, 83 primitive steps)
+Expanding `cutSquash':
+Status: `cutSquash' is a derived object with a complete proof (3 rule boxes, 12 primitive steps)
+Expanding `lambda_sqequal_elim':
+Status: `lambda_sqequal_elim' is a derived object with a complete proof (2 rule boxes, 17 primitive steps)
+Expanding `lambda_sqequal_elim2':
+Status: `lambda_sqequal_elim2' is a derived object with a complete proof (3 rule boxes, 29 primitive steps)
+Entering itt_struct3
+Module: /itt_struct3
+Expanding `substUsingEpimorphism':
+Status: `substUsingEpimorphism' is a derived object with a complete proof (1 rule boxes, 34 primitive steps)
+Expanding `hypReplacementStrong':
+Status: `hypReplacementStrong' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `hypReplacementExt':
+Status: `hypReplacementExt' is a derived object with a complete proof (5 rule boxes, 40 primitive steps)
+Entering itt_subset
+Module: /itt_subset
+Expanding `mem_univ':
+Status: `mem_univ' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `mem_wf':
+Status: `mem_wf' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `mem_intro':
+Status: `mem_intro' is a derived object with a complete proof (2 rule boxes, 64 primitive steps)
+Expanding `subset_univ':
+Status: `subset_univ' is a derived object with a complete proof (1 rule boxes, 38 primitive steps)
+Expanding `subset_wf':
+Status: `subset_wf' is a derived object with a complete proof (1 rule boxes, 29 primitive steps)
+Expanding `subset_intro':
+Status: `subset_intro' is a derived object with a complete proof (1 rule boxes, 27 primitive steps)
+Expanding `mem_sqstable':
+Status: `mem_sqstable' is a derived object with a complete proof (1 rule boxes, 22 primitive steps)
+Expanding `subset_sqstable':
+Status: `subset_sqstable' is a derived object with a complete proof (1 rule boxes, 92 primitive steps)
+Expanding `member_sqstable':
+Status: `member_sqstable' is a derived object with a complete proof (1 rule boxes, 88 primitive steps)
+Expanding `subset_is_subtype':
+Status: `subset_is_subtype' is a derived object with a complete proof (1 rule boxes, 17 primitive steps)
+Expanding `use_subset':
+Status: `use_subset' is a derived object with a complete proof (3 rule boxes, 23 primitive steps)
+Expanding `use_superset1':
+Status: `use_superset1' is a derived object with a complete proof (3 rule boxes, 61 primitive steps)
+Expanding `use_superset2':
+Status: `use_superset2' is a derived object with a complete proof (1 rule boxes, 16 primitive steps)
+Expanding `use_superset':
+Status: `use_superset' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Expanding `counterexample1':
+Status: `counterexample1' is a derived object with a complete proof (3 rule boxes, 31 primitive steps)
+Expanding `subsetTypeRight':
+Status: `subsetTypeRight' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `subsetTypeLeft':
+Status: `subsetTypeLeft' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `member_univ':
+Status: `member_univ' is a derived object with a complete proof (1 rule boxes, 47 primitive steps)
+Expanding `member_wf':
+Status: `member_wf' is a derived object with a complete proof (1 rule boxes, 36 primitive steps)
+Expanding `member_intro':
+Status: `member_intro' is a derived object with a complete proof (5 rule boxes, 45 primitive steps)
+Expanding `member_elim':
+Status: `member_elim' is a derived object with a complete proof (3 rule boxes, 32 primitive steps)
+Expanding `member_doesnot_depend_on_B':
+Status: `member_doesnot_depend_on_B' is a derived object with a complete proof (1 rule boxes, 12 primitive steps)
+Entering itt_subset2
+Module: /itt_subset2
+Expanding `set_subset':
+Status: `set_subset' is a derived object with a complete proof (2 rule boxes, 52 primitive steps)
+Expanding `subset_set':
+Status: `subset_set' is a derived object with a complete proof (1 rule boxes, 105 primitive steps)
+Expanding `subset_iff':
+Status: `subset_iff' is a derived object with a complete proof (9 rule boxes, 267 primitive steps)
+Expanding `nat_subset_int':
+Status: `nat_subset_int' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `subset_ref':
+Status: `subset_ref' is a derived object with a complete proof (1 rule boxes, 10 primitive steps)
+Expanding `subset_trans':
+Status: `subset_trans' is a derived object with a complete proof (4 rule boxes, 46 primitive steps)
+Expanding `subset_exact':
+Status: `subset_exact' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `subset_isect':
+Status: `subset_isect' is a derived object with a complete proof (4 rule boxes, 93 primitive steps)
+Expanding `subset_bisect':
+Status: `subset_bisect' is a derived object with a complete proof (2 rule boxes, 22 primitive steps)
+Expanding `counterexample2':
+Status: `counterexample2' is a derived object with a complete proof (4 rule boxes, 54 primitive steps)
+Expanding `subset_union':
+Status: `subset_union' is a derived object with a complete proof (10 rule boxes, 167 primitive steps)
+Expanding `subset_bunion':
+Status: `subset_bunion' is a derived object with a complete proof (2 rule boxes, 27 primitive steps)
+Expanding `member_is_subset_of_union':
+Status: `member_is_subset_of_union' is a derived object with a complete proof (14 rule boxes, 1674 primitive steps)
+Expanding `prod_subset':
+Status: `prod_subset' is a derived object with a complete proof (3 rule boxes, 62 primitive steps)
+Expanding `dprod_subset':
+Status: `dprod_subset' is a derived object with a complete proof (4 rule boxes, 122 primitive steps)
+Expanding `union_subset':
+Status: `union_subset' is a derived object with a complete proof (7 rule boxes, 161 primitive steps)
+Expanding `list_subset':
+Status: `list_subset' is a derived object with a complete proof (8 rule boxes, 89 primitive steps)
+Expanding `set_monotone':
+Status: `set_monotone' is a derived object with a complete proof (6 rule boxes, 151 primitive steps)
+Expanding `superset':
+Status: `superset' is a derived object with a complete proof (1 rule boxes, 98 primitive steps)
+Entering itt_subtype
+Module: /itt_subtype
+Expanding `subtypeEquality':
+Status: `subtypeEquality' is a primitive axiom
+Expanding `subtypeType':
+Status: `subtypeType' is a primitive axiom
+Expanding `subtypeTypeRight':
+Status: `subtypeTypeRight' is a primitive axiom
+Expanding `subtypeTypeLeft':
+Status: `subtypeTypeLeft' is a primitive axiom
+Expanding `subtype_axiomFormation':
+Status: `subtype_axiomFormation' is a primitive axiom
+Expanding `subtypeElimination':
+Status: `subtypeElimination' is a primitive axiom
+Expanding `useSubtype':
+Status: `useSubtype' is a primitive axiom
+Expanding `subtypeElimination2':
+Status: `subtypeElimination2' is a derived object with a complete proof (2 rule boxes, 14 primitive steps)
+Expanding `subtype_axiomEquality':
+Status: `subtype_axiomEquality' is a derived object with a complete proof (2 rule boxes, 29 primitive steps)
+Expanding `use_subtype1':
+Status: `use_subtype1' is a derived object with a complete proof (2 rule boxes, 18 primitive steps)
+Expanding `use_subtype2':
+Status: `use_subtype2' is a derived object with a complete proof (2 rule boxes, 30 primitive steps)
+Expanding `by_subtype':
+Status: `by_subtype' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `by_subtype2':
+Status: `by_subtype2' is a derived object with a complete proof (1 rule boxes, 11 primitive steps)
+Expanding `subtypeReflexivity':
+Status: `subtypeReflexivity' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `subtypeTransitive':
+Status: `subtypeTransitive' is a derived object with a complete proof (2 rule boxes, 32 primitive steps)
+Expanding `subtypeTransitiveHyp1':
+Status: `subtypeTransitiveHyp1' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `subtypeTransitiveHyp2':
+Status: `subtypeTransitiveHyp2' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `subtypeFormation':
+Status: `subtypeFormation' is a derived object with a complete proof (3 rule boxes, 44 primitive steps)
+Entering itt_theory
+Module: /itt_theory
+Entering itt_tsquash
+Module: /itt_tsquash
+Expanding `tsquashEquality':
+Status: `tsquashEquality' is a derived object with a complete proof (1 rule boxes, 15 primitive steps)
+Expanding `tsquashType':
+Status: `tsquashType' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `tsquashMemberEquality':
+Status: `tsquashMemberEquality' is a derived object with a complete proof (2 rule boxes, 35 primitive steps)
+Expanding `tsquashMemberFormation':
+Status: `tsquashMemberFormation' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `tsquashElimination':
+Status: `tsquashElimination' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Entering itt_tunion
+Module: /itt_tunion
+Expanding `tunionEquality':
+Status: `tunionEquality' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `tunionType':
+Status: `tunionType' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `tunionFormation':
+Status: `tunionFormation' is a derived object with a complete proof (2 rule boxes, 60 primitive steps)
+Expanding `tunionMemberEquality':
+Status: `tunionMemberEquality' is a derived object with a complete proof (2 rule boxes, 38 primitive steps)
+Expanding `tunionMemberFormation':
+Status: `tunionMemberFormation' is a derived object with a complete proof (2 rule boxes, 35 primitive steps)
+Expanding `tunionElimination':
+Status: `tunionElimination' is a derived object with a complete proof (2 rule boxes, 26 primitive steps)
+Expanding `tunionElimination_sq':
+Status: `tunionElimination_sq' is a derived object with a complete proof (1 rule boxes, 13 primitive steps)
+Expanding `tunionElimination_eq':
+Status: `tunionElimination_eq' is a derived object with a complete proof (6 rule boxes, 58 primitive steps)
+Expanding `tunionElimination2':
+Status: `tunionElimination2' is a derived object with a complete proof (3 rule boxes, 48 primitive steps)
+Expanding `unionSubtype':
+Status: `unionSubtype' is a derived object with a complete proof (2 rule boxes, 59 primitive steps)
+Expanding `unionSubtype2':
+Status: `unionSubtype2' is a derived object with a complete proof (2 rule boxes, 55 primitive steps)
+Expanding `unionSubtype3':
+Status: `unionSubtype3' is a derived object with a complete proof (1 rule boxes, 42 primitive steps)
+Expanding `tunion_sqsimple':
+Status: `tunion_sqsimple' is a derived object with a complete proof (2 rule boxes, 11 primitive steps)
+Entering itt_union
+Module: /itt_union
+Expanding `reduceDecideInl':
+Status: `reduceDecideInl' is a primitive axiom
+Expanding `reduceDecideInr':
+Status: `reduceDecideInr' is a primitive axiom
+Expanding `reduce_outl_inl':
+Status: `reduce_outl_inl' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_outr_inr':
+Status: `reduce_outr_inr' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_out_inl':
+Status: `reduce_out_inl' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `reduce_out_inr':
+Status: `reduce_out_inr' is a derived object with a complete proof (1 rule boxes, 8 primitive steps)
+Expanding `unionEquality':
+Status: `unionEquality' is a primitive axiom
+Expanding `unionType':
+Status: `unionType' is a primitive axiom
+Expanding `inlEquality':
+Status: `inlEquality' is a primitive axiom
+Expanding `inrEquality':
+Status: `inrEquality' is a primitive axiom
+Expanding `inlFormation':
+Status: `inlFormation' is a derived object with a complete proof (2 rule boxes, 29 primitive steps)
+Expanding `inrFormation':
+Status: `inrFormation' is a derived object with a complete proof (2 rule boxes, 29 primitive steps)
+Expanding `unionElimination':
+Status: `unionElimination' is a primitive axiom
+Expanding `decideEquality':
+Status: `decideEquality' is a primitive axiom
+Expanding `unionSubtype':
+Status: `unionSubtype' is a derived object with a complete proof (1 rule boxes, 63 primitive steps)
+Expanding `unionContradiction1':
+Status: `unionContradiction1' is a derived object with a complete proof (7 rule boxes, 42 primitive steps)
+Expanding `unionContradiction2':
+Status: `unionContradiction2' is a derived object with a complete proof (3 rule boxes, 12 primitive steps)
+Expanding `unionFormation':
+Status: `unionFormation' is a derived object with a complete proof (3 rule boxes, 44 primitive steps)
+Entering itt_union2
+Module: /itt_union2
+Expanding `inl_wf':
+Status: `inl_wf' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Expanding `inr_wf':
+Status: `inr_wf' is a derived object with a complete proof (1 rule boxes, 14 primitive steps)
+Entering itt_unit
+Module: /itt_unit
+Expanding `unitEquality':
+Status: `unitEquality' is a primitive axiom
+Expanding `unitType':
+Status: `unitType' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `unit_memberEquality':
+Status: `unit_memberEquality' is a primitive axiom
+Expanding `unit_memberFormation':
+Status: `unit_memberFormation' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `unitElimination':
+Status: `unitElimination' is a primitive axiom
+Expanding `unitSqequal':
+Status: `unitSqequal' is a primitive axiom
+Expanding `unitFormation':
+Status: `unitFormation' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Entering itt_void
+Module: /itt_void
+Expanding `voidEquality':
+Status: `voidEquality' is a primitive axiom
+Expanding `voidType':
+Status: `voidType' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `voidElimination':
+Status: `voidElimination' is a primitive axiom
+Expanding `void_subtype':
+Status: `void_subtype' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `voidFormation':
+Status: `voidFormation' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Entering itt_w
+Module: /itt_w
+Expanding `reduce_tree_ind':
+Status: `reduce_tree_ind' is a primitive axiom
+Expanding `wFormation':
+Status: `wFormation' is a primitive axiom
+Expanding `wEquality':
+Status: `wEquality' is a primitive axiom
+Expanding `wType':
+Status: `wType' is a primitive axiom
+Expanding `treeFormation':
+Status: `treeFormation' is a primitive axiom
+Expanding `treeEquality':
+Status: `treeEquality' is a primitive axiom
+Expanding `wElimination':
+Status: `wElimination' is a primitive axiom
+Expanding `tree_indEquality':
+Status: `tree_indEquality' is a derived object with a complete proof (6 rule boxes, 69 primitive steps)
+Entering itt_well_founded
+Module: /itt_well_founded
+Expanding `partial_order_type':
+Status: `partial_order_type' is a derived object with a complete proof (1 rule boxes, 135 primitive steps)
+Expanding `well_founded_type':
+Status: `well_founded_type' is a derived object with a complete proof (1 rule boxes, 103 primitive steps)
+Entering shell_command
+Module: /shell_command
+Entering shell_theory
+Module: /shell_theory
+Entering vir
+Module: /vir
+Expanding `beta_lin':
+Status: `beta_lin' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `dce_atom':
+Status: `dce_atom' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_true':
+Status: `guard_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `guard_merge':
+Status: `guard_merge' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `slice_fuse':
+Status: `slice_fuse' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `read_comm':
+Status: `read_comm' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_merge_c':
+Status: `guard_merge_c' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `slice_fuse_c':
+Status: `slice_fuse_c' is a derived object with a complete proof (1 rule boxes, 43 primitive steps)
+Expanding `aux_advance_sink_guard':
+Status: `aux_advance_sink_guard' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `aux_read_hoist':
+Status: `aux_read_hoist' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `aux_guard_swap':
+Status: `aux_guard_swap' is a derived object with a complete proof (1 rule boxes, 66 primitive steps)
+Expanding `router_fuse':
+Status: `router_fuse' is a derived object with a complete proof (5 rule boxes, 516 primitive steps)
+Entering vir2
+Uncaught exception: 
+  Invalid Argument:
+      Filter_summary.dest_id: not an int
+=== STEP 20 [ok] 0.01s :: export ();;
+# Exporting vir
+() : unit
+=== END steps=20 ok=20 err=9 rc=0 cmoz-written=60
+    CMOZ theories/itt/core/itt_union2.cmoz
+    CMOZ theories/itt/core/itt_disect.cmoz
+    CMOZ theories/itt/core/itt_pairwise2.cmoz
+    CMOZ theories/itt/core/itt_union.cmoz
+    CMOZ theories/itt/core/itt_record_exm.cmoz
+    CMOZ theories/itt/core/itt_record_label.cmoz
+    CMOZ theories/itt/core/itt_image.cmoz
+    CMOZ theories/itt/core/itt_tsquash.cmoz
+    CMOZ theories/itt/core/itt_squiggle.cmoz
+    CMOZ theories/itt/core/itt_simple_singleton.cmoz
+    CMOZ theories/itt/core/itt_squash.cmoz
+    CMOZ theories/itt/core/itt_bisect.cmoz
+    CMOZ theories/itt/core/itt_int_ext.cmoz
+    CMOZ theories/itt/core/itt_record0.cmoz
+    CMOZ theories/itt/core/itt_pairwise.cmoz
+    CMOZ theories/itt/core/itt_nequal.cmoz
+    CMOZ theories/itt/core/itt_ext_equal.cmoz
+    CMOZ theories/itt/core/itt_logic.cmoz
+    CMOZ theories/itt/core/itt_list_set.cmoz
+    CMOZ theories/itt/core/itt_esquash.cmoz
+    CMOZ theories/itt/core/itt_tunion.cmoz
+    CMOZ theories/itt/core/itt_subtype.cmoz
+    CMOZ theories/itt/core/itt_struct.cmoz
+    CMOZ theories/itt/core/itt_record.cmoz
+    CMOZ theories/itt/core/itt_quotient.cmoz
+    CMOZ theories/itt/core/itt_set.cmoz
+    CMOZ theories/itt/core/itt_srec.cmoz
+    CMOZ theories/itt/core/itt_decidable.cmoz
+    CMOZ theories/itt/core/itt_singleton.cmoz
+    CMOZ theories/itt/core/itt_fun2.cmoz
+    CMOZ theories/itt/core/itt_dprod.cmoz
+    CMOZ theories/itt/core/itt_bool.cmoz
+    CMOZ theories/itt/core/itt_unit.cmoz
+    CMOZ theories/itt/core/itt_int_base.cmoz
+    CMOZ theories/itt/core/itt_list2.cmoz
+    CMOZ theories/itt/core/itt_omega.cmoz
+    CMOZ theories/itt/core/itt_subset2.cmoz
+    CMOZ theories/itt/core/itt_prod.cmoz
+    CMOZ theories/itt/core/itt_bunion.cmoz
+    CMOZ theories/itt/core/itt_int_arith.cmoz
+    CMOZ theories/itt/core/itt_isect.cmoz
+    CMOZ theories/itt/core/itt_nat.cmoz
+    CMOZ theories/itt/core/itt_w.cmoz
+    CMOZ theories/itt/core/itt_atom.cmoz
+    CMOZ theories/itt/core/itt_dfun.cmoz
+    CMOZ theories/itt/core/itt_list3.cmoz
+    CMOZ theories/itt/core/itt_struct2.cmoz
+    CMOZ theories/itt/core/itt_well_founded.cmoz
+    CMOZ theories/itt/core/itt_image2.cmoz
+    CMOZ theories/itt/core/itt_sqsimple.cmoz
+    CMOZ theories/itt/core/itt_subset.cmoz
+    CMOZ theories/itt/core/itt_void.cmoz
+    CMOZ theories/itt/core/itt_equal.cmoz
+    CMOZ theories/itt/core/itt_record_label0.cmoz
+    CMOZ theories/itt/core/itt_record_renaming.cmoz
+    CMOZ theories/itt/core/itt_prop_decide.cmoz
+    CMOZ theories/itt/core/itt_list.cmoz
+    CMOZ theories/itt/core/itt_struct3.cmoz
+    CMOZ theories/itt/core/itt_atom_bool.cmoz
+    CMOZ theories/meta/base/base_rewrite.cmoz

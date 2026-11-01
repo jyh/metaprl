@@ -1,0 +1,29 @@
+MetaPRL 0.9.6.5+  (Subversion rev unknown):
+	build [Sun Nov 1 00:11:27 2026]
+	on <host>
+	Uses VERBOSE Refiner_ds
+
+Module: /vir3
+Current directory: /vir/vir3/route_acl_safe
+# /vir/vir3/route_acl_safe : string
+# 
+----------------------------------
+Parse error in entry [expr], rule:
+  [ "("; SELF; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ":>"; ctyp; ")"
+  | "("; SELF; ":"; ctyp; ")"
+  | "("; SELF; ")" ]
+----------------------------------
+
+Line 3, characters 1-2: 
+   Stream.Error("':>' or ':' or ')' expected after [expr] (in [expr])")
+# 
+----------------------------------
+Parse error in entry [top_phrase], rule:
+  [ phrase*; ";;" ]
+----------------------------------
+
+Line 1, characters 58-58: 
+   Stream.Error("';;' expected after [phrase] (in [top_phrase])")
+# 900001 : int
+# MetaPRL exiting

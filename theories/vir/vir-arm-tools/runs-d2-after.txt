@@ -1,0 +1,51 @@
+MetaPRL 0.9.6.5+  (Subversion rev unknown):
+	build [Sun Nov 1 00:11:27 2026]
+	on <host>
+	Uses VERBOSE Refiner_ds
+
+Module: /vir3
+Current directory: /vir/vir3/route_acl_safe
+# /vir/vir3/route_acl_safe : string
+# [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m ∀x:Top. ∀k:int. (wire_u32{x; k} ∈ int)
+2. [1m[m<Γ> [1m⊢[m ∀x:int. ∀y:int. (can_access{x; y} ∈ Bool)
+3. [1m[m<Γ> [1m⊢[m ∀s:Top. ∀x:int. (has_tokens{s; x} ∈ Bool)
+4. [1m[m<Γ> [1m⊢[m ∀p:Top. ∀n:int. ∀s:Top. (take{p; n; q. vreturn{(s,q)}} ∈ (Top + Top))
+====
+[1m
+1. [m<Γ>
+[1m⊢[m ∀b:validframe
+     ∀st:Top
+        (isrouted{vir_F2{whole_slice{b}; st}}
+         ═⇒ ↑can_access{frame_sender{b}; frame_topic{b}})
+
+[1mBY [m(idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT thenT idT)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m ∀b:validframe
+        ∀st:Top
+           (isrouted{vir_F2{whole_slice{b}; st}}
+            ═⇒ ↑can_access{frame_sender{b}; frame_topic{b}})
+[1m====[m
+[1m2. [1m?[m[m
+   ....wf....
+   [1m[m<Γ> [1m⊢[m validframe Type
+
+[1m====[m
+[1m3. [1m?[m[m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [mb: validframe
+   [1m⊢[m ∀st:Top
+        (isrouted{vir_F2{whole_slice{b}; st}}
+         ═⇒ ↑can_access{frame_sender{b}; frame_topic{b}})
+
+() : unit
+# 900001 : int
+# Auto-saving vir3
+MetaPRL exiting

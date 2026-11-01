@@ -1,0 +1,183 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir";;
+# /vir/vir : string
+=== STEP 2 [ok] 0.00s :: status_all ();;
+# Expanding `beta_lin':
+Status: `beta_lin' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `dce_atom':
+Status: `dce_atom' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_true':
+Status: `guard_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `guard_merge':
+Status: `guard_merge' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `slice_fuse':
+Status: `slice_fuse' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `read_comm':
+Status: `read_comm' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `guard_merge_c':
+Status: `guard_merge_c' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `slice_fuse_c':
+Status: `slice_fuse_c' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `aux_advance_sink_guard':
+Status: `aux_advance_sink_guard' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `aux_read_hoist':
+Status: `aux_read_hoist' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `aux_guard_swap':
+Status: `aux_guard_swap' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+User time 0.004603; System time 0.000184; Real time 0.004794
+() : unit
+=== STEP 3 [ok] 0.00s :: cd "guard_merge_c";;
+# /vir/vir/guard_merge_c : string
+=== STEP 4 [ok] 0.01s :: ls "";;
+# [1m#[m <[1m#[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m c1 ∈ Bool
+====
+[1m[m<Γ> [1m⊢[m vguard{c1; vguard{c2; eok; eerr}; eerr} ≡ vguard{c1 ∧⒝ c2; eok; eerr}
+
+[1mBY [m<goal>
+
+() : unit
+=== STEP 5 [ok] 0.00s :: refine (rwh (unfold_vguard thenC unfold_band) 0 thenT splitBoolT <<'c1>> 0 thenMT rw reduceC 0 ttca);;
+# [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m c1 ∈ Bool
+====
+[1m[m<Γ> [1m⊢[m vguard{c1; vguard{c2; eok; eerr}; eerr} ≡ vguard{c1 ∧⒝ c2; eok; eerr}
+
+[1mBY [m(rwh (unfold_vguard thenC unfold_band) 0 thenT splitBoolT <<'c1>> 0 thenMT rw reduceC 0 ttca)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m[m<Γ>[1m; [m↑c1 [1m⊢[m vguard{true; vguard{c2; eok; eerr}; eerr} ≡ vguard{c2; eok; eerr}
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [m↑(¬⒝c1)
+   [1m⊢[m vguard{false; vguard{c2; eok; eerr}; eerr} ≡ vguard{false; eok; eerr}
+() : unit
+=== STEP 6 [ok] 0.00s :: ls "";;
+# [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m c1 ∈ Bool
+====
+[1m[m<Γ> [1m⊢[m vguard{c1; vguard{c2; eok; eerr}; eerr} ≡ vguard{c1 ∧⒝ c2; eok; eerr}
+
+[1mBY [m(rwh (unfold_vguard thenC unfold_band) 0 thenT splitBoolT <<'c1>> 0 thenMT rw reduceC 0 ttca)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m[m<Γ>[1m; [m↑c1 [1m⊢[m vguard{true; vguard{c2; eok; eerr}; eerr} ≡ vguard{c2; eok; eerr}
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>[1m
+   2. [m↑(¬⒝c1)
+   [1m⊢[m vguard{false; vguard{c2; eok; eerr}; eerr} ≡ vguard{false; eok; eerr}
+() : unit
+=== STEP 7 [ok] 0.00s :: cd "../aux_guard_swap";;
+# /vir/vir/aux_guard_swap : string
+=== STEP 8 [ok] 0.00s :: refine (rwh unfold_vguard 0 thenT splitBoolT <<'c1>> 0 thenMT splitBoolT <<'c2>> 0 thenMT rw reduceC 0 ttca);;
+# [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m c1 ∈ Bool
+2. [1m[m<Γ> [1m⊢[m c2 ∈ Bool
+====
+[1m[m<Γ> [1m⊢[m vguard{c1; vguard{c2; e; d}; d} ≡ vguard{c2; vguard{c1; e; d}; d}
+
+[1mBY [m(rwh unfold_vguard 0 thenT splitBoolT <<'c1>> 0 thenMT splitBoolT <<'c2>> 0 thenMT rw reduceC 0 ttca)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m[m<Γ>[1m; [m↑c1[1m; [m↑(¬⒝c2) [1m⊢[m vguard{false; e; d} ≡ d
+[1m2. [[1m#[m][m
+   ....main....
+   [1m[m<Γ>[1m; [m↑(¬⒝c1)[1m; [m↑c2 [1m⊢[m d ≡ vguard{false; e; d}
+() : unit
+=== STEP 9 [ok] 0.00s :: ls "";;
+# [1m#[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m c1 ∈ Bool
+2. [1m[m<Γ> [1m⊢[m c2 ∈ Bool
+====
+[1m[m<Γ> [1m⊢[m vguard{c1; vguard{c2; e; d}; d} ≡ vguard{c2; vguard{c1; e; d}; d}
+
+[1mBY [m(rwh unfold_vguard 0 thenT splitBoolT <<'c1>> 0 thenMT splitBoolT <<'c2>> 0 thenMT rw reduceC 0 ttca)
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m[m<Γ>[1m; [m↑c1[1m; [m↑(¬⒝c2) [1m⊢[m vguard{false; e; d} ≡ d
+[1m2. [[1m#[m][m
+   ....main....
+   [1m[m<Γ>[1m; [m↑(¬⒝c1)[1m; [m↑c2 [1m⊢[m d ≡ vguard{false; e; d}
+() : unit
+=== STEP 10 [ok] 0.00s :: cd "../read_comm";;
+# /vir/vir/read_comm : string
+=== STEP 11 [ok] 0.00s :: refine (rwh unfold_let_lin 0 thenT logicAutoT);;
+# [1m*[m <[1m*[m>
+....main....
+[1m
+1. [m<Γ>
+[1m⊢[m read_u32{b; i; v1. let_lin{upd[v1]; st2. read_u32{b; j; v2. e[v1; st2; v2]}}} ≡
+  read_u32{b; i; v1. read_u32{b; j; v2. let_lin{upd[v1]; st2. e[v1; st2; v2]}}}
+
+[1mBY [m(rwh unfold_let_lin 0 thenT logicAutoT)
+
+() : unit
+=== STEP 12 [ok] 0.00s :: ls "";;
+# [1m*[m <[1m*[m>
+....main....
+[1m
+1. [m<Γ>
+[1m⊢[m read_u32{b; i; v1. let_lin{upd[v1]; st2. read_u32{b; j; v2. e[v1; st2; v2]}}} ≡
+  read_u32{b; i; v1. read_u32{b; j; v2. let_lin{upd[v1]; st2. e[v1; st2; v2]}}}
+
+[1mBY [m(rwh unfold_let_lin 0 thenT logicAutoT)
+
+() : unit
+=== STEP 13 [ok] 0.00s :: cd "../slice_fuse_c";;
+# /vir/vir/slice_fuse_c : string
+=== STEP 14 [ok] 0.00s :: ls "";;
+# [1m#[m <[1m#[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m i ∈ int
+3. [1m[m<Γ> [1m⊢[m j ∈ int
+====
+[1m
+1. [m<Γ>
+[1m⊢[m advance{b; i; s1. advance{s1; j; s2. e[s2]}} ≡ advance{b; i + j; s2. e[s2]}
+
+[1mBY [m<goal>
+
+() : unit
+=== STEP 15 [ok] 0.00s :: cd "..";;
+# /vir/vir : string
+=== STEP 16 [ok] 0.00s :: status_all ();;
+# Expanding `beta_lin':
+Status: `beta_lin' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `dce_atom':
+Status: `dce_atom' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_true':
+Status: `guard_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `guard_merge':
+Status: `guard_merge' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `slice_fuse':
+Status: `slice_fuse' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `read_comm':
+Status: `read_comm' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_merge_c':
+Status: `guard_merge_c' is a derived object with an incomplete proof (1 rule boxes, 12 primitive steps)
+Expanding `slice_fuse_c':
+Status: `slice_fuse_c' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `aux_advance_sink_guard':
+Status: `aux_advance_sink_guard' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `aux_read_hoist':
+Status: `aux_read_hoist' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `aux_guard_swap':
+Status: `aux_guard_swap' is a derived object with an incomplete proof (1 rule boxes, 46 primitive steps)
+User time 0.000389; System time 0.000042; Real time 0.000431
+() : unit
+=== END steps=16 ok=16 err=0 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir.cmoz

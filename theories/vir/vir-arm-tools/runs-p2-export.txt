@@ -1,0 +1,12 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir2";;
+# /vir/vir2 : string
+=== STEP 2 [ok] 0.05s :: status_all ();;
+# Expanding `router2_fuse':
+Status: `router2_fuse' is a derived object with a complete proof (12 rule boxes, 6036 primitive steps)
+User time 0.046995; System time 0.000704; Real time 0.047698
+() : unit
+=== STEP 3 [ok] 0.01s :: export ();;
+# Exporting vir2
+() : unit
+=== END steps=3 ok=3 err=0 rc=0 cmoz-written=0

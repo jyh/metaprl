@@ -1,0 +1,14 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir";;
+# /vir/vir : string
+=== STEP 2 [ok] 0.00s :: cd "/vir/vir1b";;
+# ! File ../../theories/vir/vir1b.prla has a wrong magic number.
+! This means that is is either not a MetaPRL file
+! or is not compatible with the version of the MetaPRL you are trying to use.
+! If you are sure this file does not contain any unsaved data, delete it.
+! If it does contain unsaved data, you might need to get a different version of MetaPRL
+! and possibly export the data to a different format.
+=== STEP 3 [ok] 0.01s :: export ();;
+# Exporting vir
+() : unit
+=== END steps=3 ok=3 err=0 rc=0 cmoz-written=0

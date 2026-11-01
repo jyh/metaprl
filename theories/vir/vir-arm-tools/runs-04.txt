@@ -1,0 +1,76 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir/guard_merge_c";;
+# /vir/vir/guard_merge_c : string
+=== STEP 2 [ok] 0.01s :: refine (rw (sweepDnC (unfold_vguard orelseC unfold_band)) 0 thenT splitBoolT <<'c1>> 0 thenMT rw reduceC 0 ttca);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m c1 ∈ Bool
+====
+[1m[m<Γ> [1m⊢[m vguard{c1; vguard{c2; eok; eerr}; eerr} ≡ vguard{c1 ∧⒝ c2; eok; eerr}
+
+[1mBY [m(rw (sweepDnC (unfold_vguard orelseC unfold_band)) 0 thenT splitBoolT <<'c1>> 0 thenMT rw reduceC 0 ttca)
+
+() : unit
+=== STEP 3 [ok] 0.00s :: cd "../aux_guard_swap";;
+# /vir/vir/aux_guard_swap : string
+=== STEP 4 [ok] 0.00s :: refine (rw (sweepDnC unfold_vguard) 0 thenT splitBoolT <<'c1>> 0 thenMT splitBoolT <<'c2>> 0 thenMT rw reduceC 0 ttca);;
+# [1m*[m <[1m*[m>
+........
+1. [1m[m<Γ> [1m⊢[m c1 ∈ Bool
+2. [1m[m<Γ> [1m⊢[m c2 ∈ Bool
+====
+[1m[m<Γ> [1m⊢[m vguard{c1; vguard{c2; e; d}; d} ≡ vguard{c2; vguard{c1; e; d}; d}
+
+[1mBY [m(rw (sweepDnC unfold_vguard) 0 thenT splitBoolT <<'c1>> 0 thenMT splitBoolT <<'c2>> 0 thenMT rw reduceC 0 ttca)
+
+() : unit
+=== STEP 5 [ok] 0.00s :: cd "../slice_fuse_c";;
+# /vir/vir/slice_fuse_c : string
+=== STEP 6 [ok] 0.00s :: refine (sqSubstT << 'b ~ pair{fst{'b}; snd{'b}} >> 0);;
+# [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m i ∈ int
+3. [1m[m<Γ> [1m⊢[m j ∈ int
+====
+[1m
+1. [m<Γ>
+[1m⊢[m advance{b; i; s1. advance{s1; j; s2. e[s2]}} ≡ advance{b; i + j; s2. e[s2]}
+
+[1mBY [m(sqSubstT << 'b ~ pair{fst{'b}; snd{'b}} >> 0)
+
+[1m1. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m b ≡ (b.1,b.2)
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m advance{(b.1,b.2); i; s1. advance{s1; j; s2. e[s2]}} ≡
+     advance{(b.1,b.2); i + j; s2. e[s2]}
+() : unit
+=== STEP 7 [ok] 0.00s :: ls "";;
+# [1m#[m <[1m*[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m i ∈ int
+3. [1m[m<Γ> [1m⊢[m j ∈ int
+====
+[1m
+1. [m<Γ>
+[1m⊢[m advance{b; i; s1. advance{s1; j; s2. e[s2]}} ≡ advance{b; i + j; s2. e[s2]}
+
+[1mBY [m(sqSubstT << 'b ~ pair{fst{'b}; snd{'b}} >> 0)
+
+[1m1. [[1m#[m][m
+   ....equality....
+   [1m[m<Γ> [1m⊢[m b ≡ (b.1,b.2)
+[1m2. [[1m#[m][m
+   ....main....
+   [1m
+   1. [m<Γ>
+   [1m⊢[m advance{(b.1,b.2); i; s1. advance{s1; j; s2. e[s2]}} ≡
+     advance{(b.1,b.2); i + j; s2. e[s2]}
+() : unit
+=== END steps=7 ok=7 err=0 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir.cmoz

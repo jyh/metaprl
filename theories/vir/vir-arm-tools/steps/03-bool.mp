@@ -1,0 +1,16 @@
+cd "/vir/vir";;
+status_all ();;
+cd "guard_merge_c";;
+ls "";;
+refine (rwh (unfold_vguard thenC unfold_band) 0 thenT splitBoolT <<'c1>> 0 thenMT rw reduceC 0 ttca);;
+ls "";;
+cd "../aux_guard_swap";;
+refine (rwh unfold_vguard 0 thenT splitBoolT <<'c1>> 0 thenMT splitBoolT <<'c2>> 0 thenMT rw reduceC 0 ttca);;
+ls "";;
+cd "../read_comm";;
+refine (rwh unfold_let_lin 0 thenT logicAutoT);;
+ls "";;
+cd "../slice_fuse_c";;
+ls "";;
+cd "..";;
+status_all ();;

@@ -1,0 +1,12 @@
+beta_lin complete 1
+dce_atom complete 1
+guard_true complete 1
+guard_merge incomplete 0
+slice_fuse incomplete 0
+read_comm complete 1
+guard_merge_c complete 1
+slice_fuse_c complete 1
+aux_advance_sink_guard complete 1
+aux_read_hoist complete 1
+aux_guard_swap complete 1
+router_fuse complete 5

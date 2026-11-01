@@ -1,0 +1,55 @@
+=== START [ok] 0.1s
+=== STEP 1 [ok] 0.00s :: cd "/vir/vir/slice_fuse_c";;
+# /vir/vir/slice_fuse_c : string
+=== STEP 2 [ERR] 0.01s :: refine (rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT rw (higherC add_Assoc2C) 0 thenLT [logicAutoT; assumT 1 thenT rwh unfoldSnd 0 thenT spreadEquality <<bind{q. int}>> <<top * int>> thenT autoT; assumT 2 thenT autoT; assumT 3 thenT autoT]);;
+# Refine error:
+    match_redex_bterms: BadMatch: BTermMatch: int
+=== STEP 3 [ok] 0.00s :: ls "";;
+# [1m?[m <[1m?[m>
+....main....
+1. [1m[m<Γ> [1m⊢[m b ∈ (Top ╳ int)
+2. [1m[m<Γ> [1m⊢[m i ∈ int
+3. [1m[m<Γ> [1m⊢[m j ∈ int
+====
+[1m
+1. [m<Γ>
+[1m⊢[m advance{b; i; s1. advance{s1; j; s2. e[s2]}} ≡ advance{b; i + j; s2. e[s2]}
+
+[1mBY [m(rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT rw (sweepDnC unfold_advance) 0 thenT rw reduceC 0 thenT rw (higherC add_Assoc2C) 0 thenLT [logicAutoT; assumT 1 thenT autoT; assumT 2 thenT autoT; assumT 3 thenT autoT])
+
+[1m1. [[1m#[m][m
+   ....main....
+   [1m[m<Γ>[1m; [mb ∈ (Top ╳ int) [1m⊢[m b.2 ∈ int
+() : unit
+=== STEP 4 [ok] 0.00s :: cd "..";;
+# /vir/vir : string
+=== STEP 5 [ok] 0.01s :: export ();;
+# Exporting vir
+() : unit
+=== STEP 6 [ok] 0.01s :: status_all ();;
+# Expanding `beta_lin':
+Status: `beta_lin' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `dce_atom':
+Status: `dce_atom' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_true':
+Status: `guard_true' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `guard_merge':
+Status: `guard_merge' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `slice_fuse':
+Status: `slice_fuse' is a derived object with an incomplete proof (0 rule boxes, 1 primitive steps)
+Expanding `read_comm':
+Status: `read_comm' is a derived object with a complete proof (1 rule boxes, 7 primitive steps)
+Expanding `guard_merge_c':
+Status: `guard_merge_c' is a derived object with a complete proof (1 rule boxes, 30 primitive steps)
+Expanding `slice_fuse_c':
+Status: `slice_fuse_c' is a derived object with an incomplete proof (1 rule boxes, 34 primitive steps)
+Expanding `aux_advance_sink_guard':
+Status: `aux_advance_sink_guard' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `aux_read_hoist':
+Status: `aux_read_hoist' is a derived object with a complete proof (1 rule boxes, 9 primitive steps)
+Expanding `aux_guard_swap':
+Status: `aux_guard_swap' is a derived object with a complete proof (1 rule boxes, 66 primitive steps)
+User time 0.004845; System time 0.000121; Real time 0.004965
+() : unit
+=== END steps=6 ok=6 err=1 rc=0 cmoz-written=1
+    CMOZ theories/vir/vir.cmoz

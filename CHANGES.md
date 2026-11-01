@@ -193,6 +193,15 @@
   small hypotheses remain, but once they are all matched the rest of the
   big sequent is skipped, contexts too (big `<K>; x: B` matches small with
   no hypotheses).
+- `Term_stable`, the table keyed by a term's shape behind itt_squash's
+  unsquash resource (`test/unit/test_term_stable.ml`): 300 generated terms
+  inserted and 1,000 looked up, one in five of a shape never inserted;
+  `slookup_all` returns the values whose shape matches, newest first, and
+  `slookup` the newest or `Not_found`, against a model that computes the
+  shape from the term's structure, on all 1,000. Mutants: inserting with
+  `Hashtbl.replace` (212), counting no binders (790), giving a Token
+  parameter the Number kind (983). Recorded: a variable and a
+  second-order variable with no arguments have the same shape.
 
 ### Known not to work
 

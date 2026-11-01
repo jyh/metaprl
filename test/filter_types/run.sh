@@ -26,7 +26,9 @@ MP_INCLUDE=$(printf '%s\n' $dirs | paste -sd: -)
 export MP_ROOT MPLIB MP_GROUP MP_DESCR MP_INCLUDE
 out="$tmp/out.txt"
 : > "$out"
-for src in "$here"/*.ml; do
+# In C-locale order: a shell glob sorts ok_term and ok_term_as_dform
+# differently on macOS and Linux.
+for src in $(cd "$here" && ls *.ml | LC_ALL=C sort | sed "s|^|$here/|"); do
    name=$(basename "$src" .ml)
    cp "$src" "$tmp/$name.ml"
    grep -E '^(extends|declare) ' "$src" > "$tmp/$name.mli"

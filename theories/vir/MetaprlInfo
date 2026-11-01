@@ -7,3 +7,4 @@ THEORY_DEPS[] +=
 MPFILES[] =
     vir
     vir2
+    vir3

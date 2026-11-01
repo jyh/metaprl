@@ -1,3 +1,4 @@
 convert std = ds                     2000 of 2000
 revert ds = std                      2000 of 2000
 revert (convert t) = t               2000 of 2000
+two copies convert to one term       2000 of 2000

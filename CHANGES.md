@@ -2,6 +2,42 @@
 
 ## Unreleased
 
+### Fixed
+
+- A module whose id is 2^30 or more could not be built from its proof
+  archive (`.prla`): the filter refused it with `Filter_summary.dest_id:
+  not an int`. The id is an OCaml int written as a decimal; reading it,
+  `Lm_num` makes a decimal at or above 2^30 a big number, and `dest_id`
+  asked whether it fits `Lm_num`'s 30-bit range. Such ids occur on 64-bit
+  (the hash is seeded with bit 30 set); no committed archive has one, and a
+  new module was the first. `dest_id` now reads the decimal as an OCaml
+  int. Test: `test/filter_prla_id/run.sh` (a CI step after the build)
+  compiles a copied theory with ids 1,511,842,520, 609,661,056 and
+  -1,000,750,977; before the fix the first was refused.
+- term_std (`TERMS = std`; term_ds, which the refiner uses, was right) put
+  context hypotheses and contexts lists where term_ds does not: its
+  addressing indexed them (#56), `map_down`, `map_up`, `iter_down` and
+  `iter_up` visited them (#57), and `find_subterm` walked into them (#58).
+  A `TERMS = std` proof census lost 8 proofs to these; it now loses none.
+  term_std's `all_vars` also left out contexts-list names and `is_fo_term`
+  called a sequent first-order (#72).
+- term_ds's `match_terms` let a bound variable of the pattern match any
+  subterm, so `lam x.f{'x}` matched `lam y.f{c}` (#63), and its `all_vars`
+  left out the variables a bound term binds (#67).
+- `Tactic_boot` compared one argument's term-list attributes with
+  themselves, so the proof editor could reattach a stored sub-proof to a
+  subgoal whose term-list attribute differs (#59).
+- `Unify_mm.unifiable` said true for a variable equated with a term that
+  contains it (`'d = f{..'d..}`): the occurs check was skipped (#64).
+- `Ctime.parse_time` read every HTTP date as 0, in all three forms a server
+  must accept; it now reads them, in UTC (#71).
+- Hash-consing could give one term two live indices after a subterm was
+  collected, so `Term_eq_table` missed keys it held (#76).
+- `Supinf`'s `isNumber` compared unreduced fractions with polymorphic
+  compare, so a zero coefficient such as 0/4 counted as nonzero and the
+  SUP-INF procedure could miss a bound it had derived; it could only lose
+  proofs, not admit false ones (#78).
+
 ### Tests
 
 - Unit tests for MetaPRL's OCaml libraries (`test/unit/`, #51): each
@@ -16,6 +52,15 @@
   when `F` is a tautology (Glivenko), and LJ and LJmc agree: 383 of 383
   checked. The 17 on which LJ did not finish in 10 s are skipped and
   counted (see Known not to work).
+- `File_base`, which chooses which of a module's files to load
+  (`test/unit/test_file_base.ml`): the first directory on the path that
+  has any of them, and in it the newest by mtime, the earlier file type on
+  a tie. Eight cases agree with a model of that rule; mutants that break
+  the tie the other way or ignore the mtime differ in 2 and 6. This is why
+  a newer archive of any kind shadows the stored proof (a session's
+  auto-saved `.cmoz` is read instead of the `.prla`). Recorded: when the
+  newest file cannot be unmarshalled, loading fails; it does not fall back
+  to an older file.
 - `Term_dtable`, the table behind the intro step for subtype goals
   (`Itt_subtype`), against a model (`test/unit/test_term_dtable.ml`): a
   small subtyping system inserted the three ways itt theories insert one,
@@ -34,10 +79,11 @@
   the ds term built from the same description, revert gives the std term,
   and revert of convert is the identity, on all 2,000 (a mutant that
   reverses subterms in the copy's header makes the first two 1,604; the
-  round trip cannot see a defect that is undone on the way back). Not
-  checked: whether two copies of one term convert to one shared term,
-  which holds for 1,961 to 1,980 of the 2,000 depending on when the GC
-  runs.
+  round trip cannot see a defect that is undone on the way back). Two
+  copies of one term convert to one shared term on all 2,000, with a full
+  GC between the two converts (#84). The 1,961 to 1,980 first reported
+  here was not reproduced on this code; built against `Weak_memo` from
+  before #76 the same check reads 1,038 of 2,000.
 - The filter's term-type checking (`term_ty_infer`) on seven small theories
   (`test/filter_types/`, a CI step after the build, Linux only): building
   the theories shows that well-typed declarations are accepted, and these
@@ -47,6 +93,13 @@
   that must be accepted, including a Term where a Dform is taken (perv
   declares `Dform <- Term`). A mutant whose subtype check accepts makes
   the three type errors pass.
+- Display forms (`editor/ml/tests/dform_golden.sh`, a CI step after the
+  build): `mp -batch` prints 59 goals, one per itt/core module (its first
+  rule with a stored complete proof), and the text is compared with
+  `dform_golden.expected`. Until now nothing pinned printed output; the
+  proof census reads rule statuses. A mutant that changes one bracket in
+  `itt_record_renaming`'s `rename_df` changes 10 lines of the output.
+  ASCII display mode only, at mp's default width of 80.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`
@@ -159,6 +212,15 @@
   small hypotheses remain, but once they are all matched the rest of the
   big sequent is skipped, contexts too (big `<K>; x: B` matches small with
   no hypotheses).
+- `Term_stable`, the table keyed by a term's shape behind itt_squash's
+  unsquash resource (`test/unit/test_term_stable.ml`): 300 generated terms
+  inserted and 1,000 looked up, one in five of a shape never inserted;
+  `slookup_all` returns the values whose shape matches, newest first, and
+  `slookup` the newest or `Not_found`, against a model that computes the
+  shape from the term's structure, on all 1,000. Mutants: inserting with
+  `Hashtbl.replace` (212), counting no binders (790), giving a Token
+  parameter the Number kind (983). Recorded: a variable and a
+  second-order variable with no arguments have the same shape.
 
 ### Known not to work
 

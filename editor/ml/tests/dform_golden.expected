@@ -1,0 +1,627 @@
+== itt_equal type_type
+? <?>
+....main....
+1. <Γ> ⊢ T Type
+====
+<Γ> ⊢ ((T Type)) Type
+
+BY typeEquality ttca
+
+== itt_struct thin
+? <?>
+....main....
+1. <Γ>; <Δ> ⊢ C
+====
+<Γ>; A; <Δ> ⊢ C
+
+BY thin_many 2 2 ttca
+
+== itt_squiggle squiggleType
+? <?>
+....main....
+1. <Γ> ⊢ t ≡ s
+====
+<Γ> ⊢ t ≡ s Type
+
+BY typeAssertT thenT trivialT
+
+== itt_pairwise splitHyp
+? <?>
+........
+1. <Γ>; x: A; <Δ[x]>; y: A<|Γ|>[]; <Σ[y]> ⊢ T[y]
+====
+<Γ>; x: A; <Δ[x]>; <Σ[x]> ⊢ T[x]
+
+BY letAtT 4 <<'y='x in 'A>> ttca
+
+== itt_image img_univ_eq
+? <?>
+........
+1. <Γ> ⊢ A = B ∈ Ů_'i
+====
+<Γ> ⊢ Img(x:A.f<||>[x]) = Img(x:B.f<||>[x]) ∈ Ů_'i
+
+BY assertT << 'A='B in univ[i:l] >> taa
+
+1. [?]
+   ........
+   <Γ>; A = B ∈ Ů_'i ⊢ Img(x:A.f<||>[x]) = Img(x:B.f<||>[x]) ∈ Ů_'i
+== itt_squash squashEquality
+? <?>
+....main....
+1. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+====
+<Γ> ⊢ [A1] = [A2] ∈ Ů_'i
+
+BY byDefT unfold_squash
+
+== itt_subtype subtypeElimination2
+? <?>
+....main....
+1. <Γ>; x: A ⊑ B; <Δ[x]> ⊢ a = b ∈ A<|Γ|>[]
+2. <Γ>; x: A ⊑ B; <Δ[x]>; a = b ∈ B<|Γ|>[] ⊢ C[x]
+====
+<Γ>; x: A ⊑ B; <Δ[x]> ⊢ C[x]
+
+BY assertT <<'a = 'b in 'B>> ttca
+
+1. [?]
+   ....assertion....
+   <Γ>; x: A ⊑ B; <Δ[x]> ⊢ a = b ∈ B<|Γ|>[]
+== itt_void voidType
+? <?>
+....main....
+<Γ> ⊢ Void Type
+
+BY univTypeT <<univ[1:l]>> ttca
+
+== itt_unit unitType
+? <?>
+....main....
+<Γ> ⊢ Unit Type
+
+BY univTypeT <<univ[i:l]>> ttca
+
+== itt_atom atomType
+? <?>
+....main....
+<Γ> ⊢ Atom Type
+
+BY univTypeT <<univ [i:l]>> ttca
+
+== itt_union reduce_outl_inl
+? <?>
+....main....
+<Γ> ⊢ outl{inl x} ≡ x
+
+BY byDefT unfold_outl
+
+== itt_dprod reduceFst
+? <?>
+....main....
+<Γ> ⊢ (a,b).1 ≡ a
+
+BY byDefT unfoldFst
+
+== itt_prod independentProductEquality
+? <?>
+....main....
+1. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+2. <Γ> ⊢ B1 = B2 ∈ Ů_'i
+====
+<Γ> ⊢ (A1 ╳ B1) = (A2 ╳ B2) ∈ Ů_'i
+
+BY rwh unfold_prod 0 ta
+
+== itt_set setEquality
+? <?>
+....main....
+1. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+2. <Γ>; a1: A1 ⊢ B1[a1] = B2[a1] ∈ Ů_'i
+====
+<Γ> ⊢ {a1:A1 | B1[a1]} = {a2:A2 | B2[a2]} ∈ Ů_'i
+
+BY byDefT unfold_set
+
+== itt_dfun reduce_let
+? <?>
+....main....
+<Γ> ⊢ let x = a in b[x] ≡ b[a]
+
+BY byDefT unfold_let
+
+== itt_esquash esquash_mem
+? <?>
+....main....
+1. <Γ> ⊢ 〚A〛
+====
+<Γ> ⊢ ⋅ ∈ 〚A〛
+
+BY autoT thenT assertT <<esquash{'A}>> ttca
+
+1. [?]
+   ....main....
+   <Γ>; 〚A〛 ⊢ ⋅ ∈ 〚A〛
+== itt_logic true_univ
+? <?>
+....main....
+<Γ> ⊢ True ∈ Ů_'i
+
+BY rwh unfold_true 0 ta
+
+== itt_sqsimple sqsimple_intro
+? <?>
+....main....
+1. <Γ> ⊢ T Type
+2. <Γ>; x: T; y: T; x = y ∈ T ⊢ x ≡ y
+====
+<Γ> ⊢ sqsimple{T}
+
+BY byDefT unfold_sqsimple
+
+== itt_nequal neq_type
+? <?>
+....main....
+1. <Γ> ⊢ x ∈ T
+2. <Γ> ⊢ y ∈ T
+====
+<Γ> ⊢ (x ≠ y ∈ T) Type
+
+BY byDefT unfold_nequal
+
+== itt_well_founded partial_order_type
+? <?>
+....main....
+1. <Γ> ⊢ A Type
+2. <Γ>; a: A; b: A ⊢ R[a; b] Type
+====
+<Γ> ⊢ partial_order(x,y:A. R[x; y]) Type
+
+BY rwh unfold_partial_order 0 ta
+
+== itt_decidable fold_decidable
+? <?>
+....main....
+<Γ> ⊢ p ∨ ¬p ≡ Decidable(p)
+
+BY (rwh unfold_decidable 0) thenT trivialT
+
+== itt_ext_equal extEqualMember
+? <?>
+........
+1. <Γ> ⊢ A =⒠ B
+====
+<Γ> ⊢ (⋅,⋅) ∈ A =⒠ B
+
+BY assertT <<ext_equal{'A; 'B}>> taa
+
+1. [?]
+   ....main....
+   <Γ>; A =⒠ B ⊢ (⋅,⋅) ∈ A =⒠ B
+== itt_pairwise2 supertype
+? <?>
+........
+1. <Γ>; x: A; <Δ[x]> ⊢ A<|Γ|>[] ⊑ B<|Γ|>[]
+2. <Γ>; x: B; <Δ[x]> ⊢ T[x]
+====
+<Γ>; x: A; <Δ[x]> ⊢ T[x]
+
+BY letAtT 2 <<'y='x in 'B>> ttca
+
+1. [?]
+   ....assertion....
+   <Γ>; x: A; <Δ[x]> ⊢ x ∈ B<|Γ|>[]
+== itt_struct2 substitution2
+? <?>
+....main....
+1. <Γ> ⊢ t1 = t2 ∈ T
+2. <Γ> ⊢ C[t2]
+3. <Γ>; x: T; t1 = x ∈ T; t2 = x ∈ T ⊢ C[x] Type
+====
+<Γ> ⊢ C[t1]
+
+BY Itt_struct.substT <<'t1='t2 in {x:'T | ('x='t1 in 'T) and ('x='t2 in 'T)}>> 0
+
+1. [?]
+   ....equality....
+   <Γ> ⊢ t1 = t2 ∈ {x:T | (x = t1 ∈ T) ∧ x = t2 ∈ T}
+2. [?]
+   ....main....
+   <Γ> ⊢ C[t2]
+3. [?]
+   ....wf....
+   <Γ>; z: {x:T | (x = t1 ∈ T) ∧ x = t2 ∈ T} ⊢ C[z] Type
+== itt_struct3 substUsingEpimorphism
+? <?>
+....main....
+1. <Γ>; x: A; <Δ[x]> ⊢ g[x] ∈ B<|Γ|>[]
+2. <Γ>; x: A; <Δ[x]> ⊢ f<|Γ|>[g[x]] ≡ x
+3. <Γ>; y: B; <Δ[f[y]]> ⊢ C[f<|Γ|>[y]]
+====
+<Γ>; x: A; <Δ[x]> ⊢ C[x]
+
+BY assumT 2 thenT letAtT 2 <<'y='g['x] in 'B>> ttca
+
+1. [?]
+   ....main....
+   <Γ>; x2: B; x: A; <Δ[x]>; f<|Γ|>[x2] ≡ x ⊢ C[x]
+== itt_bool reduce_ifthenelse_true
+? <?>
+....main....
+<Γ> ⊢ (if true then e1 else e2) ≡ e1
+
+BY rwh unfold_ifthenelse 0 thenT rwh unfold_btrue 0 thenT rw reduceC 0 thenT trivialT
+
+== itt_int_base int_sqequal_rw
+? <?>
+....main....
+1. <Γ> ⊢ a = b ∈ int
+====
+<Γ> ⊢ a ≡ b
+
+BY int_sqequal thenT trivialT
+
+== itt_int_ext le_bool_wf
+? <?>
+....main....
+1. <Γ> ⊢ a1 = a2 ∈ int
+2. <Γ> ⊢ b1 = b2 ∈ int
+====
+<Γ> ⊢ (b1 ≥⒝ a1) = (b2 ≥⒝ a2) ∈ Bool
+
+BY rwh unfold_ge_bool 0 ttca
+
+== itt_int_arith lt2ge
+? <?>
+........
+1. <Γ>; x: a < b; <Δ[x]> ⊢ a<|Γ|>[] ∈ int
+2. <Γ>; x: a < b; <Δ[x]> ⊢ b<|Γ|>[] ∈ int
+3. <Γ>; x: a < b; <Δ[x]>; b<|Γ|>[]≥(a<|Γ|>[] + 1) ⊢ C[x]
+====
+<Γ>; x: a < b; <Δ[x]> ⊢ C[x]
+
+BY backThruAssumT 3 twa
+
+1. [?]
+   ....main....
+   <Γ>; x: a < b; <Δ[x]> ⊢ b<|Γ|>[]≥(a<|Γ|>[] + 1)
+== itt_omega ge_mulMonoPosit_rw
+? <?>
+....main....
+1. <Γ> ⊢ c > 0
+2. <Γ> ⊢ a ∈ int
+3. <Γ> ⊢ b ∈ int
+4. <Γ> ⊢ c ∈ int
+====
+<Γ> ⊢ a≥b ≡ (c * a)≥(c * b)
+
+BY rwh unfold_ge 0
+
+1. [?]
+   ....main....
+   <Γ> ⊢ ↑(a ≥⒝ b) ≡ ↑((c * a) ≥⒝ (c * b))
+== itt_atom_bool eq_atom_assert_elim
+? <?>
+........
+1. <Γ>; a = b ∈ Atom; <Δ[⋅]> ⊢ C[⋅]
+====
+<Γ>; x: ↑(a =⒜b); <Δ[x]> ⊢ C[x]
+
+BY copyHypT 2 3 thenT rwh unfold_assert 2 thenT dT 2 thenT assertAtT 4 << 'a = 'b in atom >> ttca
+
+== itt_nat reduce_ind_up
+? <?>
+....main....
+1. <Γ> ⊢ x ∈ ℕ
+====
+
+1. <Γ>
+⊢ Ind(x + 1) where Ind(n) =
+     (n = 0 ═⇒ Ind(n) = base)
+     ((n > 0) ═⇒ Ind(n) = up[n; Ind(n - 1)]) ≡
+  up[x + 1;
+     Ind(x) where Ind(n) =
+        (n = 0 ═⇒ Ind(n) = base)
+        ((n > 0) ═⇒ Ind(n) = up[n; Ind(n - 1)])]
+
+BY rwh unfoldInd 0 thenT rw (addrC [1] (Itt_int_base.reduce_ind_up thenC reduceC)) 0 thenT genAssumT [1] thenT byDefT unfold_nat
+
+== itt_isect topUniv
+? <?>
+....main....
+<Γ> ⊢ Top ∈ Ů_'i
+
+BY rwh unfold_top 0 ta
+
+== itt_tsquash tsquashEquality
+? <?>
+....main....
+1. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+====
+<Γ> ⊢ [A1]⒯ = [A2]⒯ ∈ Ů_'i
+
+BY byDefT unfold_tsquash
+
+== itt_disect dintersectionMemberFormation
+? <?>
+....main....
+1. <Γ>; x: A ⊢ B[x] Type
+2. <Γ> ⊢ t ∈ A
+3. <Γ> ⊢ t ∈ B[t]
+====
+<Γ> ⊢ x:A∩B[x]
+
+BY useWitnessT <<'t>> thenT dT 0 thenT trivialT
+
+== itt_singleton singletonEquality
+? <?>
+....main....
+1. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+2. <Γ> ⊢ a1 = a2 ∈ A1
+====
+<Γ> ⊢ {a1}_A1 = {a2}_A2 ∈ Ů_'i
+
+BY byDefT singleton
+
+== itt_subset mem_univ
+? <?>
+....main....
+1. <Γ> ⊢ {a1}_B1 = {a2}_B2 ∈ Ů_'i
+2. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+====
+<Γ> ⊢ (a1 ∈_B1 A1) = (a2 ∈_B2 A2) ∈ Ů_'i
+
+BY byDefT mem
+
+== itt_image2 img_elim2
+? <?>
+....main....
+1. <Γ>; y: Img(a:A.f<||>[a]); <Δ[y]>; a: A<|Γ|>[] ⊢ [C[f<||>[a]]]
+====
+<Γ>; y: Img(a:A.f<||>[a]); <Δ[y]> ⊢ [C[y]]
+
+BY useWitnessT <<it>> thenT dT 2 ttca
+
+== itt_tunion tunionEquality
+? <?>
+....main....
+1. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+2. <Γ>; x: A1 ⊢ B1[x] = B2[x] ∈ Ů_'i
+====
+<Γ> ⊢ ∪x1:A1.B1[x1] = ∪x2:A2.B2[x2] ∈ Ů_'i
+
+BY rwh unfold_tunion 0 ttca
+
+== itt_list reduce_listindNil
+? <?>
+....main....
+<Γ> ⊢ match [] with [] -> base | h::t.f -> step[h; t; f] ≡ base
+
+BY byDefsT [unfold_list_ind; unfold_nil; reduce_fix]
+
+== itt_bisect bisectEquality
+? <?>
+....main....
+1. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+2. <Γ> ⊢ B1 = B2 ∈ Ů_'i
+====
+<Γ> ⊢ (A1 ∩ B1) = (A2 ∩ B2) ∈ Ů_'i
+
+BY rwh unfold_bisect 0
+
+1. [?]
+   ....main....
+   <Γ> ⊢ ∩x:Bool.(if x then A1 else B1) = ∩x:Bool.(if x then A2 else B2) ∈ Ů_'i
+== itt_bunion bunionEquality
+? <?>
+....main....
+1. <Γ> ⊢ A1 = A2 ∈ Ů_'i
+2. <Γ> ⊢ B1 = B2 ∈ Ů_'i
+====
+<Γ> ⊢ (A1 ∪ B1) = (A2 ∪ B2) ∈ Ů_'i
+
+BY rwh unfold_bunion 0
+
+1. [?]
+   ....main....
+
+   1. <Γ>
+   ⊢ ∪x:Bool.((if x then A1 else B1)) = ∪x:Bool.((if x then A2 else B2)) ∈ Ů_'i
+== itt_w tree_indEquality
+? <?>
+........
+1. <Γ> ⊢ z1 = z2 ∈ (Wx:A.B[x])
+2.
+   1. <Γ>
+   2. a: A
+   3. f: B[a] ─→ (Wx:A.B[x])
+   4. g: b:B[a] ─→ T[f b]
+   ⊢ body1[a; f; g] = body2[a; f; g] ∈ T[tree(a, f)]
+====
+
+1. <Γ>
+⊢ (tree_ind(g. let tree(a, f) = z1 in body1[a; f; g])
+  = (tree_ind(g2. let tree(a2, f2) = z2 in body2[a2; f2; g2]) ∈ T[z1]
+
+BY assertEqT <<'z1='z2 in w{'A;x.'B['x]}>> taa
+
+1. [?]
+   ....main....
+
+   1. <Γ>
+   2. z: Wx:A.B[x]
+   ⊢ (tree_ind(g. let tree(a, f) = z in body1[a; f; g])
+     = (tree_ind(g2. let tree(a2, f2) = z in body2[a2; f2; g2]) ∈ T[z]
+== itt_srec srecType
+? <?>
+....main....
+1. <Γ>; T: Ů_'i ⊢ B[T] ∈ Ů_'i
+2. <Γ>; S1: Ů_'i; S2: Ů_'i; S1 ⊑ S2 ⊢ B[S1] ⊑ B[S2]
+====
+<Γ> ⊢ μ{T.B[T]} Type
+
+BY univTypeT <<univ[i:l]>> ttca
+
+== itt_quotient quotient_memberFormation
+? <?>
+....main....
+1. <Γ> ⊢ (x, y: A // E[x; y]) Type
+2. <Γ> ⊢ A
+====
+<Γ> ⊢ x, y: A // E[x; y]
+
+BY assumT 2
+
+1. [?]
+   ....main....
+   <Γ>; A ⊢ x, y: A // E[x; y]
+== itt_simple_singleton singleton_univ
+? <?>
+....main....
+<Γ> ⊢ {a<||>[]} ∈ Ů_'i
+
+BY byDefT unfold_singleton
+
+== itt_list2 reduce_hd
+? <?>
+....main....
+<Γ> ⊢ hd{h::t} ≡ h
+
+BY rwh unfold_hd 0 thenT rwh reduceC 0 ttca
+
+== itt_list_set mem_append_left
+? <?>
+....main....
+1. <Γ> ⊢ x ∈ ty
+2. <Γ> ⊢ l1 ∈ ty List
+3. <Γ> ⊢ l2 ∈ ty List
+4. <Γ> ⊢ mem(x ∈ l1 in ty List)
+====
+<Γ> ⊢ mem(x ∈ l1○ l2 in ty List)
+
+BY genAssumT [2; 4] thenT dT (-1) ttca
+
+1. [?]
+   ....main....
+
+   1. <Γ>
+   2. u: ty
+   3. v1: ty List
+   4. mem(x ∈ v1 in ty List) ═⇒ mem(x ∈ v1○ l2 in ty List)
+   ⊢ mem(x ∈ u::v1 in ty List) ═⇒ mem(x ∈ u::v1○ l2 in ty List)
+== itt_list3 reduce_nth_prefix_zero
+? <?>
+....main....
+<Γ> ⊢ nth_prefix{l; 0} ≡ []
+
+BY rwh unfold_nth_prefix 0 thenT rw reduceC 0 ttca
+
+== itt_fun2 reduce_compose
+? <?>
+....main....
+<Γ> ⊢ compose{f; g} x ≡ f (g x)
+
+BY byDefsT [unfold_compose; reduceC]
+
+== itt_union2 inl_wf
+? <?>
+....main....
+1. <Γ> ⊢ t ∈ (Top + Top)
+====
+<Γ> ⊢ is_inl{t} ∈ Bool
+
+BY withTermsT [<<bind{x.bool}>>; <<top+top>>] (byDefT is_inl)
+
+== itt_prop_decide imp_and_rule
+? <?>
+....main....
+1. <Γ>; x: C ∧ D ═⇒ B; <Δ[x]> ⊢ C<|Γ|>[] Type
+2. <Γ>; x: C ∧ D ═⇒ B; <Δ[x]> ⊢ D<|Γ|>[] Type
+3. <Γ>; x: C ∧ D ═⇒ B; <Δ[x]>; C<|Γ|>[] ═⇒ D<|Γ|>[] ═⇒ B<|Γ|>[] ⊢ T[x]
+====
+<Γ>; x: C ∧ D ═⇒ B; <Δ[x]> ⊢ T[x]
+
+BY assertT << 'C => 'D => 'B >>
+
+1. [?]
+   ....assertion....
+   <Γ>; x: C ∧ D ═⇒ B; <Δ[x]> ⊢ C<|Γ|>[] ═⇒ D<|Γ|>[] ═⇒ B<|Γ|>[]
+2. [?]
+   ....main....
+   <Γ>; x: C ∧ D ═⇒ B; <Δ[x]>; C<|Γ|>[] ═⇒ D<|Γ|>[] ═⇒ B<|Γ|>[] ⊢ T[x]
+== itt_subset2 set_subset
+? <?>
+....main....
+1. <Γ> ⊢ A Type
+2. <Γ>; x: A ⊢ P[x] Type
+====
+<Γ> ⊢ {a:A | P[a]} ⊆ A
+
+BY dT 0 ta
+
+1. [?]
+   ........
+   <Γ>; a: A; P[a]; b: A; a = b ∈ A ⊢ [P[b]]
+== itt_record_label0 reduce_ind_up
+? <?>
+....main....
+1. <Γ> ⊢ x ∈ Label
+====
+<Γ> ⊢ ind_lab{x'; base; l. up[l]} ≡ up[ind_lab{x; base; l. up[l]}]
+
+BY rwaAllAll [unfoldInd; unfold_next; unfold_label] thenT rwh reduceC 0 ta
+
+== itt_record_label reduce_eq_label_true_rw
+? <?>
+....main....
+1. <Γ> ⊢ x = y ∈ Label
+====
+<Γ> ⊢ (if x = y then A else B) ≡ A
+
+BY autoT
+
+== itt_record0 baseRecord
+? <?>
+....main....
+<Γ> ⊢ {0:A} ≡ A ╳ Top
+
+BY rwh unfoldRecordS 0 thenT rwh reduceC 0 ta
+
+== itt_record recordTypeS
+? <?>
+....main....
+1. <Γ> ⊢ A Type
+====
+<Γ> ⊢ {n:A} Type
+
+BY rwh unfoldRecordS 0 ta
+
+== itt_record_exm planeType
+? <?>
+....main....
+<Γ> ⊢ ℙlane Type
+
+BY rwh unfold_plane 0 ta
+
+== itt_record_renaming rename_rcrd_reduce
+? <?>
+....main....
+
+1. <Γ>
+⊢ {r; c = x}[a/b] ≡
+  (if b = c then
+      {r[a/b]; a = x}
+   else
+      (if a = c then {r[a/b]; b = x} else {r[a/b]; c = x}))
+
+BY decideEqLabelT <<label[b:t]>> <<label[c:t]>>
+
+1. [?]
+   ....main....
+   <Γ>; b = c ∈ Label ⊢ {r; c = x}[a/b] ≡ {r[a/b]; a = x}
+2. [?]
+   ........
+
+   1. <Γ>
+   2. b ≠ c ∈ Label
+   ⊢ {r; c = x}[a/b] ≡ (if a = c then {r[a/b]; b = x} else {r[a/b]; c = x})

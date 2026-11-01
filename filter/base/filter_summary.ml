@@ -1412,10 +1412,14 @@ struct
    (*
     * Identifier.
     *)
-   and dest_id convert t =
+   and dest_id _convert t =
+      (* An id is an OCaml int (Filter_cache_fun.hash), written as a decimal.
+       * Lm_num.is_integer_num means "fits Lm_num's 30-bit Int", so an id
+       * >= 2^30 read back from a .prla was refused although it is an int. *)
       let n = (dest_number_any_term t) in
-         if Lm_num.is_integer_num n then Id (Lm_num.int_of_num n)
-         else raise (Invalid_argument "Filter_summary.dest_id: not an int")
+         match int_of_string_opt (Lm_num.string_of_num n) with
+            Some i -> Id i
+          | None -> raise (Invalid_argument "Filter_summary.dest_id: not an int")
 
    (*
     * Magic block of items.

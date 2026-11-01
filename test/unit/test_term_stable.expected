@@ -1,0 +1,4 @@
+inserted 300 terms, 13 distinct shapes
+queries that find a shape            788 of 1000
+slookup_all = model (newest first)   1000 of 1000
+slookup = newest or Not_found        1000 of 1000

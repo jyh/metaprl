@@ -1,0 +1,9 @@
+only b                                           loads d1/b                                   = model
+a b c at 100 300 200                             loads d1/b                                   = model
+a b c all at 200 (a tie)                         loads d1/a                                   = model
+b c tie at 200, a older                          loads d1/b                                   = model
+c newest                                         loads d1/c                                   = model
+dir 1 has old c, dir 2 has newer a               loads d1/c                                   = model
+dir 1 empty, dir 2 has b                         loads d2/b                                   = model
+no file anywhere                                 loads Failure                                = model
+newest (c) corrupt, older a fine                 loads raised Failure("cannot unmarshal m.c") (recorded)

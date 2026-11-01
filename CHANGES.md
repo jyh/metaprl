@@ -60,10 +60,11 @@
   the ds term built from the same description, revert gives the std term,
   and revert of convert is the identity, on all 2,000 (a mutant that
   reverses subterms in the copy's header makes the first two 1,604; the
-  round trip cannot see a defect that is undone on the way back). Not
-  checked: whether two copies of one term convert to one shared term,
-  which holds for 1,961 to 1,980 of the 2,000 depending on when the GC
-  runs.
+  round trip cannot see a defect that is undone on the way back). Two
+  copies of one term convert to one shared term on all 2,000, with a full
+  GC between the two converts (#84). The 1,961 to 1,980 first reported
+  here was not reproduced on this code; built against `Weak_memo` from
+  before #76 the same check reads 1,038 of 2,000.
 - The filter's term-type checking (`term_ty_infer`) on seven small theories
   (`test/filter_types/`, a CI step after the build, Linux only): building
   the theories shows that well-typed declarations are accepted, and these

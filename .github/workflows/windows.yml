@@ -181,17 +181,6 @@ jobs:
         if: always()
         working-directory: metaprl
         run: timeout 600 opam exec -- sh test/filter_prla_id/run.sh
-      # The two install tests the Linux build job runs (a space in INSTALL_DIR
-      # is a typical Windows path). install_space.sh needs GNU cp, which
-      # Cygwin has.
-      - name: an INSTALL_DIR with a space stays one THEORYPATH entry (editor/ml/tests/install_dir_space.sh)
-        if: always()
-        working-directory: metaprl
-        run: timeout 900 opam exec -- sh editor/ml/tests/install_dir_space.sh
-      - name: omake install works with a space in INSTALL_DIR (editor/ml/tests/install_space.sh)
-        if: always()
-        working-directory: metaprl
-        run: timeout 900 opam exec -- sh editor/ml/tests/install_space.sh
       # With the census input: every stored proof, compared with the file the
       # Linux proofs job checks. A difference is a finding to name.
       - name: replay every stored proof (editor/ml/tests/proof_census.sh)

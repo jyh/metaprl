@@ -1,0 +1,21 @@
+h[n:n]{'a} --> k[n:n]{'a}
+  std compiles; ds compiles
+  instances      300 of 300 agree with the model (it rewrites 300)
+  near misses    300 of 300 agree with the model (it rewrites 0)
+p[n:n, x:s]{'a; 'b} --> q[x:s, n:n]{'b; 'a}
+  std compiles; ds compiles
+  instances      300 of 300 agree with the model (it rewrites 300)
+  near misses    300 of 300 agree with the model (it rewrites 0)
+tk[t:t]{'a} --> tk2[t:t, 7:n]{'a}
+  std compiles; ds compiles
+  instances      300 of 300 agree with the model (it rewrites 300)
+  near misses    300 of 300 agree with the model (it rewrites 0)
+e{'a} --> h[5:n, "five":s]{'a}
+  std compiles; ds compiles
+  instances      300 of 300 agree with the model (it rewrites 300)
+  near misses    300 of 300 agree with the model (it rewrites 0)
+h[n:n]{h[n:n]{'a}} --> m[n:n]{'a}
+  std compiles; ds compiles
+  instances      300 of 300 agree with the model (it rewrites 300)
+  near misses    300 of 300 agree with the model (it rewrites 82)
+h[n:n]{'a} --> h[m:n]{'a} (m unbound): std refused, ds refused

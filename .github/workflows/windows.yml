@@ -226,6 +226,10 @@ jobs:
         if: ${{ always() && env.CENSUS == 'true' }}
         working-directory: metaprl
         run: timeout 600 opam exec -- sh editor/ml/tests/dir_of_path_precedence.sh
+      - name: ls options select what they name (editor/ml/tests/ls_options.sh)
+        if: ${{ always() && env.CENSUS == 'true' }}
+        working-directory: metaprl
+        run: timeout 600 opam exec -- sh editor/ml/tests/ls_options.sh
       - name: summarise the build log
         if: always()
         run: |

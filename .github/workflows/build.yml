@@ -155,3 +155,6 @@ jobs:
       - name: absolute paths resolve theory before module (editor/ml/tests/dir_of_path_precedence.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/dir_of_path_precedence.sh
+      - name: ls options select what they name (editor/ml/tests/ls_options.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/ls_options.sh

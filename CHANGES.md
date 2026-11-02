@@ -19,6 +19,16 @@ against libmojave 1.1.1 or later:
 
 ### Fixed
 
+- term_ds's `TermSubst.standardize` (term_ds is the default refiner) gave back
+  a context's arguments in reverse order: a context hypothesis
+  `<K<||>[a; b]>` came back as `<K<||>[b; a]>` (three list reversals where
+  two were meant), and a context term `<H>[a; b]` likewise (one where two
+  were meant: no `List.rev`, which the second-order case has),
+  so the result was not alpha-equal to the term it renamed. term_std was
+  right. Its one caller outside the debug refiner is the experimental M
+  compiler's `m_standardize`. Found by the new TermSubst checks in
+  `test/unit/test_term_differential.ml`: 211 of 2,000 terms, and the
+  context term.
 - A module whose id is 2^30 or more could not be built from its proof
   archive (`.prla`): the filter refused it with `Filter_summary.dest_id:
   not an int`. The id is an OCaml int written as a decimal; reading it,

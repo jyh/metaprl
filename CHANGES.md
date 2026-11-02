@@ -19,6 +19,26 @@ against libmojave 1.1.1 or later:
 
 ### Fixed
 
+- term_ds's `TermSubst.standardize` (term_ds is the default refiner) gave back
+  a context's arguments in reverse order: a context hypothesis
+  `<K<||>[a; b]>` came back as `<K<||>[b; a]>` (three list reversals where
+  two were meant), and a context term `<H>[a; b]` likewise (one where two
+  were meant: no `List.rev`, which the second-order case has),
+  so the result was not alpha-equal to the term it renamed. term_std was
+  right. Its one caller outside the debug refiner is the experimental M
+  compiler's `m_standardize`. Found by the new TermSubst checks in
+  `test/unit/test_term_differential.ml`: 211 of 2,000 terms, and the
+  context term.
+- term_ds's `TermMan.all_vars_info` left out bound variables (term_std
+  records them as first order). Its callers take the names it returns as
+  the names in use and pick a fresh one outside them (itt_vec_sequent_term's
+  `hoist_hyps_length_tac`, meta_context_ind1's `new_vars_table`), so on
+  term_ds the "fresh" name could be one the term binds. 562 of 2,000 terms.
+- term_std's `TermMan.explode_term` of a second-order variable listed one
+  subterm more than its arguments: the contexts list term_std keeps as a
+  last subterm. It now lists the arguments only, as term_ds and the
+  signature's "standard form" do. 281 of 2,000 terms (every one whose root
+  is a second-order variable).
 - A module whose id is 2^30 or more could not be built from its proof
   archive (`.prla`): the filter refused it with `Filter_summary.dest_id:
   not an int`. The id is an OCaml int written as a decimal; reading it,
@@ -123,6 +143,13 @@ against libmojave 1.1.1 or later:
   that must be accepted, including a Term where a Dform is taken (perv
   declares `Dform <- Term`). A mutant whose subtype check accepts makes
   the three type errors pass.
+- `Term_match_table.lookup_bucket` and `lookup_rmap`
+  (`test/unit/test_term_match_table.ml`, 600 tables each, against the same
+  matching model): the bucket is every value added with one most specific
+  matching pattern, patterns being the same up to the names of their
+  variables (`'a` and `'b` share one); `lookup_rmap` returns a most specific
+  pattern's newest value with its contracta instantiated by the match. A
+  bucket cut to its first value fails 127 tables; reversed contracta fail 8.
 - Display forms (`editor/ml/tests/dform_golden.sh`, a CI step after the
   build): `mp -batch` prints 59 goals, one per itt/core module (its first
   rule with a stored complete proof), and the text is compared with
@@ -130,11 +157,28 @@ against libmojave 1.1.1 or later:
   proof census reads rule statuses. A mutant that changes one bracket in
   `itt_record_renaming`'s `rename_df` changes 10 lines of the output.
   ASCII display mode only, at mp's default width of 80.
+- Term shapes (`test/unit/test_term_shape.ml`): on 500 generated terms with
+  parameters of each kind and binders, in both implementations, the
+  canonical term of a shape has that shape, `opparam_of_term` and back
+  gives the same shape, and `shape_compare` is 0 exactly when `eq` holds;
+  both print every shape the same. Mutants that reverse a shape's
+  arities or parameters, or cap an arity at 1, each fail.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`
   returns the elements in reverse order of insertion (no order is
   documented; the test records it).
+- Meta terms, the statements of rules (`test/unit/test_term_meta.ml`): on 400
+  generated statements in both implementations, the zip/unzip pairs for
+  implications and functions give back their parts, `meta_alpha_equal`
+  holds for a renamed copy and fails for a different statement,
+  `term_of_meta_term` and back is the same, `free_vars_mterm` is the parts'
+  free variables plus the meta-functions' variables (a rule's arguments
+  count as free), and free-variable encoding round-trips. Recorded as it
+  stands: `meta_alpha_equal` ignores labels and a meta-function's variable,
+  so `(a:c -> 'a)` and `(b:c -> 'b)` compare unequal while `(a:c -> 'b)`
+  and `(b:c -> 'b)` compare equal (its main caller strips meta-functions
+  first). Three mutants each fail.
 - `mllib`'s `Latin1_case` (all 256 characters against ISO 8859-1, and its
   string functions) and `Precedence` (`get_prec` against the closure of
   `add_lt` and `add_eq`) are checked (`test/unit/test_mllib_models2.ml`,
@@ -260,6 +304,14 @@ against libmojave 1.1.1 or later:
   small hypotheses remain, but once they are all matched the rest of the
   big sequent is skipped, contexts too (big `<K>; x: B` matches small with
   no hypotheses).
+- Rules whose contractum carries parameters (`test/unit/test_rewrite_params.ml`):
+  five rules that move a number, a string and a token parameter, swap two,
+  add constant parameters and require a repeated parameter variable to
+  match equal numbers, each applied to 300 instances and 300 near misses in
+  both implementations and compared with a model; all agree, and a
+  contractum parameter the redex does not bind does not compile. A mutant
+  that reverses the contractum's parameters fails the two rules with
+  several (0 of 300).
 - `Term_stable`, the table keyed by a term's shape behind itt_squash's
   unsquash resource (`test/unit/test_term_stable.ml`): 300 generated terms
   inserted and 1,000 looked up, one in five of a shape never inserted;
@@ -269,24 +321,63 @@ against libmojave 1.1.1 or later:
   `Hashtbl.replace` (212), counting no binders (790), giving a Token
   parameter the Number kind (983). Recorded: a variable and a
   second-order variable with no arguments have the same shape.
+- Three more rules check the matcher against a model as well as across
+  the implementations: a second-order variable that occurs twice as a
+  pattern (rewrites exactly when the two bodies are the same up to the
+  binder), a second occurrence that is an instance (`'b[c]`: exactly when it
+  is the first body with `c` for its variable), and a conclusion restricted
+  to no context (`'C<||>`: exactly when no variable of `<J>` occurs); all
+  400 of 400. Disabling `check_simple_match`, `check_match` or
+  `check_var_restrictions` each fails its own model.
 - How the shell resolves paths (`editor/ml/tests/dir_of_path_precedence.sh`,
   #92): an absolute path whose first part names a theory is the theory, even
   when a module has the same name (`/itt_supinf/<rule>` asks for a module
   named `<rule>`); `..`, `...`, `~` and `.` from a proof or a module; and, as
   it is, a module reached under another theory's name (`../itt_supinf` from
   `itt_int_base`) — the theory part is not checked against the module.
+- What the shell's `ls` options select (`editor/ml/tests/ls_options.sh`):
+  on `itt_int_base`, `r` lists only rewrites and definitions, `R` only rules,
+  `rR` both, `u` exactly the rewrites and rules not yet proved, `p` the
+  `Extends` lines, `d` display forms, `D` documentation, `f` no informal
+  items, `a` everything `f` and `i` list; an unknown option is an error and
+  the shell goes on. Checked by the kind of each entry, not by counts.
 - The proof census ends a module's rows at the next module (#93): a module
   named like its theory is entered through the theory, whose `status_all`
   replays every module in it, and `itt_rfun`'s rows had also carried
   `itt_well_founded_equiv`'s `well_founded_reduction`.
+- Rules over universe levels (`test/unit/test_rewrite_levels.ml`):
+  `u[l] --> v[l]`, `u[l+1] --> v[l+1]` and `u[l+1] --> v[l]` on 300 random
+  levels in both implementations, against a model that compares levels by
+  their value for every value of their variables: `l+1` is refused exactly
+  when a variable has offset 0, and otherwise the level comes back equal
+  (or one below). Recorded, not endorsed: the constant level 0 matches
+  `l+1` with `l = 0`, so `u[l+1] --> v[l+1]` turns 0 into 1. A mutant that
+  lets `l+1` take only offsets of 2 or more fails the model on 89 levels.
 - The filter's term-type checks on every kind of statement
   (`test/filter_types`, #94): besides `prim_rw`, `interactive`, `dform`,
   `iform`, `production` and `declare rewrite`, each with a well-typed and an
   ill-typed fixture.
+- A rewrite with an argument (`test/unit/test_rewrite_args.ml`), as rules
+  such as `thin 'H` take one: `sequent[sa]{ <H>; x: 'A<|H|>; <J<|H|>> >-
+  'C<|H;J|> } --> sequent[sb]{ <H>; <J<|H|>> >- 'C<|H;J|> }` with the length
+  of `H` an int argument, on 200 sequents with every argument from -5 to 6
+  in both implementations: it removes exactly the hypothesis the argument
+  names (k > 0 the k-th; k <= 0 leaving -k after it), when nothing later
+  mentions it; 2,400 of 2,400 agree with that model. An off-by-one in
+  placing a positive argument fails 374.
 - Display forms in the `tex` and `src` modes as well as `prl`
   (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
   itt/core goals, against `dform_golden.tex.expected` and
   `dform_golden.src.expected`.
+- Three redex shapes no other test compiled (`test/unit/test_rewrite_shapes.ml`):
+  a variable bound in the redex and used in it (`lam{x. 'x} --> id` rewrites
+  exactly the identity, not `lam{u. 'z}`), a free first-order variable
+  (`f{'x} --> g{'x}` exactly when the argument is a variable), and a context
+  in two sequents of one redex (exactly when both have the same
+  hypotheses); 300 terms each, both implementations, all agree with the
+  model. Disabling the bound-variable check, letting the free variable
+  match any term, or skipping the second context's comparison each fails
+  its model.
 - The Windows lane runs the filter tests (`test/filter_types`,
   `test/filter_prla_id`, #96) and the display-form goldens in all three modes
   (#98), which ran on Linux only. The filter runners now hand the native
@@ -296,6 +387,13 @@ against libmojave 1.1.1 or later:
 
 ### Known not to work
 
+- `Term_order.compare_params` on every kind of parameter
+  (`test/unit/test_term_order_params.ml`), levels and operator parameters
+  included: on 400 generated parameters it is a total order (0 exactly when
+  two parameters are the same, antisymmetric, transitive on 20,000 triples)
+  that puts the kinds in the order of its match. Mutants that ignore a
+  level's variables, a level variable's offset, or an operator parameter's
+  arities each break "0 exactly when the same".
 - JProver's intuitionistic search (LJ, LJmc) does not finish in 10 s on 17
   of the 400 test formulas, all non-theorems, although the multiplicity is
   capped at 3. On `~~((r => r) => r)` the time goes to prefix (string)

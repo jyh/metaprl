@@ -227,14 +227,6 @@ against libmojave 1.1.1 or later:
   bare rewriter, so it was checked with a mutant instead: a term_std
   substitution that ignores a single variable makes the beta rule disagree
   on 152 of its 400 instances.
-  Rules whose contractum carries parameters (`test/unit/test_rewrite_params.ml`):
-  five rules that move a number, a string and a token parameter, swap two,
-  add constant parameters and require a repeated parameter variable to
-  match equal numbers, each applied to 300 instances and 300 near misses in
-  both implementations and compared with a model; all agree, and a
-  contractum parameter the redex does not bind does not compile. A mutant
-  that reverses the contractum's parameters fails the two rules with
-  several (0 of 300).
   Term I/O, through which stored proofs come back, is checked by round
   trip (`test/unit/test_term_io.ml`): the same 2,000 terms written with
   `Ascii_io.AsciiIO.write_term` and read back, one per file and as the
@@ -250,6 +242,14 @@ against libmojave 1.1.1 or later:
   small hypotheses remain, but once they are all matched the rest of the
   big sequent is skipped, contexts too (big `<K>; x: B` matches small with
   no hypotheses).
+- Rules whose contractum carries parameters (`test/unit/test_rewrite_params.ml`):
+  five rules that move a number, a string and a token parameter, swap two,
+  add constant parameters and require a repeated parameter variable to
+  match equal numbers, each applied to 300 instances and 300 near misses in
+  both implementations and compared with a model; all agree, and a
+  contractum parameter the redex does not bind does not compile. A mutant
+  that reverses the contractum's parameters fails the two rules with
+  several (0 of 300).
 - `Term_stable`, the table keyed by a term's shape behind itt_squash's
   unsquash resource (`test/unit/test_term_stable.ml`): 300 generated terms
   inserted and 1,000 looked up, one in five of a shape never inserted;

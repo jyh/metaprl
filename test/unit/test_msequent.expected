@@ -1,0 +1,9 @@
+1000 msequents (196 with no assumption)
+std: num/all/nth assums (1-based; 0 and k+1 refused) 1000 of 1000
+std: mk/dest_msequent, msequent_goal round trip      1000 of 1000
+std: msequent_alpha_equal: same description          1000 of 1000
+std: msequent_alpha_equal: goal, an assumption, length 1000 of 1000
+ds: num/all/nth assums (1-based; 0 and k+1 refused)  1000 of 1000
+ds: mk/dest_msequent, msequent_goal round trip       1000 of 1000
+ds: msequent_alpha_equal: same description           1000 of 1000
+ds: msequent_alpha_equal: goal, an assumption, length 1000 of 1000

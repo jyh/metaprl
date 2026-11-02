@@ -227,6 +227,14 @@ against libmojave 1.1.1 or later:
   bare rewriter, so it was checked with a mutant instead: a term_std
   substitution that ignores a single variable makes the beta rule disagree
   on 152 of its 400 instances.
+  Three more rules check the matcher against a model as well as across
+  the implementations: a second-order variable that occurs twice as a
+  pattern (rewrites exactly when the two bodies are the same up to the
+  binder), a second occurrence that is an instance (`'b[c]`: exactly when it
+  is the first body with `c` for its variable), and a conclusion restricted
+  to no context (`'C<||>`: exactly when no variable of `<J>` occurs); all
+  400 of 400. Disabling `check_simple_match`, `check_match` or
+  `check_var_restrictions` each fails its own model.
   Term I/O, through which stored proofs come back, is checked by round
   trip (`test/unit/test_term_io.ml`): the same 2,000 terms written with
   `Ascii_io.AsciiIO.write_term` and read back, one per file and as the

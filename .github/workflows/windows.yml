@@ -188,6 +188,10 @@ jobs:
         if: ${{ always() && env.CENSUS == 'true' }}
         working-directory: metaprl
         run: timeout 3600 opam exec -- sh editor/ml/tests/no_self_dependency.sh
+      - name: absolute paths resolve theory before module (editor/ml/tests/dir_of_path_precedence.sh)
+        if: ${{ always() && env.CENSUS == 'true' }}
+        working-directory: metaprl
+        run: timeout 600 opam exec -- sh editor/ml/tests/dir_of_path_precedence.sh
       - name: summarise the build log
         if: always()
         run: |

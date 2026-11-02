@@ -1,9 +1,9 @@
 3000 pairs (1064 name the same values; 95 of those build a number >= 120000 as a product on one side)
-std: ops_eq = the model                      2932 of 3000 (first: model true, a number in two forms true)
-std: ops_eq agrees with alpha_equal          2932 of 3000
-std: f[40000*3] and f[120000]                eq_num true, ops_eq false, alpha_equal true
+std: ops_eq = the model                      3000 of 3000
+std: ops_eq agrees with alpha_equal          3000 of 3000
+std: f[40000*3] and f[120000]                eq_num true, ops_eq true, alpha_equal true
 std: dest_object_id (make_object_id ps) == ps true
-ds: ops_eq = the model                       2932 of 3000 (first: model true, a number in two forms true)
-ds: ops_eq agrees with alpha_equal           2932 of 3000
-ds: f[40000*3] and f[120000]                 eq_num true, ops_eq false, alpha_equal true
+ds: ops_eq = the model                       3000 of 3000
+ds: ops_eq agrees with alpha_equal           3000 of 3000
+ds: f[40000*3] and f[120000]                 eq_num true, ops_eq true, alpha_equal true
 ds: dest_object_id (make_object_id ps) == ps true

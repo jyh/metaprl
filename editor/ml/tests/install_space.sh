@@ -3,12 +3,16 @@
 # build: this sets INSTALL_DIR in mk/config to a fresh "<tmp>/install dir",
 # runs `omake install`, and checks that lib, bin, mk and theories land
 # there and that nothing was created at the split path "<tmp>/install".
-# mk/config is restored afterwards. The install target uses GNU cp
-# (--remove-destination), so this runs on Linux, not on macOS.
+# mk/config is restored afterwards. The install target copies with OMake's
+# own cp, so this runs on Linux, macOS and Windows.
 # Usage: install_space.sh    (run from anywhere; exit 0 = pass)
 here=$(cd "$(dirname "$0")" && pwd)
-root=$(cd "$here/../../.." && pwd)
-tmp=$(mktemp -d)
+# On Windows this shell is Cygwin's: pwd and mktemp print /cygdrive/... and
+# /tmp/..., which native Windows omake cannot open, so use D:/... paths
+# (as test/unit/run.sh and the filter tests do).
+w() { if command -v cygpath > /dev/null 2>&1; then cygpath -m "$1"; else printf '%s' "$1"; fi; }
+root=$(w "$(cd "$here/../../.." && pwd)")
+tmp=$(w "$(mktemp -d)")
 dir="$tmp/install dir"
 test -f "$root/mk/config" || { echo "FAIL: no mk/config (build first)"; exit 1; }
 cp "$root/mk/config" "$tmp/config.saved"

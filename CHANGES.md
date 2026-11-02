@@ -61,6 +61,12 @@ against libmojave 1.1.1 or later:
   Test: `editor/ml/tests/no_self_dependency.sh`, a CI step after the proof
   replay and in the weekly Windows census; on `THEORIES = all` it checks
   5,232 rules in 330 modules and finds 0 self-dependencies (#90).
+- `omake install` worked on Linux only: it ran GNU `/bin/cp -L -r
+  --remove-destination`, which macOS's BSD cp rejects (nothing was
+  installed) and native Windows omake cannot run. It now copies with
+  OMake's own `mkdir` and `cp`, following symbolic links to files and
+  merging into an existing install; a link to a directory stops it with a
+  message. The install tests run on Linux, macOS and the Windows lane.
 
 ### Tests
 
@@ -272,10 +278,6 @@ against libmojave 1.1.1 or later:
 
 ### Known not to work
 
-- `omake install` on native Windows: the install rule runs GNU
-  `/bin/cp -L -r --remove-destination`, which native Windows omake cannot
-  execute (`command not found: /bin/cp`, measured on the Windows CI lane).
-  The install tests run on Linux only.
 - JProver's intuitionistic search (LJ, LJmc) does not finish in 10 s on 17
   of the 400 test formulas, all non-theorems, although the multiplicity is
   capped at 3. On `~~((r => r) => r)` the time goes to prefix (string)

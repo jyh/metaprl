@@ -195,6 +195,16 @@ jobs:
         if: always()
         working-directory: metaprl
         run: DFORM_MODE=src timeout 1200 opam exec -- sh editor/ml/tests/dform_golden.sh
+      # The two install tests the Linux build job runs: omake install now uses
+      # OMake's own cp (the GNU /bin/cp it called is not under native omake).
+      - name: an INSTALL_DIR with a space stays one THEORYPATH entry (editor/ml/tests/install_dir_space.sh)
+        if: always()
+        working-directory: metaprl
+        run: timeout 900 opam exec -- sh editor/ml/tests/install_dir_space.sh
+      - name: omake install works with a space in INSTALL_DIR (editor/ml/tests/install_space.sh)
+        if: always()
+        working-directory: metaprl
+        run: timeout 900 opam exec -- sh editor/ml/tests/install_space.sh
       # With the census input: every stored proof, compared with the file the
       # Linux proofs job checks. A difference is a finding to name.
       - name: replay every stored proof (editor/ml/tests/proof_census.sh)

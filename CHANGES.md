@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+### Fixed through libmojave 1.1.1
+
+MetaPRL reads its shell input and serves its browser through libmojave; built
+against libmojave 1.1.1 or later:
+
+- `mp`'s shell accepts a command line of any length. Without GNU readline
+  (every dune build of libmojave), a line of 1,022 characters or more came back
+  in pieces, so a long command failed with a parse error (jyh/libmojave#117).
+- A line ending in `\` continues onto the next line, as the shell intends.
+  Lines came back with their newline, so the shell's continuation test never
+  saw the `\` at the end (jyh/libmojave#118).
+- The browser server's plain (non-SSL) connections close their sending side on
+  `shutdown`, as the SSL path does; before, a client waiting for end of file
+  waited until the connection was closed (jyh/libmojave#126).
+
 ### Fixed
 
 - A module whose id is 2^30 or more could not be built from its proof

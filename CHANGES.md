@@ -140,6 +140,14 @@ against libmojave 1.1.1 or later:
   `add_lt` and `add_eq`) are checked (`test/unit/test_mllib_models2.ml`,
   #53). No defect. `mllib/simplehashtbl.ml` is not built (it is not in
   mllib's `FILES`) and nothing uses it.
+- The refiner's rewrite combinators (`test/unit/test_refine_rw.ml`):
+  `andthenrw`, `orelserw`, `rwhigher` and `rwaddr` over three rewrites made
+  with `create_rewrite` in a null refiner, 60 random combinations on 5
+  random terms each, through `rwtactic` and `refine`, against a model; all
+  300 agree. Recorded: `rwhigher` never fails — where its rewrite applies
+  nowhere it leaves the term as it is. `refine.ml` had no unit test before.
+  Mutants that swap `andthenrw`'s order, drop `orelserw`'s fallback, or
+  ignore `rwaddr`'s address each fail.
 - `mllib`'s `Memo`, `Weak_memo` and `Line_buffer` are checked
   (`test/unit/test_mllib_models3.ml`, #54): memo tables against the
   function they memoize, the weak table across forced major collections

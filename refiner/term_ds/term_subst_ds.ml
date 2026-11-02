@@ -618,7 +618,7 @@ struct
                hyps, subst, index
        | Context (cv, vars, args) ->
              let vars = List.map (subst_var subst) vars in
-             let args = List.fold_left (fun args arg -> apply_subst subst arg :: args) [] args in
+             let args = List.map (apply_subst subst) args in
              let args, index = List.fold_left standardize_terms_step ([], index) args in
              let hyps = Context (cv, vars, List.rev args) :: hyps in
                 hyps, subst, index
@@ -636,7 +636,7 @@ struct
        | SOContext(v, t, conts, ts) ->
             let ts, index = List.fold_left standardize_terms_step ([], index) ts in
             let t, index = standardize_term index t in
-               core_term(SOContext(v, t, conts, ts)), index
+               core_term(SOContext(v, t, conts, List.rev ts)), index
        | Sequent seq ->
             (*
              * XXX: TODO: this could be more efficient if the Array module

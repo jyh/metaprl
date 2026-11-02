@@ -11,9 +11,16 @@
 # Usage (from the metaprl root, after omake): sh test/filter_types/run.sh
 # Exit 0 = the same as expected.txt.
 set -u
-root=$(pwd)
+# On Windows this shell is Cygwin's: pwd and mktemp print /cygdrive/... and
+# /tmp/..., which the native filter cannot open, so hand it D:/... paths
+# (as test/unit/run.sh does), and join MP_INCLUDE with ';', the filter's
+# separator on Win32 (filter_main.ml set_path).
+if command -v cygpath > /dev/null 2>&1; then win=1; else win=; fi
+w() { if [ -n "$win" ]; then cygpath -m "$1"; else printf '%s' "$1"; fi; }
+if [ -n "$win" ]; then psep=';'; else psep=':'; fi
+root=$(w "$(pwd)")
 here="$root/test/filter_types"
-tmp=$(mktemp -d)
+tmp=$(w "$(mktemp -d)")
 trap 'rm -rf "$tmp"' EXIT
 [ -x "$root/lib/camlp5n" ] || { echo "FAIL: $root/lib/camlp5n is not built"; exit 1; }
 # Every built theory directory, for the filter's search path.
@@ -22,7 +29,7 @@ dirs=$(find "$root/theories" "$root/support" "$root/lib" -name '*.cmiz' -exec di
 incs=""
 for d in $dirs; do incs="$incs -I $d"; done
 MP_ROOT="$root" MPLIB="$root/lib" MP_GROUP=filter_types MP_DESCR=filter_types \
-MP_INCLUDE=$(printf '%s\n' $dirs | paste -sd: -)
+MP_INCLUDE=$(printf '%s\n' $dirs | paste -sd"$psep" -)
 export MP_ROOT MPLIB MP_GROUP MP_DESCR MP_INCLUDE
 out="$tmp/out.txt"
 : > "$out"

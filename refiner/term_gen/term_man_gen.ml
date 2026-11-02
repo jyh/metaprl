@@ -1149,6 +1149,11 @@ struct
       if is_var_term t then
          let v = dest_var t in
             MatchTerm (["var"], [MatchVar v], [])
+      else if is_so_var_term t then
+         (* the arguments only, not the contexts list this module keeps as
+            a last subterm (as term_ds) *)
+         let v, _, terms = dest_so_var t in
+            MatchTerm (["var"], [MatchVar v], List.map (fun t -> dest_bterm (mk_simple_bterm t)) terms)
       else if is_sequent_term t then
          let { sequent_args = args;
                sequent_hyps = hyps;

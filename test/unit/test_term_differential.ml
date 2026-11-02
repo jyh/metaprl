@@ -272,8 +272,106 @@ module Check (R : Refiner_sig.RefinerSig) = struct
 
 end
 
+(* Substitution and variable analysis (TermSubst), each as a value both
+   implementations must agree on and a property it must have. *)
+module Subst (R : Refiner_sig.RefinerSig) = struct
+  module C = Check (R)
+  open R.Term
+  open R.TermSubst
+  let names t = List.sort Stdlib.compare (List.map string_of_symbol (SymbolSet.elements (free_vars_set t)))
+  let checks d =
+    let t = C.build d in
+    let fv = free_vars_set t in
+    let u = C.build (Op ("g", [ Op ("c", []) ])) in
+    let one name value prop = name, C.safe (fun () -> value ()), (try prop () with _ -> false) in
+    [ one "is_closed_term" (fun () -> string_of_bool (is_closed_term t))
+        (fun () -> is_closed_term t = SymbolSet.is_empty fv);
+      one "is_var_free" (fun () -> String.concat "" (List.map (fun v -> if is_var_free (add v) t then "1" else "0") [ "z"; "y"; "w"; "x0"; "x1" ]))
+        (fun () -> List.for_all (fun v -> is_var_free (add v) t = SymbolSet.mem fv (add v)) [ "z"; "y"; "w"; "x0"; "x1" ]);
+      one "is_some_var_free [y; z]" (fun () -> string_of_bool (is_some_var_free [ add "y"; add "z" ] t))
+        (fun () -> is_some_var_free [ add "y"; add "z" ] t = (SymbolSet.mem fv (add "y") || SymbolSet.mem fv (add "z")));
+      one "free_vars_list" (fun () -> String.concat "," (List.sort Stdlib.compare (List.map string_of_symbol (free_vars_list t))))
+        (fun () -> let l = List.map string_of_symbol (free_vars_list t) in
+          List.sort Stdlib.compare l = names t);
+      one "subst1 = subst of one" (fun () -> C.cshow [] (subst1 t (add "z") u))
+        (fun () -> alpha_equal (subst1 t (add "z") u) (subst t [ add "z" ] [ u ]));
+      one "var_subst, then subst back" (fun () -> C.cshow [] (var_subst t (C.build (Op ("c", []))) (add "vv")))
+        (fun () -> alpha_equal (subst1 (var_subst t (C.build (Op ("c", []))) (add "vv")) (add "vv") (C.build (Op ("c", [])))) t);
+      one "standardize is alpha-equal" (fun () -> C.cshow [] (standardize t))
+        (fun () -> alpha_equal (standardize t) t) ]
+  (* A context term (SOContext), which the generator does not build. *)
+  let context_term () =
+    let op s = Opname.make_opname [ s ] in
+    let c = mk_simple_term (op "c") [] in
+    let t = R.TermMan.mk_context_term (add "H") (mk_simple_term (op "f") [ c ]) [] [ c; mk_simple_term (op "g") [ c ] ] in
+    C.safe (fun () -> string_of_bool (alpha_equal (standardize t) t))
+end
+
 module Std = Check (Refiner_std.Refiner)
 module Ds = Check (Refiner_ds.Refiner)
+module Sstd = Subst (Refiner_std.Refiner)
+module Sds = Subst (Refiner_ds.Refiner)
+
+(* TermMan.all_vars_info and explode_term.  all_vars_info names every
+   variable all_vars does except the names in contexts lists (<|H; S|>),
+   which it does not record.  The roles a description gives
+   its variables: a variable, a binder or a hypothesis is first order, a
+   second-order variable has its contexts and arguments, a context
+   hypothesis likewise; a name used in two roles is left out of the
+   model (which role wins depends on the order of the walk). *)
+let rec roles acc = function
+  | Var v -> (v, "fo") :: acc
+  | SOVar (v, cs, ts) -> List.fold_left roles ((v, Printf.sprintf "so %d %d" (List.length cs) (List.length ts)) :: acc) ts
+  | Op (_, ts) -> List.fold_left roles acc ts
+  | Bind (x, t) -> roles ((x, "fo") :: acc) t
+  | Seq (a, hs, c) ->
+      let acc = List.fold_left (fun acc -> function
+          | Hyp (v, t) -> roles ((v, "fo") :: acc) t
+          | Ctx (k, cs, ts) -> List.fold_left roles ((k, Printf.sprintf "ctx %d %d" (List.length cs) (List.length ts)) :: acc) ts) (roles acc (Op (a, []))) hs in
+      roles acc c
+
+module Man (R : Refiner_sig.RefinerSig) = struct
+  module C = Check (R)
+  open R.Term
+  open R.TermMan
+  let role = function
+    | Term_man_sig.ParamVar -> "param" | Term_man_sig.FirstOrderVar -> "fo"
+    | Term_man_sig.SecondOrderVar (a, b) -> Printf.sprintf "so %d %d" a b
+    | Term_man_sig.ContextVar (a, b) -> Printf.sprintf "context %d %d" a b
+    | Term_man_sig.SequentContextVar (a, b) -> Printf.sprintf "ctx %d %d" a b
+  let checks d =
+    let t = C.build d in
+    let info () = SymbolTable.fold (fun acc v r -> (string_of_symbol v, role r) :: acc) [] (all_vars_info SymbolTable.empty t) |> List.sort Stdlib.compare in
+    let shape = function
+      | R.TermType.MatchTerm (op, ps, bts) -> Printf.sprintf "%s/%d/%d" (String.concat "!" op) (List.length ps) (List.length bts)
+      | R.TermType.MatchSequent (op, _, hs, _) -> Printf.sprintf "sequent %s/%d" (String.concat "!" op) (List.length hs) in
+    let rs = roles [] d in
+    let single = List.filter (fun (v, r) -> List.for_all (fun (w, q) -> w <> v || q = r) rs) rs |> List.sort_uniq Stdlib.compare in
+    [ "all_vars_info", C.safe (fun () -> String.concat " " (List.map (fun (v, r) -> v ^ ":" ^ r) (info ()))),
+      (try
+         let i = info () in
+         let rec conts acc = function
+           | Var _ -> acc | SOVar (_, cs, ts) -> List.fold_left conts (cs @ acc) ts
+           | Op (_, ts) -> List.fold_left conts acc ts | Bind (_, t) -> conts acc t
+           | Seq (_, hs, c) -> conts (List.fold_left (fun acc -> function Hyp (_, t) -> conts acc t | Ctx (_, cs, ts) -> List.fold_left conts (cs @ acc) ts) acc hs) c in
+         List.sort_uniq Stdlib.compare (List.map fst i @ conts [] d)
+         = List.sort Stdlib.compare (List.map string_of_symbol (SymbolSet.elements (all_vars t)))
+         && List.for_all (fun (v, r) -> List.assoc_opt v i = Some r) single
+       with _ -> false);
+      "explode_term", C.safe (fun () -> shape (explode_term t)),
+      (try
+         match explode_term t, d with
+         | R.TermType.MatchSequent (_, _, hs, _), Seq (_, hs', _) -> List.length hs = List.length hs'
+         | R.TermType.MatchTerm ([ "var" ], [ _ ], []), (Var _ | SOVar (_, _, [])) -> true
+         | R.TermType.MatchTerm ([ "var" ], [ _ ], bts), SOVar (_, _, ts) -> List.length bts = List.length ts
+         | R.TermType.MatchTerm (op, [], bts), Op (o, ts) -> op = [ o ] && List.length bts = List.length ts
+         | R.TermType.MatchTerm ([ "lam" ], [], [ _ ]), Bind _ -> true
+         | _ -> false
+       with _ -> false) ]
+end
+
+module Mstd = Man (Refiner_std.Refiner)
+module Mds = Man (Refiner_ds.Refiner)
 
 let seqs = ref 0 and ctxs = ref 0 and hyps = ref 0 and sovars = ref 0 and conts_lists = ref 0 and binds = ref 0
 let rec count = function
@@ -334,3 +432,46 @@ let () =
     names2;
   Printf.printf "match_terms on hand-made cases (std / ds):\n";
   List.iter2 (fun (name, a) (_, b) -> Printf.printf "  %-30s %s / %s\n" name a b) Std.hand Ds.hand
+
+let () =
+  state := 31337;
+  let n = 2000 in
+  let k = List.length (Sstd.checks (Var "z")) in
+  let agree = Array.make k 0 and oks = Array.make k 0 and okd = Array.make k 0 and first = Array.make k None in
+  let nm = Array.make k "" in
+  for _ = 1 to n do
+    let d = gen 4 [] 0 in
+    List.iteri (fun i ((name, s, ps), (_, t, pd)) ->
+        nm.(i) <- name;
+        if s = t then agree.(i) <- agree.(i) + 1 else if first.(i) = None then first.(i) <- Some ("std " ^ s ^ " / ds " ^ t);
+        if ps then oks.(i) <- oks.(i) + 1 else if first.(i) = None then first.(i) <- Some ("std property fails: " ^ s);
+        if pd then okd.(i) <- okd.(i) + 1 else if first.(i) = None then first.(i) <- Some ("ds property fails: " ^ t))
+      (List.combine (Sstd.checks d) (Sds.checks d))
+  done;
+  Printf.printf "TermSubst on %d more terms (std = ds, the property in std, in ds):\n" n;
+  Array.iteri (fun i name ->
+      Printf.printf "%-30s %4d %4d %4d\n" name agree.(i) oks.(i) okd.(i);
+      match first.(i) with None -> () | Some w -> Printf.printf "  first: %s\n" w)
+    nm
+;;
+Printf.printf "standardize of the context term <H>[c; g{c}] is alpha-equal: std %s, ds %s\n" (Sstd.context_term ()) (Sds.context_term ())
+;;
+let () =
+  state := 2718;
+  let n = 2000 in
+  let k = 2 in
+  let agree = Array.make k 0 and oks = Array.make k 0 and okd = Array.make k 0 and first = Array.make k None and nm = Array.make k "" in
+  for _ = 1 to n do
+    let d = gen 4 [] 0 in
+    List.iteri (fun i ((name, s, ps), (_, t, pd)) ->
+        nm.(i) <- name;
+        if s = t then agree.(i) <- agree.(i) + 1 else if first.(i) = None then first.(i) <- Some ("std " ^ s ^ " / ds " ^ t);
+        if ps then oks.(i) <- oks.(i) + 1 else if first.(i) = None then first.(i) <- Some ("std property fails: " ^ s);
+        if pd then okd.(i) <- okd.(i) + 1 else if first.(i) = None then first.(i) <- Some ("ds property fails: " ^ t))
+      (List.combine (Mstd.checks d) (Mds.checks d))
+  done;
+  Printf.printf "TermMan on %d more terms (std = ds, the property in std, in ds):\n" n;
+  Array.iteri (fun i name ->
+      Printf.printf "%-30s %4d %4d %4d\n" name agree.(i) oks.(i) okd.(i);
+      match first.(i) with None -> () | Some w -> Printf.printf "  first: %s\n" w)
+    nm

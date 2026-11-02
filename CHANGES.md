@@ -252,6 +252,14 @@ against libmojave 1.1.1 or later:
   small hypotheses remain, but once they are all matched the rest of the
   big sequent is skipped, contexts too (big `<K>; x: B` matches small with
   no hypotheses).
+- Rules whose contractum carries parameters (`test/unit/test_rewrite_params.ml`):
+  five rules that move a number, a string and a token parameter, swap two,
+  add constant parameters and require a repeated parameter variable to
+  match equal numbers, each applied to 300 instances and 300 near misses in
+  both implementations and compared with a model; all agree, and a
+  contractum parameter the redex does not bind does not compile. A mutant
+  that reverses the contractum's parameters fails the two rules with
+  several (0 of 300).
 - `Term_stable`, the table keyed by a term's shape behind itt_squash's
   unsquash resource (`test/unit/test_term_stable.ml`): 300 generated terms
   inserted and 1,000 looked up, one in five of a shape never inserted;
@@ -261,20 +269,50 @@ against libmojave 1.1.1 or later:
   `Hashtbl.replace` (212), counting no binders (790), giving a Token
   parameter the Number kind (983). Recorded: a variable and a
   second-order variable with no arguments have the same shape.
+- Three more rules check the matcher against a model as well as across
+  the implementations: a second-order variable that occurs twice as a
+  pattern (rewrites exactly when the two bodies are the same up to the
+  binder), a second occurrence that is an instance (`'b[c]`: exactly when it
+  is the first body with `c` for its variable), and a conclusion restricted
+  to no context (`'C<||>`: exactly when no variable of `<J>` occurs); all
+  400 of 400. Disabling `check_simple_match`, `check_match` or
+  `check_var_restrictions` each fails its own model.
 - How the shell resolves paths (`editor/ml/tests/dir_of_path_precedence.sh`,
   #92): an absolute path whose first part names a theory is the theory, even
   when a module has the same name (`/itt_supinf/<rule>` asks for a module
   named `<rule>`); `..`, `...`, `~` and `.` from a proof or a module; and, as
   it is, a module reached under another theory's name (`../itt_supinf` from
   `itt_int_base`) — the theory part is not checked against the module.
+- What the shell's `ls` options select (`editor/ml/tests/ls_options.sh`):
+  on `itt_int_base`, `r` lists only rewrites and definitions, `R` only rules,
+  `rR` both, `u` exactly the rewrites and rules not yet proved, `p` the
+  `Extends` lines, `d` display forms, `D` documentation, `f` no informal
+  items, `a` everything `f` and `i` list; an unknown option is an error and
+  the shell goes on. Checked by the kind of each entry, not by counts.
 - The proof census ends a module's rows at the next module (#93): a module
   named like its theory is entered through the theory, whose `status_all`
   replays every module in it, and `itt_rfun`'s rows had also carried
   `itt_well_founded_equiv`'s `well_founded_reduction`.
+- Rules over universe levels (`test/unit/test_rewrite_levels.ml`):
+  `u[l] --> v[l]`, `u[l+1] --> v[l+1]` and `u[l+1] --> v[l]` on 300 random
+  levels in both implementations, against a model that compares levels by
+  their value for every value of their variables: `l+1` is refused exactly
+  when a variable has offset 0, and otherwise the level comes back equal
+  (or one below). Recorded, not endorsed: the constant level 0 matches
+  `l+1` with `l = 0`, so `u[l+1] --> v[l+1]` turns 0 into 1. A mutant that
+  lets `l+1` take only offsets of 2 or more fails the model on 89 levels.
 - The filter's term-type checks on every kind of statement
   (`test/filter_types`, #94): besides `prim_rw`, `interactive`, `dform`,
   `iform`, `production` and `declare rewrite`, each with a well-typed and an
   ill-typed fixture.
+- A rewrite with an argument (`test/unit/test_rewrite_args.ml`), as rules
+  such as `thin 'H` take one: `sequent[sa]{ <H>; x: 'A<|H|>; <J<|H|>> >-
+  'C<|H;J|> } --> sequent[sb]{ <H>; <J<|H|>> >- 'C<|H;J|> }` with the length
+  of `H` an int argument, on 200 sequents with every argument from -5 to 6
+  in both implementations: it removes exactly the hypothesis the argument
+  names (k > 0 the k-th; k <= 0 leaving -k after it), when nothing later
+  mentions it; 2,400 of 2,400 agree with that model. An off-by-one in
+  placing a positive argument fails 374.
 - Display forms in the `tex` and `src` modes as well as `prl`
   (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
   itt/core goals, against `dform_golden.tex.expected` and

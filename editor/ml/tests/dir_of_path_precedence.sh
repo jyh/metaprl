@@ -10,6 +10,13 @@
 # stopped going through dir_of_path; this test keeps the precedence itself
 # from changing unseen.
 #
+# Relative paths (parse_path) are pinned the same way: ".." is the parent,
+# "..." the grandparent, "~" the module of the current proof, "." the
+# current directory, and a bare name is looked up below the current one.
+# A theory component is not checked against the module: from itt_int_base
+# (theory itt_core), "../itt_supinf" reaches module itt_supinf, which is in
+# theory itt_supinf. That is pinned as it is, not endorsed.
+#
 # Usage: sh editor/ml/tests/dir_of_path_precedence.sh [MP]
 #   from the metaprl root, after a build whose THEORIES include itt_supinf
 #   (THEORIES = all does). Every case must print its own anchor, so a build
@@ -17,7 +24,8 @@
 MP=${1:-editor/ml/mp}
 out=${TMPDIR:-/tmp}/dir_of_path_precedence.$$
 
-# Case N is: cd "/"; cd "<path>"; ls "". Before it, cd "/dop_case_N" fails
+# Case N is: cd "/"; cd "<path>" for each |-separated part; ls "". Before
+# it, cd "/dop_case_N" fails
 # with "module dop_case_N does not exist", which marks where case N starts.
 set -- \
    '/'                                  'Root Theories Listing:' \
@@ -26,13 +34,21 @@ set -- \
    '/itt_supinf/ge_addMono2'            "Theory.get_theory: theory \`\`ge_addMono2'' not found" \
    '/itt_supinf/itt_supinf/ge_addMono2' 'BY ' \
    '/itt_int_base'                      'Module: /itt_int_base' \
-   '/fs'                                'OMakeroot'
+   '/fs'                                'OMakeroot' \
+   '/itt_supinf/itt_supinf/ge_addMono2|..'  'Extends itt_equal' \
+   '/itt_supinf/itt_supinf/ge_addMono2|...' '(itt_supinf) contains:' \
+   '/itt_supinf/itt_supinf/ge_addMono2|~'   'Extends itt_equal' \
+   '/itt_supinf/itt_supinf|ge2transitive'   'BY ' \
+   '/itt_supinf/itt_supinf|.'               'Extends itt_equal' \
+   '/itt_int_base|../itt_supinf'            'Extends itt_equal'
 {
    n=0; i=1
    while [ $i -le $# ]; do
       eval "p=\${$i}"
       n=$((n + 1))
-      printf 'cd "/dop_case_%d";;\ncd "/";;\ncd "%s";;\nls "";;\n' "$n" "$p"
+      printf 'cd "/dop_case_%d";;\ncd "/";;\n' "$n"
+      printf '%s\n' "$p" | tr '|' '\n' | while read -r part; do printf 'cd "%s";;\n' "$part"; done
+      printf 'ls "";;\n'
       i=$((i + 2))
    done
    printf 'cd "/dop_case_end";;\n'

@@ -8,8 +8,12 @@
 # The tree's own mk/config is kept and restored.
 # Usage: install_dir_space.sh    (run from anywhere; needs omake; exit 0 = pass)
 here=$(cd "$(dirname "$0")" && pwd)
-root=$(cd "$here/../../.." && pwd)
-tmp=$(mktemp -d)
+# On Windows this shell is Cygwin's: pwd and mktemp print /cygdrive/... and
+# /tmp/..., which native Windows omake cannot open, so use D:/... paths
+# (as test/unit/run.sh and the filter tests do).
+w() { if command -v cygpath > /dev/null 2>&1; then cygpath -m "$1"; else printf '%s' "$1"; fi; }
+root=$(w "$(cd "$here/../../.." && pwd)")
+tmp=$(w "$(mktemp -d)")
 probe="$tmp/probe"
 mkdir "$probe"
 if [ -f "$root/mk/config" ]; then cp "$root/mk/config" "$tmp/config.saved"; fi

@@ -59,8 +59,60 @@ module Show (R : Refiner_sig.RefinerSig) = struct
     with _ -> "(raises)"
 end
 
+(* subterm_exists and strip_address (no unit test reached either,
+   2026-11-02 profile): subterm_exists t a holds exactly when
+   term_subterm t a answers; for every prefix p of an address a,
+   strip_address p a composed after p is a again, and stripping an item
+   that does not start a fails. *)
+module Exists (R : Refiner_sig.RefinerSig) = struct
+  module S = Show (R)
+  open R.Term
+  open R.TermMan
+  let op = S.opname
+  let c = mk_simple_term (op "c") []
+  let terms = [
+    S.sequent;
+    mk_simple_term (op "f") [ c; mk_simple_term (op "g") [ c ] ];
+    mk_term (mk_op (op "lam") []) [ mk_bterm [ add "x" ] (mk_simple_term (op "g") [ mk_var_term (add "x") ]) ];
+    mk_so_var_term (add "A") [ add "H" ] [ c; mk_simple_term (op "g") [ c ] ] ]
+  let items = [ Subterm 1; Subterm 2; Subterm 3; Subterm (-1); Subterm (-2); ArgAddr; ClauseAddr 0; ClauseAddr 1; ClauseAddr 2; ClauseAddr 3; ClauseAddr (-1); ClauseAddr 4 ]
+  let addrs = [] :: List.concat_map (fun a -> [ a ] :: List.map (fun b -> [ a; b ]) items) items
+  let check () =
+    let tried = ref 0 and ok = ref 0 and exists = ref 0 and first = ref None in
+    List.iteri (fun ti t ->
+        List.iter (fun a ->
+            let addr = R.TermAddr.make_address a in
+            let answers = (try ignore (R.TermAddr.term_subterm t addr); true with _ -> false) in
+            let says = (try R.TermAddr.subterm_exists t addr with _ -> not answers) in
+            incr tried; if says then incr exists;
+            if says = answers then incr ok
+            else if !first = None then first := Some (Printf.sprintf "term %d at %s: subterm_exists %b, term_subterm %s" ti (R.TermAddr.string_of_address addr) says (if answers then "answers" else "raises")))
+          addrs)
+      terms;
+    let st = ref 0 and sok = ref 0 and sfirst = ref None in
+    List.iter (fun a ->
+        let addr = R.TermAddr.make_address a in
+        List.iteri (fun k _ ->
+            let p = List.filteri (fun i _ -> i < k) a in
+            incr st;
+            let good = (try R.TermAddr.dest_address (R.TermAddr.compose_address (R.TermAddr.make_address p) (R.TermAddr.strip_address p addr)) = a with _ -> false) in
+            if good then incr sok else if !sfirst = None then sfirst := Some (R.TermAddr.string_of_address addr))
+          (a @ [ ArgAddr ]);
+        match a with
+        | x :: _ ->
+            let other = if x = Subterm 1 then Subterm 2 else Subterm 1 in
+            incr st;
+            if (try ignore (R.TermAddr.strip_address [ other ] addr); false with _ -> true) then incr sok
+            else if !sfirst = None then sfirst := Some ("strip a non-prefix of " ^ R.TermAddr.string_of_address addr)
+        | [] -> ())
+      addrs;
+    !tried, !ok, !exists, !first, !st, !sok, !sfirst
+end
+
 module Std = Show (Refiner_std.Refiner)
 module Ds = Show (Refiner_ds.Refiner)
+module Estd = Exists (Refiner_std.Refiner)
+module Eds = Exists (Refiner_ds.Refiner)
 
 let () =
   Printf.printf "std sequent: %s\nds sequent:  %s\n" (Std.show 0 Std.sequent) (Ds.show 0 Ds.sequent);
@@ -78,3 +130,30 @@ let () =
      take them in this order. *)
   let s = Std.addresses and d = Ds.addresses in
   Printf.printf "subterm_addresses\n  std %s\n  ds  %s\n  %s\n" s d (if s = d then "agree" else "DIFFER")
+;;
+let () =
+  List.iter (fun (name, (tried, ok, exists, first, st, sok, sfirst)) ->
+      Printf.printf "%s: subterm_exists iff term_subterm answers: %d of %d (%d exist)\n" name ok tried exists;
+      (match first with None -> () | Some w -> Printf.printf "  first difference: %s\n" w);
+      Printf.printf "%s: strip_address inverts compose_address: %d of %d\n" name sok st;
+      match sfirst with None -> () | Some w -> Printf.printf "  first difference: %s\n" w)
+    [ "std", Estd.check (); "ds", Eds.check () ]
+;;
+(* Recorded, not endorsed: on a sequent, term_std answers plain Subterm
+   addresses by walking its own encoding of the sequent (hyp!Perv{...}
+   terms), where term_ds refuses them; on the other terms they agree. *)
+let () =
+  let differ = ref 0 and total = ref 0 and first = ref None in
+  List.iteri (fun ti (ts, td) ->
+      List.iter (fun a ->
+          let e1 = (try Refiner_std.Refiner.TermAddr.subterm_exists ts (Refiner_std.Refiner.TermAddr.make_address a) with _ -> false)
+          and e2 = (try Refiner_ds.Refiner.TermAddr.subterm_exists td (Refiner_ds.Refiner.TermAddr.make_address a) with _ -> false) in
+          incr total;
+          if e1 <> e2 then begin
+            incr differ;
+            if !first = None then first := Some (Printf.sprintf "term %d at %s: std %b, ds %b" ti (Refiner_std.Refiner.TermAddr.string_of_address (Refiner_std.Refiner.TermAddr.make_address a)) e1 e2)
+          end)
+        Estd.addrs)
+    (List.combine Estd.terms Eds.terms);
+  Printf.printf "std and ds disagree on whether a subterm exists at %d of %d (term, address) pairs\n" !differ !total;
+  match !first with None -> () | Some w -> Printf.printf "  first: %s\n" w

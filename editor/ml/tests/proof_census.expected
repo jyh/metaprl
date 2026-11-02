@@ -1410,7 +1410,6 @@ itt_rfun rfunctionExtensionality primitive
 itt_rfun rfunctionElimination primitive
 itt_rfun rfunction_applyEquality primitive
 itt_rfun rfunction_rfunction_subtype complete 8
-itt_rfun well_founded_reduction complete 17
 itt_well_founded_equiv well_founded_reduction complete 17
 itt_vec_struct context_thin complete 1
 itt_vec_struct exchange incomplete 0

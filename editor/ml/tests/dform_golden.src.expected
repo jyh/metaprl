@@ -1,0 +1,2493 @@
+== itt_equal type_type
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H> >- 'T Type }; xnil};
+          sequent (sequent_arg) { <'H> >- 'T Type Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons{sequent (sequent_arg) { <'H> >- 'T Type }; xnil};
+                    sequent (sequent_arg) { <'H> >- 'T Type Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons{sequent (sequent_arg) { <'H> >- 'T Type }; xnil};
+                         sequent (sequent_arg) { <'H> >- 'T Type Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["typeEquality ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_struct thin
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H>; <'J> >- 'C }; xnil};
+          sequent (sequent_arg) { <'H>; 'A; <'J> >- 'C }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons{sequent (sequent_arg) { <'H>; <'J> >- 'C }; xnil};
+                    sequent (sequent_arg) { <'H>; 'A; <'J> >- 'C }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H>; <'J> >- 'C };
+    xnil};
+                         sequent (sequent_arg) { <'H>; 'A; <'J> >- 'C }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["thin_many 2 2 ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_squiggle squiggleType
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H> >- rewrite{'t; 's} }; xnil};
+          sequent (sequent_arg) { <'H> >- rewrite{'t; 's} Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- rewrite{'t; 's} };
+                         xnil};
+                    sequent (sequent_arg) { <'H> >- rewrite{'t; 's} Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- rewrite{'t; 's} };
+    xnil};
+                         sequent (sequent_arg) { <'H> >- rewrite{'t; 's} Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["typeAssertT thenT trivialT":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_pairwise splitHyp
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>; x: 'A; <'J['x]>; y: 'A<|H|>[]; <'K['y]> >- 'T['y] };
+               xnil};
+          sequent (sequent_arg) { <'H>; x: 'A; <'J['x]>; <'K['x]> >- 'T['x] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>;
+                         x: 'A; <'J['x]>; y: 'A<|H|>[]; <'K['y]> >- 'T['y] };
+                         xnil};
+                    sequent (sequent_arg) {
+                    <'H>; x: 'A; <'J['x]>; <'K['x]> >- 'T['x] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["":s];
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; x: 'A; <'J['x]>; y: 'A<|H|>[]; <'K['y]> >- 'T['y] };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H>; x: 'A; <'J['x]>; <'K['x]> >- 'T['x] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["letAtT 4 <<'y='x in 'A>> ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_image img_univ_eq
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["":s];
+          xcons{sequent (sequent_arg) { <'H> >- 'A = 'B in univ['i:l] }; xnil};
+          sequent (sequent_arg) {
+          <'H> >-
+          Img{'A; x. 'f<||>['x]} = Img{'B; x. 'f<||>['x]} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A = 'B in univ['i:l] };
+                         xnil};
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    Img{'A; x. 'f<||>['x]}
+                    = Img{'B; x. 'f<||>['x]} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A = 'B in univ['i:l] };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         Img{'A; x. 'f<||>['x]}
+                         = Img{'B; x. 'f<||>['x]} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["assertT << 'A='B in univ[i:l] >> taa":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["":s];
+    xcons{sequent (sequent_arg) { <'H> >- 'A = 'B in univ['i:l] }; xnil};
+    sequent (sequent_arg) {
+    <'H>;
+    'A = 'B in univ['i:l] >-
+    Img{'A; x. 'f<||>['x]} = Img{'B; x. 'f<||>['x]} in univ['i:l] }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_squash squashEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+               xnil};
+          sequent (sequent_arg) {
+          <'H> >- squash{'A1} = squash{'A2} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A1 = 'A2 in univ['i:l] };
+                         xnil};
+                    sequent (sequent_arg) {
+                    <'H> >- squash{'A1} = squash{'A2} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H> >- squash{'A1} = squash{'A2} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfold_squash":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_subtype subtypeElimination2
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>; x: 'A subtype 'B; <'J['x]> >- 'a = 'b in 'A<|H|>[] };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>;
+                    x: 'A subtype 'B;
+                    <'J['x]>; 'a = 'b in 'B<|H|>[] >- 'C['x] };
+                    xnil}};
+          sequent (sequent_arg) { <'H>; x: 'A subtype 'B; <'J['x]> >- 'C['x] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>;
+                         x: 'A subtype 'B; <'J['x]> >- 'a = 'b in 'A<|H|>[] };
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; x: 'A subtype 'B; <'J['x]>; 'a = 'b in 'B<|H|>[] >- 'C['x] };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H>; x: 'A subtype 'B; <'J['x]> >- 'C['x] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; x: 'A subtype 'B; <'J['x]> >- 'a = 'b in 'A<|H|>[] };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'A subtype 'B; <'J['x]>; 'a = 'b in 'B<|H|>[] >- 'C['x] };
+         xnil}};
+                         sequent (sequent_arg) {
+                         <'H>; x: 'A subtype 'B; <'J['x]> >- 'C['x] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["assertT <<'a = 'b in 'B>> ttca":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["assertion":s];
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'A subtype 'B; <'J['x]> >- 'a = 'b in 'A<|H|>[] };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>;
+              x: 'A subtype 'B; <'J['x]>; 'a = 'b in 'B<|H|>[] >- 'C['x] };
+              xnil}};
+    sequent (sequent_arg) {
+    <'H>; x: 'A subtype 'B; <'J['x]> >- 'a = 'b in 'B<|H|>[] }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_void voidType
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- void Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) { <'H> >- void Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) { <'H> >- void Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["univTypeT <<univ[1:l]>> ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_unit unitType
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- unit Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) { <'H> >- unit Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) { <'H> >- unit Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["univTypeT <<univ[i:l]>> ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_atom atomType
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- atom Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) { <'H> >- atom Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) { <'H> >- atom Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["univTypeT <<univ [i:l]>> ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_union reduce_outl_inl
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- rewrite{outl{inl{'x}}; 'x} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{outl{inl{'x}}; 'x} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{outl{inl{'x}}; 'x} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfold_outl":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_dprod reduceFst
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- rewrite{fst{'a,'b}; 'a} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) { <'H> >- rewrite{fst{'a,'b}; 'a} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{fst{'a,'b}; 'a} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfoldFst":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_prod independentProductEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+               xcons
+                   {sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] };
+                    xnil}};
+          sequent (sequent_arg) {
+          <'H> >- prod{'A1; 'B1} = prod{'A2; 'B2} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A1 = 'A2 in univ['i:l] };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >- prod{'A1; 'B1} = prod{'A2; 'B2} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xcons{sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         prod{'A1; 'B1} = prod{'A2; 'B2} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_prod 0 ta":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_set setEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ['i:l] };
+                    xnil}};
+          sequent (sequent_arg) {
+          <'H> >-
+          set{'A1; a1. 'B1['a1]} = set{'A2; a2. 'B2['a2]} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A1 = 'A2 in univ['i:l] };
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ['i:l] };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    set{'A1; a1. 'B1['a1]}
+                    = set{'A2; a2. 'B2['a2]} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; a1: 'A1 >- 'B1['a1] = 'B2['a1] in univ['i:l] };
+         xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         set{'A1; a1. 'B1['a1]}
+                         = set{'A2; a2. 'B2['a2]} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfold_set":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_dfun reduce_let
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- rewrite{let{'a; x. 'b['x]}; 'b['a]} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{let{'a; x. 'b['x]}; 'b['a]} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{let{'a; x. 'b['x]}; 'b['a]} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfold_let":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_esquash esquash_mem
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H> >- esquash{'A} }; xnil};
+          sequent (sequent_arg) { <'H> >- it in esquash{'A} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons{sequent (sequent_arg) { <'H> >- esquash{'A} }; xnil};
+                    sequent (sequent_arg) { <'H> >- it in esquash{'A} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- esquash{'A} };
+    xnil};
+                         sequent (sequent_arg) { <'H> >- it in esquash{'A} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["autoT thenT assertT <<esquash{'A}>> ttca":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons{sequent (sequent_arg) { <'H> >- esquash{'A} }; xnil};
+    sequent (sequent_arg) { <'H>; esquash{'A} >- it in esquash{'A} }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_logic true_univ
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- "true" in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) { <'H> >- "true" in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) { <'H> >- "true" in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_true 0 ta":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_sqsimple sqsimple_intro
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'T Type };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>; x: 'T; y: 'T; 'x = 'y in 'T >- rewrite{'x; 'y} };
+                    xnil}};
+          sequent (sequent_arg) { <'H> >- sqsimple{'T} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'T Type };
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; x: 'T; y: 'T; 'x = 'y in 'T >- rewrite{'x; 'y} };
+    xnil}};
+                    sequent (sequent_arg) { <'H> >- sqsimple{'T} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'T Type };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'T; y: 'T; 'x = 'y in 'T >- rewrite{'x; 'y} };
+         xnil}};
+                         sequent (sequent_arg) { <'H> >- sqsimple{'T} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfold_sqsimple":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_nequal neq_type
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'x in 'T };
+               xcons{sequent (sequent_arg) { <'H> >- 'y in 'T }; xnil}};
+          sequent (sequent_arg) { <'H> >- 'x <> 'y in 'T Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'x in 'T };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'y in 'T };
+    xnil}};
+                    sequent (sequent_arg) { <'H> >- 'x <> 'y in 'T Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'x in 'T };
+    xcons{sequent (sequent_arg) { <'H> >- 'y in 'T }; xnil}};
+                         sequent (sequent_arg) { <'H> >- 'x <> 'y in 'T Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfold_nequal":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_well_founded partial_order_type
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A Type };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>; a: 'A; b: 'A >- 'R['a; 'b] Type };
+                    xnil}};
+          sequent (sequent_arg) {
+          <'H> >- partial_order{'A; x, y. 'R['x; 'y]} Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'A Type };
+                         xcons
+   {sequent (sequent_arg) { <'H>; a: 'A; b: 'A >- 'R['a; 'b] Type };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >- partial_order{'A; x, y. 'R['x; 'y]} Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A Type };
+    xcons
+        {sequent (sequent_arg) { <'H>; a: 'A; b: 'A >- 'R['a; 'b] Type };
+         xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >- partial_order{'A; x, y. 'R['x; 'y]} Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_partial_order 0 ta":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_decidable fold_decidable
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) {
+          <'H> >- rewrite{'p or "not"{'p}; decidable{'p}} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{'p or "not"{'p}; decidable{'p}} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{'p or "not"{'p}; decidable{'p}} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["(rwh unfold_decidable 0) thenT trivialT":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_ext_equal extEqualMember
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["":s];
+          xcons{sequent (sequent_arg) { <'H> >- ext_equal{'A; 'B} }; xnil};
+          sequent (sequent_arg) { <'H> >- (it,it) in ext_equal{'A; 'B} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- ext_equal{'A; 'B} };
+                         xnil};
+                    sequent (sequent_arg) {
+                    <'H> >- (it,it) in ext_equal{'A; 'B} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- ext_equal{'A; 'B} };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H> >- (it,it) in ext_equal{'A; 'B} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["assertT <<ext_equal{'A; 'B}>> taa":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons{sequent (sequent_arg) { <'H> >- ext_equal{'A; 'B} }; xnil};
+    sequent (sequent_arg) {
+    <'H>; ext_equal{'A; 'B} >- (it,it) in ext_equal{'A; 'B} }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_pairwise2 supertype
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>; x: 'A; <'J['x]> >- 'A<|H|>[] subtype 'B<|H|>[] };
+               xcons
+                   {sequent (sequent_arg) { <'H>; x: 'B; <'J['x]> >- 'T['x] };
+                    xnil}};
+          sequent (sequent_arg) { <'H>; x: 'A; <'J['x]> >- 'T['x] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>; x: 'A; <'J['x]> >- 'A<|H|>[] subtype 'B<|H|>[] };
+                         xcons
+   {sequent (sequent_arg) { <'H>; x: 'B; <'J['x]> >- 'T['x] };
+    xnil}};
+                    sequent (sequent_arg) { <'H>; x: 'A; <'J['x]> >- 'T['x] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["":s];
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; x: 'A; <'J['x]> >- 'A<|H|>[] subtype 'B<|H|>[] };
+    xcons{sequent (sequent_arg) { <'H>; x: 'B; <'J['x]> >- 'T['x] }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H>; x: 'A; <'J['x]> >- 'T['x] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["letAtT 2 <<'y='x in 'B>> ttca":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["assertion":s];
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'A; <'J['x]> >- 'A<|H|>[] subtype 'B<|H|>[] };
+         xcons{sequent (sequent_arg) { <'H>; x: 'B; <'J['x]> >- 'T['x] }; xnil}};
+    sequent (sequent_arg) { <'H>; x: 'A; <'J['x]> >- 'x in 'B<|H|>[] }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_struct2 substitution2
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 't1 = 't2 in 'T };
+               xcons
+                   {sequent (sequent_arg) { <'H> >- 'C['t2] };
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>;
+                         x: 'T; 't1 = 'x in 'T; 't2 = 'x in 'T >- 'C['x] Type };
+                         xnil}}};
+          sequent (sequent_arg) { <'H> >- 'C['t1] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 't1 = 't2 in 'T };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'C['t2] };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'T; 't1 = 'x in 'T; 't2 = 'x in 'T >- 'C['x] Type };
+         xnil}}};
+                    sequent (sequent_arg) { <'H> >- 'C['t1] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 't1 = 't2 in 'T };
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'C['t2] };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>; x: 'T; 't1 = 'x in 'T; 't2 = 'x in 'T >- 'C['x] Type };
+              xnil}}};
+                         sequent (sequent_arg) { <'H> >- 'C['t1] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box
+         ["Itt_struct.substT <<'t1='t2 in {x:'T | ('x='t1 in 'T) and ('x='t2 in 'T)}>> 0":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["equality":s];
+    xcons
+        {sequent (sequent_arg) { <'H> >- 't1 = 't2 in 'T };
+         xcons
+             {sequent (sequent_arg) { <'H> >- 'C['t2] };
+              xcons
+                  {sequent (sequent_arg) {
+                   <'H>; x: 'T; 't1 = 'x in 'T; 't2 = 'x in 'T >- 'C['x] Type };
+                   xnil}}};
+    sequent (sequent_arg) {
+    <'H> >- 't1 = 't2 in set{'T; x. ('x = 't1 in 'T) and 'x = 't2 in 'T} }};
+                         xnil}};
+               xcons
+                   {Summary!goal_list
+                        {xcons
+   {Summary!goal
+        {Summary!goal_status{xcons{status_asserted; xnil}};
+         Summary!goal_label["main":s];
+         xcons
+             {sequent (sequent_arg) { <'H> >- 't1 = 't2 in 'T };
+              xcons
+                  {sequent (sequent_arg) { <'H> >- 'C['t2] };
+                   xcons
+                       {sequent (sequent_arg) {
+                        <'H>;
+                        x: 'T; 't1 = 'x in 'T; 't2 = 'x in 'T >- 'C['x] Type };
+                        xnil}}};
+         sequent (sequent_arg) { <'H> >- 'C['t2] }};
+    xnil}};
+                    xcons
+                        {Summary!goal_list
+   {xcons
+        {Summary!goal
+             {Summary!goal_status{xcons{status_asserted; xnil}};
+              Summary!goal_label["wf":s];
+              xcons
+                  {sequent (sequent_arg) { <'H> >- 't1 = 't2 in 'T };
+                   xcons
+                       {sequent (sequent_arg) { <'H> >- 'C['t2] };
+                        xcons
+  {sequent (sequent_arg) {
+   <'H>; x: 'T; 't1 = 'x in 'T; 't2 = 'x in 'T >- 'C['x] Type };
+   xnil}}};
+              sequent (sequent_arg) {
+              <'H>;
+              z: set{'T; x. ('x = 't1 in 'T) and 'x = 't2 in 'T} >-
+              'C['z] Type }};
+         xnil}};
+                         xnil}}};
+          xnil}}
+== itt_struct3 substUsingEpimorphism
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>; x: 'A; <'J['x]> >- 'g['x] in 'B<|H|>[] };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>; x: 'A; <'J['x]> >- rewrite{'f<|H|>['g['x]]; 'x} };
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>; y: 'B; <'J['f['y]]> >- 'C['f<|H|>['y]] };
+                         xnil}}};
+          sequent (sequent_arg) { <'H>; x: 'A; <'J['x]> >- 'C['x] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>; x: 'A; <'J['x]> >- 'g['x] in 'B<|H|>[] };
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; x: 'A; <'J['x]> >- rewrite{'f<|H|>['g['x]]; 'x} };
+    xcons
+        {sequent (sequent_arg) { <'H>; y: 'B; <'J['f['y]]> >- 'C['f<|H|>['y]] };
+         xnil}}};
+                    sequent (sequent_arg) { <'H>; x: 'A; <'J['x]> >- 'C['x] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H>; x: 'A; <'J['x]> >- 'g['x] in 'B<|H|>[] };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'A; <'J['x]> >- rewrite{'f<|H|>['g['x]]; 'x} };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>; y: 'B; <'J['f['y]]> >- 'C['f<|H|>['y]] };
+              xnil}}};
+                         sequent (sequent_arg) {
+                         <'H>; x: 'A; <'J['x]> >- 'C['x] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["assumT 2 thenT letAtT 2 <<'y='g['x] in 'B>> ttca":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons
+        {sequent (sequent_arg) { <'H>; x: 'A; <'J['x]> >- 'g['x] in 'B<|H|>[] };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>; x: 'A; <'J['x]> >- rewrite{'f<|H|>['g['x]]; 'x} };
+              xcons
+                  {sequent (sequent_arg) {
+                   <'H>; y: 'B; <'J['f['y]]> >- 'C['f<|H|>['y]] };
+                   xnil}}};
+    sequent (sequent_arg) {
+    <'H>; x2: 'B; x: 'A; <'J['x]>; rewrite{'f<|H|>['x2]; 'x} >- 'C['x] }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_bool reduce_ifthenelse_true
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) {
+          <'H> >- rewrite{ifthenelse{btrue; 'e1; 'e2}; 'e1} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{ifthenelse{btrue; 'e1; 'e2}; 'e1} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{ifthenelse{btrue; 'e1; 'e2}; 'e1} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box
+         ["rwh unfold_ifthenelse 0 thenT rwh unfold_btrue 0 thenT rw reduceC 0 thenT trivialT":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_int_base int_sqequal_rw
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H> >- 'a = 'b in int }; xnil};
+          sequent (sequent_arg) { <'H> >- rewrite{'a; 'b} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'a = 'b in int };
+                         xnil};
+                    sequent (sequent_arg) { <'H> >- rewrite{'a; 'b} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'a = 'b in int };
+    xnil};
+                         sequent (sequent_arg) { <'H> >- rewrite{'a; 'b} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["int_sqequal thenT trivialT":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_int_ext le_bool_wf
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'a1 = 'a2 in int };
+               xcons{sequent (sequent_arg) { <'H> >- 'b1 = 'b2 in int }; xnil}};
+          sequent (sequent_arg) {
+          <'H> >- ge_bool{'b1; 'a1} = ge_bool{'b2; 'a2} in bool }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'a1 = 'a2 in int };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'b1 = 'b2 in int };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >- ge_bool{'b1; 'a1} = ge_bool{'b2; 'a2} in bool }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'a1 = 'a2 in int };
+    xcons{sequent (sequent_arg) { <'H> >- 'b1 = 'b2 in int }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         ge_bool{'b1; 'a1} = ge_bool{'b2; 'a2} in bool }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_ge_bool 0 ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_int_arith lt2ge
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>; x: lt{'a; 'b}; <'J['x]> >- 'a<|H|>[] in int };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>; x: lt{'a; 'b}; <'J['x]> >- 'b<|H|>[] in int };
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>;
+                         x: lt{'a; 'b};
+                         <'J['x]>;
+                         'b<|H|>[] >= ('a<|H|>[] +@ number[1:n]) >- 'C['x] };
+                         xnil}}};
+          sequent (sequent_arg) { <'H>; x: lt{'a; 'b}; <'J['x]> >- 'C['x] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>; x: lt{'a; 'b}; <'J['x]> >- 'a<|H|>[] in int };
+                         xcons
+   {sequent (sequent_arg) { <'H>; x: lt{'a; 'b}; <'J['x]> >- 'b<|H|>[] in int };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>;
+         x: lt{'a; 'b};
+         <'J['x]>; 'b<|H|>[] >= ('a<|H|>[] +@ number[1:n]) >- 'C['x] };
+         xnil}}};
+                    sequent (sequent_arg) {
+                    <'H>; x: lt{'a; 'b}; <'J['x]> >- 'C['x] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["":s];
+                         xcons
+   {sequent (sequent_arg) { <'H>; x: lt{'a; 'b}; <'J['x]> >- 'a<|H|>[] in int };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: lt{'a; 'b}; <'J['x]> >- 'b<|H|>[] in int };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>;
+              x: lt{'a; 'b};
+              <'J['x]>; 'b<|H|>[] >= ('a<|H|>[] +@ number[1:n]) >- 'C['x] };
+              xnil}}};
+                         sequent (sequent_arg) {
+                         <'H>; x: lt{'a; 'b}; <'J['x]> >- 'C['x] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["backThruAssumT 3 twa":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: lt{'a; 'b}; <'J['x]> >- 'a<|H|>[] in int };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>; x: lt{'a; 'b}; <'J['x]> >- 'b<|H|>[] in int };
+              xcons
+                  {sequent (sequent_arg) {
+                   <'H>;
+                   x: lt{'a; 'b};
+                   <'J['x]>;
+                   'b<|H|>[] >= ('a<|H|>[] +@ number[1:n]) >- 'C['x] };
+                   xnil}}};
+    sequent (sequent_arg) {
+    <'H>; x: lt{'a; 'b}; <'J['x]> >- 'b<|H|>[] >= ('a<|H|>[] +@ number[1:n]) }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_omega ge_mulMonoPosit_rw
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- lt{number[0:n]; 'c} };
+               xcons
+                   {sequent (sequent_arg) { <'H> >- 'a in int };
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'b in int };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'c in int };
+    xnil}}}};
+          sequent (sequent_arg) {
+          <'H> >- rewrite{'a >= 'b; ('c *@ 'a) >= ('c *@ 'b)} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- lt{number[0:n]; 'c} };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'a in int };
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'b in int };
+         xcons{sequent (sequent_arg) { <'H> >- 'c in int }; xnil}}}};
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{'a >= 'b; ('c *@ 'a) >= ('c *@ 'b)} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- lt{number[0:n]; 'c} };
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'a in int };
+         xcons
+             {sequent (sequent_arg) { <'H> >- 'b in int };
+              xcons{sequent (sequent_arg) { <'H> >- 'c in int }; xnil}}}};
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{'a >= 'b; ('c *@ 'a) >= ('c *@ 'b)} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_ge 0":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons
+        {sequent (sequent_arg) { <'H> >- lt{number[0:n]; 'c} };
+         xcons
+             {sequent (sequent_arg) { <'H> >- 'a in int };
+              xcons
+                  {sequent (sequent_arg) { <'H> >- 'b in int };
+                   xcons{sequent (sequent_arg) { <'H> >- 'c in int }; xnil}}}};
+    sequent (sequent_arg) {
+    <'H> >-
+    rewrite{assert{ge_bool{'a; 'b}}; assert{ge_bool{'c *@ 'a; 'c *@ 'b}}} }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_atom_bool eq_atom_assert_elim
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>; 'a = 'b in atom; <'J[it]> >- 'C[it] };
+               xnil};
+          sequent (sequent_arg) {
+          <'H>; x: assert{eq_atom{'a; 'b}}; <'J['x]> >- 'C['x] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>; 'a = 'b in atom; <'J[it]> >- 'C[it] };
+                         xnil};
+                    sequent (sequent_arg) {
+                    <'H>; x: assert{eq_atom{'a; 'b}}; <'J['x]> >- 'C['x] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["":s];
+                         xcons
+   {sequent (sequent_arg) { <'H>; 'a = 'b in atom; <'J[it]> >- 'C[it] };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H>; x: assert{eq_atom{'a; 'b}}; <'J['x]> >- 'C['x] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box
+         ["copyHypT 2 3 thenT rwh unfold_assert 2 thenT dT 2 thenT assertAtT 4 << 'a = 'b in atom >> ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_nat reduce_ind_up
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H> >- 'x in nat }; xnil};
+          sequent (sequent_arg) {
+          <'H> >-
+          rewrite
+              {ind{'x +@ number[1:n]; 'base; k, l. 'up['k; 'l]};
+               'up['x +@ number[1:n]; ind{'x; 'base; k, l. 'up['k; 'l]}]} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons{sequent (sequent_arg) { <'H> >- 'x in nat }; xnil};
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    rewrite
+                        {ind{'x +@ number[1:n]; 'base; k, l. 'up['k; 'l]};
+                         'up['x +@ number[1:n];
+   ind{'x; 'base; k, l. 'up['k; 'l]}]} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'x in nat };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         rewrite
+   {ind{'x +@ number[1:n]; 'base; k, l. 'up['k; 'l]};
+    'up['x +@ number[1:n]; ind{'x; 'base; k, l. 'up['k; 'l]}]} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box
+         ["rwh unfoldInd 0 thenT rw (addrC [1] (Itt_int_base.reduce_ind_up thenC reduceC)) 0 thenT genAssumT [1] thenT byDefT unfold_nat":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_isect topUniv
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- top in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) { <'H> >- top in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) { <'H> >- top in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_top 0 ta":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_tsquash tsquashEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+               xnil};
+          sequent (sequent_arg) {
+          <'H> >- tsquash{'A1} = tsquash{'A2} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A1 = 'A2 in univ['i:l] };
+                         xnil};
+                    sequent (sequent_arg) {
+                    <'H> >- tsquash{'A1} = tsquash{'A2} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H> >- tsquash{'A1} = tsquash{'A2} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfold_tsquash":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_disect dintersectionMemberFormation
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H>; x: 'A >- 'B['x] Type };
+               xcons
+                   {sequent (sequent_arg) { <'H> >- 't in 'A };
+                    xcons{sequent (sequent_arg) { <'H> >- 't in 'B['t] }; xnil}}};
+          sequent (sequent_arg) { <'H> >- bisect{'A; x. 'B['x]} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H>; x: 'A >- 'B['x] Type };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 't in 'A };
+    xcons{sequent (sequent_arg) { <'H> >- 't in 'B['t] }; xnil}}};
+                    sequent (sequent_arg) { <'H> >- bisect{'A; x. 'B['x]} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H>; x: 'A >- 'B['x] Type };
+    xcons
+        {sequent (sequent_arg) { <'H> >- 't in 'A };
+         xcons{sequent (sequent_arg) { <'H> >- 't in 'B['t] }; xnil}}};
+                         sequent (sequent_arg) {
+                         <'H> >- bisect{'A; x. 'B['x]} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["useWitnessT <<'t>> thenT dT 0 thenT trivialT":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_singleton singletonEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+               xcons{sequent (sequent_arg) { <'H> >- 'a1 = 'a2 in 'A1 }; xnil}};
+          sequent (sequent_arg) {
+          <'H> >- singleton{'a1; 'A1} = singleton{'a2; 'A2} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A1 = 'A2 in univ['i:l] };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'a1 = 'a2 in 'A1 };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    singleton{'a1; 'A1} = singleton{'a2; 'A2} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xcons{sequent (sequent_arg) { <'H> >- 'a1 = 'a2 in 'A1 }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         singleton{'a1; 'A1}
+                         = singleton{'a2; 'A2} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT singleton":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_subset mem_univ
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H> >-
+               singleton{'a1; 'B1} = singleton{'a2; 'B2} in univ['i:l] };
+               xcons
+                   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+                    xnil}};
+          sequent (sequent_arg) {
+          <'H> >- mem{'a1; 'A1; 'B1} = mem{'a2; 'A2; 'B2} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >-
+                         singleton{'a1; 'B1}
+                         = singleton{'a2; 'B2} in univ['i:l] };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    mem{'a1; 'A1; 'B1} = mem{'a2; 'A2; 'B2} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) {
+    <'H> >- singleton{'a1; 'B1} = singleton{'a2; 'B2} in univ['i:l] };
+    xcons{sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         mem{'a1; 'A1; 'B1} = mem{'a2; 'A2; 'B2} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT mem":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_image2 img_elim2
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>;
+               y: Img{'A; a. 'f<||>['a]};
+               <'J['y]>; a: 'A<|H|>[] >- squash{'C['f<||>['a]]} };
+               xnil};
+          sequent (sequent_arg) {
+          <'H>; y: Img{'A; a. 'f<||>['a]}; <'J['y]> >- squash{'C['y]} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>;
+                         y: Img{'A; a. 'f<||>['a]};
+                         <'J['y]>; a: 'A<|H|>[] >- squash{'C['f<||>['a]]} };
+                         xnil};
+                    sequent (sequent_arg) {
+                    <'H>;
+                    y: Img{'A; a. 'f<||>['a]}; <'J['y]> >- squash{'C['y]} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>;
+    y: Img{'A; a. 'f<||>['a]};
+    <'J['y]>; a: 'A<|H|>[] >- squash{'C['f<||>['a]]} };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H>;
+                         y: Img{'A; a. 'f<||>['a]};
+                         <'J['y]> >- squash{'C['y]} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["useWitnessT <<it>> thenT dT 2 ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_tunion tunionEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ['i:l] };
+                    xnil}};
+          sequent (sequent_arg) {
+          <'H> >-
+          tunion{'A1; x1. 'B1['x1]} = tunion{'A2; x2. 'B2['x2]} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A1 = 'A2 in univ['i:l] };
+                         xcons
+   {sequent (sequent_arg) { <'H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ['i:l] };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    tunion{'A1; x1. 'B1['x1]}
+                    = tunion{'A2; x2. 'B2['x2]} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'A1 >- 'B1['x] = 'B2['x] in univ['i:l] };
+         xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         tunion{'A1; x1. 'B1['x1]}
+                         = tunion{'A2; x2. 'B2['x2]} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_tunion 0 ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_list reduce_listindNil
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) {
+          <'H> >-
+          rewrite{list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]}; 'base} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    rewrite
+                        {list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]};
+                         'base} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         rewrite
+   {list_ind{nil; 'base; h, t, f. 'step['h; 't; 'f]};
+    'base} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefsT [unfold_list_ind; unfold_nil; reduce_fix]":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_bisect bisectEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+               xcons
+                   {sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] };
+                    xnil}};
+          sequent (sequent_arg) {
+          <'H> >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A1 = 'A2 in univ['i:l] };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >- bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xcons{sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         bisect{'A1; 'B1} = bisect{'A2; 'B2} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_bisect 0":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+         xcons{sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] }; xnil}};
+    sequent (sequent_arg) {
+    <'H> >-
+    isect 'x:bool.ifthenelse{'x; 'A1; 'B1}
+    = isect 'x:bool.ifthenelse{'x; 'A2; 'B2} in univ['i:l] }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_bunion bunionEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+               xcons
+                   {sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] };
+                    xnil}};
+          sequent (sequent_arg) {
+          <'H> >- bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'A1 = 'A2 in univ['i:l] };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >- bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+    xcons{sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         bunion{'A1; 'B1} = bunion{'A2; 'B2} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_bunion 0":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'A1 = 'A2 in univ['i:l] };
+         xcons{sequent (sequent_arg) { <'H> >- 'B1 = 'B2 in univ['i:l] }; xnil}};
+    sequent (sequent_arg) {
+    <'H> >-
+    tunion{bool; x. ifthenelse{'x; 'A1; 'B1}}
+    = tunion{bool; x. ifthenelse{'x; 'A2; 'B2}} in univ['i:l] }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_w tree_indEquality
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'z1 = 'z2 in w{'A; x. 'B['x]} };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>;
+                    a: 'A;
+                    f: fun{'B['a]; _. w{'A; x. 'B['x]}};
+                    g: fun{'B['a]; b. 'T[apply{'f; 'b}]} >-
+                    'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T[tree{'a; 'f}] };
+                    xnil}};
+          sequent (sequent_arg) {
+          <'H> >-
+          tree_ind{'z1; a, f, g. 'body1['a; 'f; 'g]}
+          = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]} in 'T['z1] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 'z1 = 'z2 in w{'A; x. 'B['x]} };
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>;
+    a: 'A;
+    f: fun{'B['a]; _. w{'A; x. 'B['x]}};
+    g: fun{'B['a]; b. 'T[apply{'f; 'b}]} >-
+    'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T[tree{'a; 'f}] };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    tree_ind{'z1; a, f, g. 'body1['a; 'f; 'g]}
+                    = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
+                    in 'T['z1] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'z1 = 'z2 in w{'A; x. 'B['x]} };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>;
+         a: 'A;
+         f: fun{'B['a]; _. w{'A; x. 'B['x]}};
+         g: fun{'B['a]; b. 'T[apply{'f; 'b}]} >-
+         'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T[tree{'a; 'f}] };
+         xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         tree_ind{'z1; a, f, g. 'body1['a; 'f; 'g]}
+                         = tree_ind{'z2; a2, f2, g2. 'body2['a2; 'f2; 'g2]}
+                         in 'T['z1] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["assertEqT <<'z1='z2 in w{'A;x.'B['x]}>> taa":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'z1 = 'z2 in w{'A; x. 'B['x]} };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>;
+              a: 'A;
+              f: fun{'B['a]; _. w{'A; x. 'B['x]}};
+              g: fun{'B['a]; b. 'T[apply{'f; 'b}]} >-
+              'body1['a; 'f; 'g] = 'body2['a; 'f; 'g] in 'T[tree{'a; 'f}] };
+              xnil}};
+    sequent (sequent_arg) {
+    <'H>;
+    z: w{'A; x. 'B['x]} >-
+    tree_ind{'z; a, f, g. 'body1['a; 'f; 'g]}
+    = tree_ind{'z; a2, f2, g2. 'body2['a2; 'f2; 'g2]} in 'T['z] }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_srec srecType
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>; T: univ['i:l] >- 'B['T] in univ['i:l] };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>;
+                    S1: univ['i:l];
+                    S2: univ['i:l];
+                    'S1 subtype 'S2 >- 'B['S1] subtype 'B['S2] };
+                    xnil}};
+          sequent (sequent_arg) { <'H> >- srec{T. 'B['T]} Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>; T: univ['i:l] >- 'B['T] in univ['i:l] };
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>;
+    S1: univ['i:l];
+    S2: univ['i:l]; 'S1 subtype 'S2 >- 'B['S1] subtype 'B['S2] };
+    xnil}};
+                    sequent (sequent_arg) { <'H> >- srec{T. 'B['T]} Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H>; T: univ['i:l] >- 'B['T] in univ['i:l] };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>;
+         S1: univ['i:l];
+         S2: univ['i:l]; 'S1 subtype 'S2 >- 'B['S1] subtype 'B['S2] };
+         xnil}};
+                         sequent (sequent_arg) { <'H> >- srec{T. 'B['T]} Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["univTypeT <<univ[i:l]>> ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_quotient quotient_memberFormation
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H> >- quot x, y:'A // 'E['x; 'y] Type };
+               xcons{sequent (sequent_arg) { <'H> >- 'A }; xnil}};
+          sequent (sequent_arg) { <'H> >- quot x, y:'A // 'E['x; 'y] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- quot x, y:'A // 'E['x; 'y] Type };
+                         xcons{sequent (sequent_arg) { <'H> >- 'A }; xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >- quot x, y:'A // 'E['x; 'y] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- quot x, y:'A // 'E['x; 'y] Type };
+    xcons{sequent (sequent_arg) { <'H> >- 'A }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >- quot x, y:'A // 'E['x; 'y] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["assumT 2":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons
+        {sequent (sequent_arg) { <'H> >- quot x, y:'A // 'E['x; 'y] Type };
+         xcons{sequent (sequent_arg) { <'H> >- 'A }; xnil}};
+    sequent (sequent_arg) { <'H>; 'A >- quot x, y:'A // 'E['x; 'y] }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_simple_singleton singleton_univ
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- singleton{'a<||>[]} in univ['i:l] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >- singleton{'a<||>[]} in univ['i:l] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- singleton{'a<||>[]} in univ['i:l] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefT unfold_singleton":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_list2 reduce_hd
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- rewrite{hd{cons{'h; 't}}; 'h} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{hd{cons{'h; 't}}; 'h} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{hd{cons{'h; 't}}; 'h} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_hd 0 thenT rwh reduceC 0 ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_list_set mem_append_left
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'x in 'ty };
+               xcons
+                   {sequent (sequent_arg) { <'H> >- 'l1 in list{'ty} };
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'l2 in list{'ty} };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- mem{'x; 'l1; 'ty} };
+    xnil}}}};
+          sequent (sequent_arg) { <'H> >- mem{'x; append{'l1; 'l2}; 'ty} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'x in 'ty };
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'l1 in list{'ty} };
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'l2 in list{'ty} };
+         xcons{sequent (sequent_arg) { <'H> >- mem{'x; 'l1; 'ty} }; xnil}}}};
+                    sequent (sequent_arg) {
+                    <'H> >- mem{'x; append{'l1; 'l2}; 'ty} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'x in 'ty };
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'l1 in list{'ty} };
+         xcons
+             {sequent (sequent_arg) { <'H> >- 'l2 in list{'ty} };
+              xcons{sequent (sequent_arg) { <'H> >- mem{'x; 'l1; 'ty} }; xnil}}}};
+                         sequent (sequent_arg) {
+                         <'H> >- mem{'x; append{'l1; 'l2}; 'ty} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["genAssumT [2; 4] thenT dT (-1) ttca":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'x in 'ty };
+         xcons
+             {sequent (sequent_arg) { <'H> >- 'l1 in list{'ty} };
+              xcons
+                  {sequent (sequent_arg) { <'H> >- 'l2 in list{'ty} };
+                   xcons
+                       {sequent (sequent_arg) { <'H> >- mem{'x; 'l1; 'ty} };
+                        xnil}}}};
+    sequent (sequent_arg) {
+    <'H>;
+    u: 'ty;
+    v1: list{'ty};
+    mem{'x; 'v1; 'ty} => mem{'x; append{'v1; 'l2}; 'ty} >-
+    mem{'x; cons{'u; 'v1}; 'ty} => mem{'x; append{cons{'u; 'v1}; 'l2}; 'ty} }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_list3 reduce_nth_prefix_zero
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) {
+          <'H> >- rewrite{nth_prefix{'l; number[0:n]}; nil} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{nth_prefix{'l; number[0:n]}; nil} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{nth_prefix{'l; number[0:n]}; nil} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_nth_prefix 0 thenT rw reduceC 0 ttca":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_fun2 reduce_compose
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) {
+          <'H> >-
+          rewrite{apply{compose{'f; 'g}; 'x}; apply{'f; apply{'g; 'x}}} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    rewrite
+                        {apply{compose{'f; 'g}; 'x};
+                         apply{'f; apply{'g; 'x}}} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         rewrite
+   {apply{compose{'f; 'g}; 'x};
+    apply{'f; apply{'g; 'x}}} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["byDefsT [unfold_compose; reduceC]":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_union2 inl_wf
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H> >- 't in union{top; top} }; xnil};
+          sequent (sequent_arg) { <'H> >- is_inl{'t} in bool }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- 't in union{top; top} };
+                         xnil};
+                    sequent (sequent_arg) { <'H> >- is_inl{'t} in bool }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 't in union{top; top} };
+    xnil};
+                         sequent (sequent_arg) { <'H> >- is_inl{'t} in bool }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box
+         ["withTermsT [<<bind{x.bool}>>; <<top+top>>] (byDefT is_inl)":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_prop_decide imp_and_rule
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'C<|H|>[] Type };
+               xcons
+                   {sequent (sequent_arg) {
+                    <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'D<|H|>[] Type };
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>;
+                         x: 'C and 'D => 'B;
+                         <'J['x]>;
+                         'C<|H|>[] => 'D<|H|>[] => 'B<|H|>[] >- 'T['x] };
+                         xnil}}};
+          sequent (sequent_arg) {
+          <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'T['x] }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'C<|H|>[] Type };
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'D<|H|>[] Type };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>;
+         x: 'C and 'D => 'B;
+         <'J['x]>; 'C<|H|>[] => 'D<|H|>[] => 'B<|H|>[] >- 'T['x] };
+         xnil}}};
+                    sequent (sequent_arg) {
+                    <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'T['x] }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) {
+    <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'C<|H|>[] Type };
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'D<|H|>[] Type };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>;
+              x: 'C and 'D => 'B;
+              <'J['x]>; 'C<|H|>[] => 'D<|H|>[] => 'B<|H|>[] >- 'T['x] };
+              xnil}}};
+                         sequent (sequent_arg) {
+                         <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'T['x] }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["assertT << 'C => 'D => 'B >>":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["assertion":s];
+    xcons
+        {sequent (sequent_arg) {
+         <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'C<|H|>[] Type };
+         xcons
+             {sequent (sequent_arg) {
+              <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'D<|H|>[] Type };
+              xcons
+                  {sequent (sequent_arg) {
+                   <'H>;
+                   x: 'C and 'D => 'B;
+                   <'J['x]>; 'C<|H|>[] => 'D<|H|>[] => 'B<|H|>[] >- 'T['x] };
+                   xnil}}};
+    sequent (sequent_arg) {
+    <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'C<|H|>[] => 'D<|H|>[] => 'B<|H|>[] }};
+                         xnil}};
+               xcons
+                   {Summary!goal_list
+                        {xcons
+   {Summary!goal
+        {Summary!goal_status{xcons{status_asserted; xnil}};
+         Summary!goal_label["main":s];
+         xcons
+             {sequent (sequent_arg) {
+              <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'C<|H|>[] Type };
+              xcons
+                  {sequent (sequent_arg) {
+                   <'H>; x: 'C and 'D => 'B; <'J['x]> >- 'D<|H|>[] Type };
+                   xcons
+                       {sequent (sequent_arg) {
+                        <'H>;
+                        x: 'C and 'D => 'B;
+                        <'J['x]>;
+                        'C<|H|>[] => 'D<|H|>[] => 'B<|H|>[] >- 'T['x] };
+                        xnil}}};
+         sequent (sequent_arg) {
+         <'H>;
+         x: 'C and 'D => 'B;
+         <'J['x]>; 'C<|H|>[] => 'D<|H|>[] => 'B<|H|>[] >- 'T['x] }};
+    xnil}};
+                    xnil}};
+          xnil}}
+== itt_subset2 set_subset
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) { <'H> >- 'A Type };
+               xcons
+                   {sequent (sequent_arg) { <'H>; x: 'A >- 'P['x] Type };
+                    xnil}};
+          sequent (sequent_arg) { <'H> >- set{'A; a. 'P['a]} subset 'A }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) { <'H> >- 'A Type };
+                         xcons
+   {sequent (sequent_arg) { <'H>; x: 'A >- 'P['x] Type };
+    xnil}};
+                    sequent (sequent_arg) {
+                    <'H> >- set{'A; a. 'P['a]} subset 'A }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'A Type };
+    xcons{sequent (sequent_arg) { <'H>; x: 'A >- 'P['x] Type }; xnil}};
+                         sequent (sequent_arg) {
+                         <'H> >- set{'A; a. 'P['a]} subset 'A }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["dT 0 ta":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["":s];
+    xcons
+        {sequent (sequent_arg) { <'H> >- 'A Type };
+         xcons{sequent (sequent_arg) { <'H>; x: 'A >- 'P['x] Type }; xnil}};
+    sequent (sequent_arg) {
+    <'H>; a: 'A; 'P['a]; b: 'A; 'a = 'b in 'A >- squash{'P['b]} }};
+                         xnil}};
+               xnil};
+          xnil}}
+== itt_record_label0 reduce_ind_up
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H> >- 'x in label }; xnil};
+          sequent (sequent_arg) {
+          <'H> >-
+          rewrite
+              {ind_lab{next{'x}; 'base; l. 'up['l]};
+               'up[ind_lab{'x; 'base; l. 'up['l]}]} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons{sequent (sequent_arg) { <'H> >- 'x in label }; xnil};
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    rewrite
+                        {ind_lab{next{'x}; 'base; l. 'up['l]};
+                         'up[ind_lab{'x; 'base; l. 'up['l]}]} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- 'x in label };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         rewrite
+   {ind_lab{next{'x}; 'base; l. 'up['l]};
+    'up[ind_lab{'x; 'base; l. 'up['l]}]} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box
+         ["rwaAllAll [unfoldInd; unfold_next; unfold_label] thenT rwh reduceC 0 ta":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_record_label reduce_eq_label_true_rw
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons
+              {sequent (sequent_arg) {
+               <'H> >- label[x:t] = label[y:t] in label };
+               xnil};
+          sequent (sequent_arg) {
+          <'H> >- rewrite{eq_label[x:t, y:t]{'A; 'B}; 'A} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons
+                        {sequent (sequent_arg) {
+                         <'H> >- label[x:t] = label[y:t] in label };
+                         xnil};
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{eq_label[x:t, y:t]{'A; 'B}; 'A} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons
+   {sequent (sequent_arg) { <'H> >- label[x:t] = label[y:t] in label };
+    xnil};
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{eq_label[x:t, y:t]{'A; 'B}; 'A} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["autoT":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_record0 baseRecord
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) {
+          <'H> >- rewrite{record{zero; 'A}; prod{'A; top}} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >- rewrite{record{zero; 'A}; prod{'A; top}} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >- rewrite{record{zero; 'A}; prod{'A; top}} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfoldRecordS 0 thenT rwh reduceC 0 ta":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_record recordTypeS
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xcons{sequent (sequent_arg) { <'H> >- 'A Type }; xnil};
+          sequent (sequent_arg) { <'H> >- record[n:t]{'A} Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xcons{sequent (sequent_arg) { <'H> >- 'A Type }; xnil};
+                    sequent (sequent_arg) { <'H> >- record[n:t]{'A} Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xcons{sequent (sequent_arg) { <'H> >- 'A Type }; xnil};
+                         sequent (sequent_arg) { <'H> >- record[n:t]{'A} Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfoldRecordS 0 ta":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_record_exm planeType
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) { <'H> >- plane Type }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) { <'H> >- plane Type }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) { <'H> >- plane Type }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["rwh unfold_plane 0 ta":s];
+     Summary!subgoals{xnil; xnil}}
+== itt_record_renaming rename_rcrd_reduce
+Summary!proof
+    {Summary!goal
+         {Summary!goal_status{xcons{status_asserted; xnil}};
+          Summary!goal_label["main":s];
+          xnil;
+          sequent (sequent_arg) {
+          <'H> >-
+          rewrite
+              {rename[a:t, b:t]{rcrd[c:t]{'x; 'r}};
+               eq_label
+                   [b:t,
+                    c:t]
+                   {rcrd[a:t]{'x; rename[a:t, b:t]{'r}};
+                    eq_label
+                        [a:t,
+                         c:t]
+                        {rcrd[b:t]{'x; rename[a:t, b:t]{'r}};
+                         rcrd[c:t]{'x; rename[a:t, b:t]{'r}}}}} }};
+     Summary!goal_list
+         {xcons
+              {Summary!goal
+                   {Summary!goal_status{xcons{status_asserted; xnil}};
+                    Summary!goal_label["main":s];
+                    xnil;
+                    sequent (sequent_arg) {
+                    <'H> >-
+                    rewrite
+                        {rename[a:t, b:t]{rcrd[c:t]{'x; 'r}};
+                         eq_label
+   [b:t,
+    c:t]
+   {rcrd[a:t]{'x; rename[a:t, b:t]{'r}};
+    eq_label
+        [a:t,
+         c:t]
+        {rcrd[b:t]{'x; rename[a:t, b:t]{'r}};
+         rcrd[c:t]{'x; rename[a:t, b:t]{'r}}}}} }};
+               xcons
+                   {Summary!goal
+                        {Summary!goal_status{xcons{status_asserted; xnil}};
+                         Summary!goal_label["main":s];
+                         xnil;
+                         sequent (sequent_arg) {
+                         <'H> >-
+                         rewrite
+   {rename[a:t, b:t]{rcrd[c:t]{'x; 'r}};
+    eq_label
+        [b:t,
+         c:t]
+        {rcrd[a:t]{'x; rename[a:t, b:t]{'r}};
+         eq_label
+             [a:t,
+              c:t]
+             {rcrd[b:t]{'x; rename[a:t, b:t]{'r}};
+              rcrd[c:t]{'x; rename[a:t, b:t]{'r}}}}} }};
+                    xnil}}};
+     status_asserted;
+     Summary!rule_box["decideEqLabelT <<label[b:t]>> <<label[c:t]>>":s];
+     Summary!subgoals
+         {xcons
+              {Summary!goal_list
+                   {xcons
+                        {Summary!goal
+   {Summary!goal_status{xcons{status_asserted; xnil}};
+    Summary!goal_label["main":s];
+    xnil;
+    sequent (sequent_arg) {
+    <'H>;
+    label[b:t] = label[c:t] in label >-
+    rewrite
+        {rename[a:t, b:t]{rcrd[c:t]{'x; 'r}};
+         rcrd[a:t]{'x; rename[a:t, b:t]{'r}}} }};
+                         xnil}};
+               xcons
+                   {Summary!goal_list
+                        {xcons
+   {Summary!goal
+        {Summary!goal_status{xcons{status_asserted; xnil}};
+         Summary!goal_label["":s];
+         xnil;
+         sequent (sequent_arg) {
+         <'H>;
+         label[b:t] <> label[c:t] in label >-
+         rewrite
+             {rename[a:t, b:t]{rcrd[c:t]{'x; 'r}};
+              eq_label
+                  [a:t,
+                   c:t]
+                  {rcrd[b:t]{'x; rename[a:t, b:t]{'r}};
+                   rcrd[c:t]{'x; rename[a:t, b:t]{'r}}}} }};
+    xnil}};
+                    xnil}};
+          xnil}}

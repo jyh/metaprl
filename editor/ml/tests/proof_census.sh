@@ -10,6 +10,9 @@
 # entered before, and a status can print under the wrong module.
 # A module the shell cannot enter (cd prints no "Module: /m") is recorded
 # as "m - notentered"; its status_all would otherwise replay every module.
+# A module named like its theory (itt_rfun, itt_supinf) is entered through
+# the THEORY ("/m" names the theory first), whose status_all replays every
+# module of it; so a module's rows end at the next "Module: /" line.
 # mp runs with -batch, which does not auto-save an archive.
 # LIMIT: it checks status and rule-box count, not the proofs' content.
 # Usage: proof_census.sh [out]   (exit 0 = same as expected)
@@ -39,6 +42,7 @@ one() {
    printf 'cd "/%s";;\nstatus_all ();;\n' "$1" | "$mp" -batch 2>&1 | tr -d '\r' \
       | sed 's/\x1b\[[0-9;]*m//g' | awk -v m="$1" '
       $0 == "Module: /" m { entered = 1; next }
+      entered && /^Module: \// { exit }
       entered && /^Status: `/ {
          r = $0; sub(/^Status: `/, "", r); sub(/'"'"' is .*/, "", r)
          n = $0; sub(/.*proof \(/, "", n); sub(/ rule boxes.*/, "", n)

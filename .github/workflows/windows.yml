@@ -181,6 +181,20 @@ jobs:
         if: always()
         working-directory: metaprl
         run: timeout 600 opam exec -- sh test/filter_prla_id/run.sh
+      # The display-form goldens the Linux build job runs, in all three modes,
+      # through the mp.bat launcher above. A difference from Linux is a finding.
+      - name: display forms print 59 itt/core goals as expected (editor/ml/tests/dform_golden.sh)
+        if: always()
+        working-directory: metaprl
+        run: timeout 1200 opam exec -- sh editor/ml/tests/dform_golden.sh
+      - name: the same 59 goals in the tex display mode (DFORM_MODE=tex dform_golden.sh)
+        if: always()
+        working-directory: metaprl
+        run: DFORM_MODE=tex timeout 1200 opam exec -- sh editor/ml/tests/dform_golden.sh
+      - name: the same 59 goals in the src display mode (DFORM_MODE=src dform_golden.sh)
+        if: always()
+        working-directory: metaprl
+        run: DFORM_MODE=src timeout 1200 opam exec -- sh editor/ml/tests/dform_golden.sh
       # With the census input: every stored proof, compared with the file the
       # Linux proofs job checks. A difference is a finding to name.
       - name: replay every stored proof (editor/ml/tests/proof_census.sh)

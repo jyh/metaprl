@@ -1,0 +1,614 @@
+== itt_equal type_type
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{T}}\,\mathtt{Type\mbox{\tt }}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{T}}\,\mathtt{Type\mbox{\tt }}\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }typeEquality ttca
+
+== itt_struct thin
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right> ; \left< \ensuremath{\Delta }\right>  \vdash \, \ensuremath{\mathit{C}}
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }\right>  \vdash \, \ensuremath{\mathit{C}}
+
+\textbf{BY }thin_many 2 2 ttca
+
+== itt_squiggle squiggleType
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{t}} \equiv  \ensuremath{\mathit{s}}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{t}} \equiv  \ensuremath{\mathit{s}}\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }typeAssertT thenT trivialT
+
+== itt_pairwise splitHyp
+\mbox{\tt ?} <\mbox{\tt ?}>
+........
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right> ; \ensuremath{\mathit{y}}: \ensuremath{\mathit{A}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]; \left< \ensuremath{\Sigma }[\ensuremath{\mathit{y}}]\right>  \vdash \, \ensuremath{\mathit{T}}[\ensuremath{\mathit{y}}]
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right> ; \left< \ensuremath{\Sigma }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{T}}[\ensuremath{\mathit{x}}]
+
+\textbf{BY }letAtT 4 <<'y='x in 'A>> ttca
+
+== itt_image img_univ_eq
+\mbox{\tt ?} <\mbox{\tt ?}>
+........
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}} = \ensuremath{\mathit{B}} \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, Img(\ensuremath{\mathit{x}}:\ensuremath{\mathit{A}}.\ensuremath{\mathit{f}}{}_{\left< ||\right> }[\ensuremath{\mathit{x}}]) = Img(\ensuremath{\mathit{x}}:\ensuremath{\mathit{B}}.\ensuremath{\mathit{f}}{}_{\left< ||\right> }[\ensuremath{\mathit{x}}]) \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }assertT << 'A='B in univ[i:l] >> taa
+
+\textbf{1. [\mbox{\tt ?}]}
+   ........
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{A}} = \ensuremath{\mathit{B}} \in  \mathbb{U}{}_{'i} \vdash \, Img(\ensuremath{\mathit{x}}:\ensuremath{\mathit{A}}.\ensuremath{\mathit{f}}{}_{\left< ||\right> }[\ensuremath{\mathit{x}}]) = Img(\ensuremath{\mathit{x}}:\ensuremath{\mathit{B}}.\ensuremath{\mathit{f}}{}_{\left< ||\right> }[\ensuremath{\mathit{x}}]) \in  \mathbb{U}{}_{'i}
+== itt_squash squashEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \sq{\ensuremath{\mathit{A}_{1}}} = \sq{\ensuremath{\mathit{A}_{2}}} \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }byDefT unfold_squash
+
+== itt_subtype subtypeElimination2
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}} \sqsubseteq  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{a}} = \ensuremath{\mathit{b}} \in  \ensuremath{\mathit{A}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}} \sqsubseteq  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right> ; \ensuremath{\mathit{a}} = \ensuremath{\mathit{b}} \in  \ensuremath{\mathit{B}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{x}}]
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}} \sqsubseteq  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{x}}]
+
+\textbf{BY }assertT <<'a = 'b in 'B>> ttca
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....assertion....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}} \sqsubseteq  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{a}} = \ensuremath{\mathit{b}} \in  \ensuremath{\mathit{B}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]
+== itt_void voidType
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, Void\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }univTypeT <<univ[1:l]>> ttca
+
+== itt_unit unitType
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, Unit\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }univTypeT <<univ[i:l]>> ttca
+
+== itt_atom atomType
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, Atom\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }univTypeT <<univ [i:l]>> ttca
+
+== itt_union reduce_outl_inl
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, outl{inl \ensuremath{\mathit{x}}} \equiv  \ensuremath{\mathit{x}}
+
+\textbf{BY }byDefT unfold_outl
+
+== itt_dprod reduceFst
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, (\ensuremath{\mathit{a}},\ensuremath{\mathit{b}}).1 \equiv  \ensuremath{\mathit{a}}
+
+\textbf{BY }byDefT unfoldFst
+
+== itt_prod independentProductEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{B}_{1}} = \ensuremath{\mathit{B}_{2}} \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, (\ensuremath{\mathit{A}_{1}} \times  \ensuremath{\mathit{B}_{1}}) = (\ensuremath{\mathit{A}_{2}} \times  \ensuremath{\mathit{B}_{2}}) \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }rwh unfold_prod 0 ta
+
+== itt_set setEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{a}_{1}}: \ensuremath{\mathit{A}_{1}} \vdash \, \ensuremath{\mathit{B}_{1}}[\ensuremath{\mathit{a}_{1}}] = \ensuremath{\mathit{B}_{2}}[\ensuremath{\mathit{a}_{1}}] \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \{\ensuremath{\mathit{a}_{1}}\colon \ensuremath{\mathit{A}_{1}}|\ensuremath{\mathit{B}_{1}}[\ensuremath{\mathit{a}_{1}}]\} = \{\ensuremath{\mathit{a}_{2}}\colon \ensuremath{\mathit{A}_{2}}|\ensuremath{\mathit{B}_{2}}[\ensuremath{\mathit{a}_{2}}]\} \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }byDefT unfold_set
+
+== itt_dfun reduce_let
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, let \ensuremath{\mathit{x}} = \ensuremath{\mathit{a}} in \ensuremath{\mathit{b}}[\ensuremath{\mathit{x}}] \equiv  \ensuremath{\mathit{b}}[\ensuremath{\mathit{a}}]
+
+\textbf{BY }byDefT unfold_let
+
+== itt_esquash esquash_mem
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, [\![\ensuremath{\mathit{A}}]\!]
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \cdot  \in  [\![\ensuremath{\mathit{A}}]\!]
+
+\textbf{BY }autoT thenT assertT <<esquash{'A}>> ttca
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right> ; [\![\ensuremath{\mathit{A}}]\!] \vdash \, \cdot  \in  [\![\ensuremath{\mathit{A}}]\!]
+== itt_logic true_univ
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, True \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }rwh unfold_true 0 ta
+
+== itt_sqsimple sqsimple_intro
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{T}}\,\mathtt{Type\mbox{\tt }}
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{T}}; \ensuremath{\mathit{y}}: \ensuremath{\mathit{T}}; \ensuremath{\mathit{x}} = \ensuremath{\mathit{y}} \in  \ensuremath{\mathit{T}} \vdash \, \ensuremath{\mathit{x}} \equiv  \ensuremath{\mathit{y}}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, sqsimple{\ensuremath{\mathit{T}}}
+
+\textbf{BY }byDefT unfold_sqsimple
+
+== itt_nequal neq_type
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{x}} \in  \ensuremath{\mathit{T}}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{y}} \in  \ensuremath{\mathit{T}}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{x}} \neq  \ensuremath{\mathit{y}} \in  \ensuremath{\mathit{T}}\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }byDefT unfold_nequal
+
+== itt_well_founded partial_order_type
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}}\,\mathtt{Type\mbox{\tt }}
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{a}}: \ensuremath{\mathit{A}}; \ensuremath{\mathit{b}}: \ensuremath{\mathit{A}} \vdash \, \ensuremath{\mathit{R}}[\ensuremath{\mathit{a}}; \ensuremath{\mathit{b}}]\,\mathtt{Type\mbox{\tt }}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, partial_order(\ensuremath{\mathit{x}},\ensuremath{\mathit{y}}:\ensuremath{\mathit{A}}. \ensuremath{\mathit{R}}[\ensuremath{\mathit{x}}; \ensuremath{\mathit{y}}])\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }rwh unfold_partial_order 0 ta
+
+== itt_decidable fold_decidable
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{p}} \vee  \neg \ensuremath{\mathit{p}} \equiv  Decidable(\ensuremath{\mathit{p}})
+
+\textbf{BY }(rwh unfold_decidable 0) thenT trivialT
+
+== itt_ext_equal extEqualMember
+\mbox{\tt ?} <\mbox{\tt ?}>
+........
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}} ={}_{e} \ensuremath{\mathit{B}}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, (\cdot ,\cdot ) \in  \ensuremath{\mathit{A}} ={}_{e} \ensuremath{\mathit{B}}
+
+\textbf{BY }assertT <<ext_equal{'A; 'B}>> taa
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{A}} ={}_{e} \ensuremath{\mathit{B}} \vdash \, (\cdot ,\cdot ) \in  \ensuremath{\mathit{A}} ={}_{e} \ensuremath{\mathit{B}}
+== itt_pairwise2 supertype
+\mbox{\tt ?} <\mbox{\tt ?}>
+........
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{A}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \sqsubseteq  \ensuremath{\mathit{B}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{T}}[\ensuremath{\mathit{x}}]
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{T}}[\ensuremath{\mathit{x}}]
+
+\textbf{BY }letAtT 2 <<'y='x in 'B>> ttca
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....assertion....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{x}} \in  \ensuremath{\mathit{B}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]
+== itt_struct2 substitution2
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{t}_{1}} = \ensuremath{\mathit{t}_{2}} \in  \ensuremath{\mathit{T}}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{t}_{2}}]
+3. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{T}}; \ensuremath{\mathit{t}_{1}} = \ensuremath{\mathit{x}} \in  \ensuremath{\mathit{T}}; \ensuremath{\mathit{t}_{2}} = \ensuremath{\mathit{x}} \in  \ensuremath{\mathit{T}} \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{x}}]\,\mathtt{Type\mbox{\tt }}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{t}_{1}}]
+
+\textbf{BY }Itt_struct.substT <<'t1='t2 in {x:'T | ('x='t1 in 'T) and ('x='t2 in 'T)}>> 0
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....equality....
+   \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{t}_{1}} = \ensuremath{\mathit{t}_{2}} \in  \{\ensuremath{\mathit{x}}\colon \ensuremath{\mathit{T}}|(\ensuremath{\mathit{x}} = \ensuremath{\mathit{t}_{1}} \in  \ensuremath{\mathit{T}}) \wedge  \ensuremath{\mathit{x}} = \ensuremath{\mathit{t}_{2}} \in  \ensuremath{\mathit{T}}\}
+\textbf{2. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{t}_{2}}]
+\textbf{3. [\mbox{\tt ?}]}
+   ....wf....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{z}}: \{\ensuremath{\mathit{x}}\colon \ensuremath{\mathit{T}}|(\ensuremath{\mathit{x}} = \ensuremath{\mathit{t}_{1}} \in  \ensuremath{\mathit{T}}) \wedge  \ensuremath{\mathit{x}} = \ensuremath{\mathit{t}_{2}} \in  \ensuremath{\mathit{T}}\} \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{z}}]\,\mathtt{Type\mbox{\tt }}
+== itt_struct3 substUsingEpimorphism
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{g}}[\ensuremath{\mathit{x}}] \in  \ensuremath{\mathit{B}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{f}}{}_{\left< |\ensuremath{\Gamma }|\right> }[\ensuremath{\mathit{g}}[\ensuremath{\mathit{x}}]] \equiv  \ensuremath{\mathit{x}}
+3. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{y}}: \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{f}}[\ensuremath{\mathit{y}}]]\right>  \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{f}}{}_{\left< |\ensuremath{\Gamma }|\right> }[\ensuremath{\mathit{y}}]]
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{x}}]
+
+\textbf{BY }assumT 2 thenT letAtT 2 <<'y='g['x] in 'B>> ttca
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}_{2}}: \ensuremath{\mathit{B}}; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right> ; \ensuremath{\mathit{f}}{}_{\left< |\ensuremath{\Gamma }|\right> }[\ensuremath{\mathit{x}_{2}}] \equiv  \ensuremath{\mathit{x}} \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{x}}]
+== itt_bool reduce_ifthenelse_true
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, \mathop{\bf if}true\mathrel{\bf then}\ensuremath{\mathit{e}_{1}}\mathrel{\bf else}\ensuremath{\mathit{e}_{2}} \equiv  \ensuremath{\mathit{e}_{1}}
+
+\textbf{BY }rwh unfold_ifthenelse 0 thenT rwh unfold_btrue 0 thenT rw reduceC 0 thenT trivialT
+
+== itt_int_base int_sqequal_rw
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{a}} = \ensuremath{\mathit{b}} \in  int
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{a}} \equiv  \ensuremath{\mathit{b}}
+
+\textbf{BY }int_sqequal thenT trivialT
+
+== itt_int_ext le_bool_wf
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{a}_{1}} = \ensuremath{\mathit{a}_{2}} \in  int
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{b}_{1}} = \ensuremath{\mathit{b}_{2}} \in  int
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, (\ensuremath{\mathit{b}_{1}} \ge {}_{b} \ensuremath{\mathit{a}_{1}}) = (\ensuremath{\mathit{b}_{2}} \ge {}_{b} \ensuremath{\mathit{a}_{2}}) \in  \mathbb{B}
+
+\textbf{BY }rwh unfold_ge_bool 0 ttca
+
+== itt_int_arith lt2ge
+\mbox{\tt ?} <\mbox{\tt ?}>
+........
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{a}} < \ensuremath{\mathit{b}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{a}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \in  int
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{a}} < \ensuremath{\mathit{b}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{b}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \in  int
+3. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{a}} < \ensuremath{\mathit{b}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right> ; \ensuremath{\mathit{b}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]\ge (\ensuremath{\mathit{a}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] + 1) \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{x}}]
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{a}} < \ensuremath{\mathit{b}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{x}}]
+
+\textbf{BY }backThruAssumT 3 twa
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{a}} < \ensuremath{\mathit{b}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{b}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]\ge (\ensuremath{\mathit{a}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] + 1)
+== itt_omega ge_mulMonoPosit_rw
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{c}} > 0
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{a}} \in  int
+3. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{b}} \in  int
+4. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{c}} \in  int
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{a}}\ge \ensuremath{\mathit{b}} \equiv  (\ensuremath{\mathit{c}} * \ensuremath{\mathit{a}})\ge (\ensuremath{\mathit{c}} * \ensuremath{\mathit{b}})
+
+\textbf{BY }rwh unfold_ge 0
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right>  \vdash \, \uparrow (\ensuremath{\mathit{a}} \ge {}_{b} \ensuremath{\mathit{b}}) \equiv  \uparrow ((\ensuremath{\mathit{c}} * \ensuremath{\mathit{a}}) \ge {}_{b} (\ensuremath{\mathit{c}} * \ensuremath{\mathit{b}}))
+== itt_atom_bool eq_atom_assert_elim
+\mbox{\tt ?} <\mbox{\tt ?}>
+........
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{a}} = \ensuremath{\mathit{b}} \in  Atom; \left< \ensuremath{\Delta }[\cdot ]\right>  \vdash \, \ensuremath{\mathit{C}}[\cdot ]
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \uparrow (\ensuremath{\mathit{a}} ={}_{a}\ensuremath{\mathit{b}}); \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{C}}[\ensuremath{\mathit{x}}]
+
+\textbf{BY }copyHypT 2 3 thenT rwh unfold_assert 2 thenT dT 2 thenT assertAtT 4 << 'a = 'b in atom >> ttca
+
+== itt_nat reduce_ind_up
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{x}} \in  \mathbb{N}
+====
+
+1. \left< \ensuremath{\Gamma }\right>
+\vdash \,
+\mathit{Ind}(\ensuremath{\mathit{x}} + 1) where \mathit{Ind}(\mathit{n}) = \mathit{n} = 0\Rightarrow \mathit{Ind}(\mathit{n}) = \ensuremath{\mathit{base}} \mathit{n}>0\Rightarrow \mathit{Ind}(\mathit{n}) = \ensuremath{\mathit{up}}[\mathit{n}; \mathit{Ind}(\mathit{n}-1)] \equiv
+\ensuremath{\mathit{up}}[\ensuremath{\mathit{x}} + 1; \mathit{Ind}(\ensuremath{\mathit{x}}) where \mathit{Ind}(\mathit{n}) = \mathit{n} = 0\Rightarrow \mathit{Ind}(\mathit{n}) = \ensuremath{\mathit{base}} \mathit{n}>0\Rightarrow \mathit{Ind}(\mathit{n}) = \ensuremath{\mathit{up}}[\mathit{n}; \mathit{Ind}(\mathit{n}-1)]]
+
+\textbf{BY }rwh unfoldInd 0 thenT rw (addrC [1] (Itt_int_base.reduce_ind_up thenC reduceC)) 0 thenT genAssumT [1] thenT byDefT unfold_nat
+
+== itt_isect topUniv
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, Top \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }rwh unfold_top 0 ta
+
+== itt_tsquash tsquashEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, [\ensuremath{\mathit{A}_{1}}]{}_{t} = [\ensuremath{\mathit{A}_{2}}]{}_{t} \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }byDefT unfold_tsquash
+
+== itt_disect dintersectionMemberFormation
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}} \vdash \, \ensuremath{\mathit{B}}[\ensuremath{\mathit{x}}]\,\mathtt{Type\mbox{\tt }}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{t}} \in  \ensuremath{\mathit{A}}
+3. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{t}} \in  \ensuremath{\mathit{B}}[\ensuremath{\mathit{t}}]
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{x}}:\ensuremath{\mathit{A}}\cap \ensuremath{\mathit{B}}[\ensuremath{\mathit{x}}]
+
+\textbf{BY }useWitnessT <<'t>> thenT dT 0 thenT trivialT
+
+== itt_singleton singletonEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{a}_{1}} = \ensuremath{\mathit{a}_{2}} \in  \ensuremath{\mathit{A}_{1}}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, {\ensuremath{\mathit{a}_{1}}}{}_{\ensuremath{\mathit{A}_{1}}} = {\ensuremath{\mathit{a}_{2}}}{}_{\ensuremath{\mathit{A}_{2}}} \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }byDefT singleton
+
+== itt_subset mem_univ
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, {\ensuremath{\mathit{a}_{1}}}{}_{\ensuremath{\mathit{B}_{1}}} = {\ensuremath{\mathit{a}_{2}}}{}_{\ensuremath{\mathit{B}_{2}}} \in  \mathbb{U}{}_{'i}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, (\ensuremath{\mathit{a}_{1}} \in {}_{\ensuremath{\mathit{B}_{1}}} \ensuremath{\mathit{A}_{1}}) = (\ensuremath{\mathit{a}_{2}} \in {}_{\ensuremath{\mathit{B}_{2}}} \ensuremath{\mathit{A}_{2}}) \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }byDefT mem
+
+== itt_image2 img_elim2
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{y}}: Img(\ensuremath{\mathit{a}}:\ensuremath{\mathit{A}}.\ensuremath{\mathit{f}}{}_{\left< ||\right> }[\ensuremath{\mathit{a}}]); \left< \ensuremath{\Delta }[\ensuremath{\mathit{y}}]\right> ; \ensuremath{\mathit{a}}: \ensuremath{\mathit{A}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \vdash \, \sq{\ensuremath{\mathit{C}}[\ensuremath{\mathit{f}}{}_{\left< ||\right> }[\ensuremath{\mathit{a}}]]}
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{y}}: Img(\ensuremath{\mathit{a}}:\ensuremath{\mathit{A}}.\ensuremath{\mathit{f}}{}_{\left< ||\right> }[\ensuremath{\mathit{a}}]); \left< \ensuremath{\Delta }[\ensuremath{\mathit{y}}]\right>  \vdash \, \sq{\ensuremath{\mathit{C}}[\ensuremath{\mathit{y}}]}
+
+\textbf{BY }useWitnessT <<it>> thenT dT 2 ttca
+
+== itt_tunion tunionEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}_{1}} \vdash \, \ensuremath{\mathit{B}_{1}}[\ensuremath{\mathit{x}}] = \ensuremath{\mathit{B}_{2}}[\ensuremath{\mathit{x}}] \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \cup \ensuremath{\mathit{x}_{1}}:\ensuremath{\mathit{A}_{1}}.\ensuremath{\mathit{B}_{1}}[\ensuremath{\mathit{x}_{1}}] = \cup \ensuremath{\mathit{x}_{2}}:\ensuremath{\mathit{A}_{2}}.\ensuremath{\mathit{B}_{2}}[\ensuremath{\mathit{x}_{2}}] \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }rwh unfold_tunion 0 ttca
+
+== itt_list reduce_listindNil
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, match [] with [] -> \ensuremath{\mathit{base}} | \ensuremath{\mathit{h}}::\ensuremath{\mathit{t}}.\ensuremath{\mathit{f}} -> \ensuremath{\mathit{step}}[\ensuremath{\mathit{h}}; \ensuremath{\mathit{t}}; \ensuremath{\mathit{f}}] \equiv  \ensuremath{\mathit{base}}
+
+\textbf{BY }byDefsT [unfold_list_ind; unfold_nil; reduce_fix]
+
+== itt_bisect bisectEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{B}_{1}} = \ensuremath{\mathit{B}_{2}} \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, (\ensuremath{\mathit{A}_{1}} \cap  \ensuremath{\mathit{B}_{1}}) = (\ensuremath{\mathit{A}_{2}} \cap  \ensuremath{\mathit{B}_{2}}) \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }rwh unfold_bisect 0
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right>  \vdash \, \cap \ensuremath{\mathit{x}}:\mathbb{B}.\mathop{\bf if}\ensuremath{\mathit{x}}\mathrel{\bf then}\ensuremath{\mathit{A}_{1}}\mathrel{\bf else}\ensuremath{\mathit{B}_{1}} = \cap \ensuremath{\mathit{x}}:\mathbb{B}.\mathop{\bf if}\ensuremath{\mathit{x}}\mathrel{\bf then}\ensuremath{\mathit{A}_{2}}\mathrel{\bf else}\ensuremath{\mathit{B}_{2}} \in  \mathbb{U}{}_{'i}
+== itt_bunion bunionEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}_{1}} = \ensuremath{\mathit{A}_{2}} \in  \mathbb{U}{}_{'i}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{B}_{1}} = \ensuremath{\mathit{B}_{2}} \in  \mathbb{U}{}_{'i}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, (\ensuremath{\mathit{A}_{1}} \cup  \ensuremath{\mathit{B}_{1}}) = (\ensuremath{\mathit{A}_{2}} \cup  \ensuremath{\mathit{B}_{2}}) \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }rwh unfold_bunion 0
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right>  \vdash \, \cup \ensuremath{\mathit{x}}:\mathbb{B}.(\mathop{\bf if}\ensuremath{\mathit{x}}\mathrel{\bf then}\ensuremath{\mathit{A}_{1}}\mathrel{\bf else}\ensuremath{\mathit{B}_{1}}) = \cup \ensuremath{\mathit{x}}:\mathbb{B}.(\mathop{\bf if}\ensuremath{\mathit{x}}\mathrel{\bf then}\ensuremath{\mathit{A}_{2}}\mathrel{\bf else}\ensuremath{\mathit{B}_{2}}) \in  \mathbb{U}{}_{'i}
+== itt_w tree_indEquality
+\mbox{\tt ?} <\mbox{\tt ?}>
+........
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{z}_{1}} = \ensuremath{\mathit{z}_{2}} \in  (\mathbb{W}\ensuremath{\mathit{x}}:\ensuremath{\mathit{A}}.\ensuremath{\mathit{B}}[\ensuremath{\mathit{x}}])
+2.
+   1. \left< \ensuremath{\Gamma }\right>
+   2. \ensuremath{\mathit{a}}: \ensuremath{\mathit{A}}
+   3. \ensuremath{\mathit{f}}: \ensuremath{\mathit{B}}[\ensuremath{\mathit{a}}]\rightarrow \mathbb{W}\ensuremath{\mathit{x}}:\ensuremath{\mathit{A}}.\ensuremath{\mathit{B}}[\ensuremath{\mathit{x}}]
+   4. \ensuremath{\mathit{g}}: \ensuremath{\mathit{b}}\colon \ensuremath{\mathit{B}}[\ensuremath{\mathit{a}}]\rightarrow \ensuremath{\mathit{T}}[\ensuremath{\mathit{f}} \ensuremath{\mathit{b}}]
+   \vdash \, \ensuremath{\mathit{body}_{1}}[\ensuremath{\mathit{a}}; \ensuremath{\mathit{f}}; \ensuremath{\mathit{g}}] = \ensuremath{\mathit{body}_{2}}[\ensuremath{\mathit{a}}; \ensuremath{\mathit{f}}; \ensuremath{\mathit{g}}] \in  \ensuremath{\mathit{T}}[tree(\ensuremath{\mathit{a}}, \ensuremath{\mathit{f}})]
+====
+
+1. \left< \ensuremath{\Gamma }\right>
+\vdash \,
+(tree_ind(\ensuremath{\mathit{g}}. let tree(\ensuremath{\mathit{a}}, \ensuremath{\mathit{f}}) = \ensuremath{\mathit{z}_{1}} in \ensuremath{\mathit{body}_{1}}[\ensuremath{\mathit{a}}; \ensuremath{\mathit{f}}; \ensuremath{\mathit{g}}])
+= (tree_ind(\ensuremath{\mathit{g}_{2}}. let tree(\ensuremath{\mathit{a}_{2}}, \ensuremath{\mathit{f}_{2}}) = \ensuremath{\mathit{z}_{2}} in \ensuremath{\mathit{body}_{2}}[\ensuremath{\mathit{a}_{2}}; \ensuremath{\mathit{f}_{2}}; \ensuremath{\mathit{g}_{2}}]) \in  \ensuremath{\mathit{T}}[\ensuremath{\mathit{z}_{1}}]
+
+\textbf{BY }assertEqT <<'z1='z2 in w{'A;x.'B['x]}>> taa
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+
+   1. \left< \ensuremath{\Gamma }\right>
+   2. \ensuremath{\mathit{z}}: \mathbb{W}\ensuremath{\mathit{x}}:\ensuremath{\mathit{A}}.\ensuremath{\mathit{B}}[\ensuremath{\mathit{x}}]
+   \vdash \,
+   (tree_ind(\ensuremath{\mathit{g}}. let tree(\ensuremath{\mathit{a}}, \ensuremath{\mathit{f}}) = \ensuremath{\mathit{z}} in \ensuremath{\mathit{body}_{1}}[\ensuremath{\mathit{a}}; \ensuremath{\mathit{f}}; \ensuremath{\mathit{g}}])
+   = (tree_ind(\ensuremath{\mathit{g}_{2}}. let tree(\ensuremath{\mathit{a}_{2}}, \ensuremath{\mathit{f}_{2}}) = \ensuremath{\mathit{z}} in \ensuremath{\mathit{body}_{2}}[\ensuremath{\mathit{a}_{2}}; \ensuremath{\mathit{f}_{2}}; \ensuremath{\mathit{g}_{2}}]) \in  \ensuremath{\mathit{T}}[\ensuremath{\mathit{z}}]
+== itt_srec srecType
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{T}}: \mathbb{U}{}_{'i} \vdash \, \ensuremath{\mathit{B}}[\ensuremath{\mathit{T}}] \in  \mathbb{U}{}_{'i}
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{S}_{1}}: \mathbb{U}{}_{'i}; \ensuremath{\mathit{S}_{2}}: \mathbb{U}{}_{'i}; \ensuremath{\mathit{S}_{1}} \sqsubseteq  \ensuremath{\mathit{S}_{2}} \vdash \, \ensuremath{\mathit{B}}[\ensuremath{\mathit{S}_{1}}] \sqsubseteq  \ensuremath{\mathit{B}}[\ensuremath{\mathit{S}_{2}}]
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \mu {\ensuremath{\mathit{T}}.\ensuremath{\mathit{B}}[\ensuremath{\mathit{T}}]}\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }univTypeT <<univ[i:l]>> ttca
+
+== itt_quotient quotient_memberFormation
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{x}}, \ensuremath{\mathit{y}}: \ensuremath{\mathit{A}} // \ensuremath{\mathit{E}}[\ensuremath{\mathit{x}}; \ensuremath{\mathit{y}}]\,\mathtt{Type\mbox{\tt }}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{x}}, \ensuremath{\mathit{y}}: \ensuremath{\mathit{A}} // \ensuremath{\mathit{E}}[\ensuremath{\mathit{x}}; \ensuremath{\mathit{y}}]
+
+\textbf{BY }assumT 2
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{A}} \vdash \, \ensuremath{\mathit{x}}, \ensuremath{\mathit{y}}: \ensuremath{\mathit{A}} // \ensuremath{\mathit{E}}[\ensuremath{\mathit{x}}; \ensuremath{\mathit{y}}]
+== itt_simple_singleton singleton_univ
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, {\ensuremath{\mathit{a}}{}_{\left< ||\right> }[]} \in  \mathbb{U}{}_{'i}
+
+\textbf{BY }byDefT unfold_singleton
+
+== itt_list2 reduce_hd
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, hd{\ensuremath{\mathit{h}}::\ensuremath{\mathit{t}}} \equiv  \ensuremath{\mathit{h}}
+
+\textbf{BY }rwh unfold_hd 0 thenT rwh reduceC 0 ttca
+
+== itt_list_set mem_append_left
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{x}} \in  \ensuremath{\mathit{ty}}
+2. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{l}_{1}} \in  \ensuremath{\mathit{ty}} List
+3. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{l}_{2}} \in  \ensuremath{\mathit{ty}} List
+4. \left< \ensuremath{\Gamma }\right>  \vdash \, mem(\ensuremath{\mathit{x}} \in  \ensuremath{\mathit{l}_{1}} in \ensuremath{\mathit{ty}} List)
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, mem(\ensuremath{\mathit{x}} \in  \ensuremath{\mathit{l}_{1}}\circ  \ensuremath{\mathit{l}_{2}} in \ensuremath{\mathit{ty}} List)
+
+\textbf{BY }genAssumT [2; 4] thenT dT (-1) ttca
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+
+   1. \left< \ensuremath{\Gamma }\right>
+   2. \ensuremath{\mathit{u}}: \ensuremath{\mathit{ty}}
+   3. \ensuremath{\mathit{v}_{1}}: \ensuremath{\mathit{ty}} List
+   4. mem(\ensuremath{\mathit{x}} \in  \ensuremath{\mathit{v}_{1}} in \ensuremath{\mathit{ty}} List) \rightarrow  mem(\ensuremath{\mathit{x}} \in  \ensuremath{\mathit{v}_{1}}\circ  \ensuremath{\mathit{l}_{2}} in \ensuremath{\mathit{ty}} List)
+   \vdash \, mem(\ensuremath{\mathit{x}} \in  \ensuremath{\mathit{u}}::\ensuremath{\mathit{v}_{1}} in \ensuremath{\mathit{ty}} List) \rightarrow  mem(\ensuremath{\mathit{x}} \in  \ensuremath{\mathit{u}}::\ensuremath{\mathit{v}_{1}}\circ  \ensuremath{\mathit{l}_{2}} in \ensuremath{\mathit{ty}} List)
+== itt_list3 reduce_nth_prefix_zero
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, nth_prefix{\ensuremath{\mathit{l}}; 0} \equiv  []
+
+\textbf{BY }rwh unfold_nth_prefix 0 thenT rw reduceC 0 ttca
+
+== itt_fun2 reduce_compose
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, compose{\ensuremath{\mathit{f}}; \ensuremath{\mathit{g}}} \ensuremath{\mathit{x}} \equiv  \ensuremath{\mathit{f}} (\ensuremath{\mathit{g}} \ensuremath{\mathit{x}})
+
+\textbf{BY }byDefsT [unfold_compose; reduceC]
+
+== itt_union2 inl_wf
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{t}} \in  (Top + Top)
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, is_inl{\ensuremath{\mathit{t}}} \in  \mathbb{B}
+
+\textbf{BY }withTermsT [<<bind{x.bool}>>; <<top+top>>] (byDefT is_inl)
+
+== itt_prop_decide imp_and_rule
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{C}} \wedge  \ensuremath{\mathit{D}} \rightarrow  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{C}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]\,\mathtt{Type\mbox{\tt }}
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{C}} \wedge  \ensuremath{\mathit{D}} \rightarrow  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{D}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]\,\mathtt{Type\mbox{\tt }}
+3. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{C}} \wedge  \ensuremath{\mathit{D}} \rightarrow  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right> ; \ensuremath{\mathit{C}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \rightarrow  \ensuremath{\mathit{D}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \rightarrow  \ensuremath{\mathit{B}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \vdash \, \ensuremath{\mathit{T}}[\ensuremath{\mathit{x}}]
+====
+\left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{C}} \wedge  \ensuremath{\mathit{D}} \rightarrow  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{T}}[\ensuremath{\mathit{x}}]
+
+\textbf{BY }assertT << 'C => 'D => 'B >>
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....assertion....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{C}} \wedge  \ensuremath{\mathit{D}} \rightarrow  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right>  \vdash \, \ensuremath{\mathit{C}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \rightarrow  \ensuremath{\mathit{D}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \rightarrow  \ensuremath{\mathit{B}}{}_{\left< |\ensuremath{\Gamma }|\right> }[]
+\textbf{2. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{C}} \wedge  \ensuremath{\mathit{D}} \rightarrow  \ensuremath{\mathit{B}}; \left< \ensuremath{\Delta }[\ensuremath{\mathit{x}}]\right> ; \ensuremath{\mathit{C}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \rightarrow  \ensuremath{\mathit{D}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \rightarrow  \ensuremath{\mathit{B}}{}_{\left< |\ensuremath{\Gamma }|\right> }[] \vdash \, \ensuremath{\mathit{T}}[\ensuremath{\mathit{x}}]
+== itt_subset2 set_subset
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}}\,\mathtt{Type\mbox{\tt }}
+2. \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{x}}: \ensuremath{\mathit{A}} \vdash \, \ensuremath{\mathit{P}}[\ensuremath{\mathit{x}}]\,\mathtt{Type\mbox{\tt }}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \{\ensuremath{\mathit{a}}\colon \ensuremath{\mathit{A}}|\ensuremath{\mathit{P}}[\ensuremath{\mathit{a}}]\} \subseteq  \ensuremath{\mathit{A}}
+
+\textbf{BY }dT 0 ta
+
+\textbf{1. [\mbox{\tt ?}]}
+   ........
+   \left< \ensuremath{\Gamma }\right> ; \ensuremath{\mathit{a}}: \ensuremath{\mathit{A}}; \ensuremath{\mathit{P}}[\ensuremath{\mathit{a}}]; \ensuremath{\mathit{b}}: \ensuremath{\mathit{A}}; \ensuremath{\mathit{a}} = \ensuremath{\mathit{b}} \in  \ensuremath{\mathit{A}} \vdash \, \sq{\ensuremath{\mathit{P}}[\ensuremath{\mathit{b}}]}
+== itt_record_label0 reduce_ind_up
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{x}} \in  Label
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, ind_lab{\ensuremath{\mathit{x}}'; \ensuremath{\mathit{base}}; l. \ensuremath{\mathit{up}}[\ensuremath{\mathit{l}}]} \equiv  \ensuremath{\mathit{up}}[ind_lab{\ensuremath{\mathit{x}}; \ensuremath{\mathit{base}}; l. \ensuremath{\mathit{up}}[\ensuremath{\mathit{l}}]}]
+
+\textbf{BY }rwaAllAll [unfoldInd; unfold_next; unfold_label] thenT rwh reduceC 0 ta
+
+== itt_record_label reduce_eq_label_true_rw
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, x = y \in  Label
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, \mathop{\bf if}x = y\mathrel{\bf then}\ensuremath{\mathit{A}}\mathrel{\bf else}\ensuremath{\mathit{B}} \equiv  \ensuremath{\mathit{A}}
+
+\textbf{BY }autoT
+
+== itt_record0 baseRecord
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, {0:\ensuremath{\mathit{A}}} \equiv  \ensuremath{\mathit{A}} \times  Top
+
+\textbf{BY }rwh unfoldRecordS 0 thenT rwh reduceC 0 ta
+
+== itt_record recordTypeS
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+1. \left< \ensuremath{\Gamma }\right>  \vdash \, \ensuremath{\mathit{A}}\,\mathtt{Type\mbox{\tt }}
+====
+\left< \ensuremath{\Gamma }\right>  \vdash \, {n:\ensuremath{\mathit{A}}}\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }rwh unfoldRecordS 0 ta
+
+== itt_record_exm planeType
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, \mathbb{P}lane\,\mathtt{Type\mbox{\tt }}
+
+\textbf{BY }rwh unfold_plane 0 ta
+
+== itt_record_renaming rename_rcrd_reduce
+\mbox{\tt ?} <\mbox{\tt ?}>
+....main....
+\left< \ensuremath{\Gamma }\right>  \vdash \, {\ensuremath{\mathit{r}}; c = \ensuremath{\mathit{x}}}[{a\overb}] \equiv  \mathop{\bf if}b = c\mathrel{\bf then}{\ensuremath{\mathit{r}}[{a\overb}]; a = \ensuremath{\mathit{x}}}\mathrel{\bf else}\mathop{\bf if}a = c\mathrel{\bf then}{\ensuremath{\mathit{r}}[{a\overb}]; b = \ensuremath{\mathit{x}}}\mathrel{\bf else}{\ensuremath{\mathit{r}}[{a\overb}]; c = \ensuremath{\mathit{x}}}
+
+\textbf{BY }decideEqLabelT <<label[b:t]>> <<label[c:t]>>
+
+\textbf{1. [\mbox{\tt ?}]}
+   ....main....
+   \left< \ensuremath{\Gamma }\right> ; b = c \in  Label \vdash \, {\ensuremath{\mathit{r}}; c = \ensuremath{\mathit{x}}}[{a\overb}] \equiv  {\ensuremath{\mathit{r}}[{a\overb}]; a = \ensuremath{\mathit{x}}}
+\textbf{2. [\mbox{\tt ?}]}
+   ........
+   \left< \ensuremath{\Gamma }\right> ; b \neq  c \in  Label \vdash \, {\ensuremath{\mathit{r}}; c = \ensuremath{\mathit{x}}}[{a\overb}] \equiv  \mathop{\bf if}a = c\mathrel{\bf then}{\ensuremath{\mathit{r}}[{a\overb}]; b = \ensuremath{\mathit{x}}}\mathrel{\bf else}{\ensuremath{\mathit{r}}[{a\overb}]; c = \ensuremath{\mathit{x}}}

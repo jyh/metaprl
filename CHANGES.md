@@ -332,6 +332,16 @@ against libmojave 1.1.1 or later:
   (`test/filter_types`, #94): besides `prim_rw`, `interactive`, `dform`,
   `iform`, `production` and `declare rewrite`, each with a well-typed and an
   ill-typed fixture.
+- Variable info (`test/unit/test_vars_info.ml`): on 1,500 terms with
+  sequents, contexts, second-order variables, binders and parameters, and
+  1,500 lists of them, `param_vars_info` is the set of meta-variables the
+  parameters name (inside parameter lists, not inside operator
+  parameters), `so_vars_info` and `context_vars_info` name exactly the
+  second-order variables and context hypotheses, each `_list` form is the
+  fold of its single form, `all_vars_terms` is the union of `all_vars`, and
+  term_std and term_ds agree on all of it. No defect. Mutants that look
+  inside operator parameters, skip parameter lists, read only the first
+  term of a list, or mark a sequent context as plain each fail.
 - A rewrite with an argument (`test/unit/test_rewrite_args.ml`), as rules
   such as `thin 'H` take one: `sequent[sa]{ <H>; x: 'A<|H|>; <J<|H|>> >-
   'C<|H;J|> } --> sequent[sb]{ <H>; <J<|H|>> >- 'C<|H;J|> }` with the length

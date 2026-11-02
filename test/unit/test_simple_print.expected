@@ -1,0 +1,43 @@
+dstring_of_var x                   x
+dstring_of_var x, index 3          x3
+dstring_of_var empty               _
+string_of_opname Itt_int!add       Itt_int!add
+string_of_opname two words         two words
+level 2                            2
+level k+1                          {'k'}
+level max(k, 2)                    {2 | 'k}
+param Number 42                    42:n
+param Number 2^70                  1180591620717411303424:n
+param String s                     "s":s
+param String two words             "two words":s
+param String q"uote                "q\"uote":s
+param String empty                 "":s
+param Token                        "Itt_int!add":t
+param Var                          x:v
+param MNumber                      n:n
+param MString                      s:s
+param MToken                       t:t
+param MLevel k+1                   {'k'}:l
+param Quote                        @
+param ObId [1]                     <object-id>
+param ParamList [1; a]             [1:n; "a":s]
+var x                              'x
+constant c                         c
+f{x; c}                            f{'x; c}
+op with params                     p[3:n, "two words":s]
+SO var A<H;S>[x; c]                'A<|H; S|>['x; c]
+SO var B (no args)                 'B<||>
+lam x. f{x}                        lam{'x. f{'x}}
+two binders                        spread{'a, 'b. f{'a}}
+sequent                            Arg: sa
+Hyps:
+      1.h :T
+      2.<K<|H|>['h]>
+Goal:f{'h}
+short_string_of_term, 2^7 leaves   f{f{f{f{f{f{f{z; z}; f{z; z}}; f{f{z; z}; f{z; z}}}; f{f{f{z; z}; f{z; z}}; f...
+string_of_term, same: length       893
+MetaTheorem                        A
+MetaImplies                        A --> B
+MetaFunction                       'x : A --> B
+MetaIff                            A <--> B
+MetaLabeled                         ["lbl"]A

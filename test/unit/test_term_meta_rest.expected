@@ -1,0 +1,21 @@
+600 meta terms (142 strip-refused, 16 rewrites among them), 300 generated rewrites
+std: is_meta_term of term_of_meta_term              600 of 600
+std: iter_mterm visits the terms in order           600 of 600
+std: map_mterm = the model                          600 of 600
+std: all_vars_mterm = union of all_vars             600 of 600
+std: strip_mfunction = the model (or refused)       600 of 600
+std: unzip_mrewrite = the model (or refused)        600 of 600
+std: unzip_mrewrite on generated rewrites           300 of 300
+std: is_meta_term of c, of a broken implication    false, false
+std: zip_mlabeled: labels, unfold_mlabeled, goal   true
+std: unfold_mlabeled refuses an implication        true
+ds: is_meta_term of term_of_meta_term               600 of 600
+ds: iter_mterm visits the terms in order            600 of 600
+ds: map_mterm = the model                           600 of 600
+ds: all_vars_mterm = union of all_vars              600 of 600
+ds: strip_mfunction = the model (or refused)        600 of 600
+ds: unzip_mrewrite = the model (or refused)         600 of 600
+ds: unzip_mrewrite on generated rewrites            300 of 300
+ds: is_meta_term of c, of a broken implication     false, false
+ds: zip_mlabeled: labels, unfold_mlabeled, goal    true
+ds: unfold_mlabeled refuses an implication         true

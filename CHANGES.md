@@ -304,6 +304,12 @@ against libmojave 1.1.1 or later:
   to no context (`'C<||>`: exactly when no variable of `<J>` occurs); all
   400 of 400. Disabling `check_simple_match`, `check_match` or
   `check_var_restrictions` each fails its own model.
+- The rest of `Term_meta` (`test/unit/test_term_meta_rest.ml`): on 600
+  generated meta terms and 300 rewrites, in both implementations, each
+  against a model on the description -- `is_meta_term`, `iter_mterm` (in
+  order), `map_mterm`, `all_vars_mterm`, `strip_mfunction` (with its two
+  refusals), `unzip_mrewrite`, and `zip_mlabeled` with `unfold_mlabeled`.
+  No defect. Five rebuilt mutants of `term_meta_gen.ml` each fail.
 - How the shell resolves paths (`editor/ml/tests/dir_of_path_precedence.sh`,
   #92): an absolute path whose first part names a theory is the theory, even
   when a module has the same name (`/itt_supinf/<rule>` asks for a module

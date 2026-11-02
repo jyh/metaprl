@@ -1,0 +1,8 @@
+term_std: 500 patterns (321 matched), 500 pairs of redices (82 matched)
+term_ds: 500 patterns (323 matched), 500 pairs of redices (96 matched)
+lookup_rwi: 300 tables (183 found a pattern)
+extract_redex_types: first-occurrence order      2000 of 2000
+apply_redex = the model's bindings, or raises    1000 of 1000
+test_redex_applicability raises iff apply_redex  1000 of 1000
+compile_redices: two redices, shared variables   1000 of 1000
+lookup_rwi = apply_redex of the chosen pattern    300 of  300

@@ -316,6 +316,13 @@ against libmojave 1.1.1 or later:
   `Extends` lines, `d` display forms, `D` documentation, `f` no informal
   items, `a` everything `f` and `i` list; an unknown option is an error and
   the shell goes on. Checked by the kind of each entry, not by counts.
+- `Unify_mm`'s equation lists (`test/unit/test_unify_eqnl.ml`): against
+  `test_unify_mm`'s Robinson unifier, on 1,500 systems of one to three
+  equations with and without a constant, the list builders match a list
+  model, `unifiable_eqnl` agrees, `unify_eqnl` raises exactly when there is
+  no unifier and otherwise returns a most general one, `unify_eqnl_eqnl`'s
+  solved form unifies every equation, and `new_eqns_var` is fresh. No
+  defect. Five rebuilt mutants of `unify_mm.ml` each fail.
 - The proof census ends a module's rows at the next module (#93): a module
   named like its theory is entered through the theory, whose `status_all`
   replays every module in it, and `itt_rfun`'s rows had also carried

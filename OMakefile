@@ -193,9 +193,39 @@ $(MPINSTALL): $(EXPORT)/mk/OMakeroot $(EXPORT)/mk/OCaml_version
 #
 # Install everything
 #
+# InstallTree(src, dst) copies the directory src to dst/<its name>, merging
+# into what is already there and following symbolic links to files (lib/,
+# bin/ and export/ are farms of them), with OMake's own mkdir and cp: GNU
+# cp's -L -r --remove-destination is not on macOS (BSD cp) or under native
+# Windows omake, so `omake install` used to work on Linux only. A symbolic
+# link to a DIRECTORY stops the install with a message rather than being
+# skipped (none occurs in these trees; OMake's subdirs does not follow one,
+# and its test -L reads false on links, so it is found as a directory entry
+# subdirs does not list).
+InstallTree(src, dst) =
+    src = $(dir $(src))
+    s = $(string $(src))
+    top = $(dst)/$(basename $(s))
+    real[] =
+    foreach(x => ..., $(subdirs $(src)))
+        real[] += $(string $(x))
+        export
+    foreach(d => ..., $(subdirs $(src)))
+        rel = $(removeprefix $(s), $(string $(d)))
+        mkdir -p $"$(top)$(rel)"
+        foreach(f => ..., $(ls $(d)))
+            if $(not $(test -d $(f)))
+                cp -f $(f) $"$(top)$(rel)/$(basename $(f))"
+                export
+            elseif $(not $(mem $(string $(f)), $(real)))
+                eprintln($"InstallTree: $(f) is a symbolic link to a directory, which this copy does not follow")
+                exit(1)
+            export
+        export
+
 install: $(MPINSTALL)
-    mkdir -p "$(INSTALL_DIR)"
-    /bin/cp -L -r --remove-destination $(LIB) "$(INSTALL_DIR)"
-    /bin/cp -L -r --remove-destination $(BIN) "$(INSTALL_DIR)"
-    /bin/cp -L -r --remove-destination $(EXPORT)/mk "$(INSTALL_DIR)"
-    /bin/cp -L -r --remove-destination $(EXPORT)/theories "$(INSTALL_DIR)"
+    mkdir -p $"$(INSTALL_DIR)"
+    InstallTree($(LIB), $"$(INSTALL_DIR)")
+    InstallTree($(BIN), $"$(INSTALL_DIR)")
+    InstallTree($(EXPORT)/mk, $"$(INSTALL_DIR)")
+    InstallTree($(EXPORT)/theories, $"$(INSTALL_DIR)")

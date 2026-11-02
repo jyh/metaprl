@@ -293,6 +293,14 @@ against libmojave 1.1.1 or later:
   named like its theory is entered through the theory, whose `status_all`
   replays every module in it, and `itt_rfun`'s rows had also carried
   `itt_well_founded_equiv`'s `well_founded_reduction`.
+- Rules over universe levels (`test/unit/test_rewrite_levels.ml`):
+  `u[l] --> v[l]`, `u[l+1] --> v[l+1]` and `u[l+1] --> v[l]` on 300 random
+  levels in both implementations, against a model that compares levels by
+  their value for every value of their variables: `l+1` is refused exactly
+  when a variable has offset 0, and otherwise the level comes back equal
+  (or one below). Recorded, not endorsed: the constant level 0 matches
+  `l+1` with `l = 0`, so `u[l+1] --> v[l+1]` turns 0 into 1. A mutant that
+  lets `l+1` take only offsets of 2 or more fails the model on 89 levels.
 - The filter's term-type checks on every kind of statement
   (`test/filter_types`, #94): besides `prim_rw`, `interactive`, `dform`,
   `iform`, `production` and `declare rewrite`, each with a well-typed and an

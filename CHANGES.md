@@ -52,6 +52,15 @@ against libmojave 1.1.1 or later:
   compare, so a zero coefficient such as 0/4 counted as nonzero and the
   SUP-INF procedure could miss a bound it had derived; it could only lose
   proofs, not admit false ones (#78).
+- `check_all ()`, the grounded check, read every proved rule of a module named
+  like its theory (`itt_rfun`, `itt_supinf`) as depending on an incomplete
+  copy of itself. Rules are registered with `Shell_command.extract [module;
+  rule]`, which resolved the pair as a path from the root, where a theory
+  name wins over a module of the same name. It now looks the module up by
+  name. Proofs were never affected (`status_all` read them complete).
+  Test: `editor/ml/tests/no_self_dependency.sh`, a CI step after the proof
+  replay and in the weekly Windows census; on `THEORIES = all` it checks
+  5,232 rules in 330 modules and finds 0 self-dependencies (#90).
 
 ### Tests
 
@@ -236,9 +245,31 @@ against libmojave 1.1.1 or later:
   `Hashtbl.replace` (212), counting no binders (790), giving a Token
   parameter the Number kind (983). Recorded: a variable and a
   second-order variable with no arguments have the same shape.
+- How the shell resolves paths (`editor/ml/tests/dir_of_path_precedence.sh`,
+  #92): an absolute path whose first part names a theory is the theory, even
+  when a module has the same name (`/itt_supinf/<rule>` asks for a module
+  named `<rule>`); `..`, `...`, `~` and `.` from a proof or a module; and, as
+  it is, a module reached under another theory's name (`../itt_supinf` from
+  `itt_int_base`) — the theory part is not checked against the module.
+- The proof census ends a module's rows at the next module (#93): a module
+  named like its theory is entered through the theory, whose `status_all`
+  replays every module in it, and `itt_rfun`'s rows had also carried
+  `itt_well_founded_equiv`'s `well_founded_reduction`.
+- The filter's term-type checks on every kind of statement
+  (`test/filter_types`, #94): besides `prim_rw`, `interactive`, `dform`,
+  `iform`, `production` and `declare rewrite`, each with a well-typed and an
+  ill-typed fixture.
+- Display forms in the `tex` and `src` modes as well as `prl`
+  (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
+  itt/core goals, against `dform_golden.tex.expected` and
+  `dform_golden.src.expected`.
 
 ### Known not to work
 
+- `omake install` on native Windows: the install rule runs GNU
+  `/bin/cp -L -r --remove-destination`, which native Windows omake cannot
+  execute (`command not found: /bin/cp`, measured on the Windows CI lane).
+  The install tests run on Linux only.
 - JProver's intuitionistic search (LJ, LJmc) does not finish in 10 s on 17
   of the 400 test formulas, all non-theorems, although the multiplicity is
   capped at 3. On `~~((r => r) => r)` the time goes to prefix (string)

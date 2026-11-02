@@ -157,6 +157,12 @@ against libmojave 1.1.1 or later:
   proof census reads rule statuses. A mutant that changes one bracket in
   `itt_record_renaming`'s `rename_df` changes 10 lines of the output.
   ASCII display mode only, at mp's default width of 80.
+- Term shapes (`test/unit/test_term_shape.ml`): on 500 generated terms with
+  parameters of each kind and binders, in both implementations, the
+  canonical term of a shape has that shape, `opparam_of_term` and back
+  gives the same shape, and `shape_compare` is 0 exactly when `eq` holds;
+  both print every shape the same. Mutants that reverse a shape's
+  arities or parameters, or cap an arity at 1, each fail.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`

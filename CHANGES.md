@@ -320,6 +320,16 @@ against libmojave 1.1.1 or later:
   named like its theory is entered through the theory, whose `status_all`
   replays every module in it, and `itt_rfun`'s rows had also carried
   `itt_well_founded_equiv`'s `well_founded_reduction`.
+- The primitive term vocabulary (`test/unit/test_xterms.ml`): in both
+  implementations, list terms built by `mk_xlist_term` and by
+  `xcons`/`xnil` agree and `dest_xlist` gives the terms back (500 random
+  lists); a cons with a non-list tail or a bound variable, and `xnil` with a
+  parameter, are refused; `xrewrite`, `xbind` and the string with one
+  subterm round-trip and refuse other shapes; `is_fso_var_term` holds for a
+  variable and a second-order variable with contexts but no arguments; and
+  `construct_redex` is the binders in order around `params @ terms`. No
+  defect. Mutants that drop the tail check, swap `params` and `terms`, or
+  reverse the binders each fail.
 - Rules over universe levels (`test/unit/test_rewrite_levels.ml`):
   `u[l] --> v[l]`, `u[l+1] --> v[l+1]` and `u[l+1] --> v[l]` on 300 random
   levels in both implementations, against a model that compares levels by

@@ -1,0 +1,39 @@
+500 lists, lengths 0-5 (80 empty)
+std: mk_xlist_term / dest_xlist (500 lists)        500 of 500
+std: mk_xlist_term = xcons ... xnil                500 of 500
+std: dest_xcons / is_xnil_term                     500 of 500
+std: cons with tail c                              is_xlist false, dest_xlist refused
+std: cons binding x                                is_xlist false, dest_xlist refused
+std: xnil with a parameter                         is_xlist false, dest_xlist refused
+std: xrewrite round trip                           true
+std: xrewrite of an xcons                          is false, dest refused
+std: xbind                                         is true; of xcons false
+std: xstring_dep0 round trip                       true
+std: xstring with no subterm                       is false, dest refused
+std: xstring with a bound subterm                  is false, dest refused
+std: variable z                                    is_fso true, dest_fso_var z
+std: z<||> (no contexts, no arguments)             is_fso true, dest_fso_var z
+std: z<|H|> (a context, no arguments)              is_fso true, dest_fso_var z
+std: z[c] (an argument)                            is_fso false, dest_fso_var refused
+std: the term c                                    is_fso false, dest_fso_var refused
+std: construct_redex [|p;q;r|] [c;d] [x]           binders p,q,r, body is params @ terms true
+std: xconcl_term                                   Perv!xconcl, 0 subterms
+ds: mk_xlist_term / dest_xlist (500 lists)         500 of 500
+ds: mk_xlist_term = xcons ... xnil                 500 of 500
+ds: dest_xcons / is_xnil_term                      500 of 500
+ds: cons with tail c                               is_xlist false, dest_xlist refused
+ds: cons binding x                                 is_xlist false, dest_xlist refused
+ds: xnil with a parameter                          is_xlist false, dest_xlist refused
+ds: xrewrite round trip                            true
+ds: xrewrite of an xcons                           is false, dest refused
+ds: xbind                                          is true; of xcons false
+ds: xstring_dep0 round trip                        true
+ds: xstring with no subterm                        is false, dest refused
+ds: xstring with a bound subterm                   is false, dest refused
+ds: variable z                                     is_fso true, dest_fso_var z
+ds: z<||> (no contexts, no arguments)              is_fso true, dest_fso_var z
+ds: z<|H|> (a context, no arguments)               is_fso true, dest_fso_var z
+ds: z[c] (an argument)                             is_fso false, dest_fso_var refused
+ds: the term c                                     is_fso false, dest_fso_var refused
+ds: construct_redex [|p;q;r|] [c;d] [x]            binders p,q,r, body is params @ terms true
+ds: xconcl_term                                    Perv!xconcl, 0 subterms

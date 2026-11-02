@@ -37,12 +37,22 @@ done
 if grep -q '^NCURSES_ENABLED *= *true' "$root/mk/config" 2>/dev/null; then
    clibs="$clibs -cclib -lncurses"
 fi
+# A COMPILATION_MODE = native build (the weekly Windows census, the Linux
+# proofs job) has no .cma archives, only .cmxa: link those with ocamlopt
+# then (no -custom; the C archives link as they are).
+if [ ! -f "$root/tactics/proof/prooflib.cma" ] && [ -f "$root/tactics/proof/prooflib.cmxa" ]; then
+   comp="ocamlfind ocamlopt"; a=cmxa
+   clibs=$(printf '%s\n' "$clibs" | sed 's/-custom //')
+   echo "(native build: linking the .cmxa archives with ocamlopt)"
+else
+   comp="ocamlfind ocamlc"; a=cma
+fi
 for src in "$here"/test_*.ml; do
    name=$(basename "$src" .ml)
    cp "$src" "$tmp/"
-   if ! (cd "$tmp" && ocamlfind ocamlc -package unix,threads.posix,camlp5 -thread -linkpkg -rectypes \
-           $includes "$root/libmojave/lm.cma" "$root/mllib/util.cma" "$root/refiner/refiner.cma" \
-           "$root/tactics/null/trefiner.cma" "$root/tactics/proof/prooflib.cma" $clibs \
+   if ! (cd "$tmp" && $comp -package unix,threads.posix,camlp5 -thread -linkpkg -rectypes \
+           $includes "$root/libmojave/lm.$a" "$root/mllib/util.$a" "$root/refiner/refiner.$a" \
+           "$root/tactics/null/trefiner.$a" "$root/tactics/proof/prooflib.$a" $clibs \
            "$name.ml" -o "$name") > "$tmp/$name.build" 2>&1; then
       echo "FAIL $name: does not build"; cat "$tmp/$name.build"; status=1; continue
    fi

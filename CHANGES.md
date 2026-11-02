@@ -19,6 +19,10 @@ against libmojave 1.1.1 or later:
 
 ### Fixed
 
+- The browser server answers a refused request (`ForbiddenCode`, sent by the
+  shell's browser for a forbidden path) with `403 Forbidden`; it sent `402`,
+  which is Payment Required. mllib's unused `Http_server` carries the same
+  table and is left as it is.
 - term_ds's `TermSubst.standardize` (term_ds is the default refiner) gave back
   a context's arguments in reverse order: a context hypothesis
   `<K<||>[a; b]>` came back as `<K<||>[b; a]>` (three list reversals where

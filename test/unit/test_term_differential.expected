@@ -33,3 +33,8 @@ subst1 = subst of one          2000 2000 2000
 var_subst, then subst back     2000 2000 2000
 standardize is alpha-equal     2000 2000 2000
 standardize of the context term <H>[c; g{c}] is alpha-equal: std true, ds true
+TermMan on 2000 more terms (std = ds, the property in std, in ds):
+all_vars_info                  1438 2000 1438
+  first: std A:so 0 1 K12:ctx 1 1 v2:fo v3:fo v4:fo x0:fo z:fo / ds A:so 0 1 K12:ctx 1 1 v2:fo v3:fo v4:fo z:fo
+explode_term                   1719 1719 2000
+  first: std var/1/3 / ds var/1/2

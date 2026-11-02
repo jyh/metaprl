@@ -1,0 +1,10 @@
+u[l]{'a} --> v[l]{'a}
+  std and ds agree on 300 of 300 (rewrote 300)
+  the model holds on 300; the constant level 0 is apart on 0
+u[l+1]{'a} --> v[l+1]{'a}
+  std and ds agree on 300 of 300 (rewrote 203)
+  the model holds on 286; the constant level 0 is apart on 14
+u[l+1]{'a} --> v[l]{'a}
+  std and ds agree on 300 of 300 (rewrote 203)
+  the model holds on 286; the constant level 0 is apart on 14
+u[l+1] --> v[l+1] on the level 0: 1[]

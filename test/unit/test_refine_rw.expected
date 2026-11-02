@@ -1,0 +1,7 @@
+60 rewrites x 5 terms: 300 cases, 125 rewritten
+  primitive  140 of 140 agree with the model
+  andthenrw   45 of  45 agree with the model
+  orelserw    40 of  40 agree with the model
+  rwhigher    35 of  35 agree with the model
+  rwaddr      40 of  40 agree with the model
+all: 300 of 300 agree with the model

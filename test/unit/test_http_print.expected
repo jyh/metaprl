@@ -1,0 +1,125 @@
+server bound to a port
+/code/0:
+  HTTP/1.0 100 Continue\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/1:
+  HTTP/1.0 200 OK\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/2:
+  HTTP/1.0 201 Created\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/3:
+  HTTP/1.0 202 Accepted\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/4:
+  HTTP/1.0 204 No Content\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/5:
+  HTTP/1.0 301 Moved Permanently\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/6:
+  HTTP/1.0 302 Moved Temporarily\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/7:
+  HTTP/1.0 303 See Other\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/8:
+  HTTP/1.0 304 Not modified\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/9:
+  HTTP/1.0 400 Bad request\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/10:
+  HTTP/1.0 401 Unauthorized\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/11:
+  HTTP/1.0 402 Forbidden\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/12:
+  HTTP/1.0 404 Not found\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/13:
+  HTTP/1.0 500 Internal server error\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/14:
+  HTTP/1.0 501 Not implemented\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/15:
+  HTTP/1.0 502 Bad gateway\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/code/16:
+  HTTP/1.0 503 Service unavailable\r
+  Cache-Control: no-cache\r
+  no Content-Length; body bytes 0
+  body ""
+/page:
+  HTTP/1.0 200 OK\r
+  Cache-Control: no-cache\r
+  Content-Length: 7\r
+  Content-Length = body bytes (7)
+  body "a body\n"
+/content:
+  HTTP/1.0 201 Created\r
+  Cache-Control: no-cache\r
+  Content-Type: text/plain\r
+  Content-Length: 7\r
+  Content-Length = body bytes (7)
+  body "a body\n"
+/error:
+  HTTP/1.0 404 Not found\r
+  Content-Length: 88\r
+  Content-Length = body bytes (88)
+  body starts "<html>\n<head>\n<title>Not found</title>\n<"
+/redirect:
+  HTTP/1.0 302 Moved Temporarily\r
+  Location: /else/where\r
+  Content-Length: 152\r
+  Content-Length = body bytes (152)
+  body starts "<html>\n<head>\n<title>Moved Temporarily</"
+/channel:
+  HTTP/1.0 200 OK\r
+  Last-Modified: Sun, 09 Sep 2001 01:46:40 GMT\r
+  Cache-Control: public\r
+  Content-Length: 18\r
+  Content-Length = body bytes (18)
+  body "line one\nline two\n"
+/cchannel:
+  HTTP/1.0 200 OK\r
+  Last-Modified: Sun, 09 Sep 2001 01:46:40 GMT\r
+  Cache-Control: public\r
+  Content-Type: text/html\r
+  Content-Length: 18\r
+  Content-Length = body bytes (18)
+  body "line one\nline two\n"

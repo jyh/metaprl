@@ -263,6 +263,12 @@ against libmojave 1.1.1 or later:
   (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
   itt/core goals, against `dform_golden.tex.expected` and
   `dform_golden.src.expected`.
+- The Windows lane runs the filter tests (`test/filter_types`,
+  `test/filter_prla_id`, #96) and the display-form goldens in all three modes
+  (#98), which ran on Linux only. The filter runners now hand the native
+  filter `cygpath -m` paths and join `MP_INCLUDE` with `;` under Cygwin
+  (before, every case failed there); the goldens print byte-identically on
+  Windows and Linux.
 
 ### Known not to work
 

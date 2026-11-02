@@ -227,6 +227,16 @@ against libmojave 1.1.1 or later:
   bare rewriter, so it was checked with a mutant instead: a term_std
   substitution that ignores a single variable makes the beta rule disagree
   on 152 of its 400 instances.
+  The rewriter's separate redex interface, which the filter's generated
+  code and every display form (`Term_match_table.lookup_rwi`) use, is
+  checked against first-order matching (`test/unit/test_rewrite_redex.ml`):
+  `compile_redex`, `compile_redices`, `extract_redex_types`,
+  `test_redex_applicability` and `apply_redex` on 500 patterns and 500 pairs
+  of redices over terms and a number parameter, in both implementations,
+  and `lookup_rwi` on 300 tables; all agree. It records that
+  `compile_redices [p; q]` lists `q`'s variables before `p`'s. Mutants that
+  reverse `apply_redex`'s items or `extract_redex_types`' list, or make
+  `test_redex_applicability` accept every term, each turn their checks red.
   Term I/O, through which stored proofs come back, is checked by round
   trip (`test/unit/test_term_io.ml`): the same 2,000 terms written with
   `Ascii_io.AsciiIO.write_term` and read back, one per file and as the

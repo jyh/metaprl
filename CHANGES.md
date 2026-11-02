@@ -296,6 +296,13 @@ against libmojave 1.1.1 or later:
   `Hashtbl.replace` (212), counting no binders (790), giving a Token
   parameter the Number kind (983). Recorded: a variable and a
   second-order variable with no arguments have the same shape.
+- The `TermOp` constructors (`test/unit/test_term_op_shapes.ml`): in both
+  implementations, for 40 `mk_` constructors, `dest_` (and `dest_..._any`)
+  gives the components back, `is_` holds under its own name, and both
+  refuse another name; across the table, `is_X` on the term `mk_Y` built
+  holds exactly when the two have the same shape (1,482 pairs), except
+  that `is_token_simple_term` accepts any number of binder-free subterms.
+  No defect. Four rebuilt mutants of term_ds's `term_op_ds.ml` each fail.
 - Three more rules check the matcher against a model as well as across
   the implementations: a second-order variable that occurs twice as a
   pattern (rewrites exactly when the two bodies are the same up to the

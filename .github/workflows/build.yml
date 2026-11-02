@@ -87,6 +87,12 @@ jobs:
       - name: display forms print 59 itt/core goals as expected (editor/ml/tests/dform_golden.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/dform_golden.sh
+      - name: the same 59 goals in the tex display mode (DFORM_MODE=tex dform_golden.sh)
+        working-directory: metaprl
+        run: DFORM_MODE=tex opam exec -- sh editor/ml/tests/dform_golden.sh
+      - name: the same 59 goals in the src display mode (DFORM_MODE=src dform_golden.sh)
+        working-directory: metaprl
+        run: DFORM_MODE=src opam exec -- sh editor/ml/tests/dform_golden.sh
       - name: an INSTALL_DIR with a space stays one THEORYPATH entry (editor/ml/tests/install_dir_space.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/install_dir_space.sh

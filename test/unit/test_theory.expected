@@ -1,0 +1,7 @@
+get_theories, nothing recorded: []
+get_theory a, nothing recorded: Failure Theory.get_theory: theory ``a'' not found
+get_theories after a/g1, b/g1, a/g2: [a/g2 b/g1 a/g1]
+get_theory a: a/g2
+get_theory b: b/g1
+get_theory c: Failure Theory.get_theory: theory ``c'' not found
+get_theory "": Failure Theory.get_theory: theory ``'' not found

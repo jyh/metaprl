@@ -340,6 +340,19 @@ against libmojave 1.1.1 or later:
   names (k > 0 the k-th; k <= 0 leaving -k after it), when nothing later
   mentions it; 2,400 of 2,400 agree with that model. An off-by-one in
   placing a positive argument fails 374.
+- Level expressions and primitive strings (`test/unit/test_level_exp.ml`):
+  in both implementations, a level built from `mk_const_level_exp`,
+  `mk_var_level_exp`, `max_level_exp` and `incr_level_exp` has the value of
+  its expression (max of a constant and variable-plus-offset terms) under
+  every assignment of 0..3 to three variables, on 3,000 random expressions,
+  with its variables distinct and in order; `level_le` and `level_lt` are
+  sound against those values on 3,000 pairs (they compare constant with
+  constant and offset with offset, so about 4 % of pairs whose values agree
+  get a no, which the test counts). `mk_xstring_term` round-trips and
+  `is_xstring_term`/`dest_xstring` refuse four other shapes. No defect.
+  Mutants that drop an offset in `max_level_exp`, forget the variables in
+  `incr_level_exp`, accept a variable missing on the right, or make
+  `level_lt` non-strict each fail.
 - Display forms in the `tex` and `src` modes as well as `prl`
   (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
   itt/core goals, against `dform_golden.tex.expected` and

@@ -168,6 +168,17 @@ against libmojave 1.1.1 or later:
   their interfaces state them. No defect. `List_neq_append.to_list`
   returns the elements in reverse order of insertion (no order is
   documented; the test records it).
+- Meta terms, the statements of rules (`test/unit/test_term_meta.ml`): on 400
+  generated statements in both implementations, the zip/unzip pairs for
+  implications and functions give back their parts, `meta_alpha_equal`
+  holds for a renamed copy and fails for a different statement,
+  `term_of_meta_term` and back is the same, `free_vars_mterm` is the parts'
+  free variables plus the meta-functions' variables (a rule's arguments
+  count as free), and free-variable encoding round-trips. Recorded as it
+  stands: `meta_alpha_equal` ignores labels and a meta-function's variable,
+  so `(a:c -> 'a)` and `(b:c -> 'b)` compare unequal while `(a:c -> 'b)`
+  and `(b:c -> 'b)` compare equal (its main caller strips meta-functions
+  first). Three mutants each fail.
 - `mllib`'s `Latin1_case` (all 256 characters against ISO 8859-1, and its
   string functions) and `Precedence` (`get_prec` against the closure of
   `add_lt` and `add_eq`) are checked (`test/unit/test_mllib_models2.ml`,

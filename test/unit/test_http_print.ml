@@ -68,7 +68,7 @@ let report path =
   let rec find i = if i + 3 >= String.length r then None
     else if String.sub r i 4 = "\r\n\r\n" then Some i else find (i + 1) in
   match find 0 with
-  | None -> Printf.printf "  no blank line; %d bytes: %S\n" (String.length r) r
+  | None -> Printf.printf "  no blank line; %d bytes: %S\n%!" (String.length r) r
   | Some i ->
       let head = String.sub r 0 (i + 2) and body = String.sub r (i + 4) (String.length r - i - 4) in
       List.iter (fun l -> if l <> "" then Printf.printf "  %s\n" (show_line l)) (String.split_on_char '\n' head);
@@ -82,7 +82,10 @@ let report path =
        | Some n -> Printf.printf "  Content-Length %d, body bytes %d\n" n (String.length body)
        | None -> Printf.printf "  no Content-Length; body bytes %d\n" (String.length body));
       if String.length body <= 40 then Printf.printf "  body %S\n" body
-      else Printf.printf "  body starts %S\n" (String.sub body 0 40)
+      else Printf.printf "  body starts %S\n" (String.sub body 0 40);
+      (* Flushed per request, so a server log line lands beside the request
+         that caused it rather than after the whole report. *)
+      flush stdout
 
 let () =
   let oc = open_out_bin file in

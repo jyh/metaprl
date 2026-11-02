@@ -279,6 +279,15 @@ against libmojave 1.1.1 or later:
   (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
   itt/core goals, against `dform_golden.tex.expected` and
   `dform_golden.src.expected`.
+- Three redex shapes no other test compiled (`test/unit/test_rewrite_shapes.ml`):
+  a variable bound in the redex and used in it (`lam{x. 'x} --> id` rewrites
+  exactly the identity, not `lam{u. 'z}`), a free first-order variable
+  (`f{'x} --> g{'x}` exactly when the argument is a variable), and a context
+  in two sequents of one redex (exactly when both have the same
+  hypotheses); 300 terms each, both implementations, all agree with the
+  model. Disabling the bound-variable check, letting the free variable
+  match any term, or skipping the second context's comparison each fails
+  its model.
 - The Windows lane runs the filter tests (`test/filter_types`,
   `test/filter_prla_id`, #96) and the display-form goldens in all three modes
   (#98), which ran on Linux only. The filter runners now hand the native

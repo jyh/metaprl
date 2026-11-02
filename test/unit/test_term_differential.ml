@@ -272,8 +272,45 @@ module Check (R : Refiner_sig.RefinerSig) = struct
 
 end
 
+(* Substitution and variable analysis (TermSubst), each as a value both
+   implementations must agree on and a property it must have. *)
+module Subst (R : Refiner_sig.RefinerSig) = struct
+  module C = Check (R)
+  open R.Term
+  open R.TermSubst
+  let names t = List.sort Stdlib.compare (List.map string_of_symbol (SymbolSet.elements (free_vars_set t)))
+  let checks d =
+    let t = C.build d in
+    let fv = free_vars_set t in
+    let u = C.build (Op ("g", [ Op ("c", []) ])) in
+    let one name value prop = name, C.safe (fun () -> value ()), (try prop () with _ -> false) in
+    [ one "is_closed_term" (fun () -> string_of_bool (is_closed_term t))
+        (fun () -> is_closed_term t = SymbolSet.is_empty fv);
+      one "is_var_free" (fun () -> String.concat "" (List.map (fun v -> if is_var_free (add v) t then "1" else "0") [ "z"; "y"; "w"; "x0"; "x1" ]))
+        (fun () -> List.for_all (fun v -> is_var_free (add v) t = SymbolSet.mem fv (add v)) [ "z"; "y"; "w"; "x0"; "x1" ]);
+      one "is_some_var_free [y; z]" (fun () -> string_of_bool (is_some_var_free [ add "y"; add "z" ] t))
+        (fun () -> is_some_var_free [ add "y"; add "z" ] t = (SymbolSet.mem fv (add "y") || SymbolSet.mem fv (add "z")));
+      one "free_vars_list" (fun () -> String.concat "," (List.sort Stdlib.compare (List.map string_of_symbol (free_vars_list t))))
+        (fun () -> let l = List.map string_of_symbol (free_vars_list t) in
+          List.sort Stdlib.compare l = names t);
+      one "subst1 = subst of one" (fun () -> C.cshow [] (subst1 t (add "z") u))
+        (fun () -> alpha_equal (subst1 t (add "z") u) (subst t [ add "z" ] [ u ]));
+      one "var_subst, then subst back" (fun () -> C.cshow [] (var_subst t (C.build (Op ("c", []))) (add "vv")))
+        (fun () -> alpha_equal (subst1 (var_subst t (C.build (Op ("c", []))) (add "vv")) (add "vv") (C.build (Op ("c", [])))) t);
+      one "standardize is alpha-equal" (fun () -> C.cshow [] (standardize t))
+        (fun () -> alpha_equal (standardize t) t) ]
+  (* A context term (SOContext), which the generator does not build. *)
+  let context_term () =
+    let op s = Opname.make_opname [ s ] in
+    let c = mk_simple_term (op "c") [] in
+    let t = R.TermMan.mk_context_term (add "H") (mk_simple_term (op "f") [ c ]) [] [ c; mk_simple_term (op "g") [ c ] ] in
+    C.safe (fun () -> string_of_bool (alpha_equal (standardize t) t))
+end
+
 module Std = Check (Refiner_std.Refiner)
 module Ds = Check (Refiner_ds.Refiner)
+module Sstd = Subst (Refiner_std.Refiner)
+module Sds = Subst (Refiner_ds.Refiner)
 
 let seqs = ref 0 and ctxs = ref 0 and hyps = ref 0 and sovars = ref 0 and conts_lists = ref 0 and binds = ref 0
 let rec count = function
@@ -334,3 +371,26 @@ let () =
     names2;
   Printf.printf "match_terms on hand-made cases (std / ds):\n";
   List.iter2 (fun (name, a) (_, b) -> Printf.printf "  %-30s %s / %s\n" name a b) Std.hand Ds.hand
+
+let () =
+  state := 31337;
+  let n = 2000 in
+  let k = List.length (Sstd.checks (Var "z")) in
+  let agree = Array.make k 0 and oks = Array.make k 0 and okd = Array.make k 0 and first = Array.make k None in
+  let nm = Array.make k "" in
+  for _ = 1 to n do
+    let d = gen 4 [] 0 in
+    List.iteri (fun i ((name, s, ps), (_, t, pd)) ->
+        nm.(i) <- name;
+        if s = t then agree.(i) <- agree.(i) + 1 else if first.(i) = None then first.(i) <- Some ("std " ^ s ^ " / ds " ^ t);
+        if ps then oks.(i) <- oks.(i) + 1 else if first.(i) = None then first.(i) <- Some ("std property fails: " ^ s);
+        if pd then okd.(i) <- okd.(i) + 1 else if first.(i) = None then first.(i) <- Some ("ds property fails: " ^ t))
+      (List.combine (Sstd.checks d) (Sds.checks d))
+  done;
+  Printf.printf "TermSubst on %d more terms (std = ds, the property in std, in ds):\n" n;
+  Array.iteri (fun i name ->
+      Printf.printf "%-30s %4d %4d %4d\n" name agree.(i) oks.(i) okd.(i);
+      match first.(i) with None -> () | Some w -> Printf.printf "  first: %s\n" w)
+    nm
+;;
+Printf.printf "standardize of the context term <H>[c; g{c}] is alpha-equal: std %s, ds %s\n" (Sstd.context_term ()) (Sds.context_term ())

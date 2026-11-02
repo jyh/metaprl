@@ -257,6 +257,12 @@ against libmojave 1.1.1 or later:
   named `<rule>`); `..`, `...`, `~` and `.` from a proof or a module; and, as
   it is, a module reached under another theory's name (`../itt_supinf` from
   `itt_int_base`) — the theory part is not checked against the module.
+- What the shell's `ls` options select (`editor/ml/tests/ls_options.sh`):
+  on `itt_int_base`, `r` lists only rewrites and definitions, `R` only rules,
+  `rR` both, `u` exactly the rewrites and rules not yet proved, `p` the
+  `Extends` lines, `d` display forms, `D` documentation, `f` no informal
+  items, `a` everything `f` and `i` list; an unknown option is an error and
+  the shell goes on. Checked by the kind of each entry, not by counts.
 - The proof census ends a module's rows at the next module (#93): a module
   named like its theory is entered through the theory, whose `status_all`
   replays every module in it, and `itt_rfun`'s rows had also carried

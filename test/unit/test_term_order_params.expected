@@ -1,0 +1,6 @@
+400 parameters of 12 kinds (53 of them levels, 31 operator parameters)
+compare a a = 0                                     400 of    400
+compare a b = 0 iff the same parameter           160000 of 160000
+sign (compare a b) = - sign (compare b a)        160000 of 160000
+kinds in the order of the match                   72778 of  72778
+transitive (a <= b <= c gives a <= c)              3567 of   3567

@@ -355,6 +355,13 @@ against libmojave 1.1.1 or later:
 
 ### Known not to work
 
+- `Term_order.compare_params` on every kind of parameter
+  (`test/unit/test_term_order_params.ml`), levels and operator parameters
+  included: on 400 generated parameters it is a total order (0 exactly when
+  two parameters are the same, antisymmetric, transitive on 20,000 triples)
+  that puts the kinds in the order of its match. Mutants that ignore a
+  level's variables, a level variable's offset, or an operator parameter's
+  arities each break "0 exactly when the same".
 - JProver's intuitionistic search (LJ, LJmc) does not finish in 10 s on 17
   of the 400 test formulas, all non-theorems, although the multiplicity is
   capped at 3. On `~~((r => r) => r)` the time goes to prefix (string)

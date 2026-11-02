@@ -1,0 +1,8 @@
+500 terms (296 with an operator at the root)
+std and ds print the shape the same                   500 of 500
+std: canonical term has the shape                     500 of 500
+std: opparam round trip                               500 of 500
+std: shape_compare 0 iff eq, antisymmetric           250000 of 250000
+ds: canonical term has the shape                      500 of 500
+ds: opparam round trip                                500 of 500
+ds: shape_compare 0 iff eq, antisymmetric            250000 of 250000

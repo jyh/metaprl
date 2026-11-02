@@ -143,6 +143,13 @@ against libmojave 1.1.1 or later:
   that must be accepted, including a Term where a Dform is taken (perv
   declares `Dform <- Term`). A mutant whose subtype check accepts makes
   the three type errors pass.
+- `Term_match_table.lookup_bucket` and `lookup_rmap`
+  (`test/unit/test_term_match_table.ml`, 600 tables each, against the same
+  matching model): the bucket is every value added with one most specific
+  matching pattern, patterns being the same up to the names of their
+  variables (`'a` and `'b` share one); `lookup_rmap` returns a most specific
+  pattern's newest value with its contracta instantiated by the match. A
+  bucket cut to its first value fails 127 tables; reversed contracta fail 8.
 - Display forms (`editor/ml/tests/dform_golden.sh`, a CI step after the
   build): `mp -batch` prints 59 goals, one per itt/core module (its first
   rule with a stored complete proof), and the text is compared with

@@ -287,6 +287,17 @@ against libmojave 1.1.1 or later:
   contractum parameter the redex does not bind does not compile. A mutant
   that reverses the contractum's parameters fails the two rules with
   several (0 of 300).
+- Term projections, simple terms and the rest of `Term_addr`
+  (`test/unit/test_term_base_addr.ml`): in both implementations, on 1,500
+  terms, `opname_of_term`/`subterms_of_term`/`subterm_arities` match the
+  description; at every listed address `apply_fun_arg_at_addr` and
+  `apply_var_fun_arg_at_addr` agree with their plain forms and with
+  `term_subterm` (term_ds builds the plain form from the `_arg` one, so the
+  `term_subterm` check is the one that does not share its code);
+  `split_clause_address` splits clause addresses on sequents and refuses
+  others; and the simple-term constructors and destructors round-trip and
+  refuse parameters and binders. No defect. Five rebuilt mutants of
+  term_ds's own code each fail.
 - `Term_stable`, the table keyed by a term's shape behind itt_squash's
   unsquash resource (`test/unit/test_term_stable.ml`): 300 generated terms
   inserted and 1,000 looked up, one in five of a shape never inserted;

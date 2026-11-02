@@ -29,6 +29,16 @@ against libmojave 1.1.1 or later:
   compiler's `m_standardize`. Found by the new TermSubst checks in
   `test/unit/test_term_differential.ml`: 211 of 2,000 terms, and the
   context term.
+- term_ds's `TermMan.all_vars_info` left out bound variables (term_std
+  records them as first order). Its callers take the names it returns as
+  the names in use and pick a fresh one outside them (itt_vec_sequent_term's
+  `hoist_hyps_length_tac`, meta_context_ind1's `new_vars_table`), so on
+  term_ds the "fresh" name could be one the term binds. 562 of 2,000 terms.
+- term_std's `TermMan.explode_term` of a second-order variable listed one
+  subterm more than its arguments: the contexts list term_std keeps as a
+  last subterm. It now lists the arguments only, as term_ds and the
+  signature's "standard form" do. 281 of 2,000 terms (every one whose root
+  is a second-order variable).
 - A module whose id is 2^30 or more could not be built from its proof
   archive (`.prla`): the filter refused it with `Filter_summary.dest_id:
   not an int`. The id is an OCaml int written as a decimal; reading it,

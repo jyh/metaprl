@@ -305,6 +305,14 @@ against libmojave 1.1.1 or later:
   (`test/filter_types`, #94): besides `prim_rw`, `interactive`, `dform`,
   `iform`, `production` and `declare rewrite`, each with a well-typed and an
   ill-typed fixture.
+- A rewrite with an argument (`test/unit/test_rewrite_args.ml`), as rules
+  such as `thin 'H` take one: `sequent[sa]{ <H>; x: 'A<|H|>; <J<|H|>> >-
+  'C<|H;J|> } --> sequent[sb]{ <H>; <J<|H|>> >- 'C<|H;J|> }` with the length
+  of `H` an int argument, on 200 sequents with every argument from -5 to 6
+  in both implementations: it removes exactly the hypothesis the argument
+  names (k > 0 the k-th; k <= 0 leaving -k after it), when nothing later
+  mentions it; 2,400 of 2,400 agree with that model. An off-by-one in
+  placing a positive argument fails 374.
 - Display forms in the `tex` and `src` modes as well as `prl`
   (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
   itt/core goals, against `dform_golden.tex.expected` and

@@ -1,0 +1,6 @@
+lam{x. 'x} --> id
+  std and ds agree on 300 of 300; the model on 300 (it rewrites 135)
+f{'x} --> g{'x} (x free)
+  std and ds agree on 300 of 300; the model on 300 (it rewrites 158)
+pair of sequents sharing <H>
+  std and ds agree on 300 of 300; the model on 300 (it rewrites 176)

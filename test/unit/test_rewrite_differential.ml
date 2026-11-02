@@ -4,8 +4,9 @@
    its redex (built from pseudo-random subterms) and to 400 pseudo-random
    terms, and compares the contracta, or that both refuse.  The rules
    cover an operator, a binder with a second-order body, a sequent with
-   contexts and a hypothesis, and the hyps_length rule whose redex led to
-   #58.  The generator is a fixed linear congruential sequence, so the
+   contexts and a hypothesis, the hyps_length rule whose redex led to
+   #58, a second-order variable that occurs twice (as a pattern, and as
+   an instance), and a conclusion restricted to no context.  The generator is a fixed linear congruential sequence, so the
    terms are the same on every OCaml. *)
 open Lm_symbol
 open Term_sig
@@ -139,6 +140,21 @@ end
 module Std = Rw (Refiner_std.Refiner)
 module Ds = Rw (Refiner_ds.Refiner)
 
+(* The description with c for the free variable x. *)
+let rec subst_c x = function
+  | Var v -> if v = x then Op ("c", []) else Var v
+  | SOVar (v, cs, ts) -> SOVar (v, cs, List.map (subst_c x) ts)
+  | Op (o, ts) -> Op (o, List.map (subst_c x) ts)
+  | Bind (z, t) -> if z = x then Bind (z, t) else Bind (z, subst_c x t)
+  | Seq (a, hs, c) ->
+      let rec go acc = function
+        | [] -> Seq (a, List.rev acc, subst_c x c)
+        | Hyp (v, t) :: hs when v = x -> Seq (a, List.rev_append acc (Hyp (v, subst_c x t) :: hs), c)
+        | Hyp (v, t) :: hs -> go (Hyp (v, subst_c x t) :: acc) hs
+        | Ctx (k, cs, ts) :: hs -> go (Ctx (k, cs, List.map (subst_c x) ts) :: acc) hs
+      in
+      go [] hs
+
 let mv v = SOVar (v, [], [])
 let rand_hyps prefix env =
   let rec go i env acc =
@@ -174,6 +190,38 @@ let rules = [
      let j, _ = rand_hyps "j" [] in
      let k, _ = rand_hyps "k" [] in
      Op ("hyps_length", [ Seq ("mk_vbind", j, Op ("mk_core", [ Seq ("hypconslist", k, gen 2 [] 0) ])) ]));
+
+  (* A second-order variable that occurs twice as a pattern (its arguments
+     are bound variables): the second is matched against the first
+     (Rewrite_match_redex.check_simple_match). Half the instances repeat the
+     body under a renamed binder, half do not. *)
+  "f{lam{x. 'b['x]}; lam{y. 'b['y]}} --> 'b[c]",
+  Op ("f", [ Bind ("x", SOVar ("b", [], [ Var "x" ])); Bind ("y", SOVar ("b", [], [ Var "y" ])) ]),
+  SOVar ("b", [], [ Op ("c", []) ]),
+  (fun () ->
+     let body = gen 3 [ "u" ] 0 in
+     Op ("f", [ Bind ("u", body); if pick 2 = 0 then Bind ("w", subst "u" "w" body) else Bind ("w", gen 3 [ "w" ] 0) ]));
+
+  (* A second occurrence that is an instance (its argument is not a bound
+     variable): 'b[c] is matched against the body of the first, with c for
+     its variable (Rewrite_match_redex.check_match). *)
+  "g{lam{x. 'b['x]}; 'b[c]} --> 'b[c]",
+  Op ("g", [ Bind ("x", SOVar ("b", [], [ Var "x" ])); SOVar ("b", [], [ Op ("c", []) ]) ]),
+  SOVar ("b", [], [ Op ("c", []) ]),
+  (fun () ->
+     let body = gen 3 [ "u" ] 0 in
+     Op ("g", [ Bind ("u", body); if pick 2 = 0 then subst_c "u" body else gen 3 [] 0 ]));
+
+  (* A conclusion restricted to no context: 'C<||>['x] may not mention the
+     hypotheses of <J> (Rewrite_match_redex.check_var_restrictions). The
+     instances' conclusions sometimes use a variable bound in <J>. *)
+  "sequent[sa]{ <J>; x: 'A<|J|> >- 'C<||>['x] } --> sequent[sb]{ <J>; x: 'A<|J|> >- 'C<||>['x] }",
+  Seq ("sa", [ Ctx ("J", [], []); Hyp ("x", SOVar ("A", [ "J" ], [])) ], SOVar ("C", [], [ Var "x" ])),
+  Seq ("sb", [ Ctx ("J", [], []); Hyp ("x", SOVar ("A", [ "J" ], [])) ], SOVar ("C", [], [ Var "x" ])),
+  (fun () ->
+     let j = List.init (1 + pick 2) (fun i -> Hyp (Printf.sprintf "jv%d" i, Op ("c", []))) in
+     let env = if pick 2 = 0 then [ "y" ] else List.map (function Hyp (v, _) -> v | Ctx (k, _, _) -> k) j @ [ "y" ] in
+     Seq ("sa", j @ [ Hyp ("y", gen 2 [] 0) ], gen 2 env 0));
 ]
 
 let () =
@@ -200,3 +248,35 @@ let () =
       run "instances of the redex" instance;
       run "random terms" (fun () -> gen 4 [] 0))
     rules
+
+(* The two rules above against a model, in term_ds: the restricted
+   conclusion rewrites exactly when the instance does not mention a
+   variable bound in <J>, and the twice-occurring 'b exactly when the two
+   bodies are the same up to the binder's name. *)
+let rec mentions_j = function
+  | Var v -> String.length v > 2 && String.sub v 0 2 = "jv"
+  | SOVar (_, _, ts) | Op (_, ts) -> List.exists mentions_j ts
+  | Bind (_, t) -> mentions_j t
+  | Seq (_, hs, c) ->
+      mentions_j c || List.exists (function Hyp (_, t) -> mentions_j t | Ctx (_, _, ts) -> List.exists mentions_j ts) hs
+
+let () =
+  state := 999;
+  let model name (_, redex, contractum, inst) want =
+    let rw = Ds.rewrite redex contractum in
+    let agree = ref 0 and yes = ref 0 and first = ref None in
+    for _ = 1 to 400 do
+      let d = inst () in
+      let w = want d and got = Ds.apply rw d <> "(refused)" in
+      if w then incr yes;
+      if w = got then incr agree else if !first = None then first := Some (Ds.show (Ds.build d))
+    done;
+    Printf.printf "model: %-60s %d of 400 agree (the model rewrites %d)\n" name !agree !yes;
+    match !first with None -> () | Some d -> Printf.printf "    first difference: %s\n" d
+  in
+  model "'b twice: rewrites iff the bodies are the same" (List.nth rules 4)
+    (function Op (_, [ Bind (u, b1); Bind (w, b2) ]) -> subst w u b2 = b1 | _ -> false);
+  model "'b[c]: rewrites iff it is the body with c for its variable" (List.nth rules 5)
+    (function Op (_, [ Bind (u, b1); b2 ]) -> subst_c u b1 = b2 | _ -> false);
+  model "'C<||>: rewrites iff no variable of <J> occurs" (List.nth rules 6)
+    (fun d -> not (mentions_j d))

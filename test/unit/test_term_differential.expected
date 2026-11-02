@@ -24,3 +24,15 @@ match_terms on hand-made cases (std / ds):
   f{'y; 'y} with f{c; 'w}        (raises) / (raises)
   lam x.f{'y} with lam x.f{'x}   (raises) / (raises)
   f{'y} with f{'y}               [] / []
+TermSubst on 2000 more terms (std = ds, the property in std, in ds):
+is_closed_term                 2000 2000 2000
+is_var_free                    2000 2000 2000
+is_some_var_free [y; z]        2000 2000 2000
+free_vars_list                 2000 2000 2000
+subst1 = subst of one          2000 2000 2000
+var_subst, then subst back     2000 2000 2000
+standardize is alpha-equal     2000 2000 2000
+standardize of the context term <H>[c; g{c}] is alpha-equal: std true, ds true
+TermMan on 2000 more terms (std = ds, the property in std, in ds):
+all_vars_info                  2000 2000 2000
+explode_term                   2000 2000 2000

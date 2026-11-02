@@ -19,6 +19,10 @@ against libmojave 1.1.1 or later:
 
 ### Fixed
 
+- The browser server answers a refused request (`ForbiddenCode`, sent by the
+  shell's browser for a forbidden path) with `403 Forbidden`; it sent `402`,
+  which is Payment Required. mllib's unused `Http_server` carries the same
+  table and is left as it is.
 - term_ds's `TermSubst.standardize` (term_ds is the default refiner) gave back
   a context's arguments in reverse order: a context hypothesis
   `<K<||>[a; b]>` came back as `<K<||>[b; a]>` (three list reversals where
@@ -59,6 +63,14 @@ against libmojave 1.1.1 or later:
 - term_ds's `match_terms` let a bound variable of the pattern match any
   subterm, so `lam x.f{'x}` matched `lam y.f{c}` (#63), and its `all_vars`
   left out the variables a bound term binds (#67).
+- `Term_match_table` lost a sequent pattern with hypotheses on both sides of
+  its context (`{ 'a; <H>; 'b >- c }`): `compile_sequent` built the
+  pattern's program from the stack it was given instead of the one its
+  recursion returned, dropping the hypotheses after the context, so a
+  lookup missed the entry even where the rewriter's own matcher accepts the
+  pattern. The tables behind resources (intro, elim, the decision tables)
+  are of this kind. Found by `test/unit/test_term_match_seq.ml`: 64 of 600
+  tables missed a matching value, none now.
 - `Tactic_boot` compared one argument's term-list attributes with
   themselves, so the proof editor could reattach a stored sub-proof to a
   subgoal whose term-list attribute differs (#59).
@@ -143,6 +155,13 @@ against libmojave 1.1.1 or later:
   that must be accepted, including a Term where a Dform is taken (perv
   declares `Dform <- Term`). A mutant whose subtype check accepts makes
   the three type errors pass.
+- `Term_match_table.lookup_bucket` and `lookup_rmap`
+  (`test/unit/test_term_match_table.ml`, 600 tables each, against the same
+  matching model): the bucket is every value added with one most specific
+  matching pattern, patterns being the same up to the names of their
+  variables (`'a` and `'b` share one); `lookup_rmap` returns a most specific
+  pattern's newest value with its contracta instantiated by the match. A
+  bucket cut to its first value fails 127 tables; reversed contracta fail 8.
 - Display forms (`editor/ml/tests/dform_golden.sh`, a CI step after the
   build): `mp -batch` prints 59 goals, one per itt/core module (its first
   rule with a stored complete proof), and the text is compared with
@@ -150,16 +169,41 @@ against libmojave 1.1.1 or later:
   proof census reads rule statuses. A mutant that changes one bracket in
   `itt_record_renaming`'s `rename_df` changes 10 lines of the output.
   ASCII display mode only, at mp's default width of 80.
+- Term shapes (`test/unit/test_term_shape.ml`): on 500 generated terms with
+  parameters of each kind and binders, in both implementations, the
+  canonical term of a shape has that shape, `opparam_of_term` and back
+  gives the same shape, and `shape_compare` is 0 exactly when `eq` holds;
+  both print every shape the same. Mutants that reverse a shape's
+  arities or parameters, or cap an arity at 1, each fail.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`
   returns the elements in reverse order of insertion (no order is
   documented; the test records it).
+- Meta terms, the statements of rules (`test/unit/test_term_meta.ml`): on 400
+  generated statements in both implementations, the zip/unzip pairs for
+  implications and functions give back their parts, `meta_alpha_equal`
+  holds for a renamed copy and fails for a different statement,
+  `term_of_meta_term` and back is the same, `free_vars_mterm` is the parts'
+  free variables plus the meta-functions' variables (a rule's arguments
+  count as free), and free-variable encoding round-trips. Recorded as it
+  stands: `meta_alpha_equal` ignores labels and a meta-function's variable,
+  so `(a:c -> 'a)` and `(b:c -> 'b)` compare unequal while `(a:c -> 'b)`
+  and `(b:c -> 'b)` compare equal (its main caller strips meta-functions
+  first). Three mutants each fail.
 - `mllib`'s `Latin1_case` (all 256 characters against ISO 8859-1, and its
   string functions) and `Precedence` (`get_prec` against the closure of
   `add_lt` and `add_eq`) are checked (`test/unit/test_mllib_models2.ml`,
   #53). No defect. `mllib/simplehashtbl.ml` is not built (it is not in
   mllib's `FILES`) and nothing uses it.
+- The refiner's rewrite combinators (`test/unit/test_refine_rw.ml`):
+  `andthenrw`, `orelserw`, `rwhigher` and `rwaddr` over three rewrites made
+  with `create_rewrite` in a null refiner, 60 random combinations on 5
+  random terms each, through `rwtactic` and `refine`, against a model; all
+  300 agree. Recorded: `rwhigher` never fails — where its rewrite applies
+  nowhere it leaves the term as it is. `refine.ml` had no unit test before.
+  Mutants that swap `andthenrw`'s order, drop `orelserw`'s fallback, or
+  ignore `rwaddr`'s address each fail.
 - `mllib`'s `Memo`, `Weak_memo` and `Line_buffer` are checked
   (`test/unit/test_mllib_models3.ml`, #54): memo tables against the
   function they memoize, the weak table across forced major collections
@@ -169,6 +213,14 @@ against libmojave 1.1.1 or later:
   entries added in the same clock tick are ordered by key, so on a coarse
   clock (Windows) a newly added key that sorts first can be the one
   evicted; the test adds keys in increasing order and records this.
+- `TermAddr.subterm_exists` and `strip_address`
+  (`test/unit/test_term_addr_std_ds.ml`): on four terms (the sequent, an
+  operator, a binder, a second-order variable) and 157 addresses each,
+  `subterm_exists` holds exactly when `term_subterm` answers, and
+  `strip_address` of every prefix composes back to the address, in both
+  implementations. Recorded, not endorsed: on a sequent, term_std answers
+  plain `Subterm` addresses by walking its own encoding of the sequent,
+  where term_ds refuses (8 of 628 pairs).
 - metaprl's two term implementations disagree on addresses under a
   context hypothesis (`test/unit/test_term_addr_std_ds.ml`, #55, a pin:
   16 of 36 addresses differ). For `sequent { <H>; x: A; <K['t1; it]> >- C }`,
@@ -355,6 +407,13 @@ against libmojave 1.1.1 or later:
 
 ### Known not to work
 
+- `Term_order.compare_params` on every kind of parameter
+  (`test/unit/test_term_order_params.ml`), levels and operator parameters
+  included: on 400 generated parameters it is a total order (0 exactly when
+  two parameters are the same, antisymmetric, transitive on 20,000 triples)
+  that puts the kinds in the order of its match. Mutants that ignore a
+  level's variables, a level variable's offset, or an operator parameter's
+  arities each break "0 exactly when the same".
 - JProver's intuitionistic search (LJ, LJmc) does not finish in 10 s on 17
   of the 400 test formulas, all non-theorems, although the multiplicity is
   capped at 3. On `~~((r => r) => r)` the time goes to prefix (string)

@@ -912,7 +912,9 @@ struct
       List.fold_left all_vars_info_param vars params
 
    and all_vars_info_bterm vars bt =
-      all_vars_info vars bt.bterm
+      (* the binders too, as first-order variables (as term_std) *)
+      let vars = List.fold_left (fun vars v -> SymbolTable.add vars v FirstOrderVar) vars bt.bvars in
+         all_vars_info vars bt.bterm
 
    and all_vars_info_bterm_list vars l =
       List.fold_left all_vars_info_bterm vars l

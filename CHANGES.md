@@ -227,6 +227,16 @@ against libmojave 1.1.1 or later:
   bare rewriter, so it was checked with a mutant instead: a term_std
   substitution that ignores a single variable makes the beta rule disagree
   on 152 of its 400 instances.
+  The rewriter's separate redex interface, which the filter's generated
+  code and every display form (`Term_match_table.lookup_rwi`) use, is
+  checked against first-order matching (`test/unit/test_rewrite_redex.ml`):
+  `compile_redex`, `compile_redices`, `extract_redex_types`,
+  `test_redex_applicability` and `apply_redex` on 500 patterns and 500 pairs
+  of redices over terms and a number parameter, in both implementations,
+  and `lookup_rwi` on 300 tables; all agree. It records that
+  `compile_redices [p; q]` lists `q`'s variables before `p`'s. Mutants that
+  reverse `apply_redex`'s items or `extract_redex_types`' list, or make
+  `test_redex_applicability` accept every term, each turn their checks red.
   Term I/O, through which stored proofs come back, is checked by round
   trip (`test/unit/test_term_io.ml`): the same 2,000 terms written with
   `Ascii_io.AsciiIO.write_term` and read back, one per file and as the
@@ -265,6 +275,12 @@ against libmojave 1.1.1 or later:
   named `<rule>`); `..`, `...`, `~` and `.` from a proof or a module; and, as
   it is, a module reached under another theory's name (`../itt_supinf` from
   `itt_int_base`) — the theory part is not checked against the module.
+- What the shell's `ls` options select (`editor/ml/tests/ls_options.sh`):
+  on `itt_int_base`, `r` lists only rewrites and definitions, `R` only rules,
+  `rR` both, `u` exactly the rewrites and rules not yet proved, `p` the
+  `Extends` lines, `d` display forms, `D` documentation, `f` no informal
+  items, `a` everything `f` and `i` list; an unknown option is an error and
+  the shell goes on. Checked by the kind of each entry, not by counts.
 - The proof census ends a module's rows at the next module (#93): a module
   named like its theory is entered through the theory, whose `status_all`
   replays every module in it, and `itt_rfun`'s rows had also carried

@@ -1,0 +1,6 @@
+server bound to a port
+GET: HTTP/1.0 200 OK :: get a b|d
+POST: HTTP/1.0 200 OK :: post form x=1 y=a b&
+Http_simple: Failure("unhexify"): error during web service
+bad escape: (no reply)
+after it: HTTP/1.0 200 OK :: get still|up

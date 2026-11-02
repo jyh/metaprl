@@ -59,6 +59,14 @@ against libmojave 1.1.1 or later:
 - term_ds's `match_terms` let a bound variable of the pattern match any
   subterm, so `lam x.f{'x}` matched `lam y.f{c}` (#63), and its `all_vars`
   left out the variables a bound term binds (#67).
+- `Term_match_table` lost a sequent pattern with hypotheses on both sides of
+  its context (`{ 'a; <H>; 'b >- c }`): `compile_sequent` built the
+  pattern's program from the stack it was given instead of the one its
+  recursion returned, dropping the hypotheses after the context, so a
+  lookup missed the entry even where the rewriter's own matcher accepts the
+  pattern. The tables behind resources (intro, elim, the decision tables)
+  are of this kind. Found by `test/unit/test_term_match_seq.ml`: 64 of 600
+  tables missed a matching value, none now.
 - `Tactic_boot` compared one argument's term-list attributes with
   themselves, so the proof editor could reattach a stored sub-proof to a
   subgoal whose term-list attribute differs (#59).

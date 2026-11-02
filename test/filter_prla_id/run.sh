@@ -16,9 +16,16 @@
 # Run after the build, from the metaprl root. Exit 1 if the output
 # differs from expected.
 set -u
-root=$(pwd)
+# On Windows this shell is Cygwin's: pwd and mktemp print /cygdrive/... and
+# /tmp/..., which the native filter cannot open, so hand it D:/... paths
+# (as test/unit/run.sh does), and join MP_INCLUDE with ';', the filter's
+# separator on Win32 (filter_main.ml set_path).
+if command -v cygpath > /dev/null 2>&1; then win=1; else win=; fi
+w() { if [ -n "$win" ]; then cygpath -m "$1"; else printf '%s' "$1"; fi; }
+if [ -n "$win" ]; then psep=';'; else psep=':'; fi
+root=$(w "$(pwd)")
 here="$root/test/filter_prla_id"
-tmp=$(mktemp -d)
+tmp=$(w "$(mktemp -d)")
 trap 'rm -rf "$tmp"' EXIT
 [ -x "$root/lib/camlp5n" ] || { echo "FAIL: $root/lib/camlp5n is not built"; exit 1; }
 src="$root/theories/itt/core/itt_pairwise2"
@@ -27,7 +34,7 @@ dirs=$(find "$root/theories" "$root/support" "$root/lib" -name '*.cmiz' -exec di
 incs="-I $tmp"
 for d in $dirs; do incs="$incs -I $d"; done
 MP_ROOT="$root" MPLIB="$root/lib" MP_GROUP=filter_prla_id MP_DESCR=filter_prla_id \
-MP_INCLUDE=$(printf '%s\n' "$tmp" $dirs | paste -sd: -)
+MP_INCLUDE=$(printf '%s\n' "$tmp" $dirs | paste -sd"$psep" -)
 export MP_ROOT MPLIB MP_GROUP MP_DESCR MP_INCLUDE
 out="$tmp/out.txt"
 : > "$out"

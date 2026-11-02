@@ -149,6 +149,14 @@ against libmojave 1.1.1 or later:
   entries added in the same clock tick are ordered by key, so on a coarse
   clock (Windows) a newly added key that sorts first can be the one
   evicted; the test adds keys in increasing order and records this.
+- `TermAddr.subterm_exists` and `strip_address`
+  (`test/unit/test_term_addr_std_ds.ml`): on four terms (the sequent, an
+  operator, a binder, a second-order variable) and 157 addresses each,
+  `subterm_exists` holds exactly when `term_subterm` answers, and
+  `strip_address` of every prefix composes back to the address, in both
+  implementations. Recorded, not endorsed: on a sequent, term_std answers
+  plain `Subterm` addresses by walking its own encoding of the sequent,
+  where term_ds refuses (8 of 628 pairs).
 - metaprl's two term implementations disagree on addresses under a
   context hypothesis (`test/unit/test_term_addr_std_ds.ml`, #55, a pin:
   16 of 36 addresses differ). For `sequent { <H>; x: A; <K['t1; it]> >- C }`,

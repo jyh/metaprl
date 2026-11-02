@@ -55,7 +55,7 @@ server bound to a port
   no Content-Length; body bytes 0
   body ""
 /code/11:
-  HTTP/1.0 402 Forbidden\r
+  HTTP/1.0 403 Forbidden\r
   Cache-Control: no-cache\r
   no Content-Length; body bytes 0
   body ""

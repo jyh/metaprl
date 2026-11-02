@@ -31,6 +31,5 @@ is_some_var_free [y; z]        2000 2000 2000
 free_vars_list                 2000 2000 2000
 subst1 = subst of one          2000 2000 2000
 var_subst, then subst back     2000 2000 2000
-standardize is alpha-equal     1789 2000 1789
-  first: std lam{_. f{sequent[sa]{ <K4<|S|>[]>; <K3<|S|>[]>; <K2<||>[c; '#1]> >- c }}} / ds lam{_. f{sequent[sa]{ <K4<|S|>[]>; <K3<|S|>[]>; <K2<||>['#1; c]> >- c }}}
-standardize of the context term <H>[c; g{c}] is alpha-equal: std true, ds false
+standardize is alpha-equal     2000 2000 2000
+standardize of the context term <H>[c; g{c}] is alpha-equal: std true, ds true

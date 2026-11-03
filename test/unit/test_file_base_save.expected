@@ -1,0 +1,22 @@
+create_info writes nothing                           a=(none) b=(none) c=(none)
+save AnySuffix: the first suffix                     a="one|magic 0" b=(none) c=(none)
+save OnlySuffixes [c]                                a="one|magic 0" b=(none) c="one|magic 0"
+save_if_missing [a], a exists: unchanged             a="one|magic 0" b=(none) c="one|magic 0"
+save_if_missing [b], b missing: written              a="one|magic 0" b="two|magic 0" c="one|magic 0"
+save_if_newer [a], a older than the info: written    a="two|magic 0" b="two|magic 0" c="one|magic 0"
+save_if_newer [b], b newer than the info: unchanged  a="two|magic 0" b="two|magic 0" c="one|magic 0"
+create_info again, same dir/file/type                raised Invalid_argument("File_base.save_as")
+save_as, same dir/file/type                          raised Invalid_argument("File_base.save_as")
+find: the cached info                                three
+find_match: the cached info                          three
+find_file: the disk (newest is a), not cached        on disk a
+find after find_file: still the cached info          three
+find after remove_info: the disk                     on disk a
+find again: cached from the last load                on disk a
+find after clear: the disk (newest is c)             on disk c, now newest
+names of the info loaded from m.c                    file_name m, full_name m.a
+magic of a loaded info                               0
+set_magic 1 (two magics)                             1
+save [b] after set_magic 1                           a="on disk a" b="on disk c, now newest|magic 1" c="on disk c, now newest"
+set_magic 2                                          raised Invalid_argument("set_magic")
+set_magic -1                                         -1

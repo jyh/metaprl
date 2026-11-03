@@ -184,7 +184,7 @@ let rec compile_sequent prog stack = function
  | Hypothesis (_, t) :: hyps ->
       begin match compile_sequent prog stack hyps with
          ProgSeq(Right 0) :: prog, stack      -> ProgSeq(Left 1) :: prog, t :: stack
-       | ProgSeq(Right i) :: _, _             -> ProgSeq(Both(1,i)) :: prog, t :: stack
+       | ProgSeq(Right i) :: prog, stack      -> ProgSeq(Both(1,i)) :: prog, t :: stack
        | ProgSeq(Exact i) :: prog, stack      -> ProgSeq(Exact (i+1)) :: prog, t :: stack
        | ProgSeq(Left i) :: prog, stack       -> ProgSeq(Left (i+1)) :: prog, t :: stack
        | ProgSeq(Both (i, j)) :: prog, stack  -> ProgSeq(Both (i+1, j)) :: prog, t :: stack

@@ -1,0 +1,39 @@
+MP_ROOT unset (exit 0)
+    root: Invalid_argument Setup: the environment variable MP_ROOT is not defined
+    lib: Invalid_argument Setup: the environment variable MP_ROOT is not defined
+    doc_dir: Invalid_argument Setup: the environment variable MP_ROOT is not defined
+MP_ROOT with lib/ and doc/htmlman/ (exit 0)
+    root: <T>/root
+    lib: <T>/root/lib
+    doc_dir: Some /doc/htmlman/
+MP_ROOT with no lib/, no doc/ (exit 0)
+    root: <T>/root
+    lib: Invalid_argument Setup: MPLIB environment variable must be defined
+    doc_dir: None
+MPLIB set (wins over MP_ROOT/lib) (exit 0)
+    root: <T>/root
+    lib: <T>/mylib
+    doc_dir: None
+HOME without .metaprl (exit 0)
+    WARNING!   MetaPRL state directory <T>/h/.metaprl did not exist, created a new one.
+    home (first call): <T>/h/.metaprl
+    home (second call): <T>/h/.metaprl
+    .metaprl is a directory: true
+HOME with .metaprl (exit 0)
+    home (first call): <T>/h/.metaprl
+    home (second call): <T>/h/.metaprl
+    .metaprl is a directory: true
+editor: no file, EDITOR=ed (exit 0)
+    editor: notepad.exe
+editor: no file, no EDITOR (exit 0)
+    editor: notepad.exe
+editor: .metaprl/editor holds emacs (exit 0)
+    editor: emacs -nw
+hostname from MP_BROWSER_HOSTNAME (exit 0)
+    gethostname: test.example
+    after sethostname: gethostname: other.example
+    after sethostname: MP_BROWSER_HOSTNAME: other.example
+HOME/.metaprl is a plain file (exit 0)
+    home (first call): Invalid_argument Setup: Please make sure that <T>/h/.metaprl is a directory for which MetaPRL has read and write access
+    home (second call): Invalid_argument Setup: Please make sure that <T>/h/.metaprl is a directory for which MetaPRL has read and write access
+    .metaprl is a directory: false

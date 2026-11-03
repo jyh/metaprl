@@ -191,6 +191,10 @@ jobs:
         if: always()
         working-directory: metaprl
         run: timeout 1200 opam exec -- sh editor/ml/tests/dform_golden.sh
+      - name: the product type-inversion rule derives no void (editor/ml/tests/inv_typing_sound.sh)
+        if: always()
+        working-directory: metaprl
+        run: timeout 300 opam exec -- sh editor/ml/tests/inv_typing_sound.sh
       - name: the same 59 goals in the tex display mode (DFORM_MODE=tex dform_golden.sh)
         if: always()
         working-directory: metaprl

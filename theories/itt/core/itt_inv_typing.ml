@@ -15,7 +15,7 @@ prim dintersectionTypeElimination {| elim [ThinOption thinT] |} 'H 'a :
 
 prim independentProductTypeElimination {| elim [ThinOption thinT] |} 'H :
    ('t['u;'v;'w] :
-   sequent { <H>; u:"type"{'A * 'B}; v:"type"{'A}; w:"type"{'B}; <J['u]> >- 'C['u] }) -->
+   sequent { <H>; u:"type"{'A * 'B}; v:"type"{'A}; w:('A -> "type"{'B}); <J['u]> >- 'C['u] }) -->
    sequent { <H>; u:"type"{'A * 'B}; <J['u]> >- 'C['u] } =
    't['u;it;it]
 

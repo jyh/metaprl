@@ -90,6 +90,9 @@ jobs:
       - name: display forms print 59 itt/core goals as expected (editor/ml/tests/dform_golden.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/dform_golden.sh
+      - name: the product type-inversion rule derives no void (editor/ml/tests/inv_typing_sound.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/inv_typing_sound.sh
       - name: the same 59 goals in the tex display mode (DFORM_MODE=tex dform_golden.sh)
         working-directory: metaprl
         run: DFORM_MODE=tex opam exec -- sh editor/ml/tests/dform_golden.sh

@@ -561,7 +561,16 @@ itt_int_ext div_neg complete 1
 itt_int_ext div_neg_rw complete 1
 itt_int_ext div_indReduce incomplete 1
 itt_int_ext div_indReduce_rw complete 1
-itt_int_ext div_wf incomplete 0
+itt_int_ext ge_lt_absurd complete 1
+itt_int_ext sub_one_lt complete 1
+itt_int_ext pos_ge_one complete 1
+itt_int_ext div_step_bound complete 1
+itt_int_ext div_fix_wf complete 1
+itt_int_ext div_fix_wf2 complete 1
+itt_int_ext neg_lt_zero complete 1
+itt_int_ext pos_ge_zero complete 1
+itt_int_ext ge_ne_pos complete 1
+itt_int_ext div_wf complete 1
 itt_int_ext div_remProperty incomplete 0
 itt_int_ext lt_divMono incomplete 0
 itt_int_ext add_divReduce incomplete 0

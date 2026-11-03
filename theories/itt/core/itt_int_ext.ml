@@ -929,6 +929,62 @@ interactive_rw div_indReduce_rw {| reduce |} :
 
 let div_indReduceC = div_indReduce_rw
 
+(* Order facts for div_fix_wf's induction, proved without arithT (which comes later). *)
+interactive ge_lt_absurd 'x 'y 'z :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   [wf] sequent { <H> >- 'z in int } -->
+   sequent { <H> >- 'x >= 'y } -->
+   sequent { <H> >- 'z >= 'x } -->
+   sequent { <H> >- 'z < 'y } -->
+   sequent { <H> >- 'C }
+
+interactive sub_one_lt :
+   [wf] sequent { <H> >- 'm in int } -->
+   sequent { <H> >- ('m -@ 1) < 'm }
+
+interactive pos_ge_one :
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'b >= 1 }
+
+interactive div_step_bound :
+   [wf] sequent { <H> >- 'm in int } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- ('m +@ 1) >= 'a } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'm >= ('a -@ 'b) }
+
+(* div's recursive step gives an int on every dividend 0 <= a <= n when b > 0 (step induction on the bound n). *)
+interactive div_fix_wf :
+   sequent { <H> >- 0 < 'b } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- all n: int. all a: int. ('a >= 0 => 'n >= 'a => (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b in int)) }
+
+interactive div_fix_wf2 :
+   sequent { <H> >- 0 < 'b } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b in int }
+
+interactive neg_lt_zero :
+   [wf] sequent { <H> >- 'x in int } -->
+   sequent { <H> >- 'x < 0 } -->
+   sequent { <H> >- 0 < (-'x) }
+
+interactive pos_ge_zero :
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- 0 < 'y } -->
+   sequent { <H> >- 'y >= 0 }
+
+interactive ge_ne_pos :
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'b >= 0 } -->
+   sequent { <H> >- 'b <> 0 } -->
+   sequent { <H> >- 0 < 'b }
+
 interactive div_wf {| intro [] |} :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->

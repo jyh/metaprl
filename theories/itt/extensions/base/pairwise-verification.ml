@@ -1014,9 +1014,12 @@ doc <:doc< This simple elimination rule is obviously correct. >>
    sequent { <H>; u:"type"{bisect{'A; x. 'B['x]}}; <J['u]> >- 'C['u] } =
    't['u;it]
 
-(* XXX: questionable? *) prim itt_inv_typing.independentProductTypeElimination {| elim [ThinOption thinT] |} 'H :
+(* XXX: questionable? -- it was unsound: with w:"type"{'B} it derived void, since
+   type{void * B} holds for every B. Restated with w:('A -> "type"{'B}), the form
+   functionTypeElimination below uses (editor/ml/tests/inv_typing_sound.sh). *)
+prim itt_inv_typing.independentProductTypeElimination {| elim [ThinOption thinT] |} 'H :
    ('t['u;'v;'w] :
-   sequent { <H>; u:"type"{'A * 'B}; v:"type"{'A}; w:"type"{'B}; <J['u]> >- 'C['u] }) -->
+   sequent { <H>; u:"type"{'A * 'B}; v:"type"{'A}; w:('A -> "type"{'B}); <J['u]> >- 'C['u] }) -->
    sequent { <H>; u:"type"{'A * 'B}; <J['u]> >- 'C['u] } =
    't['u;it;it]
 

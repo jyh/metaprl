@@ -1,0 +1,21 @@
+written: 16 lines, first field of each: N O N O N P O T B T B N O T B T
+read_from_file t4 (the whole term)             f{lam{'x. 'x}; c}
+read_from_file t2 (the lam term)               lam{'x. 'x}
+read_from_file t (the binder's body)           'x
+read_from_file c (an opname, not a term)       raised Not_found
+read_from_file zz (no such name)               raised Not_found
+read_from_file of a missing file               raised Sys_error("no_such_file.prla: No such file or directory")
+the whole file: get_term                       f{lam{'x. 'x}; c}
+the whole file: get_named_term t2              lam{'x. 'x}
+the line defining t2 dropped: get_term         raised Invalid_argument("ASCII IO: invalid entry encountered by add_items")
+the line defining t2 dropped: get_named_term t2 raised Invalid_argument("ASCII IO: invalid entry encountered by add_items")
+the line defining t3 doubled: get_term         raised Invalid_argument("ASCII IO: invalid entry encountered by hash_add_new key=t3")
+the line defining t3 doubled: get_named_term t2 raised Invalid_argument("ASCII IO: invalid entry encountered by hash_add_new key=t3")
+t3 redefined as t (a second definition): get_term raised Invalid_argument("ASCII IO: invalid entry encountered by hash_add_new key=t")
+t3 redefined as t (a second definition): get_named_term t2 raised Invalid_argument("ASCII IO: invalid entry encountered by hash_add_new key=t")
+an unknown line kind X: get_term               raised Invalid_argument("ASCII IO: invalid entry encountered by get_term: X")
+an unknown line kind X: get_named_term t2      raised Invalid_argument("ASCII IO: invalid entry encountered by add_items: X")
+the last line cut to two fields: get_term      raised Invalid_argument("ASCII IO: invalid entry encountered by add_term")
+the last line cut to two fields: get_named_term t2 raised Invalid_argument("ASCII IO: invalid entry encountered by add_term")
+an empty file: get_term                        raised Invalid_argument("ASCII IO: invalid entry encountered by get_term1")
+an empty file: get_named_term t2               raised Not_found

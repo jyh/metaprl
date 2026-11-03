@@ -1,0 +1,29 @@
+1500 terms, 707 with an operator or binder at the root (the projection check's population)
+std: 2317 addresses, 432 sequents, 1107 clause addresses split
+std: opname/subterms/arities = the description       1500 of 1500
+std: apply_fun_arg_at_addr at every address          1500 of 1500
+std: apply_var_fun_arg_at_addr, same variable set    1500 of 1500
+std: term_subterm t null_address = t                 1500 of 1500
+std: split_clause_address (sequents; refused off them) 1500 of 1500
+std: dest_simple_term (mk_simple_term f [c; x])      true
+std: dest_simple_term_opname f                       true
+std: is_simple_term_opname f, own / other name       true
+std: mk_any_term: subterms, arities 0                true
+std: with a parameter: not simple, dest refused      true
+std: with a binder: not simple, dest refused         true
+std: dest_simple_bterm (mk_simple_bterm c)           true
+std: is_simple_bterm of a binder                     true
+ds: 2317 addresses, 432 sequents, 1107 clause addresses split
+ds: opname/subterms/arities = the description        1500 of 1500
+ds: apply_fun_arg_at_addr at every address           1500 of 1500
+ds: apply_var_fun_arg_at_addr, same variable set     1500 of 1500
+ds: term_subterm t null_address = t                  1500 of 1500
+ds: split_clause_address (sequents; refused off them) 1500 of 1500
+ds: dest_simple_term (mk_simple_term f [c; x])       true
+ds: dest_simple_term_opname f                        true
+ds: is_simple_term_opname f, own / other name        true
+ds: mk_any_term: subterms, arities 0                 true
+ds: with a parameter: not simple, dest refused       true
+ds: with a binder: not simple, dest refused          true
+ds: dest_simple_bterm (mk_simple_bterm c)            true
+ds: is_simple_bterm of a binder                      true

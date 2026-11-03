@@ -107,6 +107,18 @@ against libmojave 1.1.1 or later:
   merging into an existing install; a link to a directory stops it with a
   message. The install tests run on Linux, macOS and the Windows lane.
 
+- Two of `itt_int_ext`'s remainder rules were false as stated, so they
+  could never be proved. `rem_neg` said `a %@ b ~ (-a) %@ (-b)`; at a = 7,
+  b = 2 the literal reductions give 1 and -1 (the remainder takes the
+  dividend's sign). It now says `a %@ b ~ a %@ (-b)`, which its rewrite
+  `rem_neg_rw` already said. `rem_indReduce` and `rem_indReduce_rw` said
+  `((a * b) + c) %@ b ~ c %@ b` for any b <> 0; at a = 1, b = 2, c = -1 they
+  give 1 and -1. They now carry `div_indReduce`'s conditions, a >= 0, b > 0
+  and c >= 0. Both rules were unproved and no stored proof uses them, so no
+  proof's status changes. The false forms date from the 2006 change that gave
+  div and rem explicit definitions; the earlier axiom `rem_neg` had the
+  right form.
+
 ### Tests
 
 - Unit tests for MetaPRL's OCaml libraries (`test/unit/`, #51): each
@@ -509,6 +521,13 @@ against libmojave 1.1.1 or later:
   Windows and Linux.
 
 ### Known not to work
+
+- 11 of `itt_int_ext`'s division and remainder rules have no complete proof:
+  `div_indReduce` (21 of its rule boxes done), `div_wf`, `div_remProperty`,
+  `lt_divMono`, `add_divReduce`, `div_Assoc`, `rem_baseReduce`, `rem_neg`,
+  `rem_neg_rw`, `rem_indReduce` and `rem_wf`, and through them the rewrites
+  built on them. `div_wf` (a quotient is an integer) is the one the others
+  need.
 
 - `Term_order.compare_params` on every kind of parameter
   (`test/unit/test_term_order_params.ml`), levels and operator parameters

@@ -331,6 +331,15 @@ against libmojave 1.1.1 or later:
   small hypotheses remain, but once they are all matched the rest of the
   big sequent is skipped, contexts too (big `<K>; x: B` matches small with
   no hypotheses).
+- The rest of `TermSubst` (`test/unit/test_term_subst_rest.ml`): on 1,500
+  terms in both implementations, each against an oracle that does not use
+  it -- `alpha_equal_vars` is `alpha_equal` under a binder,
+  `alpha_equal_fun` is `alpha_equal` to the substitution,
+  `dest_bterm_and_rename` avoids the given variables and keeps the bound
+  term, `free_vars_terms` is the union, `is_some_var_free_list` is the
+  exists, and `equal_operators`/`equal_params` agree with `alpha_equal`. No
+  defect. Five mutants of term_ds's own code, each rebuilt, fail on the line
+  they change.
 - Rules whose contractum carries parameters (`test/unit/test_rewrite_params.ml`):
   five rules that move a number, a string and a token parameter, swap two,
   add constant parameters and require a repeated parameter variable to

@@ -1,0 +1,13 @@
+1500 terms (810 with a free 'z), 1500 others
+std: alpha_equal_vars = alpha_equal under lam      1500 of 1500
+std: alpha_equal_fun = alpha_equal to subst        1500 of 1500
+std: dest_bterm_and_rename avoids, keeps the term  1500 of 1500
+std: free_vars_terms = union                       1500 of 1500
+std: is_some_var_free_list = exists                1500 of 1500
+std: equal_operators, equal_params = alpha_equal   1942 of 1942 (1096 equal)
+ds: alpha_equal_vars = alpha_equal under lam       1500 of 1500
+ds: alpha_equal_fun = alpha_equal to subst         1500 of 1500
+ds: dest_bterm_and_rename avoids, keeps the term   1500 of 1500
+ds: free_vars_terms = union                        1500 of 1500
+ds: is_some_var_free_list = exists                 1500 of 1500
+ds: equal_operators, equal_params = alpha_equal    1942 of 1942 (1096 equal)

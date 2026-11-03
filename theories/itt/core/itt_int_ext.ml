@@ -1133,6 +1133,27 @@ interactive div_fix_nonneg :
    sequent { <H> >- 'x >= 0 } -->
    sequent { <H> >- (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) >= 0 }
 
+(* The core is superadditive, for add_divReduce. *)
+interactive sub_add_swap :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- (('x +@ 'y) -@ 'c) ~ (('x -@ 'c) +@ 'y) }
+
+interactive div_fix_add_ind :
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'c } -->
+   sequent { <H> >- all n: int. all x: int. all y: int. ('x >= 0 => 'y >= 0 => 'n >= 'x => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x +@ 'y) 'c) >= ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c)))) }
+
+interactive div_fix_add :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'c } -->
+   sequent { <H> >- 'x >= 0 } -->
+   sequent { <H> >- 'y >= 0 } -->
+   sequent { <H> >- (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x +@ 'y) 'c) >= ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c)) }
+
 interactive add_divReduce :
    sequent { <H> >- 0 < 'a } -->
    sequent { <H> >- 0 < 'b } -->

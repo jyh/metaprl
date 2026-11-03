@@ -593,7 +593,10 @@ itt_int_ext neg_nonpos complete 1
 itt_int_ext div_fix_mono_ind complete 1
 itt_int_ext div_fix_mono complete 1
 itt_int_ext div_fix_nonneg complete 1
-itt_int_ext add_divReduce incomplete 0
+itt_int_ext sub_add_swap complete 1
+itt_int_ext div_fix_add_ind complete 1
+itt_int_ext div_fix_add complete 1
+itt_int_ext add_divReduce complete 1
 itt_int_ext div_Assoc incomplete 0
 itt_int_ext div_Assoc_rw complete 1
 itt_int_ext rem_baseReduce complete 1

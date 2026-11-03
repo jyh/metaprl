@@ -84,6 +84,9 @@ jobs:
       - name: the shell reads a one-argument minus as negation (editor/ml/tests/toploop_minus.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/toploop_minus.sh
+      - name: div and rem unfold to what the literal rewrites compute (editor/ml/tests/int_div_def.sh)
+        working-directory: metaprl
+        run: opam exec -- sh editor/ml/tests/int_div_def.sh
       - name: display forms print 59 itt/core goals as expected (editor/ml/tests/dform_golden.sh)
         working-directory: metaprl
         run: opam exec -- sh editor/ml/tests/dform_golden.sh

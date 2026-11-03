@@ -77,7 +77,7 @@ define opaque unfold_div :
    "div"{'a; 'b} <-->
    (let div =
       fix{div.lambda{a. lambda{b.
-         if lt_bool{'a; 'b} then 0 else 'div ('a -@ 'b) 'b}}}
+         if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}}
    in
       if lt_bool{'a; 0} then
          if lt_bool{'b; 0} then
@@ -887,6 +887,13 @@ interactive_rw div_baseReduce_rw :
    ('a /@ 'b) <--> 0
 
 let div_baseReduceC = div_baseReduce_rw
+
+(* An integer that is >= 0 and whose negation is >= 0 is 0 (div_neg's sign boundary). *)
+interactive ge_zero_both :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- (-'a) >= 0 } -->
+   sequent { <H> >- 'a = 0 in int }
 
 interactive div_neg :
    sequent { <H> >- 'b <> 0 } -->

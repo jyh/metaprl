@@ -556,9 +556,10 @@ itt_int_ext beq_mulMonoSq complete 1
 itt_int_ext beq_mulMono_rw complete 3
 itt_int_ext div_baseReduce complete 3
 itt_int_ext div_baseReduce_rw complete 1
-itt_int_ext div_neg complete 20
+itt_int_ext ge_zero_both complete 1
+itt_int_ext div_neg complete 1
 itt_int_ext div_neg_rw complete 1
-itt_int_ext div_indReduce incomplete 21
+itt_int_ext div_indReduce incomplete 1
 itt_int_ext div_indReduce_rw complete 1
 itt_int_ext div_wf incomplete 0
 itt_int_ext div_remProperty incomplete 0

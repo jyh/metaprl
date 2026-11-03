@@ -1073,13 +1073,65 @@ interactive div_remProperty :
    [wf] sequent { <H> >- 'b in int } -->
 	sequent { <H> >- ('a %@ 'b) +@ ('a /@ 'b) *@ 'b = 'a in int }
 
-interactive lt_divMono 'b :
-   sequent { <H> >- 0 < 'c } -->
-   sequent { <H> >- 'a < 'b } -->
+(* Order facts and the core's monotonicity, for lt_divMono. *)
+interactive not_lt_ge :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- "not"{('x < 'y)} } -->
+   sequent { <H> >- 'x >= 'y }
+
+interactive lt_ge_weak :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a < 'b } -->
+   sequent { <H> >- 'b >= 'a }
+
+interactive le_lt_trans 'z :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'z in int } -->
    [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- 'a /@ 'c <= 'b /@ 'c }
+   sequent { <H> >- 'z >= 'x } -->
+   sequent { <H> >- 'z < 'c } -->
+   sequent { <H> >- 'x < 'c }
+
+interactive sub_ge_mono :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'y >= 'x } -->
+   sequent { <H> >- ('y -@ 'c) >= ('x -@ 'c) }
+
+interactive neg_ge_rev :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- 'y >= 'x } -->
+   sequent { <H> >- (-'x) >= (-'y) }
+
+interactive neg_nonpos :
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- 'y >= 0 } -->
+   sequent { <H> >- 0 >= (-'y) }
+
+interactive div_fix_mono_ind :
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'c } -->
+   sequent { <H> >- all n: int. all x: int. all y: int. ('x >= 0 => 'y >= 'x => 'n >= 'y => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c) >= (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c))) }
+
+interactive div_fix_mono :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'c } -->
+   sequent { <H> >- 'x >= 0 } -->
+   sequent { <H> >- 'y >= 'x } -->
+   sequent { <H> >- (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c) >= (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) }
+
+interactive div_fix_nonneg :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'c } -->
+   sequent { <H> >- 'x >= 0 } -->
+   sequent { <H> >- (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) >= 0 }
 
 interactive add_divReduce :
    sequent { <H> >- 0 < 'a } -->
@@ -1174,6 +1226,14 @@ interactive rem_ind_arith :
    [wf] sequent { <H> >- 'c in int } -->
    [wf] sequent { <H> >- 'q in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) -@ (('a +@ 'q) *@ 'b)) ~ ('c -@ ('q *@ 'b)) }
+
+interactive lt_divMono 'b :
+   sequent { <H> >- 0 < 'c } -->
+   sequent { <H> >- 'a < 'b } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 'a /@ 'c <= 'b /@ 'c }
 
 interactive rem_neg :
    sequent { <H> >- 'b <> 0 } -->

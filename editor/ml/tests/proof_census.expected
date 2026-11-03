@@ -584,7 +584,15 @@ itt_int_ext div_fix_ind complete 1
 itt_int_ext div_indReduce complete 1
 itt_int_ext div_indReduce_rw complete 1
 itt_int_ext div_remProperty complete 1
-itt_int_ext lt_divMono incomplete 0
+itt_int_ext not_lt_ge complete 1
+itt_int_ext lt_ge_weak complete 1
+itt_int_ext le_lt_trans complete 1
+itt_int_ext sub_ge_mono complete 1
+itt_int_ext neg_ge_rev complete 1
+itt_int_ext neg_nonpos complete 1
+itt_int_ext div_fix_mono_ind complete 1
+itt_int_ext div_fix_mono complete 1
+itt_int_ext div_fix_nonneg complete 1
 itt_int_ext add_divReduce incomplete 0
 itt_int_ext div_Assoc incomplete 0
 itt_int_ext div_Assoc_rw complete 1
@@ -597,6 +605,7 @@ itt_int_ext div_eval_nn complete 1
 itt_int_ext div_neg_den complete 1
 itt_int_ext pos_ne_zero complete 1
 itt_int_ext rem_ind_arith complete 1
+itt_int_ext lt_divMono complete 1
 itt_int_ext rem_neg complete 1
 itt_int_ext rem_neg_rw complete 1
 itt_int_ext rem_indReduce complete 1

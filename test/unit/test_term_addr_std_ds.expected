@@ -41,3 +41,9 @@ subterm_addresses
   std [Clause(1)] [Clause(3)] [Clause(4); 1] [Clause(4); 2] [Arg]
   ds  [Clause(1)] [Clause(3)] [Clause(4); 1] [Clause(4); 2] [Arg]
   agree
+std: subterm_exists iff term_subterm answers: 628 of 628 (48 exist)
+std: strip_address inverts compose_address: 613 of 613
+ds: subterm_exists iff term_subterm answers: 628 of 628 (40 exist)
+ds: strip_address inverts compose_address: 613 of 613
+std and ds disagree on whether a subterm exists at 8 of 628 (term, address) pairs
+  first: term 0 at [1]: std true, ds false

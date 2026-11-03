@@ -19,6 +19,10 @@ against libmojave 1.1.1 or later:
 
 ### Fixed
 
+- The browser server answers a refused request (`ForbiddenCode`, sent by the
+  shell's browser for a forbidden path) with `403 Forbidden`; it sent `402`,
+  which is Payment Required. mllib's unused `Http_server` carries the same
+  table and is left as it is.
 - term_ds's `TermSubst.standardize` (term_ds is the default refiner) gave back
   a context's arguments in reverse order: a context hypothesis
   `<K<||>[a; b]>` came back as `<K<||>[b; a]>` (three list reversals where
@@ -59,6 +63,14 @@ against libmojave 1.1.1 or later:
 - term_ds's `match_terms` let a bound variable of the pattern match any
   subterm, so `lam x.f{'x}` matched `lam y.f{c}` (#63), and its `all_vars`
   left out the variables a bound term binds (#67).
+- `Term_match_table` lost a sequent pattern with hypotheses on both sides of
+  its context (`{ 'a; <H>; 'b >- c }`): `compile_sequent` built the
+  pattern's program from the stack it was given instead of the one its
+  recursion returned, dropping the hypotheses after the context, so a
+  lookup missed the entry even where the rewriter's own matcher accepts the
+  pattern. The tables behind resources (intro, elim, the decision tables)
+  are of this kind. Found by `test/unit/test_term_match_seq.ml`: 64 of 600
+  tables missed a matching value, none now.
 - `Tactic_boot` compared one argument's term-list attributes with
   themselves, so the proof editor could reattach a stored sub-proof to a
   subgoal whose term-list attribute differs (#59).
@@ -68,6 +80,13 @@ against libmojave 1.1.1 or later:
   must accept; it now reads them, in UTC (#71).
 - Hash-consing could give one term two live indices after a subterm was
   collected, so `Term_eq_table` missed keys it held (#76).
+- `Term.ops_eq` (term_std and term_ds) compared parameters with polymorphic
+  equality, so an operator whose number was computed as a product kept as a
+  big integer (`40000 * 3`) differed from the same operator written with
+  `120000`, while `alpha_equal` (which compares numbers by value) called the
+  terms equal; on 3,000 generated pairs 68 disagreed. It now compares
+  parameters as `alpha_equal` does. Its caller in a theory is
+  `if_same_op` (`base_reflection`).
 - `Supinf`'s `isNumber` compared unreduced fractions with polymorphic
   compare, so a zero coefficient such as 0/4 counted as nonzero and the
   SUP-INF procedure could miss a bound it had derived; it could only lose
@@ -157,16 +176,41 @@ against libmojave 1.1.1 or later:
   proof census reads rule statuses. A mutant that changes one bracket in
   `itt_record_renaming`'s `rename_df` changes 10 lines of the output.
   ASCII display mode only, at mp's default width of 80.
+- Term shapes (`test/unit/test_term_shape.ml`): on 500 generated terms with
+  parameters of each kind and binders, in both implementations, the
+  canonical term of a shape has that shape, `opparam_of_term` and back
+  gives the same shape, and `shape_compare` is 0 exactly when `eq` holds;
+  both print every shape the same. Mutants that reverse a shape's
+  arities or parameters, or cap an arity at 1, each fail.
 - `mllib`'s `Sort`, `List_neq_append`, `Flist` and `Permutations` are
   checked against plain OCaml (`test/unit/test_mllib_models.ml`, #52), as
   their interfaces state them. No defect. `List_neq_append.to_list`
   returns the elements in reverse order of insertion (no order is
   documented; the test records it).
+- Meta terms, the statements of rules (`test/unit/test_term_meta.ml`): on 400
+  generated statements in both implementations, the zip/unzip pairs for
+  implications and functions give back their parts, `meta_alpha_equal`
+  holds for a renamed copy and fails for a different statement,
+  `term_of_meta_term` and back is the same, `free_vars_mterm` is the parts'
+  free variables plus the meta-functions' variables (a rule's arguments
+  count as free), and free-variable encoding round-trips. Recorded as it
+  stands: `meta_alpha_equal` ignores labels and a meta-function's variable,
+  so `(a:c -> 'a)` and `(b:c -> 'b)` compare unequal while `(a:c -> 'b)`
+  and `(b:c -> 'b)` compare equal (its main caller strips meta-functions
+  first). Three mutants each fail.
 - `mllib`'s `Latin1_case` (all 256 characters against ISO 8859-1, and its
   string functions) and `Precedence` (`get_prec` against the closure of
   `add_lt` and `add_eq`) are checked (`test/unit/test_mllib_models2.ml`,
   #53). No defect. `mllib/simplehashtbl.ml` is not built (it is not in
   mllib's `FILES`) and nothing uses it.
+- The refiner's rewrite combinators (`test/unit/test_refine_rw.ml`):
+  `andthenrw`, `orelserw`, `rwhigher` and `rwaddr` over three rewrites made
+  with `create_rewrite` in a null refiner, 60 random combinations on 5
+  random terms each, through `rwtactic` and `refine`, against a model; all
+  300 agree. Recorded: `rwhigher` never fails — where its rewrite applies
+  nowhere it leaves the term as it is. `refine.ml` had no unit test before.
+  Mutants that swap `andthenrw`'s order, drop `orelserw`'s fallback, or
+  ignore `rwaddr`'s address each fail.
 - `mllib`'s `Memo`, `Weak_memo` and `Line_buffer` are checked
   (`test/unit/test_mllib_models3.ml`, #54): memo tables against the
   function they memoize, the weak table across forced major collections
@@ -176,6 +220,14 @@ against libmojave 1.1.1 or later:
   entries added in the same clock tick are ordered by key, so on a coarse
   clock (Windows) a newly added key that sorts first can be the one
   evicted; the test adds keys in increasing order and records this.
+- `TermAddr.subterm_exists` and `strip_address`
+  (`test/unit/test_term_addr_std_ds.ml`): on four terms (the sequent, an
+  operator, a binder, a second-order variable) and 157 addresses each,
+  `subterm_exists` holds exactly when `term_subterm` answers, and
+  `strip_address` of every prefix composes back to the address, in both
+  implementations. Recorded, not endorsed: on a sequent, term_std answers
+  plain `Subterm` addresses by walking its own encoding of the sequent,
+  where term_ds refuses (8 of 628 pairs).
 - metaprl's two term implementations disagree on addresses under a
   context hypothesis (`test/unit/test_term_addr_std_ds.ml`, #55, a pin:
   16 of 36 addresses differ). For `sequent { <H>; x: A; <K['t1; it]> >- C }`,
@@ -329,6 +381,16 @@ against libmojave 1.1.1 or later:
   named like its theory is entered through the theory, whose `status_all`
   replays every module in it, and `itt_rfun`'s rows had also carried
   `itt_well_founded_equiv`'s `well_founded_reduction`.
+- The primitive term vocabulary (`test/unit/test_xterms.ml`): in both
+  implementations, list terms built by `mk_xlist_term` and by
+  `xcons`/`xnil` agree and `dest_xlist` gives the terms back (500 random
+  lists); a cons with a non-list tail or a bound variable, and `xnil` with a
+  parameter, are refused; `xrewrite`, `xbind` and the string with one
+  subterm round-trip and refuse other shapes; `is_fso_var_term` holds for a
+  variable and a second-order variable with contexts but no arguments; and
+  `construct_redex` is the binders in order around `params @ terms`. No
+  defect. Mutants that drop the tail check, swap `params` and `terms`, or
+  reverse the binders each fail.
 - Rules over universe levels (`test/unit/test_rewrite_levels.ml`):
   `u[l] --> v[l]`, `u[l+1] --> v[l+1]` and `u[l+1] --> v[l]` on 300 random
   levels in both implementations, against a model that compares levels by
@@ -341,6 +403,16 @@ against libmojave 1.1.1 or later:
   (`test/filter_types`, #94): besides `prim_rw`, `interactive`, `dform`,
   `iform`, `production` and `declare rewrite`, each with a well-typed and an
   ill-typed fixture.
+- Variable info (`test/unit/test_vars_info.ml`): on 1,500 terms with
+  sequents, contexts, second-order variables, binders and parameters, and
+  1,500 lists of them, `param_vars_info` is the set of meta-variables the
+  parameters name (inside parameter lists, not inside operator
+  parameters), `so_vars_info` and `context_vars_info` name exactly the
+  second-order variables and context hypotheses, each `_list` form is the
+  fold of its single form, `all_vars_terms` is the union of `all_vars`, and
+  term_std and term_ds agree on all of it. No defect. Mutants that look
+  inside operator parameters, skip parameter lists, read only the first
+  term of a list, or mark a sequent context as plain each fail.
 - A rewrite with an argument (`test/unit/test_rewrite_args.ml`), as rules
   such as `thin 'H` take one: `sequent[sa]{ <H>; x: 'A<|H|>; <J<|H|>> >-
   'C<|H;J|> } --> sequent[sb]{ <H>; <J<|H|>> >- 'C<|H;J|> }` with the length
@@ -349,10 +421,34 @@ against libmojave 1.1.1 or later:
   names (k > 0 the k-th; k <= 0 leaving -k after it), when nothing later
   mentions it; 2,400 of 2,400 agree with that model. An off-by-one in
   placing a positive argument fails 374.
+- Level expressions and primitive strings (`test/unit/test_level_exp.ml`):
+  in both implementations, a level built from `mk_const_level_exp`,
+  `mk_var_level_exp`, `max_level_exp` and `incr_level_exp` has the value of
+  its expression (max of a constant and variable-plus-offset terms) under
+  every assignment of 0..3 to three variables, on 3,000 random expressions,
+  with its variables distinct and in order; `level_le` and `level_lt` are
+  sound against those values on 3,000 pairs (they compare constant with
+  constant and offset with offset, so about 4 % of pairs whose values agree
+  get a no, which the test counts). `mk_xstring_term` round-trips and
+  `is_xstring_term`/`dest_xstring` refuse four other shapes. No defect.
+  Mutants that drop an offset in `max_level_exp`, forget the variables in
+  `incr_level_exp`, accept a variable missing on the right, or make
+  `level_lt` non-strict each fail.
 - Display forms in the `tex` and `src` modes as well as `prl`
   (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
   itt/core goals, against `dform_golden.tex.expected` and
   `dform_golden.src.expected`.
+- Operator-parameter equality and term types
+  (`test/unit/test_opparam_eq_ty.ml`): in both implementations,
+  `TermSubst.opparam_eq` on 4,000 pairs of operator parameters built
+  separately from descriptions -- every parameter kind, nested operators,
+  object ids and parameter lists, and pairs that differ in one parameter at
+  any depth -- is true exactly when the descriptions are equal; `Term_ty`'s
+  `eq_ty` compares name, parameters, bound terms and type and ignores the
+  term, `eq` also compares the term, `term_of_ty` gives the term back, and
+  `string_of_ty_param` names each kind. No defect. Mutants that ignore the
+  arities, treat nested operators or token parameters as always equal, or
+  drop the term from `eq` each fail.
 - Three redex shapes no other test compiled (`test/unit/test_rewrite_shapes.ml`):
   a variable bound in the redex and used in it (`lam{x. 'x} --> id` rewrites
   exactly the identity, not `lam{u. 'z}`), a free first-order variable
@@ -362,6 +458,17 @@ against libmojave 1.1.1 or later:
   model. Disabling the bound-variable check, letting the free variable
   match any term, or skipping the second context's comparison each fails
   its model.
+- Term shapes, the parts `test_term_shape` leaves out
+  (`test/unit/test_term_shape_quote.ml`): on 2,000 generated shapes with
+  quote, shape, operator, level and variable parameters, in both
+  implementations, `unquote_shape` removes exactly the leading quotes (a
+  quote after another parameter stays), returns its argument itself when
+  there is none, and is idempotent; `opname_of_shape` and the canonical term
+  of a quoted shape hold. Variables, second-order variables and sequents
+  have their special shapes, and an `ObId` or `ParamList` parameter makes
+  `shape_of_term` raise `Invalid_argument`. No defect. Mutants that strip
+  every quote, always copy the shape, or give a quote's canonical term a
+  variable parameter each fail.
 - The Windows lane runs the filter tests (`test/filter_types`,
   `test/filter_prla_id`, #96) and the display-form goldens in all three modes
   (#98), which ran on Linux only. The filter runners now hand the native

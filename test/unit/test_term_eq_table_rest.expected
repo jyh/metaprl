@@ -1,0 +1,8 @@
+iter visits the model's pairs                     300 of  300
+map f = the model's values mapped, in order       300 of  300
+fold_map holds every pair (multiset per key)      300 of  300
+fold_map visits a key's values newest first       300 of  300
+deletemax drains each key once with its values    300 of  300
+union t1 t2 = t1's values then t2's               300 of  300
+deletemax of the empty table: raised Invalid_argument("lift_right")
+print of {c -> [3;1]; g{c} -> [2]}: "\n(:2 Leaf (:1 Leaf Leaf))"

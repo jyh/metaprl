@@ -1,0 +1,82 @@
+std dep0                             dest ok; -; is ok; other refused
+std dep0_dep0                        dest ok; -; is ok; other refused
+std dep0_dep0_dep0                   dest ok; -; is ok; other refused
+std dep0_dep0_dep0_dep0              dest ok; -; is ok; other refused
+std dep1                             dest ok; any ok; is ok; other refused
+std dep2                             dest ok; -; is ok; other refused
+std dep1_dep1                        dest ok; -; is ok; other refused
+std dep0_dep1                        dest ok; any ok; is ok; other refused
+std dep0_dep1_any                    -; any ok; is ok; -
+std dep1_dep0                        dest ok; -; is ok; other refused
+std dep0_dep2                        dest ok; -; is ok; other refused
+std dep0_dep3                        dest ok; -; is ok; other refused
+std dep2_dep0                        dest ok; -; is ok; other refused
+std dep0_dep0_dep1                   dest ok; any ok; is ok; other refused
+std dep0_dep0_dep2                   dest ok; -; is ok; other refused
+std dep0_dep0_dep1_any               -; any ok; is ok; -
+std dep0_dep1_dep1                   dest ok; -; is ok; other refused
+std dep0_dep2_dep0_dep2              dest ok; -; is ok; other refused
+std dep0_dep0_dep3                   dest ok; -; is ok; other refused
+std dep2_dep2_dep0_dep0              dest ok; -; is ok; other refused
+std string                           dest ok; any ok; is ok; other refused
+std string_string                    dest ok; -; is ok; other refused
+std var_param                        dest ok; -; is ok; other refused
+std var_dep0                         dest ok; any ok; is ok; other refused
+std var_dep0_dep0                    dest ok; -; is ok; other refused
+std string_dep0                      dest ok; -; is ok; other refused
+std string_string_dep0               dest ok; any ok; is ok; other refused
+std number_dep0                      dest ok; any ok; is ok; other refused
+std number_dep1                      dest ok; any ok; is ok; other refused
+std number_number_dep0               dest ok; any ok; is ok; other refused
+std number_number_string_dep0        dest ok; any ok; is ok; other refused
+std number_number_string_dep0_dep0   dest ok; any ok; is ok; other refused
+std string_dep0_dep0                 dest ok; any ok; is ok; other refused
+std string_dep0_dep0_dep0            -; -; -; -
+std string_string_dep0_dep0          dest ok; any ok; is ok; other refused
+std number                           dest ok; any ok; is ok; other refused
+std univ                             dest ok; -; is ok; other refused
+std token                            dest ok; any ok; is ok; other refused
+std token_simple                     dest ok; -; is ok; other refused
+std dep0 (under 'other')             dest ok; -; -; -
+std is_X on Y's term = same shape    1482 of 1482 (43 same-shape pairs)
+ds dep0                             dest ok; -; is ok; other refused
+ds dep0_dep0                        dest ok; -; is ok; other refused
+ds dep0_dep0_dep0                   dest ok; -; is ok; other refused
+ds dep0_dep0_dep0_dep0              dest ok; -; is ok; other refused
+ds dep1                             dest ok; any ok; is ok; other refused
+ds dep2                             dest ok; -; is ok; other refused
+ds dep1_dep1                        dest ok; -; is ok; other refused
+ds dep0_dep1                        dest ok; any ok; is ok; other refused
+ds dep0_dep1_any                    -; any ok; is ok; -
+ds dep1_dep0                        dest ok; -; is ok; other refused
+ds dep0_dep2                        dest ok; -; is ok; other refused
+ds dep0_dep3                        dest ok; -; is ok; other refused
+ds dep2_dep0                        dest ok; -; is ok; other refused
+ds dep0_dep0_dep1                   dest ok; any ok; is ok; other refused
+ds dep0_dep0_dep2                   dest ok; -; is ok; other refused
+ds dep0_dep0_dep1_any               -; any ok; is ok; -
+ds dep0_dep1_dep1                   dest ok; -; is ok; other refused
+ds dep0_dep2_dep0_dep2              dest ok; -; is ok; other refused
+ds dep0_dep0_dep3                   dest ok; -; is ok; other refused
+ds dep2_dep2_dep0_dep0              dest ok; -; is ok; other refused
+ds string                           dest ok; any ok; is ok; other refused
+ds string_string                    dest ok; -; is ok; other refused
+ds var_param                        dest ok; -; is ok; other refused
+ds var_dep0                         dest ok; any ok; is ok; other refused
+ds var_dep0_dep0                    dest ok; -; is ok; other refused
+ds string_dep0                      dest ok; -; is ok; other refused
+ds string_string_dep0               dest ok; any ok; is ok; other refused
+ds number_dep0                      dest ok; any ok; is ok; other refused
+ds number_dep1                      dest ok; any ok; is ok; other refused
+ds number_number_dep0               dest ok; any ok; is ok; other refused
+ds number_number_string_dep0        dest ok; any ok; is ok; other refused
+ds number_number_string_dep0_dep0   dest ok; any ok; is ok; other refused
+ds string_dep0_dep0                 dest ok; any ok; is ok; other refused
+ds string_dep0_dep0_dep0            -; -; -; -
+ds string_string_dep0_dep0          dest ok; any ok; is ok; other refused
+ds number                           dest ok; any ok; is ok; other refused
+ds univ                             dest ok; -; is ok; other refused
+ds token                            dest ok; any ok; is ok; other refused
+ds token_simple                     dest ok; -; is ok; other refused
+ds dep0 (under 'other')             dest ok; -; -; -
+ds is_X on Y's term = same shape    1482 of 1482 (43 same-shape pairs)

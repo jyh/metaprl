@@ -398,6 +398,17 @@ against libmojave 1.1.1 or later:
   model. Disabling the bound-variable check, letting the free variable
   match any term, or skipping the second context's comparison each fails
   its model.
+- Term shapes, the parts `test_term_shape` leaves out
+  (`test/unit/test_term_shape_quote.ml`): on 2,000 generated shapes with
+  quote, shape, operator, level and variable parameters, in both
+  implementations, `unquote_shape` removes exactly the leading quotes (a
+  quote after another parameter stays), returns its argument itself when
+  there is none, and is idempotent; `opname_of_shape` and the canonical term
+  of a quoted shape hold. Variables, second-order variables and sequents
+  have their special shapes, and an `ObId` or `ParamList` parameter makes
+  `shape_of_term` raise `Invalid_argument`. No defect. Mutants that strip
+  every quote, always copy the shape, or give a quote's canonical term a
+  variable parameter each fail.
 - The Windows lane runs the filter tests (`test/filter_types`,
   `test/filter_prla_id`, #96) and the display-form goldens in all three modes
   (#98), which ran on Linux only. The filter runners now hand the native

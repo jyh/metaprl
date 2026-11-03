@@ -3,7 +3,8 @@
    the browser hostname (and, through home, the unexported ensure_dir). Every value is computed
    once per process from the environment, so each case is a child process
    (this executable again) whose HOME and MP_ROOT point into a temporary
-   directory; nothing outside it is read or written. Paths print with that
+   directory; nothing outside it is read or written. On Win32 the default
+   editor is notepad.exe whatever EDITOR says (test_setup.expected.win32). Paths print with that
    directory as <T> and "/" as the separator. Not covered: HOME unset (it
    falls back to /tmp/metaprl-<uid>, outside the temporary directory), and
    the certificate files (with SSL enabled they run openssl; whether a build

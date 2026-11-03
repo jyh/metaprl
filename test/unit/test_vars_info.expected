@@ -1,0 +1,17 @@
+1500 terms: 555 with parameter meta-variables, 654 with an SO variable, 456 with a context hypothesis; 1500 lists of 1-3
+std and ds give the same info (terms)            1500 of 1500
+std and ds give the same info (lists)            1500 of 1500
+std: param_vars_info = the model                 1500 of 1500
+std: so_vars_info names the SO variables         1500 of 1500
+std: context_vars_info names the contexts        1500 of 1500
+std: param_vars_info_list = fold                 1500 of 1500
+std: so_vars_info_list = fold                    1500 of 1500
+std: context_vars_info_list = fold               1500 of 1500
+std: all_vars_terms = union of all_vars          1500 of 1500
+ds: param_vars_info = the model                  1500 of 1500
+ds: so_vars_info names the SO variables          1500 of 1500
+ds: context_vars_info names the contexts         1500 of 1500
+ds: param_vars_info_list = fold                  1500 of 1500
+ds: so_vars_info_list = fold                     1500 of 1500
+ds: context_vars_info_list = fold                1500 of 1500
+ds: all_vars_terms = union of all_vars           1500 of 1500

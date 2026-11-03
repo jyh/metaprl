@@ -167,6 +167,10 @@ jobs:
         if: always()
         working-directory: metaprl
         run: timeout 300 opam exec -- sh editor/ml/tests/toploop_minus.sh
+      - name: div and rem unfold to what the literal rewrites compute (editor/ml/tests/int_div_def.sh)
+        if: always()
+        working-directory: metaprl
+        run: timeout 300 opam exec -- sh editor/ml/tests/int_div_def.sh
       - name: stored proofs that carry ~labels load (editor/ml/tests/old_labels.sh)
         if: always()
         working-directory: metaprl

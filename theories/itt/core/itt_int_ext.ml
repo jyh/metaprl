@@ -994,7 +994,7 @@ interactive rem_neg :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
-   sequent { <H> >- ('a %@ 'b) ~ ((-'a) %@ (-'b)) }
+   sequent { <H> >- ('a %@ 'b) ~ ('a %@ (-'b)) }
 
 interactive_rw rem_neg_rw :
    ('b <> 0) -->
@@ -1005,14 +1005,18 @@ interactive_rw rem_neg_rw :
 let rem_negC = rem_neg_rw
 
 interactive rem_indReduce :
-   sequent { <H> >- 'b <> 0 } -->
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- 'b > 0 } -->
+   sequent { <H> >- 'c >= 0 } -->
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ((('a *@ 'b) +@ 'c) %@ 'b) ~ ('c %@ 'b) }
 
 interactive_rw rem_indReduce_rw :
-   ('b <> 0) -->
+   ('a >= 0) -->
+   ('b > 0) -->
+   ('c >= 0) -->
    ('a in int) -->
    ('b in int) -->
    ('c in int) -->

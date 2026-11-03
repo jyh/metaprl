@@ -47,6 +47,10 @@ if [ ! -f "$root/tactics/proof/prooflib.cma" ] && [ -f "$root/tactics/proof/proo
 else
    comp="ocamlfind ocamlc"; a=cma
 fi
+# A test whose output is platform-specific (Setup's default editor is
+# notepad.exe on Win32) keeps a second file, test_*.expected.win32, used
+# when the compiler's os_type is Win32.
+os_type=$(ocamlfind ocamlc -config-var os_type 2>/dev/null)
 for src in "$here"/test_*.ml; do
    name=$(basename "$src" .ml)
    cp "$src" "$tmp/"
@@ -60,10 +64,12 @@ for src in "$here"/test_*.ml; do
       echo "FAIL $name: exited non-zero"; cat "$tmp/$name.out"; status=1; continue
    fi
    # OCaml's stdout is in text mode on Windows: ignore the CRs it adds.
-   if diff -u --strip-trailing-cr "$here/$name.expected" "$tmp/$name.out"; then
+   expected="$here/$name.expected"
+   if [ "$os_type" = Win32 ] && [ -f "$expected.win32" ]; then expected="$expected.win32"; fi
+   if diff -u --strip-trailing-cr "$expected" "$tmp/$name.out"; then
       echo "OK   $name"
    else
-      echo "FAIL $name: output differs from $name.expected"; status=1
+      echo "FAIL $name: output differs from $(basename "$expected")"; status=1
    fi
 done
 exit $status

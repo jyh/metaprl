@@ -141,7 +141,35 @@ struct
    let make_op x = x (* external make_op : operator' -> operator = "%identity" *)
    let dest_op x = x (* external dest_op : operator -> operator' = "%identity" *)
 
-   let ops_eq op1 op2 = Opname.eq op1.op_name op2.op_name && op1.op_params = op2.op_params
+   (*
+    * Parameters are compared as alpha_equal compares them (TermSubst's
+    * equal_params): a number by its value, so a product kept as a big
+    * integer equals the same number kept as an int.
+    *)
+   let rec ops_eq_params p1 p2 =
+      match p1, p2 with
+         Number n1, Number n2 ->
+            Lm_num.eq_num n1 n2
+       | ObId pl1, ObId pl2
+       | ParamList pl1, ParamList pl2 ->
+            Lm_list_util.for_all2 ops_eq_params pl1 pl2
+       | Token op1, Token op2 ->
+            Opname.eq op1 op2
+       | Operator op1, Operator op2 ->
+            Opname.eq op1.opparam_name op2.opparam_name
+            && Lm_list_util.for_all2 ops_eq_params op1.opparam_params op2.opparam_params
+            && op1.opparam_arities = op2.opparam_arities
+       | MNumber v1, MNumber v2
+       | MString v1, MString v2
+       | MToken v1, MToken v2
+       | MOperator v1, MOperator v2
+       | Var v1, Var v2 ->
+            Lm_symbol.eq v1 v2
+       | _ ->
+            p1 = p2
+
+   let ops_eq op1 op2 =
+      Opname.eq op1.op_name op2.op_name && Lm_list_util.for_all2 ops_eq_params op1.op_params op2.op_params
 
    let mk_bterm bvars term = { bvars = bvars; bterm = term }
 

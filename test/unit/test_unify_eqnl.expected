@@ -1,0 +1,16 @@
+constants {}: 1500 systems, 543 unifiable by the model
+  the builders = the list model                  1500 of 1500
+  unifiable_eqnl agrees with the model           1500 of 1500
+  unify_eqnl raises exactly when no unifier      1500 of 1500
+  unify_eqnl's substitution unifies every equation 543 of 543
+  most general (model mgu up to renaming)        543 of 543
+  unify_eqnl_eqnl: variables on the left, unifies 1500 of 1500
+  new_eqns_var fresh, or the variable itself     1500 of 1500
+constants {a}: 1500 systems, 441 unifiable by the model
+  the builders = the list model                  1500 of 1500
+  unifiable_eqnl agrees with the model           1500 of 1500
+  unify_eqnl raises exactly when no unifier      1500 of 1500
+  unify_eqnl's substitution unifies every equation 441 of 441
+  most general (model mgu up to renaming)        441 of 441
+  unify_eqnl_eqnl: variables on the left, unifies 1500 of 1500
+  new_eqns_var fresh, or the variable itself     1500 of 1500

@@ -1,0 +1,19 @@
+3000 expressions (mean size 5.1), 3000 pairs, 64 assignments
+std: the level has the expression's value        3000 of 3000
+std: variables distinct and increasing           3000 of 3000
+std: level_le sound                              3000 of 3000 (said yes 2276; holds on the grid but said no 119)
+std: level_lt sound                              3000 of 3000 (said yes 1585; holds on the grid but said no 107)
+std: mk_xstring_term round trip (5 strings)      true
+std: a variable                                  is_xstring false, dest_xstring refused
+std: another operator with a string              is_xstring false, dest_xstring refused
+std: the string operator with a number           is_xstring false, dest_xstring refused
+std: the string operator with a subterm          is_xstring false, dest_xstring refused
+ds: the level has the expression's value         3000 of 3000
+ds: variables distinct and increasing            3000 of 3000
+ds: level_le sound                               3000 of 3000 (said yes 2276; holds on the grid but said no 119)
+ds: level_lt sound                               3000 of 3000 (said yes 1585; holds on the grid but said no 107)
+ds: mk_xstring_term round trip (5 strings)       true
+ds: a variable                                   is_xstring false, dest_xstring refused
+ds: another operator with a string               is_xstring false, dest_xstring refused
+ds: the string operator with a number            is_xstring false, dest_xstring refused
+ds: the string operator with a subterm           is_xstring false, dest_xstring refused

@@ -80,6 +80,13 @@ against libmojave 1.1.1 or later:
   must accept; it now reads them, in UTC (#71).
 - Hash-consing could give one term two live indices after a subterm was
   collected, so `Term_eq_table` missed keys it held (#76).
+- `Term.ops_eq` (term_std and term_ds) compared parameters with polymorphic
+  equality, so an operator whose number was computed as a product kept as a
+  big integer (`40000 * 3`) differed from the same operator written with
+  `120000`, while `alpha_equal` (which compares numbers by value) called the
+  terms equal; on 3,000 generated pairs 68 disagreed. It now compares
+  parameters as `alpha_equal` does. Its caller in a theory is
+  `if_same_op` (`base_reflection`).
 - `Supinf`'s `isNumber` compared unreduced fractions with polymorphic
   compare, so a zero coefficient such as 0/4 counted as nonzero and the
   SUP-INF procedure could miss a bound it had derived; it could only lose

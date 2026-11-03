@@ -1,0 +1,37 @@
+options: neither                   exit 0
+    topt=None tiopt=None tdbg_one=false tdbg_two=false
+options: environment               exit 0
+    topt=Some "env" tiopt=Some 5 tdbg_one=false tdbg_two=false
+options: command line              exit 0
+    textra given
+    anonymous anon
+    topt=Some "cmd" tiopt=Some 9 tdbg_one=false tdbg_two=false
+MP_DEBUG before the flag exists    exit 0
+    topt=None tiopt=None tdbg_one=false tdbg_two=true
+MP_DEBUG two names                 exit 0
+    topt=None tiopt=None tdbg_one=true tdbg_two=true
+-debug on the command line         exit 0
+    topt=None tiopt=None tdbg_one=true tdbg_two=false
+-debug unknown name                exit 1
+    illegal option: valid options are:
+    -tiopt : an optional int
+    -topt : an optional string
+    -debug : set debugging flags
+    Debugging flags:
+    You can specify these as a colon-separated list
+    tdbg_two: test flag two: false
+    tdbg_one: test flag one: false
+    (and other lines)
+putenv                             exit 0
+    MP_TPUT="from putenv" tput="from putenv"
+usage                              exit 0
+    usage message
+    -tiopt : an optional int
+    -topt : an optional string
+    -debug : set debugging flags
+    -textra : an extra option
+    Debugging flags:
+    You can specify these as a colon-separated list
+    tdbg_two: test flag two: false
+    tdbg_one: test flag one: false
+    (and other lines)

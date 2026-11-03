@@ -1,0 +1,11 @@
+p_convert std = ds                           500 of 500
+p_revert ds = std                            500 of 500
+p_revert (p_convert t) = t                   500 of 500
+p_add_src, p_retrieve_src = std              500 of 500
+p_add_src, p_retrieve_dst = ds               500 of 500
+p_add_dst index compares equal               500 of 500
+another term compares as equality            499 of 499
+meta: convert, revert, round trip            500 of 500
+meta: add/retrieve both sides, compare       500 of 500
+msequent: convert, revert, round trip        500 of 500
+msequent: add/retrieve both sides, compare   500 of 500

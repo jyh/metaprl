@@ -1,0 +1,4 @@
+600 tables: 341 with a matching pattern, 19 with several
+patterns by kind: exact 591 left 279 right 287 both 509 context only 135
+lookup_all = the matching values              600 of  600
+lookup: None iff no match, else a match       600 of  600

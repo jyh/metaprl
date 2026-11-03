@@ -365,8 +365,12 @@ struct
       in
          table
 
+   (* The channel is closed once the table is read, also when reading raises:
+      an open handle keeps Windows from writing or removing the file. *)
    let read_from_file file =
-      get_named_term (read_table (open_in file))
+      let inx = open_in file in
+      let table = Fun.protect ~finally:(fun () -> close_in inx) (fun () -> read_table inx) in
+         get_named_term table
 
    (************************************************************************
     * OUTPUT                                                               *

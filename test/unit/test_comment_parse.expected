@@ -1,0 +1,90 @@
+""
+  => 
+"plain words"
+  => "plain" _ "words"
+"two\nlines"
+  => "two" _ "lines"
+"a_b^c; d,e [f] !g"
+  => "a" "_" "b" "^" "c" ";" _ "d" "," "e" _ "[" "f" "]" _ "!" "g"
+"@bf{bold} and @tt[x]"
+  => (@bf@1:1 [] {"bold"}) _ "and" _ (@tt@1:15 ["x"] )
+"@hrefterm[a; b,c]{one}{two}"
+  => (@hrefterm@1:1 ["a";"b";"c"] {"one"}) {"two"}
+"@foo_bar[x]"
+  => (@foo_bar@1:1 ["x"] )
+"@\"quoted name\"{x}"
+  => (@quoted name@1:13 [] {"x"})
+"{a {b}}"
+  => {"a" _ {"b"}}
+"'x and 'y1 and 'z'"
+  => "'" "x" _ "and" _ "'" "y" "1" _ "and" _ "'" "z" "'"
+"\"a string\" and \"esc \\\" quote\""
+  => "\"a string\"" _ "and" _ "\"esc \" quote\""
+"before (* a (* nested *) comment *) after"
+  => "before" _ "after"
+"<<1 + 2>> and <:doc< x <<y>> >>"
+  => (@math@1:7 [] {(quote@1:0 "" "1 + 2")}) _ "and" _ (@math@1:29 [] {(quote@1:14 "doc" " x <<y>> ")})
+"$x_1 + y^2$"
+  => (@math@1:0 [] {(@math_subscript@1:2 [] {"x"} {"1"}) _ "+" _ (@math_superscript@1:8 [] {"y"} {"2"})})
+"$$a_{i}$$"
+  => (@centermath@1:0 [] {(@math_subscript@1:3 [] {"a"} {{"i"}})})
+math "x_1^2"
+  => (@math_superscript@1:3 [] {(@math_subscript@1:1 [] {"x"} {"1"})} {"2"})
+"@code{let x = {1}}"
+  => Parse_error "terminator mismatch ({})" at 1:17-1:18
+"@email{someone at example}"
+  => (@email@1:1 ["someone at example"] )
+"@begin[doc] text @end[doc]"
+  => (@doc@1:1 [] {_ "text" _})
+"@begin[verbatim] a { b @end[verbatim]"
+  => (@verbatim@1:1 [" { b "] )
+"@begin[literal]<x>@end[literal]"
+  => (@literal@1:1 ["x>"] )
+"@begin[iverbatim]i@end[iverbatim]"
+  => (@iverbatim@1:1 [""] )
+"@begin[html]<b>@end[html]"
+  => (@html@1:1 ["b>"] )
+"@begin[doc]\nline two\n@end[doc]"
+  => (@doc@1:1 [] {_ "line" _ "two" _})
+"@begin[verbatim]\nlet x = 1\n@end[verbatim]"
+  => (@verbatim@1:1 ["let x = 1\n"] )
+"@begin[verbatim]\n\nlet x = 1\n@end[verbatim]"
+  => (@verbatim@1:1 ["\nlet x = 1\n"] )
+"@begin[verbatim]  two spaces@end[verbatim]"
+  => (@verbatim@1:1 [" spaces"] )
+"@begin[verbatim][x]@end[verbatim]"
+  => (@verbatim@1:1 ["x]"] )
+"@begin[verbatim]{x}@end[verbatim]"
+  => Parse_error "terminator mismatch (end(verbatim))" at 1:33-1:33
+"''x and ''y'"
+  => var:'x _ "and" _ "''y'"
+"@foo{a; b}"
+  => (@foo@1:1 [] {"a"} {_ "b"})
+"@code{a}b"
+  => (@code@1:1 ["a"] ) "b"
+"(* open comment"
+  => Parse_error "comment is not terminated" at 1:15-1:15
+"<<open quotation"
+  => Parse_error "quotation is not terminated" at 1:16-1:16
+"\"open string"
+  => Parse_error "string is not terminated" at 1:12-1:12
+"@bf{unclosed"
+  => Parse_error "terminator mismatch (EOF)" at 1:12-1:12
+"{unclosed"
+  => Parse_error "terminator mismatch (EOF)" at 1:9-1:9
+"closed}"
+  => Parse_error "terminator mismatch ({})" at 1:6-1:7
+"$x"
+  => Parse_error "terminator mismatch (EOF)" at 1:2-1:2
+"@begin[doc] x @end[other]"
+  => Parse_error "terminator mismatch (end(other))" at 1:25-1:25
+"@begin[verbatim] never ended"
+  => Parse_error "code block is not terminated" at 1:28-1:28
+"@code{never ended"
+  => Parse_error "code string is not terminated" at 1:17-1:17
+"$x_$"
+  => Parse_error "illegal sub/superscript operation" at 1:3-1:4
+"@foo[a{b}]"
+  => Parse_error "illegal parameter" at 1:6-1:7
+"@\"open name"
+  => Parse_error "string is not terminated" at 1:11-1:11

@@ -438,6 +438,12 @@ against libmojave 1.1.1 or later:
   (or one below). Recorded, not endorsed: the constant level 0 matches
   `l+1` with `l = 0`, so `u[l+1] --> v[l+1]` turns 0 into 1. A mutant that
   lets `l+1` take only offsets of 2 or more fails the model on 89 levels.
+- The msequent accessors of `Refine` (`test/unit/test_msequent.ml`): on
+  1,000 msequents in both implementations, `msequent_num_assums`,
+  `msequent_all_assums` and `msequent_nth_assum` (counting from 1; 0 and
+  one past the end refused), `mk_msequent`/`dest_msequent`/`msequent_goal`,
+  and `msequent_alpha_equal` against a rebuilt copy and three kinds of
+  difference. No defect. Four rebuilt mutants of `refine.ml` each fail.
 - The filter's term-type checks on every kind of statement
   (`test/filter_types`, #94): besides `prim_rw`, `interactive`, `dform`,
   `iform`, `production` and `declare rewrite`, each with a well-typed and an

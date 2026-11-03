@@ -597,7 +597,16 @@ itt_int_ext sub_add_swap complete 1
 itt_int_ext div_fix_add_ind complete 1
 itt_int_ext div_fix_add complete 1
 itt_int_ext add_divReduce complete 1
-itt_int_ext div_Assoc incomplete 0
+itt_int_ext mul_succ complete 1
+itt_int_ext sub_add_cancel complete 1
+itt_int_ext add_sub_cancel2 complete 1
+itt_int_ext mul_pos complete 1
+itt_int_ext x_split complete 1
+itt_int_ext div_fix_lt_ind complete 1
+itt_int_ext div_fix_lt complete 1
+itt_int_ext div_fix_bc_step complete 1
+itt_int_ext div_fix_assoc_ind complete 1
+itt_int_ext div_Assoc complete 1
 itt_int_ext div_Assoc_rw complete 1
 itt_int_ext rem_baseReduce complete 1
 itt_int_ext rem_baseReduce_rw complete 1

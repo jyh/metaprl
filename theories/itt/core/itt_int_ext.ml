@@ -1163,6 +1163,66 @@ interactive add_divReduce :
    [wf] sequent { <H> >- 'c in int } -->
    sequent { <H> >- ('a /@ 'c) +@ ('b /@ 'c) <= ('a +@ 'b) /@ 'c }
 
+(* For div_Assoc. *)
+interactive mul_succ :
+   [wf] sequent { <H> >- 'm in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- (('m +@ 1) *@ 'b) ~ (('m *@ 'b) +@ 'b) }
+
+interactive sub_add_cancel :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- (('x -@ 'b) +@ 'b) ~ 'x }
+
+interactive add_sub_cancel2 :
+   [wf] sequent { <H> >- 'c in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- (('c +@ 'y) -@ 'c) ~ 'y }
+
+interactive mul_pos :
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 0 < 'c } -->
+   sequent { <H> >- 0 < ('b *@ 'c) }
+
+interactive x_split :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- (('c *@ 'b) +@ ('x -@ ('b *@ 'c))) ~ 'x }
+
+interactive div_fix_lt_ind :
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- all n: int. ('n >= 0 => all x: int. ('x >= 0 => 'x < ('n *@ 'b) => (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) < 'n)) }
+
+interactive div_fix_lt :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'c >= 0 } -->
+   sequent { <H> >- 'x >= 0 } -->
+   sequent { <H> >- 'x < ('c *@ 'b) } -->
+   sequent { <H> >- (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) < 'c }
+
+interactive div_fix_bc_step :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'c >= 0 } -->
+   sequent { <H> >- 'x >= ('b *@ 'c) } -->
+   sequent { <H> >- (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) ~ ('c +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ ('b *@ 'c)) 'b)) }
+
+interactive div_fix_assoc_ind :
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 0 < 'c } -->
+   sequent { <H> >- all n: int. all x: int. ('x >= 0 => 'n >= 'x => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x ('b *@ 'c)) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) 'c))) }
+
 interactive div_Assoc :
    sequent { <H> >- 'a >= 0 } -->
    sequent { <H> >- 0 < 'b } -->

@@ -1,0 +1,5 @@
+term_arrays_of_string (string_of_term_lists ...)     300 of 300
+a string without the header                          Invalid_argument Ml_term.get_string
+a short string                                       Invalid_argument Ml_term.get_string
+Lib_term.make_term (Lib_term.dest_term t) = t        619 of 619
+sequent -> ugly -> sequent (ugly is no sequent)      170 of 170

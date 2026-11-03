@@ -395,6 +395,14 @@ against libmojave 1.1.1 or later:
   named `<rule>`); `..`, `...`, `~` and `.` from a proof or a module; and, as
   it is, a module reached under another theory's name (`../itt_supinf` from
   `itt_int_base`) — the theory part is not checked against the module.
+- `Ml_term`, the string form in which the filter stores a theory's terms,
+  and `Lib_term`'s sequent encoding (`test/unit/test_ml_term.ml`): on 300
+  batches of terms, meta terms, opnames and numbers (big integers among
+  them), `term_arrays_of_string (string_of_term_lists ...)` gives every list
+  back in order; a string without the header is refused; and a sequent
+  survives `ugly_term_of_sequent_term` and back, as every term survives
+  `Lib_term.dest_term` and `make_term`. No defect. Four rebuilt mutants of
+  `ml_term.ml` and `lib_term.ml` each fail.
 - What the shell's `ls` options select (`editor/ml/tests/ls_options.sh`):
   on `itt_int_base`, `r` lists only rewrites and definitions, `R` only rules,
   `rR` both, `u` exactly the rewrites and rules not yet proved, `p` the

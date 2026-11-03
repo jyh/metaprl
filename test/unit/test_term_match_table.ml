@@ -90,3 +90,69 @@ let () =
       match first.(k) with None -> () | Some w -> Printf.printf "  first difference: %s\n" w)
     [ "lookup_all = the matching values"; "lookup: None iff no match, else a match";
       "lookup's pattern is not strictly more general"; "identical patterns: the newest value wins" ]
+
+(* lookup_bucket and lookup_rmap, against the same model.  A pattern is
+   "most specific" among the matching ones when no other matching pattern
+   is strictly less general.
+     - lookup_bucket is None exactly when nothing matches, and otherwise is
+       the values of every entry added with one most specific pattern, a
+       pattern being the same up to the names of its variables ('a and 'b
+       share a bucket);
+     - lookup_rmap (a table of pattern -> contracta, here g{'v} for each
+       variable 'v of the pattern, or c) is None exactly when nothing
+       matches, and otherwise is a most specific pattern's newest value
+       with its contracta instantiated by the match. *)
+let rec pvars = function PV v -> [ v ] | C -> [] | G a -> pvars a | F (a, b) -> pvars a @ pvars b
+(* A pattern up to the names of its variables. *)
+let canon p =
+  let names = ref [] in
+  let rec go = function
+    | PV v -> (match List.assoc_opt v !names with Some i -> PV (string_of_int i) | None -> let i = List.length !names in names := (v, i) :: !names; PV (string_of_int i))
+    | C -> C | G a -> G (go a) | F (a, b) -> let a = go a in F (a, go b) in
+  go p
+let contracta p = match List.sort_uniq Stdlib.compare (pvars p) with [] -> [ C ] | vs -> List.map (fun v -> G (PV v)) vs
+let rec inst s = function PV v -> List.assoc v s | C -> C | G a -> G (inst s a) | F (a, b) -> F (inst s a, inst s b)
+let rec of_term t =
+  let { Term_sig.term_op; term_terms } = dest_term t in
+  match Opname.dest_opname (dest_op term_op).Term_sig.op_name, List.map (fun b -> of_term (dest_bterm b).Term_sig.bterm) term_terms with
+  | [ "c" ], [] -> C | [ "g" ], [ a ] -> G a | [ "f" ], [ a; b ] -> F (a, b) | _ -> failwith "of_term"
+
+let () =
+  state := 4711;
+  let n = 600 in
+  let bt = ref 0 and bok = ref 0 and bfirst = ref None and rt = ref 0 and rok = ref 0 and rfirst = ref None in
+  for _ = 1 to n do
+    let pats = List.init (1 + pick 6) (fun _ -> gpat 3) in
+    let pats = if pick 2 = 0 then pats @ [ List.nth pats (pick (List.length pats)) ] else pats in
+    let indexed = List.mapi (fun k p -> k, p) pats in
+    let t = gterm 4 in
+    let what = Printf.sprintf "patterns [%s], term %s" (String.concat "; " (List.map show pats)) (show t) in
+    let matching = List.filter (fun (_, p) -> matches p t) indexed in
+    let specific = List.filter (fun (_, p) -> not (List.exists (fun (_, q) -> strictly_more_general p q) matching)) matching in
+    (* lookup_bucket *)
+    let tbl = List.fold_left (fun tb (k, p) -> Term_match_table.add_item tb (build p) k) Term_match_table.empty_table indexed in
+    incr bt;
+    let got = try Term_match_table.lookup_bucket tbl Term_match_table.select_all (build t) with _ -> Some [ -1 ] in
+    let ok = match got with
+      | None -> matching = []
+      | Some vs ->
+          List.exists (fun (_, p) -> List.sort compare vs = List.sort compare (List.filter_map (fun (k, q) -> if canon q = canon p then Some k else None) indexed)) specific in
+    if ok then incr bok else if !bfirst = None then bfirst := Some what;
+    (* lookup_rmap *)
+    let mt = List.fold_left (fun tb (k, p) -> Term_match_table.add_map tb (build p) (List.map build (contracta p)) k) Term_match_table.empty_map_table indexed in
+    incr rt;
+    let got = try Option.map (fun (cs, k) -> List.map of_term cs, k) (Term_match_table.lookup_rmap mt Term_match_table.select_all (build t)) with _ -> Some ([], -1) in
+    let ok = match got with
+      | None -> matching = []
+      | Some (cs, k) ->
+          (match List.assoc_opt k indexed with
+           | Some p when List.mem_assoc k specific ->
+               let newest = List.fold_left (fun a (j, q) -> if q = p then max a j else a) (-1) indexed in
+               (match m [] p t with Some s -> k = newest && cs = List.map (inst s) (contracta p) | None -> false)
+           | _ -> false) in
+    if ok then incr rok else if !rfirst = None then rfirst := Some what
+  done;
+  Printf.printf "%-44s %4d of %4d\n" "lookup_bucket: a most specific pattern's values" !bok !bt;
+  (match !bfirst with None -> () | Some w -> Printf.printf "  first difference: %s\n" w);
+  Printf.printf "%-44s %4d of %4d\n" "lookup_rmap: its contracta, instantiated" !rok !rt;
+  match !rfirst with None -> () | Some w -> Printf.printf "  first difference: %s\n" w

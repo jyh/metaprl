@@ -1,0 +1,12 @@
+400 cases (std, ds)
+unzip_mimplies (zip_mimplies hs c)            400  400
+unzip_mfunction (zip_mfunction vs c)          400  400
+meta_alpha_equal to a renamed copy            400  400
+meta_alpha_equal iff the same                 400  400
+meta_term_of_term (term_of_meta_term m)       400  400
+free_vars_mterm = parts' + arguments          400  400
+decode (encode v) = v                         400  400
+meta_alpha_equal wf[T] vs main[T]               std true, ds true
+meta_alpha_equal T vs wf[T]                     std true, ds true
+meta_alpha_equal (a:c -> 'a) vs (b:c -> 'b)     std false, ds false
+meta_alpha_equal (a:c -> 'b) vs (b:c -> 'b)     std true, ds true

@@ -1,0 +1,44 @@
+2000 shapes: 463 with a leading quote, 466 with a quote after another parameter
+std and ds print the shape the same            2000 of 2000
+std: unquote_shape = the model                 2000 of 2000
+std: unquote_shape s == s, no leading quote    2000 of 2000
+std: unquote_shape idempotent                  2000 of 2000
+std: opname_of_shape                           2000 of 2000
+std: canonical term has the shape              2000 of 2000
+std: shape_eq agrees with eq                   2000 of 2000
+ds: unquote_shape = the model                  2000 of 2000
+ds: unquote_shape s == s, no leading quote     2000 of 2000
+ds: unquote_shape idempotent                   2000 of 2000
+ds: opname_of_shape                            2000 of 2000
+ds: canonical term has the shape               2000 of 2000
+ds: shape_eq agrees with eq                    2000 of 2000
+-- std
+variable                           var[V]{}
+variable is var_shape              true
+second-order variable, 2 args      var[V]{0;0}
+sequent                            Perv!sequent[]{0;1}
+sequent is sequent_shape           true
+q[quote; 1]                        q[QN]{} -> q[N]{}
+q[quote; quote; 1]                 q[QQN]{} -> q[N]{}
+q[1; quote]                        q[NQ]{} -> q[NQ]{}
+q[quote; 1; quote]                 q[QNQ]{} -> q[NQ]{}
+q[quote]                           q[Q]{} -> q[]{}
+shape_of_term ObId                 EXN Invalid_argument("Term.shape_of_term")
+shape_of_opparam ObId              EXN Invalid_argument("Term.shape_of_term")
+shape_of_term ParamList            EXN Invalid_argument("Term.shape_of_term")
+shape_of_opparam ParamList         EXN Invalid_argument("Term.shape_of_term")
+-- ds
+variable                           var[V]{}
+variable is var_shape              true
+second-order variable, 2 args      var[V]{0;0}
+sequent                            Perv!sequent[]{0;1}
+sequent is sequent_shape           true
+q[quote; 1]                        q[QN]{} -> q[N]{}
+q[quote; quote; 1]                 q[QQN]{} -> q[N]{}
+q[1; quote]                        q[NQ]{} -> q[NQ]{}
+q[quote; 1; quote]                 q[QNQ]{} -> q[NQ]{}
+q[quote]                           q[Q]{} -> q[]{}
+shape_of_term ObId                 EXN Invalid_argument("Term.shape_of_term")
+shape_of_opparam ObId              EXN Invalid_argument("Term.shape_of_term")
+shape_of_term ParamList            EXN Invalid_argument("Term.shape_of_term")
+shape_of_opparam ParamList         EXN Invalid_argument("Term.shape_of_term")

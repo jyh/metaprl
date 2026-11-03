@@ -1,0 +1,4 @@
+Flist: 2000 lists (create 632, append 674, append_skip 694), 0 differ from the model
+Line_buffer: iter visits [a;b;c;e], fold visits [a;b;c;e]
+Weak_memo.create_default: retrieve "image of x", retrieve_hack "image of x", same header equal true, other header equal false
+Weak_memo.create_default: apply raised Invalid_argument Weak_memo.create_default: applications are not allowed

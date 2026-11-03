@@ -77,7 +77,7 @@ define opaque unfold_div :
    "div"{'a; 'b} <-->
    (let div =
       fix{div.lambda{a. lambda{b.
-         if lt_bool{'a; 'b} then 0 else 'div ('a -@ 'b) 'b}}}
+         if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}}
    in
       if lt_bool{'a; 0} then
          if lt_bool{'b; 0} then

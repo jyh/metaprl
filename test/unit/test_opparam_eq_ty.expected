@@ -1,0 +1,14 @@
+4000 operator pairs (1434 share a description; 1027 with a nested operator, object id or list)
+4000 type pairs (1082 share a description; 976 differ only in the term)
+std: opparam_eq = the model                    4000 of 4000
+std: opparam_eq raised                            0
+std: eq_ty = the model (term ignored)          4000 of 4000
+std: eq = the model                            4000 of 4000
+std: term_of_ty gives its term (==)            true
+std: TyNumber TyString TyShape TyOperator TyLevel TyVar TyQuote TyToken ta
+ds: opparam_eq = the model                     4000 of 4000
+ds: opparam_eq raised                             0
+ds: eq_ty = the model (term ignored)           4000 of 4000
+ds: eq = the model                             4000 of 4000
+ds: term_of_ty gives its term (==)             true
+ds: TyNumber TyString TyShape TyOperator TyLevel TyVar TyQuote TyToken ta

@@ -389,6 +389,17 @@ against libmojave 1.1.1 or later:
   (`editor/ml/tests/dform_golden.sh` with `DFORM_MODE`, #95): the same 59
   itt/core goals, against `dform_golden.tex.expected` and
   `dform_golden.src.expected`.
+- Operator-parameter equality and term types
+  (`test/unit/test_opparam_eq_ty.ml`): in both implementations,
+  `TermSubst.opparam_eq` on 4,000 pairs of operator parameters built
+  separately from descriptions -- every parameter kind, nested operators,
+  object ids and parameter lists, and pairs that differ in one parameter at
+  any depth -- is true exactly when the descriptions are equal; `Term_ty`'s
+  `eq_ty` compares name, parameters, bound terms and type and ignores the
+  term, `eq` also compares the term, `term_of_ty` gives the term back, and
+  `string_of_ty_param` names each kind. No defect. Mutants that ignore the
+  arities, treat nested operators or token parameters as always equal, or
+  drop the term from `eq` each fail.
 - Three redex shapes no other test compiled (`test/unit/test_rewrite_shapes.ml`):
   a variable bound in the redex and used in it (`lam{x. 'x} --> id` rewrites
   exactly the identity, not `lam{u. 'z}`), a free first-order variable

@@ -1,0 +1,8 @@
+150 worlds: 924 of 924 points agree with the model (298 at a bookmark; 114 theories with a diamond)
+get_parents = the theories extended directly: 626 of 626
+a duplicate bookmark in one theory       raised Invalid_argument("Mp_resource.bookmark: bookmark dup aready exists in this theory")
+close_theory of a closed name            raised Invalid_argument("Mp_resource.close_theory: theory errs_a aready exists")
+Mp_resource: warning: included theory no_such_theory does not have resources
+extends_theory of an unknown theory      accepted
+find of an unknown bookmark              raised Not_found
+find of an unknown theory                raised Not_found

@@ -909,26 +909,6 @@ interactive_rw div_neg_rw :
 
 let div_negC = div_neg_rw
 
-interactive div_indReduce :
-   sequent { <H> >- 'a >= 0 } -->
-   sequent { <H> >- 'b > 0 } -->
-   sequent { <H> >- 'c >= 0 } -->
-   [wf] sequent { <H> >- 'a in int } -->
-   [wf] sequent { <H> >- 'b in int } -->
-   [wf] sequent { <H> >- 'c in int } -->
-   sequent { <H> >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) }
-
-interactive_rw div_indReduce_rw {| reduce |} :
-   ('a >= 0) -->
-   ('b > 0) -->
-   ('c >= 0) -->
-   ('a in int) -->
-   ('b in int) -->
-   ('c in int) -->
-   ((('a *@ 'b) +@ 'c) /@ 'b) <--> ('a +@ ('c /@ 'b))
-
-let div_indReduceC = div_indReduce_rw
-
 (* Order facts for div_fix_wf's induction, proved without arithT (which comes later). *)
 interactive ge_lt_absurd 'x 'y 'z :
    [wf] sequent { <H> >- 'x in int } -->
@@ -990,6 +970,102 @@ interactive div_wf {| intro [] |} :
    [wf] sequent { <H> >- 'a in int } -->
    [wf] sequent { <H> >- 'b in int } -->
    sequent { <H> >- 'a /@ 'b in int }
+
+(* div on a nonnegative dividend and a positive divisor is its recursive core; the core's two equations. *)
+interactive div_pos_unfold :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- ('a /@ 'b) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b) }
+
+interactive div_fix_base :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'x < 'b } -->
+   sequent { <H> >- (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) ~ 0 }
+
+interactive div_fix_step :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'x >= 'b } -->
+   sequent { <H> >- (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ 'b) 'b)) }
+
+(* Arithmetic for div_indReduce, without arithT. *)
+interactive add_ge_self :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- 'y >= 0 } -->
+   sequent { <H> >- ('x +@ 'y) >= 'x }
+
+interactive add_ge_self2 :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- 'x >= 0 } -->
+   sequent { <H> >- ('x +@ 'y) >= 'y }
+
+interactive add_nonneg :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- 'x >= 0 } -->
+   sequent { <H> >- 'y >= 0 } -->
+   sequent { <H> >- ('x +@ 'y) >= 0 }
+
+interactive mul_nonneg_ind :
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'b >= 0 } -->
+   sequent { <H> >- all m: int. ('m >= 0 => ('m *@ 'b) >= 0) }
+
+interactive mul_nonneg :
+   [wf] sequent { <H> >- 'm in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'm >= 0 } -->
+   sequent { <H> >- 'b >= 0 } -->
+   sequent { <H> >- ('m *@ 'b) >= 0 }
+
+interactive mul_succ_rearr :
+   [wf] sequent { <H> >- 'm in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- ((('m +@ 1) *@ 'b) +@ 'c) ~ ((('m *@ 'b) +@ 'c) +@ 'b) }
+
+interactive add_sub_cancel :
+   [wf] sequent { <H> >- 'x in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- (('x +@ 'b) -@ 'b) ~ 'x }
+
+interactive add_one_rearr :
+   [wf] sequent { <H> >- 'm in int } -->
+   [wf] sequent { <H> >- 'y in int } -->
+   sequent { <H> >- (1 +@ ('m +@ 'y)) ~ (('m +@ 1) +@ 'y) }
+
+(* The core's quotient on m * b + c: step induction on m. *)
+interactive div_fix_ind :
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'c >= 0 } -->
+   sequent { <H> >- all m: int. ('m >= 0 => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (('m *@ 'b) +@ 'c) 'b) ~ ('m +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'c 'b)))) }
+
+interactive div_indReduce :
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- 'b > 0 } -->
+   sequent { <H> >- 'c >= 0 } -->
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   sequent { <H> >- ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) }
+
+interactive_rw div_indReduce_rw {| reduce |} :
+   ('a >= 0) -->
+   ('b > 0) -->
+   ('c >= 0) -->
+   ('a in int) -->
+   ('b in int) -->
+   ('c in int) -->
+   ((('a *@ 'b) +@ 'c) /@ 'b) <--> ('a +@ ('c /@ 'b))
+
+let div_indReduceC = div_indReduce_rw
 
 interactive div_remProperty :
    sequent { <H> >- 'b <> 0 } -->

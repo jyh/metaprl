@@ -888,6 +888,13 @@ interactive_rw div_baseReduce_rw :
 
 let div_baseReduceC = div_baseReduce_rw
 
+(* An integer that is >= 0 and whose negation is >= 0 is 0 (div_neg's sign boundary). *)
+interactive ge_zero_both :
+   [wf] sequent { <H> >- 'a in int } -->
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- (-'a) >= 0 } -->
+   sequent { <H> >- 'a = 0 in int }
+
 interactive div_neg :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->

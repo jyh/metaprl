@@ -1129,6 +1129,52 @@ interactive_rw rem_baseReduce_rw :
 
 let rem_baseReduceC = rem_baseReduce_rw
 
+interactive pos_neg_lt :
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- (-'b) < 0 }
+
+(* div by the signs of its arguments (div_pos_unfold is the a >= 0, b > 0 case). *)
+interactive div_eval_np :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a >= 0 } -->
+   sequent { <H> >- 'b < 0 } -->
+   sequent { <H> >- ('a /@ 'b) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a (-'b))) }
+
+interactive div_eval_pn :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a < 0 } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- ('a /@ 'b) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'a) 'b)) }
+
+interactive div_eval_nn :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'a < 0 } -->
+   sequent { <H> >- 'b < 0 } -->
+   sequent { <H> >- ('a /@ 'b) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'a) (-'b)) }
+
+interactive div_neg_den :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 'b <> 0 } -->
+   sequent { <H> >- ('a /@ (-'b)) ~ (-('a /@ 'b)) }
+
+interactive pos_ne_zero :
+   [wf] sequent { <H> >- 'b in int } -->
+   sequent { <H> >- 0 < 'b } -->
+   sequent { <H> >- 'b <> 0 }
+
+(* rem_indReduce's arithmetic: (a b + c) - (a + q) b = c - q b. *)
+interactive rem_ind_arith :
+   [wf] sequent { <H> >- 'a in int } -->
+   [wf] sequent { <H> >- 'b in int } -->
+   [wf] sequent { <H> >- 'c in int } -->
+   [wf] sequent { <H> >- 'q in int } -->
+   sequent { <H> >- ((('a *@ 'b) +@ 'c) -@ (('a +@ 'q) *@ 'b)) ~ ('c -@ ('q *@ 'b)) }
+
 interactive rem_neg :
    sequent { <H> >- 'b <> 0 } -->
    [wf] sequent { <H> >- 'a in int } -->

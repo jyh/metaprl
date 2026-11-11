@@ -626,16 +626,25 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
     * "Refiner2 -> Refiner_debug" conversions
     *)
 
+   (*
+    * A callback runs inside ONE implementation, whose combinators (apply_fun_higher, ...)
+    * catch THAT implementation's RefineError. The callback is Refiner_debug code and raises
+    * Refiner_debug's RefineError, a different exception, which would escape them; so re-raise
+    * it as the implementation's own (the payload is not converted: GenericError).
+    *)
+   let in1 f x = try f x with RefineError (s, _) -> raise (Err1.RefineError (s, Err1.GenericError))
+   let in2 f x = try f x with RefineError (s, _) -> raise (Err2.RefineError (s, Err2.GenericError))
+
    let split_taf f =
-      (fun t1 -> f (term_of_term1 t1)), (fun t2 -> f (term_of_term2 t2))
+      in1 (fun t1 -> f (term_of_term1 t1)), in2 (fun t2 -> f (term_of_term2 t2))
 
    let split_ttf f =
-      (fun t1 -> fst (f (term_of_term1 t1))),
-      (fun t2 -> snd (f (term_of_term2 t2)))
+      in1 (fun t1 -> fst (f (term_of_term1 t1))),
+      in2 (fun t2 -> snd (f (term_of_term2 t2)))
 
    let split_attf f =
-      (fun a t1 -> fst (f a (term_of_term1 t1))),
-      (fun a t2 -> snd (f a (term_of_term2 t2)))
+      (fun a -> in1 (fun t1 -> fst (f a (term_of_term1 t1)))),
+      (fun a -> in2 (fun t2 -> snd (f a (term_of_term2 t2))))
 
 (* unused
    let split_atf f =
@@ -643,12 +652,12 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
 *)
 
    let split_ttaf f =
-      (fun t1 -> let t, res = f (term_of_term1 t1) in fst t, res),
-      (fun t2 -> let t, res = f (term_of_term2 t2) in snd t, res)
+      in1 (fun t1 -> let t, res = f (term_of_term1 t1) in fst t, res),
+      in2 (fun t2 -> let t, res = f (term_of_term2 t2) in snd t, res)
 
    let split_attaf f =
-      (fun a t1 -> let t, res = f a (term_of_term1 t1) in fst t, res),
-      (fun a t2 -> let t, res = f a (term_of_term2 t2) in snd t, res)
+      (fun a -> in1 (fun t1 -> let t, res = f a (term_of_term1 t1) in fst t, res)),
+      (fun a -> in2 (fun t2 -> let t, res = f a (term_of_term2 t2) in snd t, res))
 
 (* unused
    let split_ml_rule r =
@@ -714,6 +723,12 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
    let merge_triv x v1 v2 =
       v1, v2
 
+   (*
+    * Never merge_poly a value a CALLER supplied (the 'a of apply_fun_arg_at_addr and its kin):
+    * it is built by the caller's function from each implementation's term, so it may hold
+    * Refiner_debug terms built from opposite directions, and <> compares their representations.
+    * Those four merges are merge_triv: the result terms are still compared, the 'a is not.
+    *)
    let merge_poly x v1 v2 =
       if v1 <> v2 then
          report_error x "Polymorphic merge";
@@ -2371,7 +2386,7 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let res2 = wrap3 TermAddr2.apply_fun_arg_at_addr p0_2 p1_2 p2_2 in
          let (res0_1, res1_1), (res0_2, res1_2) = merge merge_triv "TermAddr.apply_fun_arg_at_addr" res1 res2 in
          (merge_term "TermAddr.apply_fun_arg_at_addr - 0" res0_1 res0_2),
-         (merge_poly "TermAddr.apply_fun_arg_at_addr - 1" res1_1 res1_2)
+         (merge_triv "TermAddr.apply_fun_arg_at_addr - 1" res1_1 res1_2 |> fst)
 
       let apply_var_fun_at_addr (p0 : (SymbolSet.t -> term -> term)) (p1 : address) (p2 : SymbolSet.t) (p3 : term) =
          let p0_1, p0_2 = split_attf p0 in
@@ -2387,7 +2402,7 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let res2 = wrap4 TermAddr2.apply_var_fun_arg_at_addr p0_2 p1_2 p2 p3_2 in
          let (res0_1, res1_1), (res0_2, res1_2) = merge merge_triv "TermAddr.apply_var_fun_arg_at_addr" res1 res2 in
          (merge_term "TermAddr.apply_var_fun_arg_at_addr - 0" res0_1 res0_2),
-         (merge_poly "TermAddr.apply_var_fun_arg_at_addr - 1" res1_1 res1_2)
+         (merge_triv "TermAddr.apply_var_fun_arg_at_addr - 1" res1_1 res1_2 |> fst)
 
       let subterm_addresses (p0 : term) =
          let p0_1, p0_2 = p0 in
@@ -2404,7 +2419,7 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let res2 = wrap2 TermAddr2.apply_fun_higher p0_2 p1_2 in
          let (res0_1, res1_1), (res0_2, res1_2) = merge merge_triv "TermAddr.apply_fun_higher" res1 res2 in
          (merge_term "TermAddr.apply_fun_higher - 0" res0_1 res0_2),
-         (merge_poly "TermAddr.apply_fun_higher - 1" res1_1 res1_2)
+         (merge_triv "TermAddr.apply_fun_higher - 1" res1_1 res1_2 |> fst)
 
       let apply_var_fun_higher (p0 : (SymbolSet.t -> term -> term * 'a)) (p1 : SymbolSet.t) (p2 : term) =
          let p0_1, p0_2 = split_attaf p0 in
@@ -2413,7 +2428,7 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let res2 = wrap3 TermAddr2.apply_var_fun_higher p0_2 p1 p2_2 in
          let (res0_1, res1_1), (res0_2, res1_2) = merge merge_triv "TermAddr.apply_var_fun_higher" res1 res2 in
          (merge_term "TermAddr.apply_var_fun_higher - 0" res0_1 res0_2),
-         (merge_poly "TermAddr.apply_var_fun_higher - 1" res1_1 res1_2)
+         (merge_triv "TermAddr.apply_var_fun_higher - 1" res1_1 res1_2 |> fst)
 
    end
 

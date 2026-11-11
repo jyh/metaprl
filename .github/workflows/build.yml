@@ -12,13 +12,19 @@ name: Build
 # Lm_array). The weekly run (Monday 07:00 UTC, an hour after the Windows
 # census) replays every stored proof with SEQ_SET = Lm_splay and skips the
 # build job, so libmojave's Lm_splay_linear_set stays exercised end to end
-# (its defects fixed in libmojave #46 and #56 were found this way). Every
-# other run uses the default.
+# (its defects fixed in libmojave #46 and #56 were found this way). The
+# second weekly run (Tuesday 07:00 UTC) replays every stored proof with
+# TERMS = both: every term operation runs in both term implementations
+# (term_std and term_ds) and any disagreement fails the census, even one
+# that changes no status (proof_census.sh). The two weekly runs change one
+# setting each, so a red names its cause. A manual run can choose either.
+# Every other run uses the defaults.
 on:
   push:
   pull_request:
   schedule:
     - cron: "0 7 * * 1"
+    - cron: "0 7 * * 2"
   workflow_dispatch:
     inputs:
       seq_set:
@@ -26,9 +32,15 @@ on:
         type: choice
         options: [Lm_array, Lm_splay]
         default: Lm_array
+      terms:
+        description: the term implementation (TERMS; both = the std/ds differential)
+        type: choice
+        options: [ds, both]
+        default: ds
 
 env:
-  SEQ_SET: ${{ inputs.seq_set || (github.event_name == 'schedule' && 'Lm_splay') || 'Lm_array' }}
+  SEQ_SET: ${{ inputs.seq_set || (github.event.schedule == '0 7 * * 1' && 'Lm_splay') || 'Lm_array' }}
+  TERMS: ${{ inputs.terms || (github.event.schedule == '0 7 * * 2' && 'both') || 'ds' }}
 
 permissions:
   contents: read
@@ -118,7 +130,7 @@ jobs:
     # versions as the build job: a proof whose replay depends on the
     # compiler (hash or table order inside a tactic) shows as a difference
     # between the two legs.
-    name: replay every stored proof (OCaml ${{ matrix.ocaml }}, THEORIES = all)
+    name: replay every stored proof (OCaml ${{ matrix.ocaml }}, THEORIES = all, TERMS = ${{ inputs.terms || (github.event.schedule == '0 7 * * 2' && 'both') || 'ds' }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -146,9 +158,10 @@ jobs:
           # The first run writes mk/config and stops (mk/load_config).
           opam exec -- omake --no--progress
           sed -i 's/^THEORIES = .*/THEORIES = all/; s/^COMPILATION_MODE = .*/COMPILATION_MODE = native/' mk/config
-          sed -i "s/^SEQ_SET = .*/SEQ_SET = $SEQ_SET/" mk/config
+          sed -i "s/^SEQ_SET = .*/SEQ_SET = $SEQ_SET/; s/^TERMS = .*/TERMS = $TERMS/" mk/config
           grep -q "^SEQ_SET = $SEQ_SET\$" mk/config
-          grep -E '^(THEORIES|COMPILATION_MODE|SEQ_SET) ' mk/config
+          grep -q "^TERMS = $TERMS\$" mk/config
+          grep -E '^(THEORIES|COMPILATION_MODE|SEQ_SET|TERMS) ' mk/config
       - name: build
         working-directory: metaprl
         run: opam exec -- omake -k -j4 --no--progress

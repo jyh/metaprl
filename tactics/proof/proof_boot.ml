@@ -1134,9 +1134,9 @@ struct
    (*
     * Make the current subgoal an assumption.
     *)
-   let make_assum_arg goal i arg =
+   let make_assum_arg assum i arg =
       let goal, hyps = Refine.dest_msequent arg.ref_goal in
-      let hyps = Lm_list_util.insert_nth i goal hyps in
+      let hyps = Lm_list_util.insert_nth i assum hyps in
         { arg with ref_goal = Refine.mk_msequent goal hyps }
 
    let make_assum postf pf addr =

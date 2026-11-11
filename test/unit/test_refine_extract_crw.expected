@@ -1,0 +1,24 @@
+fc                                       f{c; c} -> subgoals g{c}, c
+   step: EDCondRewrite fc ints [] addrs [] terms [] at [[]]
+   extract q{k} (model q{k})
+   dependencies fc sax sgi (model: the step's rewrites + sax sgi)
+fc at [1]                                g{f{c; c}} -> subgoals g{g{c}}, c
+   step: EDCondRewrite fc ints [] addrs [] terms [] at [[1]]
+   extract q{q{k}} (model q{q{k}})
+   dependencies fc sax sgi (model: the step's rewrites + sax sgi)
+fc candthen gc                           f{g{c}; g{c}} -> subgoals g{c}, c
+   step: EDCondRewrite None
+   extract q{k} (model q{k})
+   dependencies fc gc sax sgi (model: the step's rewrites + sax sgi)
+gc corelse fc (gc fails)                 f{c; c} -> subgoals g{c}, c
+   step: EDCondRewrite fc ints [] addrs [] terms [] at [[]]
+   extract q{k} (model q{k})
+   dependencies fc sax sgi (model: the step's rewrites + sax sgi)
+gc (no conditions)                       g{g{c}} -> subgoals g{c}
+   step: EDCondRewrite gc ints [] addrs [] terms [] at [[]]
+   extract q{k} (model q{k})
+   dependencies gc sax sgi (model: the step's rewrites + sax sgi)
+fc on a goal it does not match           g{c}: the rewrite is refused
+fc at clause 1 (no hypothesis)           f{c; c}: the rewrite is refused
+open fc inside sgi                       subgoals g{c}, c; extract with 'e1.. q{'e1<||>}; dependencies fc sgi
+open (fc candthen gc) inside sgi         subgoals g{c}, c; extract with 'e1.. q{'e1<||>}; dependencies fc gc sgi

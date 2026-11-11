@@ -1,0 +1,11 @@
+sequents agreeing with the model on every accessor: 500/500 (19088 checks)
+i=-4 pos=0 nth_hyp=refused
+i=-3 pos=1 nth_hyp=A0
+i=-2 pos=2 nth_hyp=refused
+i=-1 pos=3 nth_hyp=A2
+i= 0 pos=0 nth_hyp=refused
+i= 1 pos=1 nth_hyp=A0
+i= 2 pos=2 nth_hyp=refused
+i= 3 pos=3 nth_hyp=A2
+i= 4 pos=4 nth_hyp=refused
+all_hyps A0,A2; args arg0,arg1

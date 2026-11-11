@@ -1,8 +1,13 @@
-equal sequents                     unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-variable in a hypothesis           unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-variable in the conclusion         unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-variable in the args               unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-variables on both sides            unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
+equal sequents                     unifiable=true unify=OK  real-sequents=true
+variable in a hypothesis           unifiable=true unify=OK  real-sequents=true
+    p := A
+variable in the conclusion         unifiable=true unify=OK  real-sequents=true
+    q := g{B}
+variable in the args               unifiable=true unify=OK  real-sequents=true
+    r := arg
+variables on both sides            unifiable=true unify=OK  real-sequents=true
+    p := A
+    q := B
 a variable := a whole sequent      unifiable=true unify=OK  real-sequents=true
     s := Arg: arg
 Hyps:
@@ -12,11 +17,12 @@ Goal:g{B}
     t := A
 a sequent nested in a term         unifiable=true unify=OK  real-sequents=true
     p := f{A; B}
-the bound name is free             unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-a context hypothesis               unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-different numbers of hypotheses    unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-different args                     unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-a clash in the conclusion          unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
-a constant may not be bound        unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
+the bound name is free             unifiable=true unify=OK  real-sequents=true
+a context hypothesis               unifiable=true unify=OK  real-sequents=true
+    p := A
+different numbers of hypotheses    unifiable=false unify=RAISES (RefineError)
+different args                     unifiable=false unify=RAISES (RefineError)
+a clash in the conclusion          unifiable=false unify=RAISES (RefineError)
+a constant may not be bound        unifiable=false unify=RAISES (RefineError)
 a cycle through a sequent          unifiable=false unify=RAISES (RefineError)
-a sequent against an operator      unifiable=false unify=RAISES (Invalid_argument("Term_base_ds.dest_term: dest_term called on a sequent"))
+a sequent against an operator      unifiable=false unify=RAISES (RefineError)

@@ -1,0 +1,9 @@
+at a clause of the goal, as the model says           6000 of 6000
+of which                                             1521 applied, 1834 conditions
+at a clause of assumption i, as the model says       6000 of 6000
+of which                                             1521 applied
+'a --> 'a if c, at the conclusion                    < |- g{c}>
+f{'a;'b} --> f{'a;'b} if c, at the conclusion        < |- f{c; c}> ; < |- c>
+a subterm address, not a clause                      refused
+the null address                                     refused
+assumption 2 of 1                                    refused

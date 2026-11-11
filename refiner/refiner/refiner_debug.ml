@@ -800,6 +800,17 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
    let merge_var_lo = merge_opt merge_vars "var list"
 *)
 
+   (*
+    * all_vars and its kin include BOUND names, which std and ds may choose
+    * differently for a binder renamed by a capture-avoiding substitution,
+    * so two alpha-equal terms may give different sets.  Callers use the set
+    * to choose names that clash with nothing in the term, and the union
+    * serves both implementations, so it is returned without a report.
+    * (A difference in FREE variables is still reported by free_vars_set.)
+    *)
+   let merge_all_vars _x s1 s2 =
+      if SymbolSet.equal s1 s2 then s1 else SymbolSet.union s1 s2
+
    let merge_ss x s1 s2 =
       if not (SymbolSet.equal s1 s2) then
          report_error x ("Symbol sets mismatch: Implementation 1: {" ^
@@ -2557,11 +2568,11 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
 
       let all_vars (p0 : term) =
          let p0_1, p0_2 = p0 in
-         merge merge_ss "TermMan.all_vars" (wrap1 TermMan1.all_vars p0_1) (wrap1 TermMan2.all_vars p0_2)
+         merge merge_all_vars "TermMan.all_vars" (wrap1 TermMan1.all_vars p0_1) (wrap1 TermMan2.all_vars p0_2)
 
       let all_vars_terms (p0 : term list) =
          let p0_1, p0_2 = split p0 in
-         merge merge_ss "TermMan.all_vars_terms" (wrap1 TermMan1.all_vars_terms p0_1) (wrap1 TermMan2.all_vars_terms p0_2)
+         merge merge_all_vars "TermMan.all_vars_terms" (wrap1 TermMan1.all_vars_terms p0_1) (wrap1 TermMan2.all_vars_terms p0_2)
 
       let all_vars_info (p0 : var_info SymbolTable.t) (p1 : term) =
          let p1_1, p1_2 = p1 in
@@ -2972,7 +2983,7 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
 
       let all_vars_mterm (p0 : meta_term) =
          let p0_1, p0_2 = split_meta_term p0 in
-         merge merge_ss "TermMeta.all_vars_mterm" (wrap1 TermMeta1.all_vars_mterm p0_1) (wrap1 TermMeta2.all_vars_mterm p0_2)
+         merge merge_all_vars "TermMeta.all_vars_mterm" (wrap1 TermMeta1.all_vars_mterm p0_1) (wrap1 TermMeta2.all_vars_mterm p0_2)
 
       let context_vars (p0 : meta_term) =
          let p0_1, p0_2 = split_meta_term p0 in

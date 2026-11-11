@@ -4,9 +4,9 @@ no renaming: free_vars_set                   {y}
 renamed alike: all_vars                      {x, x1}
 renamed alike: all_vars_terms                {x, x1}
 renamed alike: free_vars_set                 {x}
-[y := x; z := x1]: all_vars                  REPORT Found a mismatch in function TermMan.all_vars: Symbol sets mismatch: Implementation 1: {x, x2}; Implementation 2: {x, x1}
-[y := x; z := x1]: all_vars_terms            REPORT Found a mismatch in function TermMan.all_vars_terms: Symbol sets mismatch: Implementation 1: {x, x2}; Implementation 2: {x, x1}
+[y := x; z := x1]: all_vars                  {x, x1, x2}
+[y := x; z := x1]: all_vars_terms            {x, x1, x2}
 [y := x; z := x1]: free_vars_set             {x}
-[y := x; z := x1; w := x2]: all_vars         REPORT Found a mismatch in function TermMan.all_vars: Symbol sets mismatch: Implementation 1: {x, x3}; Implementation 2: {x, x1}
-[y := x; z := x1; w := x2]: all_vars_terms   REPORT Found a mismatch in function TermMan.all_vars_terms: Symbol sets mismatch: Implementation 1: {x, x3}; Implementation 2: {x, x1}
+[y := x; z := x1; w := x2]: all_vars         {x, x1, x3}
+[y := x; z := x1; w := x2]: all_vars_terms   {x, x1, x3}
 [y := x; z := x1; w := x2]: free_vars_set    {x}

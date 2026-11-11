@@ -1,0 +1,36 @@
+StringIntError
+  w200 "\nrw: depth 3"
+  w24  "\nrw: depth 3"
+  format_exn "Refine error:\n    rw: depth 3"
+StringStringError
+  w200 "\nrw: no such rule and_intro"
+  w24  "\nrw:\n   no such rule\n   and_intro"
+  format_exn "Refine error:\n    rw: no such rule and_intro"
+StringVarError
+  w200 "\nrw: free variable 'y"
+  w24  "\nrw: free variable 'y"
+  format_exn "Refine error:\n    rw: free variable 'y"
+BadMatch ParamMatch
+  w200 "\nrw: BadMatch: ParamMatch: 7:n"
+  w24  "\nrw:\n   BadMatch:\n   ParamMatch: 7:n"
+  format_exn "Refine error:\n    rw: BadMatch: ParamMatch: 7:n"
+BadMatch VarMatch
+  w200 "\nrw: BadMatch: VarMatch: z"
+  w24  "\nrw:\n   BadMatch:\n   VarMatch: z"
+  format_exn "Refine error:\n    rw: BadMatch: VarMatch: z"
+BadMatch TermMatch
+  w200 "\nrw: BadMatch: TermMatch: g{a}"
+  w24  "\nrw:\n   BadMatch:\n   TermMatch: g{a}"
+  format_exn "Refine error:\n    rw: BadMatch: TermMatch: g{a}"
+BadMatch TermMatch2
+  w200 "\nrw: BadMatch: TermMatch2: g{a} == a"
+  w24  "\nrw:\n   BadMatch:\n   TermMatch2:\n   g{a} == a"
+  format_exn "Refine error:\n    rw: BadMatch: TermMatch2: g{a} == a"
+BadMatch BTermMatch
+  w200 "\nrw: BadMatch: BTermMatch: x. g{'x<|!|>}"
+  w24  "\nrw:\n   BadMatch:\n   BTermMatch:\n   x. g{'x<|!|>}"
+  format_exn "Refine error:\n    rw: BadMatch: BTermMatch: x. g{'x<|!|>}"
+BadMatch HypMatch
+  w200 "\nrw: BadMatch: HypMatch:\n   Context(H, <J>, a\n   )Hypothesis(x, g{a})Hypothesis(a)"
+  w24  "\nrw:\n   BadMatch:\n   HypMatch:\n   Context(H, <J>, a\n   )Hypothesis(x, g{a})Hypothesis(a)"
+  format_exn "Refine error:\n    rw: BadMatch: HypMatch:\n       Context(H, <J>, a\n       )Hypothesis(x, g{a})Hypothesis(a)"

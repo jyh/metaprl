@@ -1,0 +1,20 @@
+rw cung                                          on b |- g{f{a; b}}        -> main: b |- f{a; b}
+rw cung (no g at the conclusion)                 on  |- f{a; g{c}}         -> refused (Rewrite.apply_rewrite: StringError: opnames do not match)
+rw cswap (one condition)                         on  |- f{a; g{c}}         -> main:  |- f{g{c}; a} || assertion:  |- a
+rw (cung thenC cswap)                            on b |- g{f{a; b}}        -> main: b |- f{b; a} || assertion: b |- a
+rw (cswap thenC cung) (cung fails after)         on  |- f{a; g{c}}         -> refused (Rewrite.apply_rewrite: StringError: opnames do not match)
+rw (cung orelseC cswap)                          on  |- f{a; g{c}}         -> main:  |- f{g{c}; a} || assertion:  |- a
+rw (cswap orelseC cung)                          on b |- g{f{a; b}}        -> main: b |- f{a; b}
+rw ((cung thenC cswap) thenC idC)                on b |- g{f{a; b}}        -> main: b |- f{b; a} || assertion: b |- a
+rw (cung thenC ung)  (mixed kinds)               on  |- g{g{c}}            -> main:  |- c
+rw (addrLiteralC [concl; 2] cung)                on  |- f{a; g{c}}         -> main:  |- f{a; c}
+rw (withoutOptionC opt cung)                     on b |- g{f{a; b}}        -> main: b |- f{a; b}
+rw (withoutOptionC opt ung)                      on b |- g{f{a; b}}        -> main: b |- f{a; b}
+rw (withOptionC opt OptionAllow cung)            on b |- g{f{a; b}}        -> main: b |- f{a; b}
+rw (cswap thenTC idT)                            on  |- f{a; g{c}}         -> main:  |- f{g{c}; a} || assertion:  |- a
+rw (cswap thenTC cutT c)                         on  |- f{a; g{c}}         -> main:  |- f{g{c}; a} || assertion: c || main:  |- a
+rw (create_ml_iform mlung)                       on b |- g{f{a; b}}        -> main: b |- f{a; b}
+rw (create_ml_iform mlung) (no g)                on  |- f{a; g{c}}         -> refused (mlung: not g)
+rewrite_of_pre_rewrite PrimRW with a parameter   Invalid_argument Rewrite_boot.rewrite_of_pre_rewrite: PrimRW rewrites do not take arguments
+redex_and_conv_of_rw_annotation, no arguments    g{'a<||>}, then main: f{a; b}
+  with a parameter                               Invalid_argument Line 1, characters 1-0: rewrite q2: res resource does not support annotations on rewrites that take arguments

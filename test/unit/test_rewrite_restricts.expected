@@ -196,7 +196,36 @@ Terms:
           RWSOFreeVarsVar (1, ) <0; 2; 5> []
 
 == goal, argument lam y. D<H>[g{'a}] (address D) (Strict)
-Not_found, escaping compile_redices
+Redex: Stack:
+          RStack: 8
+	FOVar y
+	CVar D<H>[0]
+	SOVarPattern a<>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 3, [])
+    RWSeqHyp: stack:5 (default x)
+       RWSOVar (4, )
+    RWSeqContext (-1, 6, [5])
+ Goals:
+    RWSOVar (7, 5)
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWSOContext (<1; 6>0: 0, 1, [])
+          RWComposite Rr!g
+             Bterm 0()
+                RWSOFreeVarsVar (2, ) <1; 3; 6> [0]
+
 == goal, argument g{'e; lam y. D<H>[g{'a}]} (address D) (Strict)
 Redex: Stack:
           RStack: 9
@@ -228,7 +257,7 @@ Terms:
     Bterm 0()
        RWComposite Rr!lam
           Bterm 1(stack:1 (default y))
-             RWSOContext (<2; 4; 7>1: 0, 2, [])
+             RWSOContext (<2; 7>1: 0, 2, [])
                 RWComposite Rr!g
                    Bterm 0()
                       RWSOFreeVarsVar (3, ) <2; 4; 7> [1]

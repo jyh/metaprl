@@ -8,14 +8,15 @@
    occur both in the redex and in an argument, a free first-order variable
    in an argument, nested under a composite term, a sequent and a binder.
    Each prints the compiled stack and terms, or the RefineError.
-   FOUND A DEFECT, pinned here, not fixed: an argument holding a term
-   context with an address argument under a binder (lam y. D<H>[...])
-   compiles, under Strict, to a RWSOFreeVarsContext whose restriction
-   map_restricts_term looks up by the ADDRESS index i
-   (List.assoc i restr) after testing the STACK index j
-   (List.mem_assoc j restr), as its RWSOContext case does not; here i is
-   not a key, so Not_found escapes compile_redices.  Where i happens to
-   be a key, the restriction of another variable would be applied. *)
+   A DEFECT, found by this test and fixed with it (2026-11-11): an
+   argument holding a term context with an address argument under a
+   binder (lam y. D<H>[...]) compiles, under Strict, to a
+   RWSOFreeVarsContext whose restriction map_restricts_term looked up by
+   the ADDRESS index i after testing the STACK index j, as its
+   RWSOContext case does not.  Where i was not a key, Not_found escaped
+   compile_redices; where it was, another variable's restriction was
+   applied: in g{'e; lam y. D<H>[...]}, D got 'e's, which forbids H, the
+   context D declares.  Both cases below now compile with D's own. *)
 open Term_sig
 open Refiner.Refiner
 open TermType

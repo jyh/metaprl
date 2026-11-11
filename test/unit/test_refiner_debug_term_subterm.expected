@@ -1,0 +1,6 @@
+no renaming                        at [2]    free vars {x, y}
+[y := x; z := x1], the body        at [2]    free vars {x, x2}
+[y := x; z := x1], inside the body at [2;1]  free vars {x2}
+[y := x; z := x1; w := x2]         at [2]    free vars {x, x3}
+two binders renamed                at [2;2]  REPORT Found a mismatch in function TermSubst.free_vars_set: Symbol sets mismatch: Implementation 1: {x, y, x2, y2}; Implementation 2: {x, y, x1, y1}
+the argument (no binder crossed)   at [1]    free vars {}

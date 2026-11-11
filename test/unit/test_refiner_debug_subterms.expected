@@ -1,0 +1,8 @@
+no renaming                        subterm 0: free vars {}
+no renaming                        subterm 1: free vars {x, y}
+renamed alike                      subterm 0: free vars {}
+renamed alike                      subterm 1: free vars {x, x1}
+[y := x; z := x1]                  subterm 0: free vars {}
+[y := x; z := x1]                  subterm 1: free vars {x, x2}
+[y := x; z := x1; w := x2]         subterm 0: free vars {}
+[y := x; z := x1; w := x2]         subterm 1: free vars {x, x3}

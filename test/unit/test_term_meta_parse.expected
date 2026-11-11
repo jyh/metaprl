@@ -24,4 +24,4 @@ mterms_of_parsed_mterms on a labelled term   lbl: Arg: Tmp!arg Hyps:       1.Tmp
 mterms: <J> >- 'C<|!!|> (the memoising parser) Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>
 term_of_parsed_term: <J> >- 'C<|!!|>         Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>
 mrewrite: the same redex and contractum      Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>  ==>  Tmp!k{'C<|J|>}
-rewrite: 'C<|!!|> in the redex, then the contractum Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<||>  ==>  Tmp!k{'C<||>}
+rewrite: 'C<|!!|> in the redex, then the contractum Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>  ==>  Tmp!k{'C<|J|>}

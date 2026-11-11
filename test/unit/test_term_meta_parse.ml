@@ -9,12 +9,11 @@
    memo that rewrite_of_parsed_rewrite shares between redex and contractum.
    Each case prints the converted term (or the error).  The expected file
    is the output of the code as written (2026-11-11), never typed.
-   Pinned as found, and a defect: rewrite_of_parsed_rewrite is
-   "f redex, f contractum", and OCaml evaluates a tuple right to left, so
-   the CONTRACTUM is parsed first and the shared memo fixes the default
-   contexts of 'C from the contractum (none) instead of the redex (J):
-   'C<||> on both sides, where mrewrite_of_parsed_mrewrite, which orders
-   its calls, gives 'C<|J|>.  The fix is a separate change. *)
+   rewrite_of_parsed_rewrite parses the redex before the contractum, as
+   mrewrite_of_parsed_mrewrite does, so a variable's default contexts come
+   from the redex: 'C<|J|> on both sides.  (Until 2026-11-11 it was
+   "f redex, f contractum", which OCaml evaluates right to left, and gave
+   'C<||>.) *)
 open Term_sig
 open Refiner.Refiner
 open TermType

@@ -1,7 +1,9 @@
 (* Proof_boot's EDITING operations on nested proofs (squash, kreitz,
    clean, make_assum, expand, set_goal), on the proof as refined and on the
    same proof reloaded through io_proof_of_proof / proof_of_io_proof,
-   unsquashed and squashed.  test_proof_ops_kinds and test_proof_ops_nested
+   unsquashed and squashed, and on the proof POSTED at its root (post
+   locks the node in the proof and puts it Pending in the cache).
+   test_proof_ops_kinds and test_proof_ops_nested
    reach these on one-step proofs or not at all.
    The proofs are test_proof_ops_nested's (two or three refinement steps).
    For each, the tree (info, status, find_subgoal at every address) is
@@ -9,7 +11,8 @@
    applied at the root, at the first inner rule node and at the first leaf
    of the proof as refined (squash and expand also on the reloads), and the
    result's node count, status, expression at that address and leaf flag
-   are printed, with every node's goal (conclusion / number of
+   are printed (for the posted proof, also whether a following clean at
+   [1] calls the update function), with every node's goal (conclusion / number of
    assumptions).  The reload's parser and evaluator map a step's text to
    its tactic.  The expected file is the output of the code as written,
    never typed.  Pinned as found, not changed:
@@ -19,11 +22,17 @@
        proof;
      - a reloaded proof reads incomplete where the proof it was saved from
        read partial, squashed or not;
-     - squashing changes the node count of the wrapT proof (2/8 -> 2/7).
+     - squashing changes the node count of the wrapT proof (2/8 -> 2/7);
+     - a posted node's info reports one more goal (3 where 2), and set_goal
+       at a posted root leaves a single unjustified node (nodes 0/1, no
+       subtree);
+     - squash, clean and make_assum keep a posted root locked, so a later
+       edit beneath it (clean at [1]) does not call the update function;
+       expand and kreitz drop the lock, and it does.
    Not reached by any proof here: the arms of squash_ext, expand_ext,
    info_ext and replace_child for Identity, Annotate, Unjustified,
-   Extract, Wrapped, Pending and Locked nodes, since index returns only a
-   rule box or a leaf at an address of these proofs. *)
+   Extract and Wrapped nodes, since index returns only a rule box, a leaf
+   or (after post) a locked node at an address of these proofs. *)
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Tactic_boot
@@ -36,7 +45,9 @@ let ex name = MLast.ExLid (Ploc.dummy, Ploc.VaVal name)
 let say fmt = Printf.ksprintf (fun s -> print_string s; flush stdout) fmt
 let st = function Proof.StatusBad -> "bad" | Proof.StatusIncomplete -> "incomplete" | Proof.StatusPartial -> "partial" | Proof.StatusComplete -> "complete"
 let nc (a, b) = Printf.sprintf "%d/%d" a b
-let upd p = p
+(* the update function: identity, counting its calls *)
+let upd_calls = ref 0
+let upd p = incr upd_calls; p
 let try_s f = try f () with RefineError.RefineError (n, _) -> "refused (" ^ n ^ ")" | e -> "raised " ^ Printexc.to_string e
 let sa a = "[" ^ String.concat "." (List.map string_of_int a) ^ "]"
 let rec expr = function
@@ -127,5 +138,21 @@ let () =
                          (expr (Proof.info q a).Proof.step_expr) (Proof.is_leaf q a) (try_s (fun () -> goals q)))))
                 ops)
             (pick p))
-            [ "proof", p0; "reloaded", (try reload false p0 with _ -> p0); "reloaded squashed", (try reload true p0 with _ -> p0) ])
+            [ "proof", p0; "reloaded", (try reload false p0 with _ -> p0); "reloaded squashed", (try reload true p0 with _ -> p0) ];
+          (* post: the node at an address is Locked in the proof and Pending in the cache *)
+          List.iter (fun a ->
+              match Proof.post (fun () -> p0) a with
+              | exception e -> say "  post at %s raised %s\n" (sa a) (Printexc.to_string e)
+              | q ->
+                  tree ("posted at " ^ sa a) q;
+                  List.iter (fun (oname, f) ->
+                      say "  %-20s at %-6s %s\n" oname (sa a)
+                        (try_s (fun () -> let r = f q a in
+                           let follow = try_s (fun () -> upd_calls := 0; ignore (Proof.clean upd r [ 1 ]); string_of_int !upd_calls) in
+                           Printf.sprintf "nodes %s, status %s, %s, leaf %b | %s | then clean at [1]: update called %s" (nc (Proof.node_count r)) (st (Proof.status r []))
+                             (expr (Proof.info r a).Proof.step_expr) (Proof.is_leaf r a) (try_s (fun () -> goals r)) follow)))
+                    ops;
+                  say "  cache of a fresh proof of the goal at %s: %s\n" (sa a)
+                    (try_s (fun () -> String.concat "; " (List.map (fun c -> Printf.sprintf "nodes %s, status %s" (nc (Proof.node_count c)) (st (Proof.status c []))) (Proof.get_cache (Proof.create (Proof.goal p0 a)) [])))))
+            [ [] ])
     steps

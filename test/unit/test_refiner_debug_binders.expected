@@ -1,0 +1,8 @@
+no renaming                                    x rebuilt-alpha-equal=true
+one substitution renames x to x1               x1 rebuilt-alpha-equal=true
+a range variable that does not occur           x rebuilt-alpha-equal=true
+[y := x; z := x1], z absent                    REPORT Found a mismatch in function TermOp.dest_dep0_dep1_term - 0: Variable mismatch: "x2" vs "x1"
+[y := x; z := x1; w := x2], z w absent         REPORT Found a mismatch in function TermOp.dest_dep0_dep1_term - 0: Variable mismatch: "x3" vs "x1"
+the renamed body still sees a free x1          REPORT Found a mismatch in function TermOp.dest_dep0_dep1_term - 0: Variable mismatch: "x3" vs "x2"
+three binders, none renamed                    x,y,z rebuilt-alpha-equal=true
+three binders, [u := x; w := x1], w absent     REPORT Found a mismatch in function TermOp.dest_dep0_dep0_dep3_term - 2: Variable mismatch: "x2" vs "x1"

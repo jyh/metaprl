@@ -1,0 +1,7 @@
+random: 300/300 proofs pass every round trip (676 refinements, 2283 nodes in all); squashing left the term unchanged in 141
+   7  status complete -> after the term trip incomplete; squashed incomplete, squashed node_count differs
+  11  status complete -> after the term trip incomplete; squashed incomplete, squashed node_count same
+ 152  status partial -> after the term trip incomplete; squashed incomplete, squashed node_count differs
+  79  status partial -> after the term trip incomplete; squashed incomplete, squashed node_count same
+  51  status partial -> after the term trip partial; squashed partial, squashed node_count same
+to_raw of a term that is not a proof: refused (Proof_boot.term_make_extract_header)

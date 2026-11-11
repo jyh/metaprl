@@ -1,0 +1,11 @@
+random: 600/600 agree with the model (292 refused, 20 refused at build, 514 subgoals in all); 0 not run (model over 30 steps)
+progressT, two subgoals, one equal to the goal: progress cut C on "main":C[] -> refused
+progressT, two subgoals, neither equal: progress cut B on "main":C[] -> 2: "assertion":B[] | "main":C[B]
+thenLT after idT, list of two: (id thenL [id; id]) on "main":C[] -> refused at build
+thenLT after idT, list of one: (id thenL [cut A]) on "main":C[] -> 2: "assertion":A[] | "main":C[A]
+thenLT after cutT, list of one: (cut A thenL [id]) on "main":C[] -> refused
+thenLT after idT in an unreached branch: (id orelse (seq [] thenL [])) on "main":C[] -> refused at build
+repeatT cutT stops on the conclusions it made: repeat cut B on "main":C[] -> 3: "assertion":B[] | "main":B[B] | "main":C[B]
+nthAssumT closes on an equal assumption: (cut C then try nthAssum 1) on "main":C[] -> 1: "assertion":C[]
+thenMT restores the goal's label: (id thenM id) on "wf":C[] -> 1: "wf":C[]
+thenLabLT on the main subgoal: (cut A thenLab ["main", cut B]) on "upcase":C[] -> 3: "assertion":A[] | "assertion":B[A] | "main":C[A,B]

@@ -1,0 +1,21 @@
+conversion combinations agreeing with the model: 300/300 (213 succeeded, 87 failed)
+someSub ung                  on f{g{c}; g{c}}          f{c; g{c}}
+lower ung                    on g{g{c}}                g{c}
+higher swap                  on g{f{c; g{c}}}          g{f{g{c}; c}}
+sweepUp wrap                 on f{c; c}                f{g{c}; g{c}}
+sweepDn swap                 on f{f{c; g{c}}; c}       f{c; f{g{c}; c}}
+sweepDn ung                  on g{g{c}}                g{c}
+sweepUp ung                  on g{g{c}}                c
+repeat ung                   on g{g{g{c}}}             c
+progress id                  on c                      fails
+allSub fail                  on c                      c
+someSub id                   on c                      fails
+repeatFor 2 ung              on g{c}                   fails
+addr [2] ung                 on f{c; g{c}}             f{c; c}
+first [fail; wrap]           on c                      g{c}
+addr [1] ung                 on c                      fails
+addr [1] try ung             on c                      c
+addr [1] id                  on c                      c
+repeat addr [1] fail         on c                      fails
+sweepDn addr [1] swap        on c                      c
+try addr [1] ung             on c                      c

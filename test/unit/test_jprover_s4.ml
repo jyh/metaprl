@@ -5,7 +5,8 @@
    atoms p, q, r.  Each formula's status is the textbook one for S4n
    (classical propositional logic with independent S4 modalities box_1,
    box_2, ...: each reflexive (T: [i]A => A) and transitive
-   (4: [i]A => [i][i]A), with K), not computed:
+   (4: [i]A => [i][i]A), with K), and for box_0 the status that
+   theories/s4lp's own sequent rules give (see the cases), not computed:
      valid    a theorem of S4n;
      invalid  not a theorem (a counter-model exists).
    Each is run at multiplicity 3 with the hypotheses and conclusions given
@@ -61,7 +62,7 @@ end
 module Pr = Jall.JProver (L)
 
 let p = A "p" and q = A "q" and r = A "r"
-let b1 a = Box (1, a) and b2 a = Box (2, a)
+let b0 a = Box (0, a) and b1 a = Box (1, a) and b2 a = Box (2, a)
 
 (* status, hypotheses, conclusions *)
 let cases = [
@@ -87,6 +88,21 @@ let cases = [
   `Invalid, [], [ Imp (Not (b1 (Not p)), b1 (Not (b1 (Not p)))) ];
   `Invalid, [ b1 p ], [ b1 q ];
   `Invalid, [], [ b1 p; b1 (Not p) ];
+  (* box_0, the sort that s4lp's box_introT keeps under every box_i
+     (thin_nonboxedT keeps a hypothesis boxed with the goal's sort or 0):
+     so [0]A gives [i]A, and [i]A does not give [0]A. *)
+  `Valid, [], [ Imp (b0 p, b1 p) ];
+  `Invalid, [], [ Imp (b1 p, b0 p) ];
+  `Valid, [], [ Imp (b0 p, b1 (b2 p)) ];
+  `Valid, [], [ Imp (b0 p, b0 (b1 p)) ];
+  `Valid, [], [ Imp (b0 p, p) ];
+  `Valid, [], [ Imp (b0 p, b0 (b0 p)) ];
+  `Valid, [], [ Imp (b1 (b0 p), b0 p) ];
+  `Valid, [], [ Imp (b0 (Imp (p, q)), Imp (b1 p, b1 q)) ];
+  `Invalid, [], [ Imp (b0 p, b0 q) ];
+  `Valid, [ b0 p; b1 (Imp (p, q)) ], [ b1 q ];
+  `Valid, [], [ Imp (b0 (b1 p), b2 (b1 p)) ];
+  `Valid, [], [ Imp (b1 (b0 p), b2 p) ];
 ]
 
 let prove hyps concls =

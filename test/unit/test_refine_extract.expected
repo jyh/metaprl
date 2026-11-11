@@ -1,0 +1,13 @@
+extract_term as the model says                       300 of 300 (169 with arguments)
+compute_dependencies as the model says               300 of 300
+a proof built under any_sentinal                     Invalid_argument Sentinals mismatch in extractor function
+derived_rule on a name never created                 refused
+derived_rule with a proof of another goal            accepted
+and then its extract                                 refused
+extract_term with a closed term as the argument      refused
+extract_term with no argument for one subgoal        refused
+extract_term with two arguments for one              refused
+compose with a goal mismatch                         Invalid_argument Refine.compose - goal mismatch
+compose across two sentinels                         Invalid_argument Refine.compose - sentinals mismatch
+a theorem using a lemma depends on                   ax fi gi
+and its extract                                      p{q{k}; k}

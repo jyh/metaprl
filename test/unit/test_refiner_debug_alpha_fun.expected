@@ -6,7 +6,7 @@ ds     two occurrences, both match        true        predicate ran 2
 ds     the predicate refuses              false       predicate ran 2
 ds     structure differs                  false       predicate ran 0
 ds     the predicate raises               RefineError predicate ran 1
-debug  two occurrences, both match        true        predicate ran 4
-debug  the predicate refuses              false       predicate ran 4
+debug  two occurrences, both match        true        predicate ran 2
+debug  the predicate refuses              false       predicate ran 2
 debug  structure differs                  false       predicate ran 0
-debug  the predicate raises               RefineError predicate ran 2
+debug  the predicate raises               RefineError predicate ran 1

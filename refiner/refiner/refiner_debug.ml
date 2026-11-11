@@ -2812,11 +2812,31 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let p2_1, p2_2 = p2 in
          merge merge_bool "TermSubst.alpha_equal_vars" (wrap4 TermSubst1.alpha_equal_vars p0_1 p1 p2_1 p3) (wrap4 TermSubst2.alpha_equal_vars p0_2 p1 p2_2 p3)
 
+      (*
+       * The predicate may have side effects (the rewriter records each match
+       * on its stack), so it runs once per occurrence: side 1 runs it and
+       * records each answer, and side 2 replays the answers in order.
+       *)
       let alpha_equal_fun (p0 : ( term -> 'a -> bool )) (p1 : term) (p2 : var list) (p3 : term) (p4 : 'a list) =
-         let p0_1, p0_2 = split_taf p0 in
+         let answers = Queue.create () in
+         let p0_1 t1 o =
+            match p0 (term_of_term1 t1) o with
+               b -> Queue.add (Ok b) answers; b
+             | exception e -> Queue.add (Error e) answers; raise e
+         in
+         let p0_2 _ _ =
+            if Queue.is_empty answers then
+               report_error "TermSubst.alpha_equal_fun" "implementation 2 asked the predicate more often than implementation 1";
+            match Queue.take answers with
+               Ok b -> b
+             | Error e -> raise e
+         in
          let p1_1, p1_2 = p1 in
          let p3_1, p3_2 = p3 in
-         merge merge_bool "TermSubst.alpha_equal_fun" (wrap5 TermSubst1.alpha_equal_fun p0_1 p1_1 p2 p3_1 p4) (wrap5 TermSubst2.alpha_equal_fun p0_2 p1_2 p2 p3_2 p4)
+         (* Side 1 first: it fills the answers side 2 replays (arguments are evaluated right to left). *)
+         let r1 = wrap5 TermSubst1.alpha_equal_fun p0_1 p1_1 p2 p3_1 p4 in
+         let r2 = wrap5 TermSubst2.alpha_equal_fun p0_2 p1_2 p2 p3_2 p4 in
+            merge merge_bool "TermSubst.alpha_equal_fun" r1 r2
 
       let standardize (p0 : term) =
          let p0_1, p0_2 = p0 in

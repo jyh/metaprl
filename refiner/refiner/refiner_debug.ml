@@ -1374,9 +1374,17 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let p0_1, p0_2 = p0 in
          merge merge_opname "Term.opname_of_term" (wrap1 Term1.opname_of_term p0_1) (wrap1 Term2.opname_of_term p0_2)
 
+      (*
+       * The bodies come without their binders, and std and ds may name a
+       * binder differently after a substitution renamed it, so side 2's
+       * bodies are renamed to side 1's binder names (merge_bterm', as
+       * dest_bterm does) before they are paired.
+       *)
       let subterms_of_term (p0 : term) =
          let p0_1, p0_2 = p0 in
-         merge merge_terms "Term.subterms_of_term" (wrap1 Term1.subterms_of_term p0_1) (wrap1 Term2.subterms_of_term p0_2)
+         let bts1 = wrap1 (fun t -> List.map Term1.dest_bterm (Term1.dest_term t).term_terms) p0_1 in
+         let bts2 = wrap1 (fun t -> List.map Term2.dest_bterm (Term2.dest_term t).term_terms) p0_2 in
+            List.map (fun bt -> bt.bterm) (merge merge_bterms' "Term.subterms_of_term" bts1 bts2)
 
       let subterm_arities (p0 : term) =
          let p0_1, p0_2 = p0 in

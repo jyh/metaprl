@@ -446,6 +446,9 @@ struct
           | Context (v, conts, subterms) ->
                mk_context_term v (mk_sequent_inner_term hyps concl (i + 1) len) conts subterms
 
+   let mk_sequent_body { sequent_hyps = hyps; sequent_concl = concl; _ } =
+      mk_sequent_inner_term hyps concl 0 (SeqHyp.length hyps)
+
    let mk_sequent_term
        { sequent_args = args;
          sequent_hyps = hyps;
@@ -522,7 +525,7 @@ struct
     *)
    let explode_sequent_name = "explode_sequent"
 
-   let explode_sequent_aux t =
+   let explode_body_aux t args body =
       let rec collect (args : term) hyps term =
          let { term_op = op; term_terms = bterms } = dest_term term in
          let opname = (dest_op op).op_name in
@@ -541,8 +544,18 @@ struct
             else
                REF_RAISE(RefineError (explode_sequent_name, TermMatchError (t, "malformed sequent")))
       in
-      let body, args = dest_sequent_outer_term t in
          collect args [] body
+
+   let explode_sequent_aux t =
+      let body, args = dest_sequent_outer_term t in
+         explode_body_aux t args body
+
+   let explode_sequent_body args body =
+      let args, hyps, concl = explode_body_aux body args body in {
+         sequent_args = args;
+         sequent_hyps = SeqHyp.of_list hyps;
+         sequent_concl = concl;
+      }
 
    let explode_sequent t =
       let args, hyps, concl = explode_sequent_aux t in {

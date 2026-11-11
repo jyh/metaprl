@@ -69,6 +69,18 @@ let is_free_var v t = SymbolSet.mem (free_vars_set t) v
  * Special terms  *
  ******************)
 
+(*
+ * The sequent view: a sequent is one function symbol whose arguments are
+ * its args and its body (Term_man_gen's nested hyp/context/concl terms).
+ * The symbol is an opname of Unify_mm's own, never Perv!sequent: a
+ * generic term with the sequent opname is a sequent under TERMS = std and
+ * not under TERMS = ds, so building one gives the two implementations
+ * different terms (TERMS = both reported each one).
+ *)
+module TermManGen = Term_man_gen.TermMan(Refiner.Refiner.TermType)(Refiner.Refiner.Term)(Refiner.Refiner.TermOp)(Refiner.Refiner.TermSubst)(Refiner.Refiner.RefineError)
+
+let sequent_view_op = mk_op (Opname.mk_opname "sequent" (Opname.make_opname ["Unify_mm"])) []
+
 type fun_name =
    FunOp of operator
  | FunSOVar of var * var list
@@ -79,8 +91,9 @@ let my_dest_term t =
       let v, conts, ts = dest_so_var t in
          FunSOVar(v,conts), List.map mk_simple_bterm ts
    else if is_sequent_term t then
-      let t = dest_term (Lib_term.ugly_term_of_sequent_term t) in
-         FunSequent t.term_op, t.term_terms
+      let s = explode_sequent t in
+         FunSequent sequent_view_op,
+         [mk_simple_bterm s.sequent_args; mk_simple_bterm (TermManGen.mk_sequent_body s)]
    else
       let t = dest_term t in
          FunOp t.term_op, t.term_terms
@@ -89,8 +102,12 @@ let my_mk_term op bterms =
    match op with
       FunSOVar(v,conts) ->
          mk_so_var_term v conts (List.map dest_simple_bterm bterms)
-    | FunSequent op -> begin
-         Lib_term.sequent_term_of_ugly_term (mk_term op bterms)
+    | FunSequent _ -> begin
+         match bterms with
+            [args; body] ->
+               mk_sequent_term (TermManGen.explode_sequent_body (dest_simple_bterm args) (dest_simple_bterm body))
+          | _ ->
+               raise (Invalid_argument "Unify_mm: a sequent view has two subterms")
       end
     | FunOp op ->
          mk_term op bterms

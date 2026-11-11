@@ -3,17 +3,18 @@
    the instance check of a meta operator that occurs twice), which only the
    proof census reached (2026-11-11 reach census).  An operator parameter
    names an operator (an opname, its parameters, its arities), as
-   h[op:op] does in the theories.  Three rules, compiled and applied in
+   h[op:op] does in the theories.  Four rules, compiled and applied in
    term_std and term_ds (Refiner_std, Refiner_ds), which must agree:
      lit    h[f/0]                 --> c     (a literal operator f, arity [0])
      meta   h[@o:op]               --> k[@o:op]
      twice  pair{h[@o:op]; h[@o:op]} --> c   (the same operator twice)
+     ttwice pair{t[@o:t]; t[@o:t]}   --> c   (the same token twice)
    Each case prints the result or that the rewrite is refused; every
    outcome is the code's own (measured 2026-11-11).  The operator is
    compared by name, parameters and arities; a meta operator in the term
    (a schema) is matched by a meta operator in the redex.
-   Not covered: the instance check for an opname (token) parameter that
-   occurs twice (StackOpname), which a mutant shows this test cannot see. *)
+   ttwice is the instance check for a token (opname) parameter that occurs
+   twice (StackOpname). *)
 open Term_sig
 
 let v = Lm_symbol.add
@@ -41,6 +42,10 @@ module Make (R : Refiner_sig.RefinerSig) = struct
   let lit = rule (h (opp "f")) c
   let meta = rule (h (mop "o")) (k (mop "o"))
   let twice = rule (pair (h (mop "o")) (h (mop "o"))) c
+  let tok p = mk_term (mk_op (op "t") [ p ]) []
+  let ttok s = make_param (Token (Opname.make_opname [ s ]))
+  let mtok x = make_param (MToken (v x))
+  let ttwice = rule (pair (tok (mtok "o")) (tok (mtok "o"))) c
   let cases =
     [ "lit on h[f/0]", apply lit (h (opp "f"));
       "lit on h[g/0]", apply lit (h (opp "g"));
@@ -53,7 +58,9 @@ module Make (R : Refiner_sig.RefinerSig) = struct
       "twice on pair{h[f/0]; h[f/1]}", apply twice (pair (h (opp "f")) (h (opp ~arities:[ 1 ] "f")));
       "twice on pair{h[@p]; h[@p]} (a schema)", apply twice (pair (h (mop "p")) (h (mop "p")));
       "twice on pair{h[@p]; h[@q]}", apply twice (pair (h (mop "p")) (h (mop "q")));
-      "lit on h[@p] (a schema)", apply lit (h (mop "p")) ]
+      "lit on h[@p] (a schema)", apply lit (h (mop "p"));
+      "ttwice on pair{t[Foo]; t[Foo]}", apply ttwice (pair (tok (ttok "Foo")) (tok (ttok "Foo")));
+      "ttwice on pair{t[Foo]; t[Bar]}", apply ttwice (pair (tok (ttok "Foo")) (tok (ttok "Bar"))) ]
 end
 
 module S = Make (Refiner_std.Refiner)

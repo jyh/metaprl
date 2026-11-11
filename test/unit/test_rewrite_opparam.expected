@@ -10,3 +10,5 @@ twice on pair{h[f/0]; h[f/1]}            refused
 twice on pair{h[@p]; h[@p]} (a schema)   c
 twice on pair{h[@p]; h[@q]}              refused
 lit on h[@p] (a schema)                  refused
+ttwice on pair{t[Foo]; t[Foo]}           c
+ttwice on pair{t[Foo]; t[Bar]}           refused

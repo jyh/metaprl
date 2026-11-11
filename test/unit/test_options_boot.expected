@@ -1,0 +1,23 @@
+list_options agrees with the model: 1000/1000
+options_eq reflexive and separating: 1000/1000
+rule_labels_are_allowed agrees with the model: 1000/1000
+options_eq after an ignore of an absent label: false (same list: true)
+  c allow
+  a exclude
+string_of_option allow = "\208\185\208\185allow"
+string_of_option exclude = "\208\185\208\185exclude"
+string_of_option ignore = "\208\185\208\185ignore"
+round trip allow: true
+round trip exclude: true
+round trip ignore: true
+option_of_string "allow" = allow, is_option_string true
+option_of_string "exclude" = exclude, is_option_string true
+option_of_string "ignore" = ignore, is_option_string true
+option_of_string "Allow": refused, is_option_string false
+option_of_string "": refused, is_option_string false
+option_of_string "allowx": refused, is_option_string false
+rule_labels_not_allowed None: passes
+rule_labels_not_allowed [select_crw]: passes
+rule_labels_not_allowed [a]: refused
+rule_labels_not_allowed [select_crw; a]: refused
+rule_labels_empty allowed by the empty table: true

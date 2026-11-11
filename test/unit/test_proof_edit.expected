@@ -1,0 +1,2 @@
+random: 400/400 edits agree with the model (8023 checks; copy 105, squash 94, clean 117, make_assum 84)
+make_assum at 1.2 (goal main:B[C]): . main:C[] -> main:C[C]  1 assertion:B[] -> assertion:B[B]  1.1 assertion:C[] -> assertion:C[C]  1.2 main:B[C] -> main:B[B,C]  2 main:C[B] -> main:C[C,B]

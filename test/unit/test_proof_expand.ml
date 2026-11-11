@@ -6,16 +6,17 @@
    as in test_proof_boot (idT, cutT X and nthAssumT i, a third under
    wrapT).  expand gets a handler that catches a refinement's failure and
    returns None, as its interface asks (Refine_exn.print "or a similar
-   wrapper").  Pinned as found:
-     - expand of an unchanged proof keeps the node count and the root's
-       status, but in some proofs it MOVES a sub-proof to a different
-       subgoal: update_subgoals matches the re-run step's new leaves in
-       order, each first exactly, then by a hypothesis-subset match
-       (tactic_arg_match), then by the conclusion alone, and open goals
-       are not candidates, so an earlier leaf can take a sub-proof made
-       for a later leaf that is an exact match for it (removing either
-       fallback alone still moves them; removing both moves none).  The count is printed, and the first such proof
-       is printed before and after;
+   wrapper").
+     - expand of an unchanged proof gives the same proof: the same node
+       count and root status, and every sub-proof at the subgoal it was
+       made for.  update_subgoals gives every new leaf its exact match
+       first and only then the fuzzy fallbacks (a hypothesis-subset match,
+       then the conclusion alone).  Until 2026-11-11 it matched the leaves
+       in order, each exactly and then fuzzily, so an earlier leaf could
+       take a sub-proof made for a later leaf that was an exact match for
+       it: 26 of these 300 proofs moved a sub-proof, and 2 changed their
+       node count.  If one ever moves again, the first is printed before
+       and after;
      - kreitz collapses a proof into one step and marks it incomplete;
        its node counts on the first ten proofs are printed.
    The generator is a fixed linear congruential sequence, not Random. *)

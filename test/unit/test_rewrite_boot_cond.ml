@@ -75,6 +75,7 @@ let () =
   case "rw (cswap thenC cung) (cung fails after)" (rw (prefix_thenC cswap cung) 0 concl) g2;
   case "rw (cung orelseC cswap)" (rw (prefix_orelseC cung cswap) 0 concl) g2;
   case "rw (cswap orelseC cung)" (rw (prefix_orelseC cswap cung) 0 concl) g1;
+  case "rw ((ung thenC cung) thenC cswap)" (rw (prefix_thenC (prefix_thenC ung cung) cswap) 0 concl) (seq [ b ] (g (g (f a b))));
   case "rw ((cung thenC cswap) thenC idC)" (rw (prefix_thenC (prefix_thenC cung cswap) idC) 0 concl) g1;
   case "rw (cung thenC ung)  (mixed kinds)" (rw (prefix_thenC cung ung) 0 concl) (seq [] (g (g c)));
   let at2 = TermAddr.make_address [ Term_addr_sig.ClauseAddr 0; Term_addr_sig.Subterm 2 ] in

@@ -5,6 +5,7 @@ rw (cung thenC cswap)                            on b |- g{f{a; b}}        -> ma
 rw (cswap thenC cung) (cung fails after)         on  |- f{a; g{c}}         -> refused (Rewrite.apply_rewrite: StringError: opnames do not match)
 rw (cung orelseC cswap)                          on  |- f{a; g{c}}         -> main:  |- f{g{c}; a} || assertion:  |- a
 rw (cswap orelseC cung)                          on b |- g{f{a; b}}        -> main: b |- f{a; b}
+rw ((ung thenC cung) thenC cswap)                on b |- g{g{f{a; b}}}     -> main: b |- f{b; a} || assertion: b |- a
 rw ((cung thenC cswap) thenC idC)                on b |- g{f{a; b}}        -> main: b |- f{b; a} || assertion: b |- a
 rw (cung thenC ung)  (mixed kinds)               on  |- g{g{c}}            -> main:  |- c
 rw (addrLiteralC [concl; 2] cung)                on  |- f{a; g{c}}         -> main:  |- f{a; c}

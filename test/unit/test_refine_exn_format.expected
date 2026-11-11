@@ -10,6 +10,10 @@ StringVarError
   w200 "\nrw: free variable 'y"
   w24  "\nrw: free variable 'y"
   format_exn "Refine error:\n    rw: free variable 'y"
+StringTermError
+  w200 "\nrw: not a redex g{a}"
+  w24  "\nrw: not a redex g{a}"
+  format_exn "Refine error:\n    rw: not a redex g{a}"
 BadMatch ParamMatch
   w200 "\nrw: BadMatch: ParamMatch: 7:n"
   w24  "\nrw:\n   BadMatch:\n   ParamMatch: 7:n"

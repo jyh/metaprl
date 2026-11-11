@@ -2,10 +2,10 @@
    editor goes through, on the error forms only the proof census printed
    (2026-11-11 reach census: 21 lines of refine_exn.ml reached by the census
    and by no unit test): StringIntError, StringStringError, StringVarError,
-   and RewriteBadMatch with each match_type -- ParamMatch, VarMatch,
-   TermMatch, TermMatch2, BTermMatch and HypMatch, whose hypotheses print
-   as Context(...) or Hypothesis(...), the latter without its variable
-   when the variable's name is empty.
+   StringTermError, and RewriteBadMatch with each match_type -- ParamMatch,
+   VarMatch, TermMatch, TermMatch2, BTermMatch and HypMatch, whose
+   hypotheses print as Context(...) or Hypothesis(...), the latter without
+   its variable when the variable's name is empty.
    Each error is printed with Dform.null_base at width 200 (one line) and
    at width 24 (to show where it breaks), and through format_exn as a
    RefineError; the text is the code's own (measured 2026-11-11).
@@ -28,6 +28,7 @@ let errors =
   [ "StringIntError", StringIntError ("depth", 3);
     "StringStringError", StringStringError ("no such rule", "and_intro");
     "StringVarError", StringVarError ("free variable", v "y");
+    "StringTermError", StringTermError ("not a redex", g a);
     "BadMatch ParamMatch", RewriteBadMatch (ParamMatch (make_param (Term_sig.Number (Lm_num.num_of_int 7))));
     "BadMatch VarMatch", RewriteBadMatch (VarMatch (v "z"));
     "BadMatch TermMatch", RewriteBadMatch (TermMatch (g a));

@@ -1,0 +1,2 @@
+random: 300/300 proofs agree with the model (12620 checks, 925 refinements)
+addresses by model status: 1699 partial, 46 complete (40 of them closed by a refinement with no subgoal); 304 wrapped refinements (11 closing)

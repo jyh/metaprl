@@ -1,0 +1,14 @@
+random: 1188/1188 agree with the model (346 refused, 256 cutC); 312 not run (an address the term lacks)
+rw ung at assumption 2 (one assumption) on main:f{g{a}; b} [f{a; b}] -> refused
+rw idC at assumption 2 on main:f{g{a}; b} [f{a; b}] -> main:f{g{a}; b} [f{a; b}]
+rw termC at assumption 2 on main:f{g{a}; b} [f{a; b}] -> EXCEPTION Failure("nth")
+rw ung at assumption -1 on main:f{g{a}; b} [f{a; b}] -> EXCEPTION Invalid_argument("List.nth")
+rw idC at the missing address [2] on main:f{g{a}; b} [f{a; b}] -> main:f{g{a}; b} [f{a; b}]
+rw ung at the missing address [2] on main:f{g{a}; b} [f{a; b}] -> refused
+rw (higherC (addrC [2] ung)) at [1] on main:f{g{a}; b} [f{a; b}] -> main:f{g{a}; b} [f{a; b}]
+rw (foldC g{f{a; b}} ung) at assumption 1 on main:f{g{a}; b} [f{a; b}] -> refused
+rw (makeFoldC f{b; g{a}} swap) at 0 on main:f{g{a}; b} [f{a; b}] -> main:f{b; g{a}} [f{a; b}]
+rw (forceC "x" swap) at [1] on main:f{g{a}; b} [f{a; b}] -> EXCEPTION Refine_error.MakeRefineError(TermType)(ParamType).RefineForceError("x", "Rewrite.apply_rewrite", _)
+rw (swap thenTC cutT c) at 0 on main:f{g{a}; b} [f{a; b}] -> main:f{b; g{a}} [f{a; b}]
+rw (tacticC (fun _ -> cutT c)) at 0 on main:f{g{a}; b} [f{a; b}] -> assertion:c [f{a; b}] || main:f{g{a}; b} [f{a; b}, c]
+rw (foldC g{f{a; b}} ung) at assumption 1 on main:f{a; b} [f{a; b}] (goal = the assumption) -> main:g{f{a; b}} [f{a; b}]

@@ -1,0 +1,11 @@
+rules applied as the model says                      8000 of 8000
+applications that kept every assumption              5630 of 5630
+some applied and some refused                        true
+create g{'a} with subgoal 'b                         refused at creation
+axiom c, any_sentinal                                subgoals []
+axiom c, null_sentinal                               refused
+check_sentinal: failed test_refine_rules!r202
+axiom c, sentinel of the refiner, not justified      refused
+check_sentinal: failed test_refine_rules!r202
+after prim_rule, the sentinel taken before           refused
+after prim_rule, a sentinel taken after              subgoals []

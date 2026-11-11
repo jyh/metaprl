@@ -2399,7 +2399,8 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
        * Those binders show up as variables free in the subterm and not in
        * the whole term.  Leaving out the names the two sides share, when
        * exactly one name differs on each side, side 2's subterm is renamed
-       * to side 1's name (unless that would capture).  With more than one,
+       * to side 1's name (unless that would capture, or the implementation
+       * refuses the rename).  With more than one,
        * the pairing is not known here and the pair is returned as before.
        *)
       let term_subterm (p0 : term) (p1 : address) =
@@ -2415,7 +2416,15 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
                   let d2 = crossed (TermSubst2.free_vars_set s2) (TermSubst2.free_vars_set p0_2) in
                   begin match SymbolSet.elements (SymbolSet.diff d1 d2), SymbolSet.elements (SymbolSet.diff d2 d1) with
                      [v1], [v2] when not (TermSubst2.is_var_free v1 s2) ->
-                        Val (TermSubst2.subst1 s2 v2 (Term2.mk_var_term v1))
+                        (* A rename the implementation refuses (ds: the name is also an
+                         * SO context's, check_conts) leaves the pair as before. *)
+                        (* ds substitutes lazily, so the result is forced here, where a
+                         * refusal can still fall back. *)
+                        (try
+                            let s2' = TermSubst2.subst1 s2 v2 (Term2.mk_var_term v1) in
+                               TermOp2.iter_down (fun _ -> ()) s2';
+                               Val s2'
+                         with _ -> r2)
                    | _ ->
                         r2
                   end

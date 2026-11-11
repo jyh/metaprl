@@ -1,0 +1,80 @@
+ 0 both   (all x. P x => P a)
+   LJ proved · LJmc proved
+ 1 both   (P a => ex x. P x)
+   LJ proved · LJmc proved
+ 2 both   (all x. P x => ex x. P x)
+   LJ proved · LJmc proved
+ 3 both   (all x. (P x & Q x) => (all x. P x & all x. Q x))
+   LJ proved · LJmc proved
+ 4 both   ((all x. P x & all x. Q x) => all x. (P x & Q x))
+   LJ proved · LJmc proved
+ 5 both   (ex x. (P x | Q x) => (ex x. P x | ex x. Q x))
+   LJ proved · LJmc proved
+ 6 both   ((ex x. P x | ex x. Q x) => ex x. (P x | Q x))
+   LJ proved · LJmc proved
+ 7 both   (all x. (P x => Q x) => (all x. P x => all x. Q x))
+   LJ proved · LJmc proved
+ 8 both   (ex x. all y. R x y => all y. ex x. R x y)
+   LJ proved · LJmc proved
+ 9 both   (~ex x. P x => all x. ~P x)
+   LJ proved · LJmc proved
+10 both   (all x. ~P x => ~ex x. P x)
+   LJ proved · LJmc proved
+11 both   (ex x. ~P x => ~all x. P x)
+   LJ proved · LJmc proved
+12 both   ((all x. P x | S) => all x. (P x | S))
+   LJ proved · LJmc proved
+13 both   (ex x. (P x => S) => (all x. P x => S))
+   LJ proved · LJmc proved
+14 both   (all x. all y. R x y => all y. all x. R x y)
+   LJ proved · LJmc proved
+15 C only (~all x. P x => ex x. ~P x)
+   LJ not provable · LJmc not provable
+16 C only ex x. (P x => all y. P y)
+   LJ not provable · LJmc not provable
+17 C only (all x. (P x | S) => (all x. P x | S))
+   LJ not provable · LJmc not provable
+18 C only ((all x. P x => S) => ex x. (P x => S))
+   LJ not provable · LJmc not provable
+19 C only (all x. P x | ex x. ~P x)
+   LJ not provable · LJmc not provable
+20 none   (all y. ex x. R x y => ex x. all y. R x y)
+   LJ not provable · LJmc not provable
+21 none   (ex x. P x => all x. P x)
+   LJ not provable · LJmc not provable
+22 none   ((ex x. P x & ex x. Q x) => ex x. (P x & Q x))
+   LJ not provable · LJmc not provable
+23 none   (P a => P b)
+   LJ not provable · LJmc not provable
+24 none   (all x. (P x | Q x) => (all x. P x | all x. Q x))
+   LJ not provable · LJmc not provable
+LJ proof of 0, (all x. P x => P a):
+   Ax  P{a}  /  Perv!xnil
+   Alll  all{D; 'x. P{'x}}  /  a
+   Impr  implies{all{D; 'x. P{'x}}; P{a}}  /  Perv!xnil
+LJ proof of 8, (ex x. all y. R x y => all y. ex x. R x y):
+   Ax  R{'c1; 'c2}  /  Perv!xnil
+   Alll  all{D; 'y. R{'c1; 'y}}  /  'c2
+   Exr  exists{D; 'x. R{'x; 'c2}}  /  'c1
+   Allr  all{D; 'y. exists{D; 'x. R{'x; 'y}}}  /  'c2
+   Exl  exists{D; 'x. all{D; 'y. R{'x; 'y}}}  /  'c1
+   Impr  implies{exists{D; 'x. all{D; 'y. R{'x; 'y}}};
+         all{D; 'y. exists{D; 'x. R{'x; 'y}}}}  /  Perv!xnil
+LJ proof of 12, ((all x. P x | S) => all x. (P x | S)):
+   Ax  S  /  Perv!xnil
+   Orr2  or{P{'c1}; S}  /  Perv!xnil
+   Ax  P{'c1}  /  Perv!xnil
+   Orr1  or{P{'c1}; S}  /  Perv!xnil
+   Alll  all{D; 'x. P{'x}}  /  'c1
+   Orl  or{all{D; 'x. P{'x}}; S}  /  Perv!xnil
+   Allr  all{D; 'x. or{P{'x}; S}}  /  'c1
+   Impr  implies{or{all{D; 'x. P{'x}}; S}; all{D; 'x. or{P{'x}; S}}}  /  Perv!xnil
+LJ proof of 13, (ex x. (P x => S) => (all x. P x => S)):
+   Ax  S  /  Perv!xnil
+   Ax  P{'c1}  /  Perv!xnil
+   Impl  implies{P{'c1}; S}  /  Perv!xnil
+   Alll  all{D; 'x. P{'x}}  /  'c1
+   Impr  implies{all{D; 'x. P{'x}}; S}  /  Perv!xnil
+   Exl  exists{D; 'x. implies{P{'x}; S}}  /  'c1
+   Impr  implies{exists{D; 'x. implies{P{'x}; S}}; implies{all{D; 'x. P{'x}}; S}}  /  Perv!xnil
+classical, all x. P x => P a: Invalid_argument: Syntax analysis of quantifiers are not implemented for Classical Logic and S4

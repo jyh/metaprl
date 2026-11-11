@@ -1,0 +1,8 @@
+no renaming                        subterm 0: free vars {}
+no renaming                        subterm 1: free vars {x, y}
+renamed alike                      subterm 0: free vars {}
+renamed alike                      subterm 1: free vars {x, x1}
+[y := x; z := x1]                  subterm 0: free vars {}
+[y := x; z := x1]                  subterm 1: free vars REPORT Found a mismatch in function TermSubst.free_vars_set: Symbol sets mismatch: Implementation 1: {x, x2}; Implementation 2: {x, x1}
+[y := x; z := x1; w := x2]         subterm 0: free vars {}
+[y := x; z := x1; w := x2]         subterm 1: free vars REPORT Found a mismatch in function TermSubst.free_vars_set: Symbol sets mismatch: Implementation 1: {x, x3}; Implementation 2: {x, x1}

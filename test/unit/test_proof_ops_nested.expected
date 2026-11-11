@@ -1,0 +1,69 @@
+== cutT B, then cutT C at [1]
+  proof: nodes 2/7, status partial
+    []       rule cutT B | goal 2, subgoals 2, extras 0 | partial | find_subgoal 0: [], [] []
+    [1]      rule cutT C | goal 2, subgoals 2, extras 0 | partial | find_subgoal 0: [], [] []
+    [1.1]    goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+    [1.2]    goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+    [2]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+  paste a one-step proof (cutT C) at [1.1]: nodes 3/10, status incomplete
+  paste a one-step proof (cutT C) at [1.2]: nodes 3/10, status incomplete
+  paste a one-step proof (cutT C) at [2]: nodes 3/10, status incomplete
+  copy [1.1] onto [1.2]: nodes 2/7, status partial
+  idT at [1.1], then copy it onto [1.2]: nodes 4/11, status incomplete
+== cutT B, then nthAssumT 1 at [2]
+  proof: nodes 2/5, status partial
+    []       rule cutT B | goal 2, subgoals 2, extras 0 | partial | find_subgoal 0: [], [] []
+    [1]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+    [2]      rule nthAssumT 1 | goal 2, subgoals 0, extras 0 | complete | find_subgoal 0: [], 
+  paste a one-step proof (cutT C) at [1]: nodes 3/8, status incomplete
+== addIntT k 3, then cutT B at [1], then idT at [1.2]
+  proof: nodes 3/8, status partial
+    []       rule addIntT k 3 | goal 3, subgoals 1, extras 0 | partial | find_subgoal 0: [], []
+    [1]      rule cutT B | goal 3, subgoals 2, extras 0 | partial | find_subgoal 0: [], [] []
+    [1.1]    goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+    [1.2]    rule idT | goal 2, subgoals 1, extras 0 | partial | find_subgoal 0: [], []
+    [1.2.1]  goal | goal 2, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+  paste a one-step proof (cutT C) at [1.1]: nodes 4/11, status incomplete
+  paste a one-step proof (cutT C) at [1.2.1]: nodes 4/11, status incomplete
+  copy [1.1] onto [1.2.1]: nodes 3/8, status partial
+  idT at [1.1], then copy it onto [1.2.1]: nodes 5/12, status incomplete
+== withTermT w C (cutT B), then wrapT (cutT C) at [1]
+  proof: nodes 2/8, status partial
+    []       rule withTermT | goal 2, subgoals 2, extras 0 | partial | find_subgoal 0: [], [] []
+    [1]      rule wrapT | goal 2, subgoals 2, extras 0 | partial | find_subgoal 0: [], [0] [0]
+    [1.1]    goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [0], 
+    [1.2]    goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [0], 
+    [2]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+  paste a one-step proof (cutT C) at [1.1]: nodes 3/11, status incomplete
+  paste a one-step proof (cutT C) at [1.2]: nodes 3/11, status incomplete
+  paste a one-step proof (cutT C) at [2]: nodes 3/11, status incomplete
+  copy [1.1] onto [1.2]: nodes 2/8, status partial
+  idT at [1.1], then copy it onto [1.2]: nodes 4/12, status incomplete
+== cutT B thenLT [idT; idT], then nthAssumT 1 at [2]
+  proof: nodes 2/5, status partial
+    []       rule thenLT | goal 2, subgoals 2, extras 0 | partial | find_subgoal 0: [], [] []
+    [1]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+    [2]      rule nthAssumT 1 | goal 2, subgoals 0, extras 0 | complete | find_subgoal 0: [], 
+  paste a one-step proof (cutT C) at [1]: nodes 3/8, status incomplete
+== cutT B thenLT [cutT C; idT] (subgoals from two branches)
+  proof: nodes 1/8, status partial
+    []       rule thenLT2 | goal 2, subgoals 3, extras 0 | partial | find_subgoal 0: [], [0] [0] []
+    [1]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [0], 
+    [2]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [0], 
+    [3]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+  paste a one-step proof (cutT C) at [1]: nodes 2/11, status incomplete
+  paste a one-step proof (cutT C) at [2]: nodes 2/11, status incomplete
+  paste a one-step proof (cutT C) at [3]: nodes 2/11, status incomplete
+  copy [1] onto [2]: nodes 1/8, status partial
+  idT at [1], then copy it onto [2]: nodes 3/12, status incomplete
+== cutT B thenLT [idT; cutT C]
+  proof: nodes 1/8, status partial
+    []       rule thenLT3 | goal 2, subgoals 3, extras 0 | partial | find_subgoal 0: [], [] [0] [0]
+    [1]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [], 
+    [2]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [0], 
+    [3]      goal | goal 1, subgoals 0, extras 0 | partial, leaf | find_subgoal 0: [0], 
+  paste a one-step proof (cutT C) at [1]: nodes 2/11, status incomplete
+  paste a one-step proof (cutT C) at [2]: nodes 2/11, status incomplete
+  paste a one-step proof (cutT C) at [3]: nodes 2/11, status incomplete
+  copy [1] onto [2]: nodes 1/8, status partial
+  idT at [1], then copy it onto [2]: nodes 3/12, status incomplete

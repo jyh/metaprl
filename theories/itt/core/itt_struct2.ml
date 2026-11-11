@@ -447,33 +447,33 @@ doc docoff
 let lambdaSqSubstT t i = funT (fun p ->
    let tt = if i = 0 then concl p else nth_hyp p i in
    let x, t1 = dest_lambda (fst (dest_squiggle t)) in
-   let arg = ref None in
-   let try_match term bvars =
-      match !arg with
-         Some _ ->
-            false
-       | None ->
-            begin try
-               match match_terms [] t1 term with
-                  [] ->
-                     arg := Some (mk_var_term x);
-                     true
-                | [v, t] when Lm_symbol.eq v x ->
-                     arg := Some t;
-                     true
-                | _ ->
-                     false
-            with RefineError _ ->
-               false
-            end
+   (*
+    * The argument of the first subterm t1 matches. find_subterm lists the matching addresses
+    * in visit order, so the first is the head; the match is recomputed there, so the predicate
+    * is pure (a stateful one that answers false after its first match gives a different answer
+    * when it is run more than once, as the TERMS = both checker runs it once per implementation).
+    *)
+   let arg_of term =
+      try
+         match match_terms [] t1 term with
+            [] -> Some (mk_var_term x)
+          | [v, t] when Lm_symbol.eq v x -> Some t
+          | _ -> None
+      with RefineError _ ->
+         None
    in
-   let addrs = find_subterm tt try_match in
-      match addrs, !arg with
-         addr :: _, Some term ->
-            if i = 0 then
-               lambda_sqsubst_concl addr t term
-            else
-               lambda_sqsubst_hyp i addr t term
+   let addrs = find_subterm tt (fun term _ -> arg_of term <> None) in
+      match addrs with
+         addr :: _ ->
+            begin match arg_of (term_subterm tt addr) with
+               Some term ->
+                  if i = 0 then
+                     lambda_sqsubst_concl addr t term
+                  else
+                     lambda_sqsubst_hyp i addr t term
+             | None ->
+                  raise(RefineError("lambdaSqSubstT", StringTermError ("Nothing appropriate found in", tt)))
+            end
        | _ ->
             raise(RefineError("lambdaSqSubstT", StringTermError ("Nothing appropriate found in", tt))))
 

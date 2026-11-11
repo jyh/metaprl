@@ -1,0 +1,14 @@
+subterm_addresses C<H>[[g{c}]][a; b]     agree  [3] [2] [1]
+subterm_addresses 'a[c; d]               agree  [2] [1]
+subterm_addresses C<H>[[g]]              agree  [1]
+apply_fun_at_addr f{c} at [3]            agree  both refused (std refused (make_index), ds refused (getnth))
+replace_subterm f{c} at [2]              agree  both refused (std refused (make_index), ds refused (getnth))
+apply_fun_at_addr 'a[c] at [2]           agree  both refused (std refused (make_index), ds refused (getnth))
+apply_fun_higher 'a[c; e]                agree  'a<>[d;e] (1 replaced)
+apply_fun_higher 'a[e; c]                agree  'a<>[e;d] (1 replaced)
+apply_fun_higher 'a[e; c; e]             agree  'a<>[e;d;e] (1 replaced)
+apply_fun_higher 'a[e]                   agree  'a<>[e] (0 replaced)
+apply_fun_higher C<H>[[e]][c]            agree  C<H>[[e]][d] (1 replaced)
+apply_fun_higher C<H>[[c]][e]            agree  C<H>[[d]][e] (1 replaced)
+apply_fun_higher C<H>[[c]][c]            agree  C<H>[[d]][d] (2 replaced)
+apply_fun_higher C<H>[[e]][e]            agree  C<H>[[e]][e] (0 replaced)

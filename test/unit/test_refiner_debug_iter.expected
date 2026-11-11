@@ -1,0 +1,9 @@
+std    iter_down: 7 calls, a=2 b=1
+std    iter_up: 7 calls, a=2 b=1
+std    iter_mterm: 2 calls, b=1
+ds     iter_down: 7 calls, a=2 b=1
+ds     iter_up: 7 calls, a=2 b=1
+ds     iter_mterm: 2 calls, b=1
+debug  iter_down: 7 calls, a=2 b=1
+debug  iter_up: 7 calls, a=2 b=1
+debug  iter_mterm: 2 calls, b=1

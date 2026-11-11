@@ -62,3 +62,16 @@ same{nil; none}                                      Perv!Term
 same{none; cons{zero; nil}}                          Perv!Term
 cons{none; cons{cons{zero; nil}; nil}}               Test!List{Test!Opt{Perv!Term}}
 cons{none; cons{zero; nil}} (Opt is no Term)         REFUSED: type error
+pair{same{x; y}; pair{'x[zero]; 'y[zero]}}           Test!Pair{Perv!Term; Test!Pair{'v1; 'v1}}
+pair{same{x; y}; pair{'x[zero]; 'y[tt]}}             Test!Pair{Perv!Term; Test!Pair{'v1; 'v1}}
+pair{same{x; y}; pair{'x[zero]; 'y[zero; zero]}}     REFUSED: type error
+pair{cons{x; cons{y; nil}}; pair{'x[zero]; 'y[zero]}} Test!Pair{Test!List{Perv!ty_so_var{Perv!ty_so_cvars{Perv!xnil};
+          Perv!ty_so_args{Perv!xcons{Perv!Term; Perv!xnil}}; 'v1}};
+           Test!Pair{'v1; 'v1}}
+pair{pair{'x[zero]; 'y[zero]}; same{x; y}}           Test!Pair{Test!Pair{'v1; 'v1}; Perv!Term}
+pair{pair{'x[zero]; 'y[tt]}; same{x; y}}             REFUSED: type error
+pair{pair{'x[zero]; 'y[tt]}; cons{x; cons{y; nil}}}  REFUSED: type error
+pair{pair{'x[zero]; 'y[zero]}; cons{x; cons{y; nil}}} Test!Pair{Test!Pair{'v1; 'v1};
+           Test!List{Perv!ty_so_var{Perv!ty_so_cvars{Perv!xnil};
+           Perv!ty_so_args{Perv!xcons{Perv!Term; Perv!xnil}}; 'v1}}}
+pair{succ{x}; 'x[zero]}                              Test!Pair{Perv!Term; 'v1}

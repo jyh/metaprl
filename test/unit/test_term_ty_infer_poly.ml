@@ -36,6 +36,10 @@
        (unpack{some}, same{nil; some}, tl{some}) and accepted against an
        existential (takes{some}) or a typeclass (same{some; nil});
      - a free variable used at 'a and at List{'a} fails the occurs check;
+     - a name used both as a variable and as a second-order variable
+       ('x and 'x[zero] in one term) types the variable with the so-var's
+       function type: cons{x; ...} is a List of ty_so_var, and succ{x} is
+       ACCEPTED as a Term, the arity mismatch unreported;
      - the reduction is found by either mechanism alone: removing the
        typereduce rewrite, or the typereductions pair, leaves every line
        unchanged; only removing both changes them. *)
@@ -105,6 +109,7 @@ let unpack l = app "unpack" [ l ]
 let takes l = app "takes" [ l ]
 let takes2 a b = app "takes2" [ a; b ]
 let tl l = app "tl" [ l ]
+let so v args = TermMan.mk_so_var_term (Lm_symbol.add v) [] args
 let map v body l = mk_term (mk_op (uop "map") []) [ mk_bterm [ Lm_symbol.add v ] body; mk_bterm [] l ]
 
 let termenv =
@@ -255,4 +260,14 @@ let () =
   infer "same{nil; none}" (same nil (c0 "none"));
   infer "same{none; cons{zero; nil}}" (same (c0 "none") (cons zero nil));
   infer "cons{none; cons{cons{zero; nil}; nil}}" (cons (c0 "none") (cons (cons zero nil) nil));
-  infer "cons{none; cons{zero; nil}} (Opt is no Term)" (cons (c0 "none") (cons zero nil))
+  infer "cons{none; cons{zero; nil}} (Opt is no Term)" (cons (c0 "none") (cons zero nil));
+  (* a name used both as a variable and as a second-order variable *)
+  infer "pair{same{x; y}; pair{'x[zero]; 'y[zero]}}" (pair (same (var "x") (var "y")) (pair (so "x" [ zero ]) (so "y" [ zero ])));
+  infer "pair{same{x; y}; pair{'x[zero]; 'y[tt]}}" (pair (same (var "x") (var "y")) (pair (so "x" [ zero ]) (so "y" [ tt ])));
+  infer "pair{same{x; y}; pair{'x[zero]; 'y[zero; zero]}}" (pair (same (var "x") (var "y")) (pair (so "x" [ zero ]) (so "y" [ zero; zero ])));
+  infer "pair{cons{x; cons{y; nil}}; pair{'x[zero]; 'y[zero]}}" (pair (cons (var "x") (cons (var "y") nil)) (pair (so "x" [ zero ]) (so "y" [ zero ])));
+  infer "pair{pair{'x[zero]; 'y[zero]}; same{x; y}}" (pair (pair (so "x" [ zero ]) (so "y" [ zero ])) (same (var "x") (var "y")));
+  infer "pair{pair{'x[zero]; 'y[tt]}; same{x; y}}" (pair (pair (so "x" [ zero ]) (so "y" [ tt ])) (same (var "x") (var "y")));
+  infer "pair{pair{'x[zero]; 'y[tt]}; cons{x; cons{y; nil}}}" (pair (pair (so "x" [ zero ]) (so "y" [ tt ])) (cons (var "x") (cons (var "y") nil)));
+  infer "pair{pair{'x[zero]; 'y[zero]}; cons{x; cons{y; nil}}}" (pair (pair (so "x" [ zero ]) (so "y" [ zero ])) (cons (var "x") (cons (var "y") nil)));
+  infer "pair{succ{x}; 'x[zero]}" (pair (succ (var "x")) (so "x" [ zero ]))

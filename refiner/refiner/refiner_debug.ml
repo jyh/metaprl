@@ -2393,10 +2393,36 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let p1_1, p1_2 = split_taf p1 in
          merge merge_addresss "TermAddr.find_subterm" (wrap2 TermAddr1.find_subterm p0_1 p1_1) (wrap2 TermAddr2.find_subterm p0_2 p1_2)
 
+      (*
+       * The subterm comes from under the binders its address crosses,
+       * without them, and std and ds may name such a binder differently.
+       * Those binders show up as variables free in the subterm and not in
+       * the whole term.  Leaving out the names the two sides share, when
+       * exactly one name differs on each side, side 2's subterm is renamed
+       * to side 1's name (unless that would capture).  With more than one,
+       * the pairing is not known here and the pair is returned as before.
+       *)
       let term_subterm (p0 : term) (p1 : address) =
          let p0_1, p0_2 = p0 in
          let p1_1, p1_2 = p1 in
-         merge merge_term "TermAddr.term_subterm" (wrap2 TermAddr1.term_subterm p0_1 p1_1) (wrap2 TermAddr2.term_subterm p0_2 p1_2)
+         let r1 = wrap2 TermAddr1.term_subterm p0_1 p1_1 in
+         let r2 = wrap2 TermAddr2.term_subterm p0_2 p1_2 in
+         let r2 =
+            match r1, r2 with
+               Val s1, Val s2 ->
+                  let crossed fv_sub fv_all = SymbolSet.diff fv_sub fv_all in
+                  let d1 = crossed (TermSubst1.free_vars_set s1) (TermSubst1.free_vars_set p0_1) in
+                  let d2 = crossed (TermSubst2.free_vars_set s2) (TermSubst2.free_vars_set p0_2) in
+                  begin match SymbolSet.elements (SymbolSet.diff d1 d2), SymbolSet.elements (SymbolSet.diff d2 d1) with
+                     [v1], [v2] when not (TermSubst2.is_var_free v1 s2) ->
+                        Val (TermSubst2.subst1 s2 v2 (Term2.mk_var_term v1))
+                   | _ ->
+                        r2
+                  end
+             | _ ->
+                  r2
+         in
+            merge merge_term "TermAddr.term_subterm" r1 r2
 
       let replace_subterm (p0 : term) (p1 : address) (p2 : term) =
          let p0_1, p0_2 = p0 in

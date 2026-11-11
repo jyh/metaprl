@@ -6,20 +6,10 @@
   kreitz on proof 6 (0/1, partial): 0/1 -> 1/3, incomplete
   kreitz on proof 7 (4/15, partial): 4/15 -> 1/7, incomplete
   kreitz on proof 8 (2/7, partial): 2/7 -> 1/4, incomplete
-first proof whose expand moves a sub-proof: proof 9
-          before main:C[A,A] node         after main:C[A,A] node
-  1       before assertion:C[A,A] node    after assertion:C[A,A] node
-  1.1     before assertion:A[A,A] leaf    after assertion:A[A,A] leaf
-  1.2     before main:C[A,A,A] leaf       after main:C[A,A,A] leaf
-  2       before main:C[A,A,C] node       after main:C[A,A,C] node
-  2.1     before assertion:C[A,A,C] leaf  after assertion:C[A,A,C] node
-  2.2     before main:C[A,A,C,C] node     after main:C[A,A,C,C] leaf
-  2.2.1   before assertion:A[A,A,C,C] leaf after -
-  2.2.2   before main:C[A,A,C,C,A] leaf   after -
   kreitz on proof 9 (4/13, partial): 4/13 -> 1/7, incomplete
   kreitz on proof 10 (1/4, partial): 1/4 -> 1/4, incomplete
 300 proofs
-expand keeps node count and root status         298 of  300
-expand keeps every sub-proof at its subgoal     274 of  300 (moved in 26)
+expand keeps node count and root status         300 of  300
+expand keeps every sub-proof at its subgoal     300 of  300 (moved in 0)
 expand at the first child returns               254 of  254
 kreitz root status: incomplete 300

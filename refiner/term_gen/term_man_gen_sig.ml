@@ -46,4 +46,13 @@ sig
    val body_of_sequent : term -> term
    val dest_sequent_outer_term : term -> term * term
    val mk_sequent_outer_term : term -> term -> term
+
+   (*
+    * The body of the generic encoding (the hypotheses and the conclusion,
+    * nested hyp/context/concl terms) without the Perv!sequent wrapper, and
+    * its inverse given the args: a caller that needs a sequent as an
+    * ordinary term can wrap the body in an operator of its own.
+    *)
+   val mk_sequent_body : esequent -> term
+   val explode_sequent_body : term -> term -> esequent
 end

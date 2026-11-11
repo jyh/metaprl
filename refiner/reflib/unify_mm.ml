@@ -69,6 +69,18 @@ let is_free_var v t = SymbolSet.mem (free_vars_set t) v
  * Special terms  *
  ******************)
 
+(*
+ * The sequent view: a sequent is one function symbol whose arguments are
+ * its args and its body (Term_man_gen's nested hyp/context/concl terms).
+ * The symbol is an opname of Unify_mm's own, never Perv!sequent: a
+ * generic term with the sequent opname is a sequent under TERMS = std and
+ * not under TERMS = ds, so building one gives the two implementations
+ * different terms (TERMS = both reported each one).
+ *)
+module TermManGen = Term_man_gen.TermMan(Refiner.Refiner.TermType)(Refiner.Refiner.Term)(Refiner.Refiner.TermOp)(Refiner.Refiner.TermSubst)(Refiner.Refiner.RefineError)
+
+let sequent_view_op = mk_op (Opname.mk_opname "sequent" (Opname.make_opname ["Unify_mm"])) []
+
 type fun_name =
    FunOp of operator
  | FunSOVar of var * var list
@@ -79,8 +91,9 @@ let my_dest_term t =
       let v, conts, ts = dest_so_var t in
          FunSOVar(v,conts), List.map mk_simple_bterm ts
    else if is_sequent_term t then
-      let t = dest_term (Lib_term.ugly_term_of_sequent_term t) in
-         FunSequent t.term_op, t.term_terms
+      let s = explode_sequent t in
+         FunSequent sequent_view_op,
+         [mk_simple_bterm s.sequent_args; mk_simple_bterm (TermManGen.mk_sequent_body s)]
    else
       let t = dest_term t in
          FunOp t.term_op, t.term_terms
@@ -89,8 +102,12 @@ let my_mk_term op bterms =
    match op with
       FunSOVar(v,conts) ->
          mk_so_var_term v conts (List.map dest_simple_bterm bterms)
-    | FunSequent op -> begin
-         Lib_term.sequent_term_of_ugly_term (mk_term op bterms)
+    | FunSequent _ -> begin
+         match bterms with
+            [args; body] ->
+               mk_sequent_term (TermManGen.explode_sequent_body (dest_simple_bterm args) (dest_simple_bterm body))
+          | _ ->
+               raise (Invalid_argument "Unify_mm: a sequent view has two subterms")
       end
     | FunOp op ->
          mk_term op bterms
@@ -687,6 +704,11 @@ and targs2args_for2 li0 li1 consts u var_hashtbl b_assbilistlist =
              )
         | _,_,_ -> raise impossible
 
+(*
+ * The two sides are terms, never dest_term'ed: under TERMS = ds,
+ * dest_term raises on a sequent, and a sequent side is unified through
+ * my_dest_term's FunSequent view like a nested one.
+ *)
 let cterms2system t_0 t_1 consts var_hashtbl =
    let u =
       { multeq_number=1;
@@ -705,7 +727,7 @@ let cterms2system t_0 t_1 consts var_hashtbl =
    u.equations <- ml;
    u.zero_counter_multeq <- ml;
    meq.m <-
-      (terms2temp_multieq (make_term t_0) ( make_term t_1) consts u var_hashtbl [] []).m_t;
+      (terms2temp_multieq t_0 t_1 consts u var_hashtbl [] []).m_t;
    { t=[]; u=u }
 
 let unifiable t0 t1 consts=
@@ -723,10 +745,8 @@ let unifiable t0 t1 consts=
             not (SymbolSet.mem consts y) && not (is_free_var y t0)
       else
       let var_hashtbl = (Hashtbl.create 23) in
-      let t_0 = dest_term t0 in
-      let t_1 = dest_term t1 in
            try
-             ignore(mm_unify (cterms2system t_0 t_1 consts var_hashtbl));
+             ignore(mm_unify (cterms2system t0 t1 consts var_hashtbl));
              true
            with Clash _ -> false
               | Cycle -> false
@@ -901,11 +921,9 @@ let unify t0 t1 consts=
          else
             [y,t0]
    else
-      let t_0 = dest_term t0 in
-      let t_1 = dest_term t1 in
       let var_hashtbl = Hashtbl.create 23 in
          solvedpart2subst (**)
-            (mm_unify (cterms2system t_0 t_1 consts var_hashtbl)).t
+            (mm_unify (cterms2system t0 t1 consts var_hashtbl)).t
             consts
             var_hashtbl
 
@@ -985,8 +1003,8 @@ let opL = mk_op (Opname.make_opname ["L"]) []
 
 let unify_eqnl_eqnl l1 consts =
    let l = List.rev l1 in
-   let t_0 = {term_op = opL; term_terms =(fofeqnlist l)} in
-   let t_1={term_op = opL; term_terms =(sofeqnlist l)} in
+   let t_0 = mk_term opL (fofeqnlist l) in
+   let t_1 = mk_term opL (sofeqnlist l) in
    let var_hashtbl = (Hashtbl.create 23) in
       solvedpart2eqnlist consts var_hashtbl (mm_unify (cterms2system t_0 t_1 consts var_hashtbl)).t
 

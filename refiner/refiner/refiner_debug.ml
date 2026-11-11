@@ -800,6 +800,17 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
    let merge_var_lo = merge_opt merge_vars "var list"
 *)
 
+   (*
+    * all_vars and its kin include BOUND names, which std and ds may choose
+    * differently for a binder renamed by a capture-avoiding substitution,
+    * so two alpha-equal terms may give different sets.  Callers use the set
+    * to choose names that clash with nothing in the term, and the union
+    * serves both implementations, so it is returned without a report.
+    * (A difference in FREE variables is still reported by free_vars_set.)
+    *)
+   let merge_all_vars _x s1 s2 =
+      if SymbolSet.equal s1 s2 then s1 else SymbolSet.union s1 s2
+
    let merge_ss x s1 s2 =
       if not (SymbolSet.equal s1 s2) then
          report_error x ("Symbol sets mismatch: Implementation 1: {" ^
@@ -961,6 +972,27 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
       if not (List.length bv1 = List.length bv2) then
          report_error x "bvar length mismatch";
       { bvars = bv1; bterm = merge_term x t1 (TermSubst2.subst t2 (List.rev bv2) (List.rev_map Term2.mk_var_term bv1)) }
+
+   (*
+    * Binders returned with the body they bind (the TermOp.dest_dep functions): a
+    * capture-avoiding substitution may rename a binder, and std and ds
+    * choose different fresh names, so the names may differ on two
+    * alpha-equal terms.  Side 2's body is renamed to side 1's names, as
+    * merge_bterm' does, and side 1's names are returned.  A side-1 name
+    * free in side 2's body (and not one of its binders) would be captured,
+    * so it is reported.
+    *)
+   let merge_binders x vs1 vs2 t2 =
+      if List.length vs1 <> List.length vs2 then
+         report_error x "binder count mismatch";
+      if List.for_all2 Lm_symbol.eq vs1 vs2 then
+         t2
+      else begin
+         List.iter2 (fun v1 v2 ->
+               if not (Lm_symbol.eq v1 v2) && not (List.exists (Lm_symbol.eq v1) vs2) && TermSubst2.is_var_free v1 t2 then
+                  report_error x ("binder capture: \"" ^ (string_of_symbol v1) ^ "\" is free in the other body")) vs1 vs2;
+         TermSubst2.subst t2 vs2 (List.map Term2.mk_var_term vs1)
+      end
 
    let merge_bterm x bt1 bt2 =
       (* XXX: TODO: need some consistency checks *)
@@ -1698,7 +1730,8 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let res1 = wrap2 TermOp1.dest_dep0_dep1_term p0 p1_1 in
          let res2 = wrap2 TermOp2.dest_dep0_dep1_term p0 p1_2 in
          let (res0_1, res1_1, res2_1), (res0_2, res1_2, res2_2) = merge merge_triv "TermOp.dest_dep0_dep1_term" res1 res2 in
-         (merge_var "TermOp.dest_dep0_dep1_term - 0" res0_1 res0_2),
+         let res2_2 = merge_binders "TermOp.dest_dep0_dep1_term - 0" [res0_1] [res0_2] res2_2 in
+         res0_1,
          (merge_term "TermOp.dest_dep0_dep1_term - 1" res1_1 res1_2),
          (merge_term "TermOp.dest_dep0_dep1_term - 2" res2_1 res2_2)
 
@@ -1910,11 +1943,10 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
          let res1 = wrap2 TermOp1.dest_dep0_dep0_dep3_term p0 p1_1 in
          let res2 = wrap2 TermOp2.dest_dep0_dep0_dep3_term p0 p1_2 in
          let (res0_1, res1_1, res2_1, res3_1, res4_1, res5_1), (res0_2, res1_2, res2_2, res3_2, res4_2, res5_2) = merge merge_triv "TermOp.dest_dep0_dep0_dep3_term" res1 res2 in
+         let res5_2 = merge_binders "TermOp.dest_dep0_dep0_dep3_term - 2..4" [res2_1; res3_1; res4_1] [res2_2; res3_2; res4_2] res5_2 in
          (merge_term "TermOp.dest_dep0_dep0_dep3_term - 0" res0_1 res0_2),
          (merge_term "TermOp.dest_dep0_dep0_dep3_term - 1" res1_1 res1_2),
-         (merge_var "TermOp.dest_dep0_dep0_dep3_term - 2" res2_1 res2_2),
-         (merge_var "TermOp.dest_dep0_dep0_dep3_term - 3" res3_1 res3_2),
-         (merge_var "TermOp.dest_dep0_dep0_dep3_term - 4" res4_1 res4_2),
+         res2_1, res3_1, res4_1,
          (merge_term "TermOp.dest_dep0_dep0_dep3_term - 5" res5_1 res5_2)
 
       let is_dep2_dep2_dep0_dep0_term (p0 : opname) (p1 : term) =
@@ -2567,11 +2599,11 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
 
       let all_vars (p0 : term) =
          let p0_1, p0_2 = p0 in
-         merge merge_ss "TermMan.all_vars" (wrap1 TermMan1.all_vars p0_1) (wrap1 TermMan2.all_vars p0_2)
+         merge merge_all_vars "TermMan.all_vars" (wrap1 TermMan1.all_vars p0_1) (wrap1 TermMan2.all_vars p0_2)
 
       let all_vars_terms (p0 : term list) =
          let p0_1, p0_2 = split p0 in
-         merge merge_ss "TermMan.all_vars_terms" (wrap1 TermMan1.all_vars_terms p0_1) (wrap1 TermMan2.all_vars_terms p0_2)
+         merge merge_all_vars "TermMan.all_vars_terms" (wrap1 TermMan1.all_vars_terms p0_1) (wrap1 TermMan2.all_vars_terms p0_2)
 
       let all_vars_info (p0 : var_info SymbolTable.t) (p1 : term) =
          let p1_1, p1_2 = p1 in
@@ -2982,7 +3014,7 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
 
       let all_vars_mterm (p0 : meta_term) =
          let p0_1, p0_2 = split_meta_term p0 in
-         merge merge_ss "TermMeta.all_vars_mterm" (wrap1 TermMeta1.all_vars_mterm p0_1) (wrap1 TermMeta2.all_vars_mterm p0_2)
+         merge merge_all_vars "TermMeta.all_vars_mterm" (wrap1 TermMeta1.all_vars_mterm p0_1) (wrap1 TermMeta2.all_vars_mterm p0_2)
 
       let context_vars (p0 : meta_term) =
          let p0_1, p0_2 = split_meta_term p0 in

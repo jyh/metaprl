@@ -25,5 +25,17 @@ rule 'a<|H|>[x] then 'a<|H|>[tt]                 REFUSED: type error
 rule 'a<|H|>[x] then 'a<|H|>[eq]                 REFUSED: type error
 rule 'a<|H|>[tt] then 'a<|H|>[x] (goal)          OK
 rule 'a<|H|>[zero] then 'a<|H|>[tt] (goal)       REFUSED: type error
+infer eq{same{C; D}; same{C[zero]; D[zero]}}     Perv!Judgment
+infer eq{same{C[zero]; D[zero]}; same{C; D}}     Perv!Judgment
+infer eq{same{C[zero]; D[tt]}; same{C; D}}       REFUSED: type error
+infer eq{same{C[zero]; D[zero]}; cons{C; cons{D; nil}}} Perv!Judgment
+infer eq{same{C[zero]; D[tt]}; cons{C; cons{D; nil}}} REFUSED: type error
+infer eq{same{H; K}; same{<H> >- zero; <K> >- zero}} Perv!Judgment
+infer eq{same{<H> >- zero; <K> >- zero}; cons{H; cons{K; nil}}} Perv!Judgment
+infer eq{same{C[zero|zero]; D[zero|zero]}; same{C; D}} Perv!Judgment
+infer eq{same{C[zero|zero]; D[zero|tt]}; same{C; D}} REFUSED: type error
+infer eq{same{C[zero|zero]; D[zero|tt]}; cons{C; cons{D; nil}}} REFUSED: type error
+infer eq{same{<H> >- zero; qarg: <K> >- zero}; same{H; K}} REFUSED: type error
+infer eq{same{<H> >- zero; qarg: <K> >- zero}; cons{H; cons{K; nil}}} REFUSED: type error
 rewrite same{'a; 'b} <--> same{'b; 'a}           OK
 rewrite C[zero] <--> C[tt] (a context)           OK

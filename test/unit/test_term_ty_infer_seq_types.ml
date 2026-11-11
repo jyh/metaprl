@@ -25,9 +25,13 @@
      - in check_rule the GOAL is inferred first, so a second-order
        variable's argument type is fixed there: 'a[zero] in a subgoal under
        'a[tt] in the goal is refused, 'a[tt] under 'a[x: Term] is not.
+     - a name used both as a variable and as a context (C and C[zero],
+       H and a sequent context <H>) types the variable with the context's
+       type, which is how two context types meet: their argument, hole and
+       hypothesis types are then compared (equal in a List, subtype in
+       same), and a mismatch is refused.
    Not reached by any input here: the unification arms for two
-   second-order-variable or two context types (TypeSoVar, TypeCVar,
-   TypeSCVar). *)
+   second-order-variable types (test_term_ty_infer_poly reaches them). *)
 open Lm_symbol
 open Opname
 open Term_sig
@@ -97,6 +101,9 @@ let same a b = app "same" [ a; b ]
 let earg = const (uop "earg")
 let harg = const (uop "harg")
 let qarg = const (uop "qarg")
+let ctx c t = TermMan.mk_context_term (Lm_symbol.add c) t [] []
+(* a context with one argument and zero in its hole *)
+let ctxa c a = TermMan.mk_context_term (Lm_symbol.add c) zero [] [ a ]
 let carg2 = const (uop "carg2")
 let ptag s = mk_term (mk_op (uop "ptag") [ make_param (Token (uop s)) ]) []
 
@@ -223,6 +230,19 @@ let () =
   check "rule 'a<|H|>[zero] then 'a<|H|>[tt] (goal)" (fun () ->
       Term_ty_infer.check_rule tenv (rule [ seq sarg [ Ctx ("H", [], []) ] (soc "a" [ "H" ] [ zero ]) ]
         (seq sarg [ Ctx ("H", [], []) ] (soc "a" [ "H" ] [ tt ]))) []);
+  (* a name used as a variable and as a context *)
+  infer "eq{same{C; D}; same{C[zero]; D[zero]}}" (eq (same (var "C") (var "D")) (same (ctx "C" zero) (ctx "D" zero)));
+  infer "eq{same{C[zero]; D[zero]}; same{C; D}}" (eq (same (ctx "C" zero) (ctx "D" zero)) (same (var "C") (var "D")));
+  infer "eq{same{C[zero]; D[tt]}; same{C; D}}" (eq (same (ctx "C" zero) (ctx "D" tt)) (same (var "C") (var "D")));
+  infer "eq{same{C[zero]; D[zero]}; cons{C; cons{D; nil}}}" (eq (same (ctx "C" zero) (ctx "D" zero)) (cons (var "C") (cons (var "D") nil)));
+  infer "eq{same{C[zero]; D[tt]}; cons{C; cons{D; nil}}}" (eq (same (ctx "C" zero) (ctx "D" tt)) (cons (var "C") (cons (var "D") nil)));
+  infer "eq{same{H; K}; same{<H> >- zero; <K> >- zero}}" (eq (same (var "H") (var "K")) (same (seq sarg [ Ctx ("H", [], []) ] zero) (seq sarg [ Ctx ("K", [], []) ] zero)));
+  infer "eq{same{<H> >- zero; <K> >- zero}; cons{H; cons{K; nil}}}" (eq (same (seq sarg [ Ctx ("H", [], []) ] zero) (seq sarg [ Ctx ("K", [], []) ] zero)) (cons (var "H") (cons (var "K") nil)));
+  infer "eq{same{C[zero|zero]; D[zero|zero]}; same{C; D}}" (eq (same (ctxa "C" zero) (ctxa "D" zero)) (same (var "C") (var "D")));
+  infer "eq{same{C[zero|zero]; D[zero|tt]}; same{C; D}}" (eq (same (ctxa "C" zero) (ctxa "D" tt)) (same (var "C") (var "D")));
+  infer "eq{same{C[zero|zero]; D[zero|tt]}; cons{C; cons{D; nil}}}" (eq (same (ctxa "C" zero) (ctxa "D" tt)) (cons (var "C") (cons (var "D") nil)));
+  infer "eq{same{<H> >- zero; qarg: <K> >- zero}; same{H; K}}" (eq (same (seq sarg [ Ctx ("H", [], []) ] zero) (seq qarg [ Ctx ("K", [], []) ] zero)) (same (var "H") (var "K")));
+  infer "eq{same{<H> >- zero; qarg: <K> >- zero}; cons{H; cons{K; nil}}}" (eq (same (seq sarg [ Ctx ("H", [], []) ] zero) (seq qarg [ Ctx ("K", [], []) ] zero)) (cons (var "H") (cons (var "K") nil)));
   check "rewrite same{'a; 'b} <--> same{'b; 'a}" (fun () -> Term_ty_infer.check_rewrite tenv (rw (same (so "a" []) (so "b" [])) (same (so "b" []) (so "a" []))) []);
   check "rewrite C[zero] <--> C[tt] (a context)" (fun () ->
       Term_ty_infer.check_rewrite tenv (rw (TermMan.mk_context_term (Lm_symbol.add "C") zero [] []) (TermMan.mk_context_term (Lm_symbol.add "C") tt [] [])) [])

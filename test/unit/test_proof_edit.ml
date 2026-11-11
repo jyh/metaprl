@@ -20,11 +20,11 @@
                     but an idT needs re-checking
      status         a rule node that needs re-checking is incomplete; incomplete wins over
                     partial in its ancestors, which win over complete
-   Measured and modelled as it is, not as its comment says: make_assum is
-   meant to add the goal at a as an assumption to every node, but
-   make_assum_arg rebinds the name goal to each node's own conclusion, so
-   each node gets ITS OWN conclusion inserted (at the root's assumption
-   count).  The fixed case at the end prints it.
+   make_assum a adds the conclusion of the goal at a as an assumption to
+   every node, inserted at the root's assumption count.  (Until this test's
+   companion fix, make_assum_arg rebound the name goal to each node's own
+   conclusion, so every node got ITS OWN conclusion instead; the fixed case
+   at the end prints the chosen goal and every node's assumptions.)
    The generator is a fixed linear congruential sequence, not Random. *)
 open Refiner.Refiner
 open Refiner.Refiner.Term
@@ -106,7 +106,7 @@ let apply_model sh = function
      set sh t moved
   | Squash a -> set sh a (squash (get sh a))
   | Clean _ -> sh
-  | MakeAssum _ -> let n = List.length (goal_of sh).a in map_goals (fun g -> { g with a = insert_nth n g.c g.a }) sh
+  | MakeAssum a -> let n = List.length (goal_of sh).a and x = (goal_of (get sh a)).c in map_goals (fun g -> { g with a = insert_nth n x g.a }) sh
 
 let () =
   let n = 400 and good = ref 0 and checks = ref 0 in

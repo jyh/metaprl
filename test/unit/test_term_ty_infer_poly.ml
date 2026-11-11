@@ -5,7 +5,8 @@
    The environment is built as in test_term_ty_infer.  A type variable is a
    free first-order variable in a declared type.
      classes  Term, Ty, Judgment, Prop (Prop and Term)
-     types    List{Ty}, Pair{Ty; Ty}, Opt{Ty}, Vec[n:n], Lab[s:s] : Ty
+     types    List{Ty}, Pair{Ty; Ty}, Opt{Ty}, Vec[n:n], Lab[s:s],
+              Kind[t:t], Vv[x:v] : Ty
               (their members are Terms)
      terms    zero : Term        tt : Prop        succ{Term} : Term
               eq{Term; Term} : Judgment
@@ -15,6 +16,8 @@
               map{x: 'a. 'b; List{'a}} : List{'b}
               same{'a; 'a} : Term
               v3 : Vec[3]   v4 : Vec[4]   la : Lab["a"]   lb : Lab["b"]
+              ka, kb : Kind[a], Kind[b]   xa, xb : Vv[a:v], Vv[b:v]
+              vm : Vec[@n]   lm : Lab[@s]   km : Kind[@t] (meta-parameters)
               some : exists v: Ty. List{'v}
               unpack{List{'a}} : 'a      tl{List{Term}} : Term
               takes{exists v: Ty. List{'v}} : Term   (and takes2, two of them)
@@ -40,6 +43,9 @@
        ('x and 'x[zero] in one term) types the variable with the so-var's
        function type: cons{x; ...} is a List of ty_so_var, and succ{x} is
        ACCEPTED as a Term, the arity mismatch unreported;
+     - a meta-parameter in a type unifies with any literal and is not
+       bound, so equality through it is not transitive: a List of v3, vm
+       and v4 is a List{Vec[3]}, though v3 and v4 alone are refused;
      - the reduction is found by either mechanism alone: removing the
        typereduce rewrite, or the typereductions pair, leaves every line
        unchanged; only removing both changes them. *)
@@ -78,6 +84,11 @@ let opt_ty a = app "Opt" [ a ]
 let pterm o p = mk_term (mk_op (uop o) [ make_param p ]) []
 let vec_ty n = pterm "Vec" (Number (Lm_num.num_of_int n))
 let lab_ty s = pterm "Lab" (String s)
+let kind_ty t = pterm "Kind" (Token (uop t))
+let vv_ty v = pterm "Vv" (Var (Lm_symbol.add v))
+let mvec_ty v = pterm "Vec" (MNumber (Lm_symbol.add v))
+let mlab_ty v = pterm "Lab" (MString (Lm_symbol.add v))
+let mkind_ty v = pterm "Kind" (MToken (Lm_symbol.add v))
 (* exists v: Ty. List{'v} *)
 let some_ty = Term_ty_infer.mk_ty_exists_term (Lm_symbol.add "v") type_c (list_ty (mk_var_term (Lm_symbol.add "v")))
 
@@ -87,7 +98,7 @@ let typeenv =
   let env = OpnameTable.fold (fun env o _ -> ShapeTable.add env (shape_of_term (const o)) o) ShapeTable.empty typeclasses in
   let env = ShapeTable.add env (shape_of_term (list_ty term_c)) Term_ty_infer.term_opname in
     List.fold_left (fun env t -> ShapeTable.add env (shape_of_term t) Term_ty_infer.term_opname) env
-      [ pair_ty term_c term_c; opt_ty term_c; vec_ty 0; lab_ty "" ]
+      [ pair_ty term_c term_c; opt_ty term_c; vec_ty 0; lab_ty ""; kind_ty "a"; vv_ty "a" ]
 
 let decl ?(params = []) o bterms ty t =
   { ty_term = t; ty_opname = o; ty_params = params; ty_bterms = bterms; ty_type = ty }
@@ -139,6 +150,15 @@ let termenv =
          decl (uop "la") [] (lab_ty "a") (c0 "la");
          decl (uop "lb") [] (lab_ty "b") (c0 "lb");
          decl (uop "some") [] some_ty (c0 "some");
+         decl ~params:[ TyToken term_c ] (uop "Kind") [] type_c (kind_ty "a");
+         decl ~params:[ TyVar ] (uop "Vv") [] type_c (vv_ty "a");
+         decl (uop "ka") [] (kind_ty "a") (c0 "ka");
+         decl (uop "kb") [] (kind_ty "b") (c0 "kb");
+         decl (uop "xa") [] (vv_ty "a") (c0 "xa");
+         decl (uop "xb") [] (vv_ty "b") (c0 "xb");
+         decl (uop "vm") [] (mvec_ty "n") (c0 "vm");
+         decl (uop "lm") [] (mlab_ty "s") (c0 "lm");
+         decl (uop "km") [] (mkind_ty "t") (c0 "km");
          decl (uop "unpack") [ bt [] (list_ty a) ] a (unpack nil);
          decl (uop "takes") [ bt [] some_ty ] term_c (takes nil);
          decl (uop "tl") [ bt [] (list_ty term_c) ] term_c (tl nil);
@@ -235,6 +255,20 @@ let () =
   infer "cons{v3; cons{la; nil}} (Vec, Lab)" (cons (c0 "v3") (cons (c0 "la") nil));
   infer "same{v3; v4}" (same (c0 "v3") (c0 "v4"));
   infer "same{la; lb}" (same (c0 "la") (c0 "lb"));
+  infer "cons{ka; cons{ka; nil}}" (cons (c0 "ka") (cons (c0 "ka") nil));
+  infer "cons{ka; cons{kb; nil}} (Kind[a], Kind[b])" (cons (c0 "ka") (cons (c0 "kb") nil));
+  infer "cons{xa; cons{xa; nil}}" (cons (c0 "xa") (cons (c0 "xa") nil));
+  infer "cons{xa; cons{xb; nil}} (Vv[a:v], Vv[b:v])" (cons (c0 "xa") (cons (c0 "xb") nil));
+  infer "cons{v3; cons{vm; nil}} (Vec[3], Vec[@n])" (cons (c0 "v3") (cons (c0 "vm") nil));
+  infer "cons{vm; cons{v3; nil}}" (cons (c0 "vm") (cons (c0 "v3") nil));
+  infer "cons{vm; cons{vm; nil}}" (cons (c0 "vm") (cons (c0 "vm") nil));
+  infer "cons{v3; cons{vm; cons{v4; nil}}} (3, @n, 4)" (cons (c0 "v3") (cons (c0 "vm") (cons (c0 "v4") nil)));
+  infer "cons{la; cons{lm; nil}} (Lab[a], Lab[@s])" (cons (c0 "la") (cons (c0 "lm") nil));
+  infer "cons{lm; cons{la; nil}}" (cons (c0 "lm") (cons (c0 "la") nil));
+  infer "cons{lm; cons{lm; nil}}" (cons (c0 "lm") (cons (c0 "lm") nil));
+  infer "cons{ka; cons{km; nil}} (Kind[a], Kind[@t])" (cons (c0 "ka") (cons (c0 "km") nil));
+  infer "cons{km; cons{ka; nil}}" (cons (c0 "km") (cons (c0 "ka") nil));
+  infer "cons{km; cons{km; nil}}" (cons (c0 "km") (cons (c0 "km") nil));
   (* an existential type *)
   infer "some" (c0 "some");
   infer "unpack{some}" (unpack (c0 "some"));

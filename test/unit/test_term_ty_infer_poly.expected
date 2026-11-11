@@ -38,6 +38,20 @@ cons{la; cons{lb; nil}} (Lab[a], Lab[b])             REFUSED: type error
 cons{v3; cons{la; nil}} (Vec, Lab)                   REFUSED: type error
 same{v3; v4}                                         REFUSED: type error
 same{la; lb}                                         REFUSED: type error
+cons{ka; cons{ka; nil}}                              Test!List{Test!Kind["Test!a":t]}
+cons{ka; cons{kb; nil}} (Kind[a], Kind[b])           REFUSED: type error
+cons{xa; cons{xa; nil}}                              Test!List{Test!Vv[a:v]}
+cons{xa; cons{xb; nil}} (Vv[a:v], Vv[b:v])           REFUSED: type error
+cons{v3; cons{vm; nil}} (Vec[3], Vec[@n])            Test!List{Test!Vec[3:n]}
+cons{vm; cons{v3; nil}}                              Test!List{Test!Vec[n:n]}
+cons{vm; cons{vm; nil}}                              Test!List{Test!Vec[n:n]}
+cons{v3; cons{vm; cons{v4; nil}}} (3, @n, 4)         Test!List{Test!Vec[3:n]}
+cons{la; cons{lm; nil}} (Lab[a], Lab[@s])            Test!List{Test!Lab["a":s]}
+cons{lm; cons{la; nil}}                              Test!List{Test!Lab[s:s]}
+cons{lm; cons{lm; nil}}                              Test!List{Test!Lab[s:s]}
+cons{ka; cons{km; nil}} (Kind[a], Kind[@t])          Test!List{Test!Kind["Test!a":t]}
+cons{km; cons{ka; nil}}                              Test!List{Test!Kind[t:t]}
+cons{km; cons{km; nil}}                              Test!List{Test!Kind[t:t]}
 some                                                 Perv!ty_exists{Perv!Ty; 'v. Test!List{'v}}
 unpack{some}                                         REFUSED: type error
 unpack{cons{zero; nil}}                              Perv!Term

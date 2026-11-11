@@ -40,7 +40,7 @@ fi
 # One module: replay it and print "module rule status" lines.
 one() {
    printf 'cd "/%s";;\nstatus_all ();;\n' "$1" | "$mp" -batch 2>&1 | tr -d '\r' \
-      | sed 's/\x1b\[[0-9;]*m//g' | awk -v m="$1" '
+      | sed 's/\x1b\[[0-9;]*m//g' | tee "$tmp/raw.$1" | awk -v m="$1" '
       $0 == "Module: /" m { entered = 1; next }
       entered && /^Module: \// { exit }
       entered && /^Status: `/ {
@@ -61,6 +61,19 @@ while read -r m; do cat "$tmp/m.$m" >> "$out" 2>/dev/null; done < "$tmp/modules"
 echo "replayed: $(wc -l < "$tmp/modules" | tr -d ' ') modules, $(wc -l < "$out" | tr -d ' ') rule statuses"
 if [ ! -s "$out" ]; then
    echo "FAIL: no rule status was replayed"
+   exit 1
+fi
+# Under TERMS = both (mk/config) every term operation runs in both term
+# implementations and a disagreement prints "Found a mismatch in function
+# ..."; it fails the census even when no status changes. The other TERMS
+# never print it.
+reports=$(cat "$tmp"/raw.* 2>/dev/null | grep -c 'Found a mismatch')
+if [ "$reports" -gt 0 ]; then
+   for f in "$tmp"/raw.*; do
+      n=$(grep -c 'Found a mismatch' "$f")
+      [ "$n" -gt 0 ] && echo "${f##*/raw.}: $n mismatch report(s), first: $(grep -m 1 'Found a mismatch' "$f")"
+   done | head -20
+   echo "FAIL: $reports TERMS = both mismatch report(s)"
    exit 1
 fi
 if diff -u "$expected" "$out" > "$tmp/diff"; then

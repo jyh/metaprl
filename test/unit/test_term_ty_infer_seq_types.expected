@@ -1,0 +1,29 @@
+infer same{sarg; sarg}                           Perv!Term
+infer same{sarg; parg}                           Perv!Term
+infer same{parg; sarg}                           REFUSED: type error
+infer same{carg; carg}                           Perv!Term
+infer same{carg; sarg}                           REFUSED: type error
+infer same{sarg; carg}                           REFUSED: type error
+infer same{qarg; sarg}                           Perv!Term
+infer same{sarg; qarg}                           REFUSED: type error
+infer cons{sarg; cons{sarg; nil}}                Test!List{Perv!ty_sequent{Perv!ty_hyp{Perv!Term; Perv!Term}; Perv!Term; Perv!Judgment}}
+infer cons{sarg; cons{parg; nil}}                REFUSED: type error
+infer cons{carg; cons{carg; nil}}                Test!List{Perv!ty_sequent{Perv!ty_hyp_cases{Perv!xcons{Perv!ty_hyp_case{Perv!Term; Perv!Term}; Perv!xcons{Perv!ty_hyp_case{Perv!Prop; Perv!Prop}; Perv!xnil}}}; Perv!Term; Perv!Judgment}}
+infer cons{carg; cons{sarg; nil}}                REFUSED: type error
+infer cons{qarg; cons{sarg; nil}} (x: Prop vs x: Term) REFUSED: type error
+infer cons{carg; cons{carg2; nil}} (a case's x differs) REFUSED: type error
+infer same{earg: x: zero >- x; earg: x: eq >- zero} Perv!Term
+infer earg: x: zero >- x                         Perv!Judgment
+infer earg: x: zero; y: tt >- x                  Perv!Judgment
+infer earg: <H>; x: zero >- x                    Perv!Judgment
+infer earg: x: eq{zero; zero} >- zero            Perv!Judgment
+infer harg: x: zero >- x                         Perv!Judgment
+infer harg: <H>; x: zero >- zero                 Perv!Judgment
+rule <H>; x; <J<|H|>[x]> >- zero --> same, succ{zero} OK
+rule <J<|H|>[x]> then <J<|H|>[tt]>               REFUSED: type error
+rule 'a<|H|>[x] then 'a<|H|>[tt]                 REFUSED: type error
+rule 'a<|H|>[x] then 'a<|H|>[eq]                 REFUSED: type error
+rule 'a<|H|>[tt] then 'a<|H|>[x] (goal)          OK
+rule 'a<|H|>[zero] then 'a<|H|>[tt] (goal)       REFUSED: type error
+rewrite same{'a; 'b} <--> same{'b; 'a}           OK
+rewrite C[zero] <--> C[tt] (a context)           OK

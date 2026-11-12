@@ -1,0 +1,13 @@
+only x2                                  x2
+only x3                                  x3
+only x1                                  x1
+x1 100, x2 300, x3 200                   x2
+x1 300, x2 100, x3 200                   x1
+x1 100, x2 200, x3 300                   x3
+x1 100, x3 200 (x2 missing)              x3
+x2 200, x3 100 (x1 missing)              x2
+all 100 (tie)                            x1
+x1 100, x2 200, x3 200 (tie)             x2
+x1 300, x2 100, x3 200, only x2/x3       x3
+x1 300, only x2/x3 (neither exists)      Failure: Failed to find the specified format of m
+none                                     Failure: Failed to find the specified format of m

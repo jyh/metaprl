@@ -553,7 +553,13 @@ let () = ();;
 
    let rewrite_of_parsed_rewrite allow_bindings_fun redex contractum =
       let f = create_term_parser allow_bindings_fun in
-         f redex, f contractum
+      (* The redex first: the parser's memo fixes each variable's default
+         contexts from its first occurrence (OCaml evaluates a tuple's
+         components right to left, so "f redex, f contractum" parsed the
+         contractum first). *)
+      let redex = f redex in
+      let contractum = f contractum in
+         redex, contractum
 
    let mrewrite_of_parsed_mrewrite allow_bindings_fun redices contractum =
       let parse = create_term_parser allow_bindings_fun in

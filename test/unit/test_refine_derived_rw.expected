@@ -1,0 +1,18 @@
+mk_rewrite_hack (xrewrite{f{'a; 'b}; 'a})                Arg: Base_rewrite!sequent_arg Hyps: 1.<H<||>> Goal:Perv!rewrite{f{'a<|H|>; 'b<|H|>}; 'a<|H|>}
+derived_rewrite k --> c, proved by ax_kc                 accepted, depends on ax_kc
+derived_rewrite k --> c, proved by ax_kd (k --> d)       accepted
+  its dependencies                                       refused (kc2: extract does not match)
+delayed_rewrite whose proof raises                       accepted
+  its dependencies                                       Incomplete test_refine_derived_rw!kc3
+derived_rewrite proved under any_sentinal                accepted
+  its dependencies                                       Invalid_argument Sentinals mismatch in extractor function
+derived_cond_rewrite k --> c if q, assumption hack(q)    accepted, depends on ax_kc
+derived_cond_rewrite k --> c if q, assumption q (no hack) accepted
+  its dependencies                                       refused (ckc2: derivation does not match)
+delayed_cond_rewrite whose proof raises                  Incomplete test_refine_derived_rw!ckc3
+find_sentinal kc: ax_kc (before kc)                      accepted
+check_sentinal: failed test_refine_derived_rw!ax_late
+find_sentinal kc: ax_late (after kc)                     refused
+find_sentinal ckc: ax_kd (before ckc)                    accepted
+check_sentinal: failed test_refine_derived_rw!ax_late
+find_sentinal ckc: ax_late (after ckc)                   refused

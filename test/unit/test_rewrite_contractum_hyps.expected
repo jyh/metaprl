@@ -1,0 +1,60 @@
+== J['x; 'y]
+Arg: Bc!arg
+Hyps:
+      1.p :Bc!P
+      2.x :Bc!A
+      3.y :Bc!B
+      4.z :Bc!g{'x; 'y}
+      5.<K<||>['y; 'x]>
+      6.w :Bc!h{'y}
+Goal:Bc!C
+== J['x; Bc!c]
+Arg: Bc!arg
+Hyps:
+      1.p :Bc!P
+      2.x :Bc!A
+      3.y :Bc!B
+      4.z :Bc!g{'x; Bc!c}
+      5.<K<||>[Bc!c; 'x]>
+      6.w :Bc!h{Bc!c}
+Goal:Bc!C
+== J[Bc!c; 'y]
+Arg: Bc!arg
+Hyps:
+      1.p :Bc!P
+      2.x :Bc!A
+      3.y :Bc!B
+      4.z :Bc!g{Bc!c; 'y}
+      5.<K<||>['y; Bc!c]>
+      6.w :Bc!h{'y}
+Goal:Bc!C
+== J[Bc!c; Bc!d]
+Arg: Bc!arg
+Hyps:
+      1.p :Bc!P
+      2.x :Bc!A
+      3.y :Bc!B
+      4.z :Bc!g{Bc!c; Bc!d}
+      5.<K<||>[Bc!d; Bc!c]>
+      6.w :Bc!h{Bc!d}
+Goal:Bc!C
+== J['y; 'x]
+Arg: Bc!arg
+Hyps:
+      1.p :Bc!P
+      2.x :Bc!A
+      3.y :Bc!B
+      4.z :Bc!g{'y; 'x}
+      5.<K<||>['x; 'y]>
+      6.w :Bc!h{'x}
+Goal:Bc!C
+== J[Bc!k{'x}; 'y]
+Arg: Bc!arg
+Hyps:
+      1.p :Bc!P
+      2.x :Bc!A
+      3.y :Bc!B
+      4.z :Bc!g{Bc!k{'x}; 'y}
+      5.<K<||>['y; Bc!k{'x}]>
+      6.w :Bc!h{'y}
+Goal:Bc!C

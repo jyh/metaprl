@@ -870,7 +870,50 @@ struct
        | answer ->
             answer
 
-   let update_subgoals = match_subgoals_general find_leaf_guess
+   (*
+    * Give every leaf its exact match first, then let find_leaf_guess place
+    * what is left.  Matching the leaves in order with the fuzzy fallbacks
+    * let an earlier leaf take a sub-proof made for a later leaf that is an
+    * exact match for it, so re-expanding an unchanged proof could move a
+    * sub-proof to another subgoal.
+    *)
+   let update_subgoals leaves subgoals extras =
+      let rec candidates = function
+         Goal _ :: subgoals ->
+            candidates subgoals
+       | subgoal :: subgoals ->
+            (goal_ext subgoal, subgoal) :: candidates subgoals
+       | [] ->
+            []
+      in
+      let rec exact cands = function
+         leaf :: leaves ->
+            begin match find_leaf tactic_arg_alpha_equal_with_attributes leaf cands with
+               Goal _, cands ->
+                  let found, cands = exact cands leaves in
+                     None :: found, cands
+             | subgoal, cands ->
+                  let found, cands = exact cands leaves in
+                     Some subgoal :: found, cands
+            end
+       | [] ->
+            [], cands
+      in
+      let rec guess cands leaves found =
+         match leaves, found with
+            leaf :: leaves, None :: found ->
+               let subgoal, cands = find_leaf_guess leaf cands in
+               let subgoals, cands = guess cands leaves found in
+                  subgoal :: subgoals, cands
+          | _ :: leaves, Some subgoal :: found ->
+               let subgoals, cands = guess cands leaves found in
+                  subgoal :: subgoals, cands
+          | _ ->
+               [], cands
+      in
+      let found, cands = exact (candidates (subgoals @ extras)) leaves in
+      let subgoals, cands = guess cands leaves found in
+         subgoals, List.map snd cands
 
    (*
     * Replace a child at the given index.

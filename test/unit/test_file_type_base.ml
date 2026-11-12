@@ -50,10 +50,11 @@ let attempt what f =
     | File_type_base.Bad_magic _ -> "raised Bad_magic"
     | File_type_base.Bad_version (_, vs, v) -> Printf.sprintf "raised Bad_version (wanted [%s], read %d)" (String.concat "; " (List.map string_of_int vs)) v
     | Failure s ->
-        (* the messages name the temporary directory: keep the words after the file name, on the first line only *)
+        (* the messages name the temporary directory: keep the words after the file name (a Unix path, or a
+           Windows one, which starts with a drive letter), on the first line only *)
         let first = List.hd (String.split_on_char '\n' s) in
         let words = String.split_on_char ' ' first in
-        let rec after = function [] -> [] | w :: r -> if String.length w > 0 && w.[0] = '/' then r else after r in
+        let rec after = function [] -> [] | w :: r -> if (String.length w > 0 && w.[0] = '/') || (String.length w > 1 && w.[1] = ':') then r else after r in
         "raised Failure: " ^ String.concat " " (match after words with [] -> words | r -> "<file>" :: r)
     | Sys_error s -> "raised Sys_error: " ^ s
     | Invalid_argument s -> "raised Invalid_argument: " ^ s

@@ -747,6 +747,9 @@ against libmojave 1.1.1 or later:
   - `test_free_vars`: Free_vars against a model; the first unit test of
     `filter/`, which `run.sh` links for a test whose first line is
     `(* unit-link: filter *)` (#261).
+  - The camlp5 parity pin of `Filter_ocaml` and `Free_vars` (`filter/test`,
+    328 items over 8 files) runs in CI after the unit tests; it was run by
+    hand only. Most of `filter_ocaml.ml` is reached by no theory build.
 
 ### Known not to work
 

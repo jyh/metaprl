@@ -30,6 +30,10 @@ Run it against a built tree, with that tree's compilers on `PATH`:
     sh filter/test/run_pin_filter_ocaml.sh <tree> out.txt $(ls filter/test/corpus/*.ml | sort)
     sh filter/test/compare_pin.sh filter/test/pin_filter_ocaml.expected out.txt
 
+CI runs exactly these two commands after the unit tests, on both OCaml legs
+of the Linux build (`.github/workflows/build.yml`); the Windows lane does
+not run them.
+
 What must match is the term's **structure** (`shape=`: the MD5 of the term
 with each node's location pair blanked), the round trip and the free
 variables. `compare_pin.sh` fails on any difference there. The full MD5

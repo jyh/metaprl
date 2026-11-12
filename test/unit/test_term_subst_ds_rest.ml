@@ -100,6 +100,14 @@ module Ops (R : Refiner_sig.RefinerSig) = struct
     "alpha lam x. lam x. x = lam y. lam x. x", guard (fun () -> sb (b (lam "x" (lam "x" (var "x"))) (lam "y" (lam "x" (var "x")))));
     "alpha lam x. lam x. x = lam y. lam x. y", guard (fun () -> sb (b (lam "x" (lam "x" (var "x"))) (lam "y" (lam "x" (var "y")))));
     "alpha lam x. g{lam y. x; y} = lam y. g{lam y. y; y}", guard (fun () -> sb (b (lam "x" (app "g" [ lam "y" (var "x"); var "y" ])) (lam "y" (app "g" [ lam "y" (var "y"); var "y" ]))));
+    (* a third binder that repeats the FIRST name, under two renamed ones: remove_var finds
+       the pair below the head and rebuilds the list; eq_filt_vars filters two pairs *)
+    "alpha lam x. lam y. lam x. g{x;y} = lam a. lam b. lam x. g{x;b}", guard (fun () ->
+        sb (b (lam "x" (lam "y" (lam "x" (app "g" [ var "x"; var "y" ])))) (lam "a" (lam "b" (lam "x" (app "g" [ var "x"; var "b" ]))))));
+    "alpha lam x. lam y. lam x. g{x;y} = lam a. lam b. lam x. g{a;b}", guard (fun () ->
+        sb (b (lam "x" (lam "y" (lam "x" (app "g" [ var "x"; var "y" ])))) (lam "a" (lam "b" (lam "x" (app "g" [ var "a"; var "b" ]))))));
+    "is_some_var_free [] g{x}", guard (fun () -> sb (R.TermSubst.is_some_var_free [] (app "g" [ var "x" ])));
+    "is_some_var_free [y; x] g{x}", guard (fun () -> sb (R.TermSubst.is_some_var_free [ v "y"; v "x" ] (app "g" [ var "x" ])));
     "alpha f{x. a} = f{x,y. a} (binder lengths)", guard (fun () -> sb (b (mk_term (mk_op (op "f") []) [ mk_bterm [ v "x" ] (c0 "a") ]) (mk_term (mk_op (op "f") []) [ mk_bterm [ v "x"; v "y" ] (c0 "a") ])));
     "alpha_equal_vars g{x} x / g{y} y", guard (fun () -> sb (R.TermSubst.alpha_equal_vars (app "g" [ var "x" ]) [ v "x" ] (app "g" [ var "y" ]) [ v "y" ]));
     "alpha_equal_vars g{x} x / g{y} y,z (lengths)", guard (fun () -> sb (R.TermSubst.alpha_equal_vars (app "g" [ var "x" ]) [ v "x" ] (app "g" [ var "y" ]) [ v "y"; v "z" ]));

@@ -23,7 +23,8 @@
        refuses the joiner's rule; a refiner joined twice is inserted once
        (its definition is not seen twice); find_sentinal of a rule gives the
        sentinel of what was there when the rule was justified (the rule
-       itself is not in it), finds a rule through a join, refuses an ML
+       itself is not in it), finds a rule through a join and one defined
+       before the join (in the join's first half), refuses an ML
        rule, and raises Not_found for a name it does not have; ML rules and
        ML rewrites are accepted by a sentinel of their refiner;
      extract arguments (prim_rule, for each subgoal): over a sequent the
@@ -166,6 +167,16 @@ let joins () =
   attempt "find_sentinal ra in B (through the join): ra" (fun () ->
       applies (find_sentinal (refiner_of_build b) (opn "test_refine_build_a" "ra")) ra "ra");
   attempt "find_sentinal of a name B does not have" (fun () -> ignore (find_sentinal (refiner_of_build b) (opn "test_refine_build_b" "zz")); "found");
+  let e = null_refiner "test_refine_build_e" in
+  let re0 = rule e "re0" in
+  join_refiner e la;
+  let re1 = rule e "re1" in
+  attempt "find_sentinal re0 in E (re0 before E joined A): re0" (fun () ->
+      applies (find_sentinal (refiner_of_build e) (opn "test_refine_build_e" "re0")) re0 "re0");
+  attempt "  ra" (fun () -> applies (find_sentinal (refiner_of_build e) (opn "test_refine_build_e" "re0")) ra "ra");
+  attempt "find_sentinal re1 in E (re1 after the join): re0" (fun () ->
+      applies (find_sentinal (refiner_of_build e) (opn "test_refine_build_e" "re1")) re0 "re0");
+  attempt "  ra" (fun () -> applies (find_sentinal (refiner_of_build e) (opn "test_refine_build_e" "re1")) ra "ra");
   let m = null_refiner "test_refine_build_ml" in
   let mlr _ mseq _ = [ mseq ], (fun _ _ _ _ _ fs -> match fs with [ h ] -> h [] | _ -> c) in
   let mtac = create_ml_rule m "mlr" mlr in

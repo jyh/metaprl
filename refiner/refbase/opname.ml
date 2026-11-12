@@ -167,11 +167,14 @@ let eq op1 op2 =
 (*
  * Destructor.
  *)
-let dst_opname = function
-   { opname_name = n :: name; _ } ->
-      n, { opname_token = opname_token; opname_name = name }
- | _ ->
-      raise (Invalid_argument "dst_opname")
+let dst_opname opname =
+   (* Normalize first: the remainder is marked normalized, so its name must be the
+    * shared list (eq and intern compare it physically), even for a marshalled copy. *)
+   match normalize_opname opname with
+      { opname_name = n :: name; _ } ->
+         n, { opname_token = opname_token; opname_name = name }
+    | _ ->
+         raise (Invalid_argument "dst_opname")
 
 let dest_opname { opname_name = name; _ } =
    name

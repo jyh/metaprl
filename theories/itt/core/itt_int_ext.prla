@@ -4,9 +4,7 @@ NPerv!cons	cons	xcons Perv
 O	o	cons
 NSummary	Summary	Summary NIL
 NSummary!location	location	location Summary
-P	p6	Number 11245
-P	p8	Number 11275
-O	o10	location p6 p8
+P	p31	Number 11309
 P	p3	Number 4
 P	p	Number 0
 P	p1	Number 1
@@ -2089,11 +2087,7 @@ T	t30	o4294 b20 b20 b17 b17 b29
 B	b30	t30
 T	t23	o4293 b22 b30
 B	b23	t23
-T	t25	o10 b23
-B	b25	t25
 P	p51	Number 11276
-P	p52	Number 11306
-O	o52	location p51 p52
 NItt_int_ext!tok_ge	tok_ge	tok_ge Itt_int_ext
 O	o37	tok_ge
 T	t41	o37
@@ -2102,11 +2096,6 @@ T	t42	o4294 b41 b41 b17 b17 b29
 B	b42	t42
 T	t32	o4293 b22 b42
 B	b32	t32
-T	t202	o52 b32
-B	b202	t202
-P	p202	Number 11307
-P	p203	Number 11337
-O	o204	location p202 p203
 NItt_int_ext!tok_eqeq	tok_eqeq	tok_eqeq Itt_int_ext
 O	o48	tok_eqeq
 T	t49	o48
@@ -2115,11 +2104,12 @@ T	t53	o4294 b49 b49 b17 b17 b29
 B	b53	t53
 T	t44	o4293 b22 b53
 B	b44	t44
-T	t206	o204 b44
-B	b206	t206
 P	p206	Number 11339
+O	o33	location p31 p206
+T	t689	o33 b23
+B	b893	t689
+P	p898	Number 11340
 P	p207	Number 11369
-O	o207	location p206 p207
 NItt_int_ext!tok_lt_bool	tok_lt_bool	tok_lt_bool Itt_int_ext
 O	o58	tok_lt_bool
 T	t64	o58
@@ -2128,11 +2118,11 @@ T	t65	o4294 b64 b64 b17 b17 b29
 B	b65	t65
 T	t68	o4293 b22 b65
 B	b68	t68
-T	t278	o207 b68
-B	b278	t278
 P	p278	Number 11370
-P	p279	Number 11400
-O	o279	location p278 p279
+O	o898	location p898 p278
+T	t921	o898 b32
+B	b934	t921
+P	p935	Number 11371
 NItt_int_ext!tok_gt_bool	tok_gt_bool	tok_gt_bool Itt_int_ext
 O	o101	tok_gt_bool
 T	t101	o101
@@ -2141,11 +2131,11 @@ T	t103	o4294 b101 b101 b17 b17 b29
 B	b103	t103
 T	t189	o4293 b22 b103
 B	b189	t189
-T	t280	o279 b189
-B	b280	t280
 P	p280	Number 11401
-P	p281	Number 11431
-O	o281	location p280 p281
+O	o935	location p935 p280
+T	t978	o935 b44
+B	b1101	t978
+P	p1104	Number 11403
 NItt_int_ext!tok_le_bool	tok_le_bool	tok_le_bool Itt_int_ext
 O	o190	tok_le_bool
 T	t190	o190
@@ -2154,11 +2144,7 @@ T	t191	o4294 b190 b190 b17 b17 b29
 B	b191	t191
 T	t208	o4293 b22 b191
 B	b208	t208
-T	t281	o281 b208
-B	b281	t281
-P	p282	Number 11432
 P	p283	Number 11462
-O	o283	location p282 p283
 NItt_int_ext!tok_ge_bool	tok_ge_bool	tok_ge_bool Itt_int_ext
 O	o203	tok_ge_bool
 T	t203	o203
@@ -2167,11 +2153,7 @@ T	t204	o4294 b203 b203 b17 b17 b29
 B	b204	t204
 T	t220	o4293 b22 b204
 B	b220	t220
-T	t291	o283 b220
-B	b291	t291
 P	p291	Number 11463
-P	p292	Number 11493
-O	o292	location p291 p292
 NItt_int_ext!tok_eq_bool	tok_eq_bool	tok_eq_bool Itt_int_ext
 O	o211	tok_eq_bool
 T	t211	o211
@@ -2180,11 +2162,7 @@ T	t212	o4294 b211 b211 b17 b17 b29
 B	b212	t212
 T	t230	o4293 b22 b212
 B	b230	t230
-T	t292	o292 b230
-B	b292	t292
 P	p293	Number 11495
-P	p294	Number 11525
-O	o294	location p293 p294
 NItt_int_ext!tok_add	tok_add	tok_add Itt_int_ext
 O	o216	tok_add
 T	t216	o216
@@ -2193,11 +2171,7 @@ T	t218	o4294 b216 b216 b17 b17 b29
 B	b218	t218
 T	t247	o4293 b22 b218
 B	b247	t247
-T	t313	o294 b247
-B	b313	t313
 P	p313	Number 11526
-P	p315	Number 11556
-O	o315	location p313 p315
 NItt_int_ext!tok_sub	tok_sub	tok_sub Itt_int_ext
 O	o222	tok_sub
 T	t223	o222
@@ -2206,11 +2180,7 @@ T	t224	o4294 b223 b223 b17 b17 b29
 B	b224	t224
 T	t308	o4293 b22 b224
 B	b315	t308
-T	t335	o315 b315
-B	b336	t335
 P	p336	Number 11557
-P	p337	Number 11587
-O	o337	location p336 p337
 NItt_int_ext!tok_mul	tok_mul	tok_mul Itt_int_ext
 O	o228	tok_mul
 T	t231	o228
@@ -2219,11 +2189,6 @@ T	t235	o4294 b231 b231 b17 b17 b29
 B	b235	t235
 T	t608	o4293 b22 b235
 B	b690	t608
-T	t353	o337 b690
-B	b446	t353
-P	p446	Number 11588
-P	p447	Number 11618
-O	o447	location p446 p447
 NItt_int_ext!tok_div	tok_div	tok_div Itt_int_ext
 O	o241	tok_div
 T	t241	o241
@@ -2232,19 +2197,9 @@ T	t243	o4294 b241 b241 b17 b17 b29
 B	b243	t243
 T	t709	o4293 b22 b243
 B	b762	t709
-T	t531	o447 b762
-B	b533	t531
 P	p5	Number 1336
-P	p7	Number 13687
-O	o7	location p5 p7
 P	p3603	Number -1
 NSummary!id	id	id Summary
-P	p9	Number 626542783
-O	o11	id p9
-T	t12	o11
-B	b12	t12
-T	t13	o7 b12
-B	b13	t13
 T	t222	o1254 b1171 b1171
 B	b222	t222
 T	t260	o b222 b17
@@ -10969,6 +10924,31 @@ P	p2913	Number 11428
 P	p2914	Number 11445
 O	o2914	apply p2913 p2914
 P	p2915	Number 11433
+O	o1104	location p1104 p2915
+T	t1116	o1104 b68
+B	b1491	t1116
+P	p1492	Number 11464
+O	o1492	location p6528 p1492
+T	t1536	o1492 b189
+B	b1558	t1536
+P	p1560	Number 11465
+O	o1560	location p1560 p293
+T	t1664	o1560 b208
+B	b1669	t1664
+P	p1669	Number 11496
+O	o1669	location p1669 p313
+T	t1669	o1669 b220
+B	b1671	t1669
+P	p1675	Number 11527
+O	o1676	location p1675 p336
+T	t1676	o1676 b230
+B	b1676	t1676
+P	p1676	Number 11559
+P	p1678	Number 11589
+O	o1678	location p1676 p1678
+T	t1678	o1678 b247
+B	b1687	t1678
+P	p1687	Number 11590
 O	o2915	lid p2913 p2915
 T	t2915	o2915 b457
 B	b2915	t2915
@@ -11122,6 +11102,14 @@ O	o3008	uid p3006 p3005
 T	t3008	o3008 b4081
 B	b3008	t3008
 P	p3008	Number 11620
+O	o1687	location p1687 p3008
+T	t1688	o1687 b315
+B	b1688	t1688
+P	p1688	Number 11621
+P	p1689	Number 11651
+O	o1689	location p1688 p1689
+T	t1690	o1689 b690
+B	b1690	t1690
 P	p3010	Number 11662
 O	o3010	tuple p3008 p3010
 P	p3011	Number 11650
@@ -11129,6 +11117,18 @@ O	o3011	lid p3008 p3011
 T	t3011	o3011 b2156
 B	b3011	t3011
 P	p3012	Number 11652
+P	p1690	Number 11682
+O	o1690	location p3012 p1690
+T	t1692	o1690 b762
+B	b1693	t1692
+P	p1693	Number 13751
+O	o1699	location p5 p1693
+P	p1699	Number 276032391
+O	o1700	id p1699
+T	t1704	o1700
+B	b1704	t1704
+T	t1710	o1699 b1704
+B	b1710	t1710
 O	o3012	lid p3012 p3010
 T	t3012	o3012 b2079
 B	b3012	t3012
@@ -13851,10 +13851,6 @@ B	b5804	t5804
 O	o5812	lid p5803
 T	t5812	o5812
 B	b5812	t5812
-T	t5819	o2128 b5097 b5057
-B	b5819	t5819
-T	t5633	o b5632 b3247
-B	b5633	t5633
 T	t5148	o2128 b2763 b5099
 B	b5148	t5148
 T	t5149	o2128 b2746 b5148
@@ -13867,10 +13863,6 @@ T	t11215	o2190 b5098 b11214
 B	b11215	t11215
 T	t11216	o2189 b11215 b17
 B	b11216	t11216
-T	t11217	o9257 b11216
-B	b11217	t11217
-T	t11218	o2185 b11217
-B	b11218	t11218
 P	p5874	String div_neg
 O	o5874	rule p5874
 T	t5874	o1262 b4890 b4884
@@ -13901,12 +13893,6 @@ T	t5281	o2128 b5097 b5278
 B	b5281	t5281
 T	t11290	o2190 b5183 b11214
 B	b11290	t11290
-T	t11291	o2189 b11290 b17
-B	b11291	t11291
-T	t11292	o9257 b11291
-B	b11292	t11292
-T	t11293	o2185 b11292
-B	b11293	t11293
 P	p5934	String div_remProperty
 O	o5934	rule p5934
 T	t5934	o1254 b5119 b2749
@@ -13926,14 +13912,6 @@ T	t5338	o2128 b5097 b5336
 B	b5338	t5338
 T	t11306	o2190 b5936 b11214
 B	b11306	t11306
-T	t11307	o2189 b11306 b17
-B	b11307	t11307
-T	t11308	o9257 b11307
-B	b11308	t11308
-T	t11309	o2185 b11308
-B	b11309	t11309
-T	t5339	o5934 b17 b5338 b11309 b17
-B	b5339	t5339
 T	t5341	o2128 b3218 b5252
 B	b5341	t5341
 T	t5342	o2128 b2763 b5341
@@ -13952,34 +13930,16 @@ T	t11319	o2190 b5251 b11318
 B	b11319	t11319
 T	t11320	o2189 b11319 b17
 B	b11320	t11320
-T	t11321	o9257 b11320
-B	b11321	t11321
-T	t11322	o2185 b11321
-B	b11322	t11322
-T	t5347	o2679 b5240 b5347 b11322 b17
-B	b5348	t5347
 T	t11331	o b5048 b3829
 B	b11331	t11331
 T	t11332	o b5290 b11331
 B	b11332	t11332
 T	t11333	o2190 b5302 b11332
 B	b11333	t11333
-T	t11334	o2189 b11333 b17
-B	b11334	t11334
-T	t11335	o9257 b11334
-B	b11335	t11335
-T	t11336	o2185 b11335
-B	b11336	t11336
 T	t11345	o b4986 b11331
 B	b11345	t11345
 T	t11346	o2190 b5492 b11345
 B	b11346	t11346
-T	t11347	o2189 b11346 b17
-B	b11347	t11347
-T	t11348	o9257 b11347
-B	b11348	t11348
-T	t11349	o2185 b11348
-B	b11349	t11349
 T	t5349	o2128 b3218 b5303
 B	b5350	t5349
 T	t5350	o2128 b2763 b5350
@@ -13992,8 +13952,6 @@ T	t5355	o2128 b5049 b5353
 B	b5356	t5355
 T	t5356	o2128 b5291 b5356
 B	b5358	t5356
-T	t5358	o2694 b17 b5358 b11336 b17
-B	b5359	t5358
 T	t5362	o2128 b3218 b5493
 B	b5364	t5362
 T	t5364	o2128 b2763 b5364
@@ -14006,8 +13964,6 @@ T	t5367	o2128 b5049 b5367
 B	b5368	t5367
 T	t5369	o2128 b4988 b5368
 B	b5370	t5369
-T	t5370	o2710 b17 b5370 b11349 b17
-B	b5371	t5370
 P	p24	String intSegUniv
 O	o25	rule p24
 NItt_equal!univ	univ	univ Itt_equal
@@ -14917,12 +14873,6 @@ T	t8806	o2190 b5789 b11214
 B	b8806	t8806
 T	t8807	o2189 b8806 b17
 B	b8807	t8807
-T	t8808	o9257 b8807
-B	b8808	t8808
-T	t8809	o2185 b8808
-B	b8809	t8809
-T	t8810	o5803 b17 b5803 b1123 b5804 b8809 b17
-B	b8810	t8810
 T	t8825	o b5096 b3828
 B	b8825	t8825
 T	t8826	o2190 b5053 b8825
@@ -14935,8 +14885,6 @@ T	t8829	o3985 b2187 b8828 b17 b17
 B	b8829	t8829
 T	t8830	o2185 b8829
 B	b8830	t8830
-T	t8831	o2555 b17 b5633 b5067 b5068 b8830 b17
-B	b8831	t8831
 T	t9952	o b314 b17
 B	b9952	t9952
 T	t9953	o b6 b9952
@@ -18002,7 +17950,9 @@ T	t5665	o1084 b5661
 B	b5665	t5665
 T	t5666	o5645 b5665
 B	b5666	t5666
-O	o5670	location p p
+P	p11	Number 28528
+P	p12	Number 28702
+O	o12	location p11 p12
 P	p5672	String ge_zero_both
 O	o5673	rule p5672
 T	t8174	o1330 b2737 b2168
@@ -18134,8 +18084,8 @@ T	t5683	o2128 b5677 b5683
 B	b5684	t5683
 T	t5684	o2128 b4988 b5684
 B	b5688	t5684
-T	t5688	o2128 b2745 b5688
-B	b5693	t5688
+T	t21	o2128 b2746 b5688
+B	b21	t21
 P	p5693	String "(assumT 1 thenT assumT 2 thenT assumT 3 thenT (assertT << \"assert\"{bor{bor{lt_bool{'a; 0}; lt_bool{0; 'a}}; beq_int{'a; 0}}} >> thenAT (rw (higherC lt_Trichot_rw) 0 thenT tryT autoT)) thenMT dT 5 thenLT [tryT (completeT autoT); dT 5 thenLT [tryT (completeT autoT); (rw (higherC unfold_ge) 3 thenT rw (higherC unfold_ge_bool) 3 thenT dT 3 thenT tryT (completeT (onSomeHypT nthHypT))); (rw (higherC unfold_ge) 4 thenT rw (higherC unfold_ge_bool) 4 thenT dT 4 thenT rw (higherC lt_reverse_rw) 0 thenT rw reduceC 0 thenT tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT (rw reduceC (-1) thenT onSomeHypT nthHypT)) thenT tryT (completeT autoT))]; (eq_int_assert_elim 5 thenLT [tryT (completeT (onSomeHypT nthHypT)); tryT (completeT autoT); tryT (completeT autoT)])])"
 O	o5693	ext_rule p5693
 T	t5693	o b5673 b17
@@ -18154,10 +18104,10 @@ T	t5707	o5693 b2187 b5707 b17 b17
 B	b5708	t5707
 T	t5708	o2185 b5708
 B	b5711	t5708
-T	t5711	o5673 b17 b5693 b5711 b17
-B	b5713	t5711
-T	t5713	o5670 b5713
-B	b5720	t5713
+T	t27	o5673 b17 b21 b5711 b17
+B	b27	t27
+T	t28	o12 b27
+B	b28	t28
 P	p5720	Number 28704
 P	p5721	Number 28893
 O	o5721	location p5720 p5721
@@ -18454,9 +18404,9 @@ T	t5749	o1084 b5749
 B	b5751	t5749
 T	t5751	o5734 b5751
 B	b5754	t5751
-P	p5759	Number 29042
-P	p5760	Number 29363
-O	o5760	location p5759 p5760
+P	p33	Number 29131
+P	p38	Number 29418
+O	o40	location p33 p38
 T	t8563	o1976 b3214 b2168
 S	s8563	tbrarg\\ h2250\\ t8563
 B	b8563	s8563
@@ -18468,8 +18418,6 @@ T	t8586	o2128 b5049 b8585
 B	b8586	t8586
 T	t8587	o2128 b4988 b8586
 B	b8587	t8587
-P	p8587	String "byDefT unfold_div  thenT repeatT (splitITE 0 ta) thenT tryT (completeT (assumT 3 thenT dest_geT (-1) ta))"
-O	o8587	ext_rule p8587
 T	t8588	o b8563 b3828
 B	b8588	t8588
 T	t8589	o b5048 b8588
@@ -18478,8 +18426,6 @@ T	t8590	o b4986 b8589
 B	b8590	t8590
 T	t8591	o2190 b5153 b8590
 B	b8591	t8591
-T	t8592	o2189 b8591 b17
-B	b8592	t8592
 T	t8593	o1330 b5050 b2168
 H	h8593	y t8593
 H	h8594	y2 t8563
@@ -18502,8 +18448,6 @@ S	s8613	tbrarg\\ h2250 h8593 h8085 h8594\\ t8613
 B	b8614	s8613
 T	t8614	o2190 b8614 b8590
 B	b8617	t8614
-T	t8617	o2189 b8617 b17
-B	b8618	t8617
 T	t8618	o1221 b8608 b2749
 B	b8619	t8618
 T	t8619	o2421 b8619
@@ -18517,8 +18461,6 @@ S	s8623	tbrarg\\ h2250 h8593 h8103 h8594\\ t8623
 B	b8624	s8623
 T	t8624	o2190 b8624 b8590
 B	b8633	t8624
-T	t8633	o2189 b8633 b17
-B	b8634	t8633
 T	t8634	o1976 b5050 b2168
 H	h8634	y t8634
 T	t8635	o1221 b1413 b5050
@@ -18532,8 +18474,6 @@ S	s8645	tbrarg\\ h2250 h8634 h8085 h8594\\ t8645
 B	b8645	s8645
 T	t8646	o2190 b8645 b8590
 B	b8646	t8646
-T	t8647	o2189 b8646 b17
-B	b8647	t8647
 T	t8652	o1221 b8635 b2749
 B	b8652	t8652
 T	t8654	o2176 b8652 b8623
@@ -18543,16 +18483,6 @@ T	t8655	o2190 b8654 b8590
 B	b8655	t8655
 T	t8656	o2189 b8655 b17
 B	b8656	t8656
-T	t8658	o b8656 b17
-B	b8658	t8658
-T	t8659	o b8647 b8658
-B	b8659	t8659
-T	t8662	o b8634 b8659
-B	b8670	t8662
-T	t8670	o b8618 b8670
-B	b8685	t8670
-T	t8685	o2188 b8592 b8685
-B	b8693	t8685
 P	p8693	String "assumT 2 thenT assertT << 'b +@ 0 < 0 +@ 'b >> thenAT lt_add_lt ta"
 O	o8693	ext_rule p8693
 T	t8693	o301 b8617 b17
@@ -19028,17 +18958,6 @@ T	t9496	o b8758 b9496
 B	b9497	t9496
 T	t9497	o b8696 b9497
 B	b9498	t9497
-T	t9498	o8587 b2187 b8693 b9498 b17
-B	b9499	t9498
-T	t9499	o2185 b9499
-B	b9500	t9499
-T	t9500	o2637 b17 b8587 b9500 b17
-B	b9501	t9500
-T	t5780	o5760 b9501
-B	b5790	t5780
-P	p5790	Number 29365
-P	p5791	Number 29572
-O	o5791	location p5790 p5791
 T	t9503	o1976 b3242 b2168
 B	b9503	t9503
 T	t9504	o b9503 b3247
@@ -19057,916 +18976,3262 @@ T	t9509	o9506 b2187 b9508 b17 b17
 B	b9509	t9509
 T	t9510	o2185 b9509
 B	b9510	t9510
-P	p5792	Number 29400
-P	p5793	Number 29406
-O	o5793	resource_defs p5792 p5793 p3549
-T	t5794	o5793 b1970 b17
-B	b5794	t5794
-T	t5796	o b5794 b17
-B	b5796	t5796
-T	t5799	o2649 b17 b9506 b5161 b5163 b9510 b5796
-B	b5807	t5799
-T	t5807	o5791 b5807
-B	b5811	t5807
-P	p5812	Number 29574
-P	p5813	Number 29611
-O	o5814	location p5812 p5813
-O	o5815	str_let p5812 p5813
-P	p5815	Number 29578
-P	p5816	Number 29592
-O	o5816	patt_var p5815 p5816
-O	o5817	patt_done p5812 p5813
-T	t5817	o5817
-B	b5817	t5817 div_indReduceC
-T	t5818	o5816 b5817
-B	b5818	t5818
-P	p5818	Number 29595
-O	o5818	lid p5818 p5813
-T	t5820	o5818 b2656
-B	b5820	t5820
-T	t5822	o5815 b5818 b5820
-B	b5822	t5822
-T	t5824	o2666 b5822 b2680
-B	b5824	t5824
-T	t5829	o5815 b5824
-B	b5829	t5829
-T	t5830	o1084 b5829
-B	b5830	t5830
-T	t5831	o5814 b5830
-B	b5831	t5831
-P	p5831	Number 29613
-P	p5832	Number 29802
-O	o5832	location p5831 p5832
-P	p5833	Number 29635
-P	p5834	Number 29643
-O	o5834	resource_defs p5833 p5834 p3525
-P	p5835	Number 29641
-O	o5835	uid p5835 p5834
-T	t5836	o5835 b2153
-B	b5836	t5836
-T	t5838	o b5836 b17
-B	b5838	t5838
-T	t5850	o5834 b1970 b5838
-B	b5868	t5850
-T	t5868	o b5868 b17
-B	b5870	t5868
-T	t5870	o2664 b17 b5281 b11293 b5870
-B	b5871	t5870
-T	t5871	o5832 b5871
-B	b5873	t5871
-P	p5875	Number 29804
-P	p5876	Number 30012
-O	o5876	location p5875 p5876
-T	t5880	o5876 b5339
-B	b5880	t5880
-P	p5880	Number 30014
-P	p5881	Number 30274
-O	o5881	location p5880 p5881
-T	t5881	o5881 b5348
-B	b5881	t5881
-P	p5882	Number 30276
-P	p5884	Number 30592
-O	o5884	location p5882 p5884
-T	t5885	o5884 b5359
-B	b5885	t5885
-P	p5885	Number 30594
-P	p5886	Number 30902
-O	o5886	location p5885 p5886
-T	t5886	o5886 b5371
-B	b5886	t5886
-P	p5887	Number 30904
-P	p5888	Number 31085
-O	o5888	location p5887 p5888
-T	t5888	o5888 b8949
-B	b5888	t5888
-P	p5889	Number 31087
-P	p5890	Number 31116
-O	o5890	location p5889 p5890
-O	o5892	str_let p5889 p5890
-P	p5892	Number 31091
-P	p5893	Number 31101
-O	o5893	patt_var p5892 p5893
-O	o5894	patt_done p5889 p5890
-T	t5895	o5894
-B	b5895	t5895 div_AssocC
-T	t5896	o5893 b5895
-B	b5896	t5896
-P	p5896	Number 31104
-O	o5896	lid p5896 p5890
-T	t5897	o5896 b2732
-B	b5897	t5897
-T	t5898	o5892 b5896 b5897
-B	b5898	t5898
-T	t5899	o2666 b5898 b2680
-B	b5899	t5899
-T	t5900	o5892 b5899
-B	b5900	t5900
-T	t5901	o1084 b5900
-B	b5901	t5901
-T	t5902	o5890 b5901
-B	b5902	t5902
-P	p5902	Number 31122
-P	p5903	Number 31194
-O	o5903	location p5902 p5903
-T	t5903	o5903 b9888
-B	b5903	t5903
-P	p5904	Number 31195
-P	p5905	Number 31411
-O	o5905	location p5904 p5905
-T	t9565	o2189 b8786 b17
-B	b9565	t9565
-T	t9568	o9257 b9565
-B	b9568	t9568
-T	t9569	o2185 b9568
-B	b9569	t9569
-T	t9570	o2504 b17 b5002 b9569 b17
-B	b9570	t9570
-T	t5905	o5905 b9570
-B	b5905	t5905
-P	p5906	Number 31413
-P	p5907	Number 31541
-O	o5907	location p5906 p5907
-T	t5907	o5907 b8791
-B	b5907	t5907
-P	p5908	Number 31543
-P	p5909	Number 31582
-O	o5909	location p5908 p5909
-O	o5910	str_let p5908 p5909
-P	p5910	Number 31547
-P	p5912	Number 31562
-O	o5912	patt_var p5910 p5912
-O	o5913	patt_done p5908 p5909
-T	t5913	o5913
-B	b5933	t5913 rem_baseReduceC
-T	t5933	o5912 b5933
-B	b5950	t5933
-P	p5950	Number 31565
-O	o5950	lid p5950 p5909
-T	t5950	o5950 b2531
-B	b5951	t5950
-T	t5951	o5910 b5950 b5951
-B	b5952	t5951
-T	t5952	o2666 b5952 b2680
-B	b5954	t5952
-T	t5954	o5910 b5954
-B	b5955	t5954
-T	t5955	o1084 b5955
-B	b5957	t5955
-T	t5957	o5909 b5957
-B	b5960	t5957
-P	p5960	Number 31584
-P	p5961	Number 31773
-O	o5961	location p5960 p5961
-T	t9586	o1267 b4890 b4884
-B	b9586	t9586
-T	t9587	o2176 b4996 b9586
-S	s9587	tbrarg\\ h2250\\ t9587
-B	b9587	s9587
-T	t9592	o2130 b9587
-B	b9592	t9592
-T	t9593	o2128 b2763 b9592
-B	b9593	t9593
-T	t9594	o2128 b2746 b9593
-B	b9594	t9594
-T	t9595	o2128 b5097 b9594
-B	b9595	t9595
-T	t9596	o2190 b9587 b11214
-B	b9596	t9596
-T	t9597	o2189 b9596 b17
-B	b9597	t9597
-T	t9598	o9257 b9597
-B	b9598	t9598
-T	t9603	o2185 b9598
-B	b9603	t9603
-T	t9604	o5788 b17 b9595 b9603 b17
-B	b9604	t9604
-T	t5961	o5961 b9604
-B	b5961	t5961
-P	p5962	Number 31775
-P	p5963	Number 31890
-O	o5964	location p5962 p5963
-T	t5970	o5964 b8810
-B	b5970	t5970
-P	p5970	Number 31892
-P	p5971	Number 31917
-O	o5971	location p5970 p5971
-O	o5974	str_let p5970 p5971
-P	p5974	Number 31896
-P	p5976	Number 31904
-O	o5976	patt_var p5974 p5976
-O	o5977	patt_done p5970 p5971
-T	t5977	o5977
-B	b5977	t5977 rem_negC
-T	t5978	o5976 b5977
-B	b5978	t5978
-P	p5978	Number 31907
-O	o5978	lid p5978 p5971
-T	t5979	o5978 b5812
-B	b5979	t5979
-T	t5991	o5974 b5978 b5979
-B	b5991	t5991
-T	t5993	o2666 b5991 b2680
-B	b5993	t5993
-T	t6001	o5974 b5993
-B	b6001	t6001
-T	t6002	o1084 b6001
-B	b6002	t6002
-T	t6003	o5971 b6002
-B	b6003	t6003
-P	p6004	Number 31919
-P	p6005	Number 32165
-O	o6005	location p6004 p6005
-T	t9636	o2189 b8826 b17
-B	b9636	t9636
-T	t9643	o9257 b9636
-B	b9648	t9643
-T	t9648	o2185 b9648
-B	b9649	t9648
-T	t9649	o2539 b17 b5819 b9649 b17
-B	b9650	t9649
-T	t6007	o6005 b9650
-B	b6007	t6007
-P	p6015	Number 32167
-P	p6017	Number 32320
-O	o6017	location p6015 p6017
-T	t6017	o6017 b8831
-B	b6017	t6017
-P	p6025	Number 32322
-P	p6026	Number 32359
-O	o6026	location p6025 p6026
-O	o6027	str_let p6025 p6026
-P	p6027	Number 32326
-P	p6028	Number 32340
-O	o6028	patt_var p6027 p6028
-O	o6029	patt_done p6025 p6026
-T	t6031	o6029
-B	b6031	t6031 rem_indReduceC
-T	t6032	o6028 b6031
-B	b6032	t6032
-P	p6033	Number 32343
-O	o6036	lid p6033 p6026
-T	t6037	o6036 b2564
-B	b6037	t6037
-T	t6038	o6027 b6032 b6037
-B	b6038	t6038
-T	t6040	o2666 b6038 b2680
-B	b6040	t6040
-T	t6042	o6027 b6040
-B	b6042	t6042
-T	t6078	o1084 b6042
-B	b6079	t6078
-T	t6079	o6026 b6079
-B	b6080	t6079
-P	p6081	Number 32361
-P	p6082	Number 32552
-O	o6083	location p6081 p6082
-P	p6083	Number 32383
-P	p6084	Number 32391
-O	o6084	resource_defs p6083 p6084 p3525
-P	p6085	Number 32389
-O	o6085	uid p6085 p6084
-T	t6090	o6085 b2153
-B	b6090	t6090
-T	t6091	o b6090 b17
-B	b6091	t6091
-T	t6102	o6084 b1970 b6091
-B	b6102	t6102
-T	t6103	o b6102 b17
-B	b6103	t6103
-T	t6115	o2572 b17 b5158 b11218 b6103
-B	b6115	t6115
-T	t6116	o6083 b6115
-B	b6116	t6116
-P	p6118	Number 32558
-P	p6122	Number 32615
-O	o6122	location p6118 p6122
-T	t6128	o6122 b10046
-B	b6128	t6128
-P	p6131	Number 32616
-P	p6132	Number 32776
-O	o6133	location p6131 p6132
-P	p6133	Number 32642
-P	p6137	Number 32650
-O	o6137	resource_defs p6133 p6137 p3525
-P	p6138	Number 32648
-O	o6138	uid p6138 p6137
-T	t6143	o6138 b2153
-B	b6143	t6143
-T	t6144	o b6143 b17
-B	b6144	t6144
-T	t6145	o6137 b1970 b6144
-B	b6145	t6145
-T	t6156	o b6145 b17
-B	b6156	t6156
-T	t6157	o25 b17 b645 b11374 b6156
-B	b6157	t6157
-T	t6158	o6133 b6157
-B	b6158	t6158
-P	p6160	Number 32778
-P	p6161	Number 32933
-O	o6162	location p6160 p6161
-P	p6162	Number 32804
-P	p6166	Number 32812
-O	o6166	resource_defs p6162 p6166 p3525
-P	p6167	Number 32810
-O	o6167	uid p6167 p6166
-T	t6172	o6167 b2153
-B	b6172	t6172
-T	t6173	o b6172 b17
-B	b6173	t6173
-T	t6174	o6166 b1970 b6173
-B	b6174	t6174
-T	t6195	o b6174 b17
-B	b6197	t6195
-T	t6197	o4645 b17 b5776 b11385 b6197
-B	b6198	t6197
-T	t6198	o6162 b6198
-B	b6220	t6198
-P	p6223	Number 32935
-P	p6227	Number 33212
-O	o6227	location p6223 p6227
-P	p6228	Number 32971
-P	p6229	Number 32979
-O	o6229	resource_defs p6228 p6229 p3525
-P	p6230	Number 32977
-O	o6230	uid p6230 p6229
-T	t6233	o6230 b2153
-B	b6233	t6233
-T	t6234	o b6233 b17
-B	b6234	t6234
-T	t6235	o6229 b1970 b6234
-B	b6235	t6235
-T	t6245	o b6235 b17
-B	b6246	t6245
-T	t6246	o4676 b17 b5927 b11396 b6246
-B	b6247	t6246
-T	t6247	o6227 b6247
-B	b6248	t6247
-P	p6250	Number 33214
-P	p6252	Number 33395
-O	o6255	location p6250 p6252
+P	p29	String ge_lt_absurd
+O	o31	rule p29
+T	t31	o2163 b5235
+B	b31	t31
+Vy	y31	y\\ H\\
+B	b33	y31
+T	t33	o2163 b33
+B	b34	t33
+Vz	z	z\\ H\\
+B	b35	z
+T	t35	o2163 b35
+B	b37	t35
+T	t37	o b37 b17
+B	b43	t37
+T	t43	o b34 b43
+B	b54	t43
+T	t54	o b31 b54
+B	b62	t54
+T	t62	o2132 b2133 b33 b33
+S	s62	tbrarg\\ h2250\\ t62
+B	b63	s62
+T	t63	o2130 b63
+B	b67	t63
+T	t34	o2129 b67
+B	b308	t34
+T	t67	o2132 b2133 b35 b35
+S	s67	tbrarg\\ h2250\\ t67
+B	b97	s67
+T	t97	o2130 b97
+B	b109	t97
+T	t533	o2129 b109
+B	b1004	t533
+T	t109	o1976 b5235 b33
+S	s109	tbrarg\\ h2250\\ t109
+B	b188	s109
+T	t188	o2130 b188
+B	b193	t188
+T	t193	o1976 b35 b5235
+S	s193	tbrarg\\ h2250\\ t193
+B	b214	s193
+T	t214	o2130 b214
+B	b260	t214
+T	t279	o1330 b35 b33
+S	s279	tbrarg\\ h2250\\ t279
+B	b279	s279
+T	t404	o2130 b279
+B	b602	t404
+VC	C602	C\\ H\\
+S	s602	tbrarg\\ h2250\\ C602
+B	b610	s602
+T	t610	o2130 b610
+B	b614	t610
+T	t639	o2128 b602 b614
+B	b699	t639
+T	t699	o2128 b260 b699
+B	b734	t699
+T	t785	o2128 b193 b734
+B	b791	t785
+T	t1004	o2128 b1004 b791
+B	b1018	t1004
+T	t1046	o2128 b308 b1018
+B	b1163	t1046
+T	t1220	o2128 b7907 b1163
+B	b1508	t1220
+P	p893	String "(assertT << 'z >= 'y >> thenLT [(ge_Transit << 'x >> thenT tryT (completeT autoT)); idT] thenMT assumT 6 thenMT rw unfold_lt (-1) thenMT rw (unfold_ge thenC sweepDnC unfold_ge_bool) (-2) thenMT dT (-2) thenMT autoT)"
+O	o893	ext_rule p893
+T	t893	o b279 b17
+B	b894	t893
+T	t894	o b214 b894
+B	b897	t894
+T	t897	o b188 b897
+B	b898	t897
+T	t900	o b97 b898
+B	b900	t900
+T	t901	o b63 b900
+B	b901	t901
+T	t902	o b5260 b901
+B	b902	t902
+T	t903	o2190 b610 b902
+B	b903	t903
+T	t905	o301 b903 b17
+B	b913	t905
+T	t913	o2188 b913 b17
+B	b914	t913
+T	t914	o893 b2187 b914 b17 b17
+B	b915	t914
+T	t915	o2185 b915
+B	b916	t915
+T	t1508	o31 b62 b1508 b916 b17
+B	b1547	t1508
+T	t687	o40 b1547
+B	b813	t687
+P	p813	Number 29420
+P	p814	Number 29522
+O	o814	location p813 p814
+P	p934	String sub_one_lt
+O	o934	rule p934
+Vm	m	m\\ H\\
+B	b936	m
+T	t936	o2132 b2133 b936 b936
+S	s936	tbrarg\\ h2250\\ t936
+B	b938	s936
+T	t938	o2130 b938
+B	b939	t938
+T	t1605	o2129 b939
+B	b1631	t1605
+T	t939	o1087 b936 b2330
+B	b940	t939
+T	t940	o1330 b940 b936
+S	s940	tbrarg\\ h2250\\ t940
+B	b941	s940
+T	t941	o2130 b941
+B	b942	t941
+T	t1631	o2128 b1631 b942
+B	b1632	t1631
+P	p946	String "((rw (sweepDnC unfold_sub) 0 thenMT rw (lt_addMono_rw << 1 >>) 0) thenT tryT (rw (higherC add_Assoc2_rw) 0) thenT tryT (rw reduceC 0) thenT tryT (completeT autoT))"
+O	o946	ext_rule p946
+T	t946	o b938 b17
+B	b948	t946
+T	t948	o2190 b941 b948
+B	b949	t948
+T	t949	o301 b949 b17
+B	b953	t949
+T	t953	o2188 b953 b17
+B	b954	t953
+T	t954	o946 b2187 b954 b17 b17
+B	b955	t954
+T	t955	o2185 b955
+B	b956	t955
+T	t1632	o934 b17 b1632 b956 b17
+B	b1633	t1632
+T	t817	o814 b1633
+B	b889	t817
+P	p894	Number 29524
+P	p897	Number 29652
+O	o897	location p894 p897
+P	p958	String pos_ge_one
+O	o958	rule p958
+T	t958	o1976 b2749 b2330
+S	s958	tbrarg\\ h2250\\ t958
+B	b959	s958
+T	t959	o2130 b959
+B	b976	t959
+T	t976	o2128 b5049 b976
+B	b977	t976
+T	t1687	o2128 b2763 b977
+B	b1689	t1687
+P	p978	String "((assumT 2 thenMT rw (unfold_lt thenC higherC lt_bool2le_bool_rw) (-1) thenMT rw reduceC (-1) thenMT rw unfold_ge 0 thenMT autoT) thenT tryT (completeT autoT))"
+O	o978	ext_rule p978
+T	t979	o b5048 b17
+B	b979	t979
+T	t980	o b2751 b979
+B	b980	t980
+T	t988	o2190 b959 b980
+B	b988	t988
+T	t989	o301 b988 b17
+B	b989	t989
+T	t990	o2188 b989 b17
+B	b990	t990
+T	t991	o978 b2187 b990 b17 b17
+B	b991	t991
+T	t992	o2185 b991
+B	b992	t992
+T	t1689	o958 b17 b1689 b992 b17
+B	b1692	t1689
+T	t916	o897 b1692
+B	b921	t916
+P	p926	Number 29654
+P	p927	Number 29919
+O	o927	location p926 p927
+P	p1007	String div_step_bound
+O	o1007	rule p1007
+T	t1010	o2302 b936 b2330
+B	b1010	t1010
+T	t1011	o1976 b1010 b2737
+S	s1011	tbrarg\\ h2250\\ t1011
+B	b1011	s1011
+T	t1012	o2130 b1011
+B	b1012	t1012
+T	t1013	o1976 b936 b1559
+S	s1013	tbrarg\\ h2250\\ t1013
+B	b1013	s1013
+T	t1014	o2130 b1013
+B	b1014	t1014
+T	t1022	o2128 b5049 b1014
+B	b1025	t1022
+T	t1025	o2128 b1012 b1025
+B	b1048	t1025
+T	t1706	o2128 b2763 b1048
+B	b1706	t1706
+T	t1707	o2128 b2746 b1706
+B	b1707	t1707
+T	t1708	o2128 b1631 b1707
+B	b1708	t1708
+P	p1052	String "(rw (sweepDnC unfold_sub) 0 thenMT (ge_Transit << ('m +@ 1) +@ (-'b) >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); ((rw (higherC add_Assoc2_rw) 0 thenMT (assertT << 0 >= (1 +@ (-'b)) >> thenLT [(assertT << ('b +@ (-'b)) >= (1 +@ (-'b)) >> thenLT [(ge_addWeakMono thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (pos_ge_one thenT tryT (completeT autoT))]); (rw reduceC (-1))]); (assertT << ('m +@ 0) >= ('m +@ (1 +@ (-'b))) >> thenLT [(ge_addWeakMono2 thenT tryT (completeT autoT)); (rw reduceC (-1))])])) thenT tryT (completeT autoT)); (ge_addWeakMono thenT tryT (completeT autoT))]))"
+O	o1052	ext_rule p1052
+T	t1053	o b1011 b979
+B	b1053	t1053
+T	t1054	o b2751 b1053
+B	b1054	t1054
+T	t1065	o b2738 b1054
+B	b1065	t1065
+T	t1066	o b938 b1065
+B	b1066	t1066
+T	t1067	o2190 b1013 b1066
+B	b1067	t1067
+T	t1068	o301 b1067 b17
+B	b1068	t1068
+T	t1069	o2188 b1068 b17
+B	b1069	t1069
+T	t1070	o1052 b2187 b1069 b17 b17
+B	b1070	t1070
+T	t1071	o2185 b1070
+B	b1071	t1071
+T	t1709	o1007 b17 b1708 b1071 b17
+B	b1709	t1709
+T	t942	o927 b1709
+B	b946	t942
+P	p947	Number 30035
+P	p948	Number 30307
+O	o948	location p947 p948
+P	p1713	Number 30606
+P	p1073	String div_fix_wf
+O	o1073	rule p1073
+T	t1074	o1976 b1218 b2168
+B	b1074	t1074
+B	b1076	t4709
+T	t1076	o1976 b1076 b1218
+B	b1077	t1076
+T	t1077	o1221 b1472 b1218
+B	b1078	t1077
+T	t1078	o1221 b1078 b2749
+B	b1079	t1078
+T	t1079	o2132 b2133 b1079 b1079
+B	b1080	t1079
+T	t1080	o3582 b1077 b1080
+B	b1081	t1080
+T	t1081	o3582 b1074 b1081
+B	b1082	t1081 a
+T	t1082	o8763 b2133 b1082
+B	b1085	t1082 n
+T	t1085	o8763 b2133 b1085
+S	s1085	tbrarg\\ h2250\\ t1085
+B	b1086	s1085
+T	t1086	o2130 b1086
+B	b1087	t1086
+T	t1743	o2128 b2763 b1087
+B	b1744	t1743
+T	t1744	o2128 b5049 b1744
+B	b1746	t1744
+P	p1101	String "((dT 0 thenMT dT (-1)) thenLT [tryT (completeT autoT); ((dT 0 thenMT dT 0 thenMT dT 0 thenMT (ge_lt_absurd << 0 >> << 'm >> << 'm -@ 1 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (ge_Transit << 'a >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 7; nthHypT 6]); (sub_one_lt thenT tryT (completeT autoT))])) thenT tryT (completeT autoT)); ((dT 0 thenMT dT 0 thenMT dT 0 thenMT rw (higherC reduce_fix) 0 thenMT rw reduceC 0 thenMT splitITE 0) thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (ge_lt_absurd << 'a >> << 'b >> << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 5); nthHypT 4; (assumT 1 thenT nthHypT (-1))])]); ((dT 0 thenMT dT 0 thenMT dT 0 thenMT rw (higherC reduce_fix) 0 thenMT rw reduceC 0 thenMT splitITE 0) thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (dT 0 thenT withT << 'a -@ 'b >> (dT 4) thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); dT 8 thenLT [assertT << 'a >= 'b >> thenLT [(rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 7); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]; dT 8 thenLT [div_step_bound thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 6; (assumT 1 thenT nthHypT (-1))]; nthHypT 8]]])])])"
+O	o1101	ext_rule p1101
+T	t1101	o b5048 b2788
+B	b1103	t1101
+T	t1103	o2190 b1086 b1103
+B	b1104	t1103
+T	t1104	o301 b1104 b17
+B	b1109	t1104
+T	t1109	o2188 b1109 b17
+B	b1110	t1109
+T	t1110	o1101 b2187 b1110 b17 b17
+B	b1113	t1110
+T	t1113	o2185 b1113
+B	b1115	t1113
+T	t1746	o1073 b17 b1746 b1115 b17
+B	b1752	t1746
+T	t956	o948 b1752
+B	b957	t956
+P	p957	Number 30309
+O	o957	location p957 p1713
+P	p1122	String div_fix_wf2
+O	o1122	rule p1122
+T	t1122	o1221 b1472 b2737
+B	b1122	t1122
+T	t1172	o1221 b1122 b2749
+B	b1179	t1172
+T	t1198	o2132 b2133 b1179 b1179
+S	s1198	tbrarg\\ h2250\\ t1198
+B	b1256	s1198
+T	t1256	o2130 b1256
+B	b1317	t1256
+T	t1388	o2128 b4988 b1317
+B	b1389	t1388
+T	t1762	o2128 b2746 b1389
+B	b1762	t1762
+T	t1766	o2128 b2763 b1762
+B	b1766	t1766
+T	t1769	o2128 b5049 b1766
+B	b1770	t1769
+P	p1394	String "(assertT << all n: int. all a: int. ('a >= 0 => 'n >= 'a => (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b in int)) >> thenLT [(div_fix_wf thenT tryT (completeT autoT)); ((withT << 'a >> (dT (-1)) thenMT withT << 'a >> (dT (-1)) thenMT (dT 2 thenLT [(assumT 4 thenT nthHypT (-1)); (dT 2 thenLT [tryT (completeT autoT); nthHypT 2])])) thenT tryT (completeT autoT))])"
+O	o1394	ext_rule p1394
+T	t1395	o b4986 b17
+B	b1395	t1395
+T	t1397	o b2738 b1395
+B	b1397	t1397
+T	t1398	o b2751 b1397
+B	b1398	t1398
+T	t1429	o b5048 b1398
+B	b1439	t1429
+T	t1442	o2190 b1256 b1439
+B	b1442	t1442
+T	t1453	o2189 b1442 b17
+B	b1478	t1453
+T	t1480	o2188 b1478 b17
+B	b1481	t1480
+T	t1481	o1394 b2187 b1481 b17 b17
+B	b1482	t1481
+T	t1482	o2185 b1482
+B	b1484	t1482
+T	t1770	o1122 b17 b1770 b1484 b17
+B	b1789	t1770
+T	t957	o957 b1789
+B	b958	t957
+P	p966	Number 30608
+P	p967	Number 30739
+O	o967	location p966 p967
+P	p1491	String neg_lt_zero
+O	o1491	rule p1491
+T	t1491	o1330 b5235 b2168
+S	s1491	tbrarg\\ h2250\\ t1491
+B	b1492	s1491
+T	t1492	o2130 b1492
+B	b1493	t1492
+T	t1493	o2421 b5235
+B	b1497	t1493
+T	t1497	o1330 b2168 b1497
+S	s1497	tbrarg\\ h2250\\ t1497
+B	b1498	s1497
+T	t1498	o2130 b1498
+B	b1500	t1498
+T	t1500	o2128 b1493 b1500
+B	b1501	t1500
+T	t1805	o2128 b7907 b1501
+B	b1805	t1805
+P	p1513	String "(rw (unfold_lt thenC higherC lt_reverse_rw) 0 thenMT rw reduceC 0 thenT tryT (completeT autoT))"
+O	o1513	ext_rule p1513
+T	t1522	o b1492 b17
+B	b1522	t1522
+T	t1525	o b5260 b1522
+B	b1525	t1525
+T	t1527	o2190 b1498 b1525
+B	b1527	t1527
+T	t1528	o301 b1527 b17
+B	b1528	t1528
+T	t1530	o2188 b1528 b17
+B	b1530	t1530
+T	t1531	o1513 b2187 b1530 b17 b17
+B	b1531	t1531
+T	t1533	o2185 b1531
+B	b1536	t1533
+T	t1817	o1491 b17 b1805 b1536 b17
+B	b1817	t1817
+T	t973	o967 b1817
+B	b978	t973
+P	p979	Number 30741
+P	p980	Number 30870
+O	o980	location p979 p980
+P	p1545	String pos_ge_zero
+O	o1546	rule p1545
+T	t1546	o1330 b2168 b33
+S	s1546	tbrarg\\ h2250\\ t1546
+B	b1546	s1546
+T	t1548	o2130 b1546
+B	b1550	t1548
+T	t1550	o1976 b33 b2168
+S	s1550	tbrarg\\ h2250\\ t1550
+B	b1551	s1550
+T	t1551	o2130 b1551
+B	b1553	t1551
+T	t1553	o2128 b1550 b1553
+B	b1555	t1553
+T	t1846	o2128 b308 b1555
+B	b1846	t1846
+P	p1559	String "(rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT dT 0 thenLT [tryT (completeT autoT); (lt_Asym << 0 >> << 'y >> thenLT [(assumT 2 thenT nthHypT (-1)); (rw unfold_lt 0 thenT hypothesis 2); tryT (completeT autoT); tryT (completeT autoT)])])"
+O	o1559	ext_rule p1559
+T	t1568	o b1546 b17
+B	b1569	t1568
+T	t1569	o b63 b1569
+B	b1571	t1569
+T	t1571	o2190 b1551 b1571
+B	b1573	t1571
+T	t1573	o2189 b1573 b17
+B	b1592	t1573
+T	t1592	o2188 b1592 b17
+B	b1593	t1592
+T	t1600	o1559 b2187 b1593 b17 b17
+B	b1601	t1600
+T	t1601	o2185 b1601
+B	b1602	t1601
+T	t1901	o1546 b17 b1846 b1602 b17
+B	b1901	t1901
+T	t994	o980 b1901
+B	b994	t994
+P	p1000	Number 30872
+P	p1001	Number 31033
+O	o1001	location p1000 p1001
+P	p1605	String ge_ne_pos
+O	o1605	rule p1605
+S	s1605	tbrarg\\ h2250\\ t8103
+B	b1608	s1605
+T	t1608	o2130 b1608
+B	b1609	t1608
+T	t1609	o2128 b5097 b5049
+B	b1610	t1609
+T	t1610	o2128 b1609 b1610
+B	b1614	t1610
+T	t1957	o2128 b2763 b1614
+B	b1957	t1957
+P	p1615	String "(splitIntT << 0 >> << 'b >> thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT (-1); (assumT 3 thenT elim_nequal (-1) thenT sqSubstT << 'b ~ 0 >> 0 thenAT (int_sqequal thenT tryT (completeT autoT)) thenT rw reduceC 0 thenT tryT (completeT autoT)); (ge_lt_absurd << 'b >> << 0 >> << 'b >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); tryT (completeT autoT); nthHypT (-1)])])"
+O	o1615	ext_rule p1615
+T	t1615	o b5096 b17
+B	b1616	t1615
+T	t1616	o b1608 b1616
+B	b1617	t1616
+T	t1617	o b2751 b1617
+B	b1618	t1617
+T	t1618	o2190 b5048 b1618
+B	b1620	t1618
+T	t1620	o2189 b1620 b17
+B	b1622	t1620
+T	t1622	o2188 b1622 b17
+B	b1623	t1622
+T	t1623	o1615 b2187 b1623 b17 b17
+B	b1624	t1623
+T	t1624	o2185 b1624
+B	b1625	t1624
+T	t1958	o1605 b17 b1957 b1625 b17
+B	b1958	t1958
+T	t1002	o1001 b1958
+B	b1003	t1002
+P	p1008	Number 31035
+P	p1009	Number 31224
+O	o1009	location p1008 p1009
+P	p1637	String "((rw (higherC unfold_div) 0 thenMT rw reduceC 0 thenMT repeatT (splitITE 0)) thenLT [tryT (completeT autoT); tryT (completeT autoT); (div_fix_wf2 thenLT [(neg_lt_zero thenLT [tryT (completeT autoT); (rw unfold_lt 0 thenT hypothesis 3)]); tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); (rw unfold_lt 0 thenT hypothesis 2)])])]); (dT 0 thenT (div_fix_wf2 thenLT [(ge_ne_pos thenLT [tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 3); (assumT 1 thenT nthHypT (-1))]); tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); (rw unfold_lt 0 thenT hypothesis 2)])])])); tryT (completeT autoT); (dT 0 thenT (div_fix_wf2 thenLT [(neg_lt_zero thenLT [tryT (completeT autoT); (rw unfold_lt 0 thenT hypothesis 3)]); tryT (completeT autoT); tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 2)])); (div_fix_wf2 thenLT [(ge_ne_pos thenLT [tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 3); (assumT 1 thenT nthHypT (-1))]); tryT (completeT autoT); tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 2)])])"
+O	o1637	ext_rule p1637
+T	t1638	o301 b11290 b17
+B	b1638	t1638
+T	t1642	o2188 b1638 b17
+B	b1649	t1642
+T	t1649	o1637 b2187 b1649 b17 b17
+B	b1650	t1649
+T	t1650	o2185 b1650
+B	b1664	t1650
+P	p1010	Number 31057
+P	p1011	Number 31065
+O	o1011	resource_defs p1010 p1011 p3525
+P	p1012	Number 31063
+O	o1012	uid p1012 p1011
+T	t1048	o1012 b2153
+B	b1049	t1048
+T	t1049	o b1049 b17
+B	b1051	t1049
+T	t1052	o1011 b1970 b1051
+B	b1052	t1052
+T	t1072	o b1052 b17
+B	b1072	t1072
+T	t1073	o2664 b17 b5281 b1664 b1072
+B	b1073	t1073
+T	t1087	o1009 b1073
+B	b1099	t1087
+P	p1711	Number 31334
+P	p1716	Number 31642
+O	o1716	location p1711 p1716
+O	o1100	location p p
+P	p1100	String div_pos_unfold
+O	o1102	rule p1100
+T	t1108	o2176 b5119 b1179
+S	s1108	tbrarg\\ h2250\\ t1108
+B	b1119	s1108
+T	t1119	o2130 b1119
+B	b1121	t1119
+T	t1121	o2128 b5049 b1121
+B	b1391	t1121
+T	t1391	o2128 b4988 b1391
+B	b1392	t1391
+T	t1723	o2128 b2763 b1392
+B	b1723	t1723
+T	t1724	o2128 b2746 b1723
+B	b1724	t1724
+P	p1489	String "((rw (addrC [1] (higherC unfold_div)) 0 thenMT rw (addrC [1] reduceC) 0) thenT splitITE 0 thenLT [tryT (completeT autoT); (ge_lt_absurd << 'a >> << 0 >> << 'a >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); (rw unfold_lt 0 thenT hypothesis 2)]); (splitITE 0 thenLT [tryT (completeT autoT); (lt_Asym << 0 >> << 'b >> thenLT [(assumT 4 thenT nthHypT (-1)); (rw unfold_lt 0 thenT hypothesis 3); tryT (completeT autoT); tryT (completeT autoT)]); tryT (completeT autoT)])])"
+O	o1489	ext_rule p1489
+T	t1501	o b4986 b979
+B	b1505	t1501
+T	t1505	o b2751 b1505
+B	b1544	t1505
+T	t1544	o b2738 b1544
+B	b1545	t1544
+T	t1545	o2190 b1119 b1545
+B	b1556	t1545
+T	t1602	o301 b1556 b17
+B	b1604	t1602
+T	t1604	o2188 b1604 b17
+B	b1605	t1604
+T	t1614	o1489 b2187 b1605 b17 b17
+B	b1615	t1614
+T	t1625	o2185 b1615
+B	b1626	t1625
+T	t1727	o1102 b17 b1724 b1626 b17
+B	b1727	t1727
+T	t1728	o1716 b1727
+B	b1728	t1728
+P	p1729	Number 31644
+P	p1731	Number 31908
+O	o1732	location p1729 p1731
+P	p1686	String div_fix_base
+O	o1686	rule p1686
+S	s1686	tbrarg\\ h2250\\ t7774
+B	b1694	s1686
+T	t1694	o2130 b1694
+B	b1713	t1694
+T	t1713	o1221 b1472 b5235
+B	b1730	t1713
+T	t1751	o1221 b1730 b2749
+B	b1751	t1751
+T	t1790	o2176 b1751 b2168
+S	s1790	tbrarg\\ h2250\\ t1790
+B	b1791	s1790
+T	t1791	o2130 b1791
+B	b1793	t1791
+T	t1793	o2128 b1713 b1793
+B	b1797	t1793
+T	t1735	o2128 b2763 b1797
+B	b1735	t1735
+T	t1741	o2128 b7907 b1735
+B	b1742	t1741
+P	p1914	String "((rw (addrC [1] (higherC reduce_fix)) 0 thenMT rw (addrC [1] reduceC) 0) thenT splitITE 0 thenLT [tryT (completeT autoT); tryT (completeT autoT); (ge_lt_absurd << 'x >> << 'b >> << 'x >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 2); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1))])])"
+O	o1915	ext_rule p1914
+T	t2017	o b1694 b17
+B	b2017	t2017
+T	t2087	o b2751 b2017
+B	b2089	t2087
+T	t2089	o b5260 b2089
+B	b2091	t2089
+T	t2091	o2190 b1791 b2091
+B	b2096	t2091
+T	t2096	o301 b2096 b17
+B	b2104	t2096
+T	t2104	o2188 b2104 b17
+B	b2105	t2104
+T	t2106	o1915 b2187 b2105 b17 b17
+B	b2110	t2106
+T	t2110	o2185 b2110
+B	b2112	t2110
+T	t1742	o1686 b17 b1742 b2112 b17
+B	b1743	t1742
+T	t1747	o1732 b1743
+B	b1747	t1747
+P	p1747	Number 31910
+P	p1748	Number 32284
+O	o1749	location p1747 p1748
+P	p2118	String div_fix_step
+O	o2118	rule p2118
+T	t2120	o1087 b5235 b2749
+B	b2120	t2120
+T	t2136	o1221 b1472 b2120
+B	b2136	t2136
+T	t2138	o1221 b2136 b2749
+B	b2138	t2138
+T	t2139	o2302 b2330 b2138
+B	b2139	t2139
+T	t2140	o2176 b1751 b2139
+S	s2140	tbrarg\\ h2250\\ t2140
+B	b2140	s2140
+T	t2147	o2130 b2140
+B	b2147	t2147
+T	t2148	o2128 b9212 b2147
+B	b2148	t2148
+T	t1752	o2128 b2763 b2148
+B	b1753	t1752
+T	t1761	o2128 b7907 b1753
+B	b1761	t1761
+P	p2154	String "((rw (addrC [1] (higherC reduce_fix)) 0 thenMT rw (addrC [1] reduceC) 0) thenT splitITE 0 thenLT [tryT (completeT autoT); (ge_lt_absurd << 'x >> << 'b >> << 'x >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); (rw unfold_lt 0 thenT hypothesis 2)]); tryT (completeT autoT)])"
+O	o2159	ext_rule p2154
+T	t2161	o b2751 b9281
+B	b2161	t2161
+T	t2162	o b5260 b2161
+B	b2162	t2162
+T	t2163	o2190 b2140 b2162
+B	b2163	t2163
+T	t2177	o301 b2163 b17
+B	b2177	t2177
+T	t2178	o2188 b2177 b17
+B	b2178	t2178
+T	t2183	o2159 b2187 b2178 b17 b17
+B	b2184	t2183
+T	t2184	o2185 b2184
+B	b2185	t2184
+T	t1767	o2118 b17 b1761 b2185 b17
+B	b1768	t1767
+T	t1768	o1749 b1768
+B	b1769	t1768
+P	p1769	Number 32338
+P	p1770	Number 32518
+O	o1771	location p1769 p1770
+P	p2189	String add_ge_self
+O	o2200	rule p2189
+T	t2205	o2302 b5235 b33
+B	b2205	t2205
+T	t2207	o1976 b2205 b5235
+S	s2207	tbrarg\\ h2250\\ t2207
+B	b2207	s2207
+T	t2208	o2130 b2207
+B	b2208	t2208
+T	t2209	o2128 b1553 b2208
+B	b2209	t2209
+T	t1771	o2128 b308 b2209
+B	b1771	t1771
+T	t1773	o2128 b7907 b1771
+B	b1773	t1773
+P	p2217	String "(assertT << ('x +@ 'y) >= ('x +@ 0) >> thenLT [(ge_addWeakMono2 thenT tryT (completeT autoT)); (rw reduceC (-1) thenT tryT (nthHypT (-1)) thenT tryT (completeT autoT))])"
+O	o2217	ext_rule p2217
+T	t2218	o b1551 b17
+B	b2218	t2218
+T	t2219	o b63 b2218
+B	b2219	t2219
+T	t2222	o b5260 b2219
+B	b2222	t2222
+T	t2223	o2190 b2207 b2222
+B	b2223	t2223
+T	t2226	o2189 b2223 b17
+B	b2234	t2226
+T	t2234	o2188 b2234 b17
+B	b2235	t2234
+T	t2235	o2217 b2187 b2235 b17 b17
+B	b2237	t2235
+T	t2237	o2185 b2237
+B	b2240	t2237
+T	t1774	o2200 b17 b1773 b2240 b17
+B	b1774	t1774
+T	t1775	o1771 b1774
+B	b1775	t1775
+P	p1775	Number 32520
+P	p1776	Number 32701
+O	o1776	location p1775 p1776
+P	p2253	String add_ge_self2
+O	o2254	rule p2253
+T	t2254	o2130 b5394
+B	b2255	t2254
+T	t2255	o1976 b2205 b33
+S	s2255	tbrarg\\ h2250\\ t2255
+B	b2256	s2255
+T	t2256	o2130 b2256
+B	b2257	t2256
+T	t2257	o2128 b2255 b2257
+B	b2261	t2257
+T	t1776	o2128 b308 b2261
+B	b1776	t1776
+T	t1777	o2128 b7907 b1776
+B	b1777	t1777
+P	p2266	String "((rw (addrC [1] add_Commut_rw) 0 thenMT (add_ge_self thenT tryT (completeT autoT))) thenT tryT (completeT autoT))"
+O	o2269	ext_rule p2266
+T	t2271	o b63 b5395
+B	b2275	t2271
+T	t2275	o b5260 b2275
+B	b2276	t2275
+T	t2276	o2190 b2256 b2276
+B	b2277	t2276
+T	t2277	o301 b2277 b17
+B	b2286	t2277
+T	t2286	o2188 b2286 b17
+B	b2287	t2286
+T	t2287	o2269 b2187 b2287 b17 b17
+B	b2288	t2287
+T	t2288	o2185 b2288
+B	b2289	t2288
+T	t1778	o2254 b17 b1777 b2289 b17
+B	b1778	t1778
+T	t1788	o1776 b1778
+B	b1788	t1788
+P	p1791	Number 32703
+P	p1794	Number 32915
+O	o1796	location p1791 p1794
+P	p2299	String add_nonneg
+O	o2307	rule p2299
+T	t2312	o1976 b2205 b2168
+S	s2312	tbrarg\\ h2250\\ t2312
+B	b2313	s2312
+T	t2313	o2130 b2313
+B	b2314	t2313
+T	t2314	o2128 b1553 b2314
+B	b2319	t2314
+T	t2319	o2128 b2255 b2319
+B	b2341	t2319
+T	t1802	o2128 b308 b2341
+B	b1802	t1802
+T	t1804	o2128 b7907 b1802
+B	b1804	t1804
+P	p2350	String "(ge_Transit << 'x >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (add_ge_self thenT tryT (completeT autoT)); tryT (completeT autoT)])"
+O	o2352	ext_rule p2350
+T	t2361	o b5394 b2218
+B	b2361	t2361
+T	t2362	o b63 b2361
+B	b2362	t2362
+T	t2369	o b5260 b2362
+B	b2369	t2369
+T	t2370	o2190 b2313 b2369
+B	b2370	t2370
+T	t2371	o2189 b2370 b17
+B	b2371	t2371
+T	t2374	o2188 b2371 b17
+B	b2374	t2374
+T	t2375	o2352 b2187 b2374 b17 b17
+B	b2375	t2375
+T	t2376	o2185 b2375
+B	b2376	t2376
+T	t1806	o2307 b17 b1804 b2376 b17
+B	b1806	t1806
+T	t1807	o1796 b1806
+B	b1807	t1807
+P	p1810	Number 32917
+P	p1811	Number 33083
+O	o1811	location p1810 p1811
+P	p2389	String mul_nonneg_ind
+O	o2390	rule p2389
+T	t2390	o1976 b3885 b2168
+B	b2390	t2390
+T	t2392	o3582 b9421 b2390
+B	b2392	t2392 m
+T	t2401	o8763 b2133 b2392
+S	s2401	tbrarg\\ h2250\\ t2401
+B	b2401	s2401
+T	t2402	o2130 b2401
+B	b2402	t2402
+T	t2403	o2128 b1609 b2402
+B	b2403	t2403
+T	t1812	o2128 b2763 b2403
+B	b1812	t1812
+P	p2406	String "((dT 0 thenMT dT (-1)) thenLT [tryT (completeT autoT); ((dT 0 thenMT (ge_lt_absurd << 0 >> << 'm1 >> << 'm1 -@ 1 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; nthHypT 5; (sub_one_lt thenT tryT (completeT autoT))])) thenT tryT (completeT autoT)); ((dT 0 thenMT rw reduceC 0) thenT tryT (completeT autoT)); ((dT 0 thenMT (dT 4 thenLT [nthHypT 3; (rw (addrC [1] mul_add_Distrib3C) 0 thenMT rw (addrC [1] reduceC) 0 thenMT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); onSomeHypT nthHypT; (assumT 2 thenT nthHypT (-1))]))])) thenT tryT (completeT autoT))])"
+O	o2406	ext_rule p2406
+T	t2408	o b1608 b17
+B	b2408	t2408
+T	t2409	o b2751 b2408
+B	b2409	t2409
+T	t2411	o2190 b2401 b2409
+B	b2411	t2411
+T	t2412	o301 b2411 b17
+B	b2412	t2412
+T	t2420	o2188 b2412 b17
+B	b2421	t2420
+T	t2421	o2406 b2187 b2421 b17 b17
+B	b2422	t2421
+T	t2422	o2185 b2422
+B	b2426	t2422
+T	t1813	o2390 b17 b1812 b2426 b17
+B	b1813	t1813
+T	t1815	o1811 b1813
+B	b1815	t1815
+P	p1815	Number 33085
+P	p1816	Number 33297
+O	o1816	location p1815 p1816
+P	p2453	String mul_nonneg
+O	o2455	rule p2453
+T	t2465	o1976 b936 b2168
+S	s2465	tbrarg\\ h2250\\ t2465
+B	b2465	s2465
+T	t2466	o2130 b2465
+B	b2466	t2466
+T	t2477	o1254 b936 b2749
+B	b2477	t2477
+T	t2478	o1976 b2477 b2168
+S	s2478	tbrarg\\ h2250\\ t2478
+B	b2478	s2478
+T	t2484	o2130 b2478
+B	b2485	t2484
+T	t2485	o2128 b1609 b2485
+B	b2486	t2485
+T	t2486	o2128 b2466 b2486
+B	b2487	t2486
+T	t1818	o2128 b2763 b2487
+B	b1818	t1818
+T	t1820	o2128 b1631 b1818
+B	b1820	t1820
+P	p2497	String "(assertT << all m: int. ('m >= 0 => ('m *@ 'b) >= 0) >> thenLT [(mul_nonneg_ind thenT tryT (completeT autoT)); ((withT << 'm >> (dT (-1)) thenMT (dT 2 thenLT [(assumT 3 thenT nthHypT (-1)); nthHypT 2])) thenT tryT (completeT autoT))])"
+O	o2497	ext_rule p2497
+T	t2497	o b2465 b2408
+B	b2498	t2497
+T	t2498	o b2751 b2498
+B	b2499	t2498
+T	t2506	o b938 b2499
+B	b2507	t2506
+T	t2507	o2190 b2478 b2507
+B	b2508	t2507
+T	t2508	o2189 b2508 b17
+B	b2509	t2508
+T	t2509	o2188 b2509 b17
+B	b2510	t2509
+T	t2512	o2497 b2187 b2510 b17 b17
+B	b2513	t2512
+T	t2513	o2185 b2513
+B	b2515	t2513
+T	t1822	o2455 b17 b1820 b2515 b17
+B	b1822	t1822
+T	t1828	o1816 b1822
+B	b1828	t1828
+P	p1831	Number 33299
+P	p1832	Number 33527
+O	o1836	location p1831 p1832
+P	p2544	String mul_succ_rearr
+O	o2548	rule p2544
+T	t2549	o1254 b1010 b2749
+B	b2549	t2549
+T	t2556	o2302 b2549 b3214
+B	b2556	t2556
+T	t2571	o2302 b2477 b3214
+B	b2571	t2571
+T	t2572	o2302 b2571 b2749
+B	b2572	t2572
+T	t2574	o2176 b2556 b2572
+S	s2574	tbrarg\\ h2250\\ t2574
+B	b2574	s2574
+T	t2575	o2130 b2574
+B	b2575	t2575
+T	t1842	o2128 b3218 b2575
+B	b1842	t1842
+T	t1843	o2128 b2763 b1842
+B	b1843	t1843
+T	t1873	o2128 b1631 b1843
+B	b1873	t1873
+P	p2578	String "((rw (addrC [1] (addrC [1] mul_add_Distrib3C)) 0 thenMT rw (addrC [1] reduceC) 0 thenMT rw (addrC [1] (addrC [2] add_Commut_rw)) 0 thenMT rw (addrC [1] add_Assoc_rw) 0) thenT tryT (completeT autoT))"
+O	o2590	ext_rule p2578
+T	t2590	o b938 b3827
+B	b2590	t2590
+T	t2594	o2190 b2574 b2590
+B	b2594	t2594
+T	t2601	o301 b2594 b17
+B	b2601	t2601
+T	t2602	o2188 b2601 b17
+B	b2602	t2602
+T	t2609	o2590 b2187 b2602 b17 b17
+B	b2609	t2609
+T	t2621	o2185 b2609
+B	b2622	t2621
+T	t1874	o2548 b17 b1873 b2622 b17
+B	b1874	t1874
+T	t1876	o1836 b1874
+B	b1876	t1876
+P	p1876	Number 33529
+P	p1881	Number 33685
+O	o1881	location p1876 p1881
+P	p2625	String add_sub_cancel
+O	o2625	rule p2625
+T	t2625	o2302 b5235 b2749
+B	b2626	t2625
+T	t2626	o1087 b2626 b2749
+B	b2630	t2626
+T	t2630	o2176 b2630 b5235
+S	s2630	tbrarg\\ h2250\\ t2630
+B	b2633	s2630
+T	t2633	o2130 b2633
+B	b2634	t2633
+T	t1889	o2128 b2763 b2634
+B	b1889	t1889
+T	t1896	o2128 b7907 b1889
+B	b1896	t1896
+P	p2640	String "((rw (addrC [1] (sweepDnC unfold_sub)) 0 thenMT rw (addrC [1] add_Assoc2_rw) 0 thenMT rw (addrC [1] reduceC) 0) thenT tryT (completeT autoT))"
+O	o2641	ext_rule p2640
+T	t2651	o b5260 b2788
+B	b2651	t2651
+T	t2657	o2190 b2633 b2651
+B	b2657	t2657
+T	t2658	o301 b2657 b17
+B	b2658	t2658
+T	t2665	o2188 b2658 b17
+B	b2666	t2665
+T	t2666	o2641 b2187 b2666 b17 b17
+B	b2672	t2666
+T	t2672	o2185 b2672
+B	b2675	t2672
+T	t1903	o2625 b17 b1896 b2675 b17
+B	b1903	t1903
+T	t1904	o1881 b1903
+B	b1904	t1904
+P	p1906	Number 33687
+P	p1908	Number 33856
+O	o1908	location p1906 p1908
+P	p2687	String add_one_rearr
+O	o2689	rule p2687
+T	t2694	o2302 b936 b33
+B	b2694	t2694
+T	t2697	o2302 b2330 b2694
+B	b2697	t2697
+T	t2705	o2302 b1010 b33
+B	b2705	t2705
+T	t2706	o2176 b2697 b2705
+S	s2706	tbrarg\\ h2250\\ t2706
+B	b2706	s2706
+T	t2723	o2130 b2706
+B	b2724	t2723
+T	t1908	o2128 b308 b2724
+B	b1908	t1908
+T	t1909	o2128 b1631 b1908
+B	b1909	t1909
+P	p2726	String "((rw (addrC [1] add_Assoc_rw) 0 thenMT rw (addrC [1] (addrC [1] add_Commut_rw)) 0) thenT tryT (completeT autoT))"
+O	o2726	ext_rule p2726
+T	t2726	o b63 b17
+B	b2727	t2726
+T	t2728	o b938 b2727
+B	b2729	t2728
+T	t2729	o2190 b2706 b2729
+B	b2730	t2729
+T	t2730	o301 b2730 b17
+B	b2733	t2730
+T	t2733	o2188 b2733 b17
+B	b2734	t2733
+T	t2734	o2726 b2187 b2734 b17 b17
+B	b2736	t2734
+T	t2736	o2185 b2736
+B	b2741	t2736
+T	t1915	o2689 b17 b1909 b2741 b17
+B	b1915	t1915
+T	t1916	o1908 b1915
+B	b1916	t1916
+P	p1916	Number 33919
+P	p1917	Number 34360
+O	o1917	location p1916 p1917
+P	p2753	String div_fix_ind
+O	o2753	rule p2753
+T	t2756	o1221 b1472 b9422
+B	b2756	t2756
+T	t2759	o1221 b2756 b2749
+B	b2762	t2759
+T	t2762	o1221 b1472 b3214
+B	b2765	t2762
+T	t2765	o1221 b2765 b2749
+B	b2768	t2765
+T	t2768	o2302 b895 b2768
+B	b2770	t2768
+T	t2770	o2176 b2762 b2770
+B	b2771	t2770
+T	t2771	o3582 b9421 b2771
+B	b2772	t2771 m
+T	t2772	o8763 b2133 b2772
+S	s2772	tbrarg\\ h2250\\ t2772
+B	b2773	s2772
+T	t2793	o2130 b2773
+B	b2795	t2793
+T	t2800	o2128 b8584 b2795
+B	b2805	t2800
+T	t2808	o2128 b5049 b2805
+B	b2809	t2808
+T	t1924	o2128 b3218 b2809
+B	b1924	t1924
+T	t1925	o2128 b2763 b1924
+B	b1925	t1925
+P	p2816	String "((dT 0 thenMT dT (-1)) thenLT [tryT (completeT autoT); ((dT 0 thenMT (ge_lt_absurd << 0 >> << 'm1 >> << 'm1 -@ 1 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; nthHypT 5; (sub_one_lt thenT tryT (completeT autoT))])) thenT tryT (completeT autoT)); ((dT 0 thenMT rw reduceC 0) thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))])) thenT tryT (completeT autoT)); ((dT 0 thenMT (dT 4 thenLT [nthHypT 3; (sqSubstT << ((('m1 +@ 1) *@ 'b) +@ 'c) ~ ((('m1 *@ 'b) +@ 'c) +@ 'b) >> 0 thenAT (mul_succ_rearr thenT tryT (completeT autoT)) thenMT sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ((('m1 *@ 'b) +@ 'c) +@ 'b) 'b) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (((('m1 *@ 'b) +@ 'c) +@ 'b) -@ 'b) 'b)) >> 0 thenAT (div_fix_step thenLT [tryT (completeT autoT); tryT (completeT autoT); (add_ge_self2 thenLT [tryT (completeT autoT); tryT (completeT autoT); (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (mul_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 3 thenT nthHypT (-1))])]); (assumT 4 thenT nthHypT (-1))])])]) thenMT sqSubstT << (((('m1 *@ 'b) +@ 'c) +@ 'b) -@ 'b) ~ (('m1 *@ 'b) +@ 'c) >> 0 thenAT (add_sub_cancel thenT tryT (completeT autoT)) thenMT hypSubstT 5 0 thenMT (add_one_rearr thenLT [tryT (completeT autoT); (div_fix_wf2 thenLT [(assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))])]))])) thenT tryT (completeT autoT))])"
+O	o2816	ext_rule p2816
+T	t2818	o b8563 b17
+B	b2819	t2818
+T	t2819	o b5048 b2819
+B	b2826	t2819
+T	t2826	o b3216 b2826
+B	b2828	t2826
+T	t2833	o b2751 b2828
+B	b2833	t2833
+T	t2840	o2190 b2773 b2833
+B	b2841	t2840
+T	t2841	o301 b2841 b17
+B	b2845	t2841
+T	t2845	o2188 b2845 b17
+B	b2846	t2845
+T	t2846	o2816 b2187 b2846 b17 b17
+B	b2852	t2846
+T	t2852	o2185 b2852
+B	b2854	t2852
+T	t1926	o2753 b17 b1925 b2854 b17
+B	b1926	t1926
+T	t1929	o1917 b1926
+B	b1929	t1929
+P	p2865	Number 34362
+P	p2868	Number 34683
+O	o2868	location p2865 p2868
+P	p2871	String "((sqSubstT << ((('a *@ 'b) +@ 'c) /@ 'b) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (('a *@ 'b) +@ 'c) 'b) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (mul_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 1 thenT nthHypT (-1)); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))])]); (assumT 3 thenT nthHypT (-1))]); (assumT 2 thenT nthHypT (-1))]) thenMT sqSubstT << ('c /@ 'b) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'c 'b) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assumT 2 thenT nthHypT (-1))]) thenMT (assertT << all m: int. ('m >= 0 => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (('m *@ 'b) +@ 'c) 'b) ~ ('m +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'c 'b)))) >> thenLT [(div_fix_ind thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); (assumT 3 thenT nthHypT (-1))]); (withT << 'a >> (dT (-1)) thenMT (dT (-1) thenLT [(assumT 1 thenT nthHypT (-1)); nthHypT (-1)]))])) thenT tryT (completeT autoT))"
+O	o2871	ext_rule p2871
+T	t2871	o2871 b2187 b9508 b17 b9498
+B	b2871	t2871
+T	t2872	o2185 b2871
+B	b2872	t2872
+T	t2874	o2637 b17 b8587 b2872 b17
+B	b2875	t2874
+T	t2875	o2868 b2875
+B	b2876	t2875
+P	p2876	Number 34685
+P	p2877	Number 34892
+O	o2877	location p2876 p2877
+P	p2878	Number 34720
+P	p2879	Number 34726
+O	o2879	resource_defs p2878 p2879 p3549
+T	t2887	o2879 b1970 b17
+B	b2887	t2887
+T	t2888	o b2887 b17
+B	b2888	t2888
+T	t2901	o2649 b17 b9506 b5161 b5163 b9510 b2888
+B	b2901	t2901
+T	t2902	o2877 b2901
+B	b2902	t2902
+P	p2903	Number 34894
+P	p2904	Number 34931
+O	o2904	location p2903 p2904
+O	o2905	str_let p2903 p2904
+P	p2905	Number 34898
+P	p2906	Number 34912
+O	o2906	patt_var p2905 p2906
+O	o2913	patt_done p2903 p2904
+T	t2913	o2913
+B	b2913	t2913 div_indReduceC
+T	t2914	o2906 b2913
+B	b2916	t2914
+P	p2916	Number 34915
+O	o2921	lid p2916 p2904
+T	t2923	o2921 b2656
+B	b2923	t2923
+T	t2943	o2905 b2916 b2923
+B	b2943	t2943
+T	t2944	o2666 b2943 b2680
+B	b2944	t2944
+T	t2948	o2905 b2944
+B	b2948	t2948
+T	t2950	o1084 b2948
+B	b2950	t2950
+T	t2951	o2904 b2950
+B	b2951	t2951
+P	p2952	Number 34933
+P	p2953	Number 35141
+O	o2953	location p2952 p2953
+P	p1967	String "((rw (higherC unfold_rem) 0 thenMT rw (sweepDnC unfold_sub) 0 thenMT rw (higherC add_Assoc2_rw) 0 thenMT rw reduceC 0) thenT tryT (completeT autoT))"
+O	o1967	ext_rule p1967
+T	t1993	o301 b11306 b17
+B	b1994	t1993
+T	t1994	o2188 b1994 b17
+B	b2005	t1994
+T	t2005	o1967 b2187 b2005 b17 b17
+B	b2009	t2005
+T	t2011	o2185 b2009
+B	b2011	t2011
+T	t2014	o5934 b17 b5338 b2011 b17
+B	b2014	t2014
+T	t2957	o2953 b2014
+B	b2957	t2957
+P	p7	Number 35206
+P	p8	Number 35385
+O	o10	location p7 p8
+P	p6	String not_lt_ge
+O	o7	rule p6
+T	t12	o1330 b5235 b33
+B	b12	t12
+T	t13	o3802 b12
+S	s13	tbrarg\\ h2250\\ t13
+B	b13	s13
+T	t25	o2130 b13
+B	b25	t25
+T	t202	o2128 b25 b193
+B	b202	t202
+T	t729	o2128 b308 b202
+B	b1679	t729
+T	t1693	o2128 b7907 b1679
+B	b1942	t1693
+P	p279	String "(rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT dT 0 thenLT [tryT (completeT autoT); (assumT 3 thenT dT 3 thenT tryT (rw unfold_lt 0 thenT hypothesis 2) thenT tryT (completeT autoT))])"
+O	o279	ext_rule p279
+T	t280	o b13 b17
+B	b280	t280
+T	t281	o b63 b280
+B	b281	t281
+T	t291	o b5260 b281
+B	b291	t291
+T	t292	o2190 b188 b291
+B	b292	t292
+T	t313	o2189 b292 b17
+B	b313	t313
+T	t335	o2188 b313 b17
+B	b336	t335
+T	t353	o279 b2187 b336 b17 b17
+B	b446	t353
+T	t531	o2185 b446
+B	b533	t531
+T	t1972	o7 b17 b1942 b533 b17
+B	b1973	t1972
+T	t1976	o10 b1973
+B	b1978	t1976
+P	p1979	Number 35387
+P	p1980	Number 35558
+O	o1980	location p1979 p1980
+P	p1495	String lt_ge_weak
+O	o1495	rule p1495
+S	s1495	tbrarg\\ h2250\\ t2821
+B	b1627	s1495
+T	t1627	o2130 b1627
+B	b1672	t1627
+T	t1672	o2128 b4995 b1672
+B	b1673	t1672
+T	t2029	o2128 b2763 b1673
+B	b2029	t2029
+T	t2032	o2128 b2746 b2029
+B	b2032	t2032
+P	p1679	String "(rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT dT 0 thenLT [tryT (completeT autoT); (lt_Asym << 'a >> << 'b >> thenLT [(assumT 3 thenT nthHypT (-1)); (rw unfold_lt 0 thenT hypothesis 2); tryT (completeT autoT); tryT (completeT autoT)])])"
+O	o1679	ext_rule p1679
+T	t1686	o b2751 b4147
+B	b1729	t1686
+T	t1729	o b2738 b1729
+B	b1790	t1729
+T	t1797	o2190 b1627 b1790
+B	b1808	t1797
+T	t1808	o2189 b1808 b17
+B	b1809	t1808
+T	t1809	o2188 b1809 b17
+B	b1810	t1809
+T	t1810	o1679 b2187 b1810 b17 b17
+B	b1829	t1810
+T	t1829	o2185 b1829
+B	b1830	t1829
+T	t2080	o1495 b17 b2032 b1830 b17
+B	b2085	t2080
+T	t2085	o1980 b2085
+B	b2086	t2085
+P	p2089	Number 35560
+P	p2098	Number 35810
+O	o2099	location p2089 p2098
+P	p1848	String le_lt_trans
+O	o1848	rule p1848
+T	t1878	o1330 b35 b3214
+S	s1878	tbrarg\\ h2250\\ t1878
+B	b1878	s1878
+T	t1888	o2130 b1878
+B	b1888	t1888
+T	t1905	o1330 b5235 b3214
+S	s1905	tbrarg\\ h2250\\ t1905
+B	b1905	s1905
+T	t1978	o2130 b1905
+B	b2087	t1978
+T	t2112	o2128 b1888 b2087
+B	b2113	t2112
+T	t2113	o2128 b260 b2113
+B	b2115	t2113
+T	t2185	o2128 b3218 b2115
+B	b2188	t2185
+T	t2196	o2128 b1004 b2188
+B	b2225	t2196
+T	t2248	o2128 b7907 b2225
+B	b2249	t2248
+P	p2190	String "(splitIntT << 'x >> << 'z >> thenLT [tryT (completeT autoT); tryT (completeT autoT); (ltDissect << 'z >> thenLT [nthHypT 2; (assumT 5 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT)]); (hypSubstT 2 0 thenT (assumT 5 thenT nthHypT (-1)) thenT tryT (completeT autoT)); (ge_lt_absurd << 'z >> << 'x >> << 'z >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 4 thenT nthHypT (-1)); tryT (completeT autoT); nthHypT 2])])"
+O	o2201	ext_rule p2190
+T	t2215	o b1878 b17
+B	b2215	t2215
+T	t2217	o b214 b2215
+B	b2217	t2217
+T	t2240	o b3216 b2217
+B	b2241	t2240
+T	t2241	o b97 b2241
+B	b2248	t2241
+T	t2249	o b5260 b2248
+B	b2251	t2249
+T	t2251	o2190 b1905 b2251
+B	b2253	t2251
+T	t2253	o2189 b2253 b17
+B	b2263	t2253
+T	t2263	o2188 b2263 b17
+B	b2265	t2263
+T	t2274	o2201 b2187 b2265 b17 b17
+B	b2290	t2274
+T	t2290	o2185 b2290
+B	b2298	t2290
+T	t2261	o1848 b43 b2249 b2298 b17
+B	b2451	t2261
+T	t2451	o2099 b2451
+B	b2452	t2451
+P	p2456	Number 35812
+P	p2457	Number 36042
+O	o2457	location p2456 p2457
+P	p2351	String sub_ge_mono
+O	o2353	rule p2351
+T	t2386	o1976 b33 b5235
+S	s2386	tbrarg\\ h2250\\ t2386
+B	b2386	s2386
+T	t2387	o2130 b2386
+B	b2387	t2387
+T	t2406	o1087 b33 b3214
+B	b2406	t2406
+T	t2426	o1087 b5235 b3214
+B	b2448	t2426
+T	t2450	o1976 b2406 b2448
+S	s2450	tbrarg\\ h2250\\ t2450
+B	b2450	s2450
+T	t2487	o2130 b2450
+B	b2490	t2487
+T	t2490	o2128 b2387 b2490
+B	b2497	t2490
+T	t2577	o2128 b3218 b2497
+B	b2577	t2577
+T	t2578	o2128 b308 b2577
+B	b2578	t2578
+T	t2580	o2128 b7907 b2578
+B	b2581	t2580
+P	p2581	String "((rw (sweepDnC unfold_sub) 0 thenMT (ge_addWeakMono thenT tryT (completeT autoT))) thenT tryT (completeT autoT))"
+O	o2607	ext_rule p2581
+T	t2622	o b2386 b17
+B	b2623	t2622
+T	t2623	o b3216 b2623
+B	b2625	t2623
+T	t2634	o b63 b2625
+B	b2635	t2634
+T	t2635	o b5260 b2635
+B	b2637	t2635
+T	t2680	o2190 b2450 b2637
+B	b2684	t2680
+T	t2684	o301 b2684 b17
+B	b2685	t2684
+T	t2685	o2188 b2685 b17
+B	b2725	t2685
+T	t2725	o2607 b2187 b2725 b17 b17
+B	b2726	t2725
+T	t2741	o2185 b2726
+B	b2750	t2741
+T	t2581	o2353 b17 b2581 b2750 b17
+B	b2582	t2581
+T	t2582	o2457 b2582
+B	b2583	t2582
+P	p2586	Number 36044
+P	p2587	Number 36222
+O	o2608	location p2586 p2587
+P	p2811	String neg_ge_rev
+O	o2812	rule p2811
+T	t2816	o2421 b33
+B	b2816	t2816
+T	t2854	o1976 b1497 b2816
+S	s2854	tbrarg\\ h2250\\ t2854
+B	b2862	s2854
+T	t2863	o2130 b2862
+B	b2865	t2863
+T	t2865	o2128 b2387 b2865
+B	b2918	t2865
+T	t2724	o2128 b308 b2918
+B	b2906	t2724
+T	t2906	o2128 b7907 b2906
+B	b2909	t2906
+P	p3033	String "((rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenMT rw (higherC lt_reverse_rw) 0 thenMT rw reduceC 0 thenMT (assumT 3 thenT nthHypT (-1))) thenT tryT (completeT autoT))"
+O	o3034	ext_rule p3033
+T	t3117	o b63 b2623
+B	b3153	t3117
+T	t3153	o b5260 b3153
+B	b3154	t3153
+T	t3154	o2190 b2862 b3154
+B	b3198	t3154
+T	t3198	o301 b3198 b17
+B	b3200	t3198
+T	t3252	o2188 b3200 b17
+B	b3264	t3252
+T	t3264	o3034 b2187 b3264 b17 b17
+B	b3265	t3264
+T	t3265	o2185 b3265
+B	b3266	t3265
+T	t2909	o2812 b17 b2909 b3266 b17
+B	b2965	t2909
+T	t2965	o2608 b2965
+B	b2969	t2965
+P	p2969	Number 36224
+P	p2970	Number 36356
+O	o2970	location p2969 p2970
+P	p3294	String neg_nonpos
+O	o3294	rule p3294
+T	t3352	o1976 b2168 b2816
+S	s3352	tbrarg\\ h2250\\ t3352
+B	b3352	s3352
+T	t3353	o2130 b3352
+B	b3353	t3353
+T	t3354	o2128 b1553 b3353
+B	b3354	t3354
+T	t2986	o2128 b308 b3354
+B	b2986	t2986
+P	p3357	String "((rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenMT rw (higherC lt_reverse_rw) 0 thenMT rw reduceC 0 thenMT (assumT 2 thenT nthHypT (-1))) thenT tryT (completeT autoT))"
+O	o3357	ext_rule p3357
+T	t3362	o2190 b3352 b2219
+B	b3362	t3362
+T	t3384	o301 b3362 b17
+B	b3384	t3384
+T	t3386	o2188 b3384 b17
+B	b3386	t3386
+T	t3387	o3357 b2187 b3386 b17 b17
+B	b3387	t3387
+T	t3389	o2185 b3387
+B	b3389	t3389
+T	t2988	o3294 b17 b2986 b3389 b17
+B	b2988	t2988
+T	t2995	o2970 b2988
+B	b2995	t2995
+P	p2995	Number 36358
+P	p2996	Number 36754
+O	o2996	location p2995 p2996
+P	p3433	String div_fix_mono_ind
+O	o3461	rule p3433
+T	t3469	o1976 b852 b2168
+B	b3469	t3469
+P	p3478	Var y
+O	o3478	var p3478
+T	t3487	o3478
+B	b3487	t3487
+T	t3490	o1976 b3487 b852
+B	b3491	t3490
+T	t3491	o1976 b1076 b3487
+B	b3492	t3491
+T	t3492	o1221 b1472 b3487
+B	b3493	t3492
+T	t3493	o1221 b3493 b3214
+B	b3542	t3493
+T	t3542	o1221 b1472 b852
+B	b3543	t3542
+T	t3543	o1221 b3543 b3214
+B	b3544	t3543
+T	t3544	o1976 b3542 b3544
+B	b3545	t3544
+T	t3545	o3582 b3492 b3545
+B	b3546	t3545
+T	t3546	o3582 b3491 b3546
+B	b3548	t3546
+T	t3548	o3582 b3469 b3548
+B	b3549	t3548 y
+T	t3549	o8763 b2133 b3549
+B	b3550	t3549 x
+T	t3550	o8763 b2133 b3550
+B	b3552	t3550 n
+T	t3552	o8763 b2133 b3552
+S	s3552	tbrarg\\ h2250\\ t3552
+B	b3560	s3552
+T	t3560	o2130 b3560
+B	b3561	t3560
+T	t3561	o2128 b3813 b3561
+B	b3878	t3561
+T	t2996	o2128 b3218 b3878
+B	b2996	t2996
+P	p4097	String "((dT 0 thenMT dT (-1)) thenLT [tryT (completeT autoT); ((dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT (ge_lt_absurd << 0 >> << 'm >> << 'm -@ 1 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (ge_Transit << 'y >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 9; (ge_Transit << 'x >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 8; nthHypT 7])]); (sub_one_lt thenT tryT (completeT autoT))])) thenT tryT (completeT autoT)); ((dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (le_lt_trans << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 6; (assumT 2 thenT nthHypT (-1))])])) thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (le_lt_trans << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (ge_Transit << 'y >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 6; nthHypT 5]); (assumT 2 thenT nthHypT (-1))])]))) thenT tryT (completeT autoT)); (((dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT (decideT << 'y < 'c >> thenLT [((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 10])) thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (le_lt_trans << 'y >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 8; nthHypT 10])]))); ((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('y -@ 'c) 'c)) >> 0 thenAT (div_fix_step thenLT [tryT (completeT autoT); tryT (completeT autoT); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])) thenMT (decideT << 'x < 'c >> thenLT [((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 11])) thenMT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); ((withT << 0 >> (dT 4) thenMT withT << 'y -@ 'c >> (dT (-1)) thenMT (dT (-1) thenLT [tryT (completeT autoT); (dT (-1) thenLT [(assertT << 'y >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); (dT (-1) thenLT [(div_step_bound thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 8; (assumT 2 thenT nthHypT (-1))]); idT])])])) thenMT (ge_Transit << fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 0 'c >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT (-1); ((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 0 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))])) thenT tryT (completeT autoT))]))])); ((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ 'c) 'c)) >> 0 thenAT (div_fix_step thenLT [tryT (completeT autoT); tryT (completeT autoT); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])) thenMT (ge_addWeakMono2 thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); ((withT << 'x -@ 'c >> (dT 4) thenMT withT << 'y -@ 'c >> (dT (-1)) thenMT (dT (-1) thenLT [(assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); (dT (-1) thenLT [(sub_ge_mono thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 7]); (dT (-1) thenLT [(div_step_bound thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 8; (assumT 2 thenT nthHypT (-1))]); idT])])])) thenMT nthHypT (-1))]))]))])) thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 2 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (assertT << 'y >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]]))) thenT tryT (completeT autoT))])"
+O	o4097	ext_rule p4097
+T	t4179	o b3812 b17
+B	b4209	t4179
+T	t4227	o b3216 b4209
+B	b4241	t4227
+T	t4241	o2190 b3560 b4241
+B	b4243	t4241
+T	t4243	o301 b4243 b17
+B	b4250	t4243
+T	t4250	o2188 b4250 b17
+B	b4251	t4250
+T	t4251	o4097 b2187 b4251 b17 b17
+B	b4252	t4251
+T	t4252	o2185 b4252
+B	b4253	t4252
+T	t2997	o3461 b17 b2996 b4253 b17
+B	b2997	t2997
+T	t3004	o2996 b2997
+B	b3004	t3004
+P	p3007	Number 36756
+P	p3009	Number 37224
+O	o3009	location p3007 p3009
+P	p4256	String div_fix_mono
+O	o4256	rule p4256
+T	t4256	o1221 b1472 b33
+B	b4257	t4256
+T	t4258	o1221 b4257 b3214
+B	b4258	t4258
+T	t4260	o1221 b1730 b3214
+B	b4260	t4260
+T	t4261	o1976 b4258 b4260
+S	s4261	tbrarg\\ h2250\\ t4261
+B	b4262	s4261
+T	t4262	o2130 b4262
+B	b4270	t4262
+T	t4270	o2128 b2387 b4270
+B	b4275	t4270
+T	t4275	o2128 b2255 b4275
+B	b4276	t4275
+T	t4277	o2128 b3813 b4276
+B	b4277	t4277
+T	t3009	o2128 b3218 b4277
+B	b3009	t3009
+T	t3010	o2128 b308 b3009
+B	b3010	t3010
+T	t3022	o2128 b7907 b3010
+B	b3022	t3022
+P	p4280	String "((assertT << all n: int. all x: int. all y: int. ('x >= 0 => 'y >= 'x => 'n >= 'y => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c) >= (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c))) >> thenLT [(div_fix_mono_ind thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); (withT << 'y >> (dT (-1)) thenMT withT << 'x >> (dT (-1)) thenMT withT << 'y >> (dT (-1)) thenMT (dT (-1) thenLT [(assumT 5 thenT nthHypT (-1)); (dT (-1) thenLT [(assumT 6 thenT nthHypT (-1)); (dT (-1) thenLT [tryT (completeT autoT); nthHypT (-1)])])]))]) thenT tryT (completeT autoT))"
+O	o4280	ext_rule p4280
+T	t4281	o b5394 b2623
+B	b4281	t4281
+T	t4299	o b3812 b4281
+B	b4300	t4299
+T	t4302	o b3216 b4300
+B	b4303	t4302
+T	t4304	o b63 b4303
+B	b4305	t4304
+T	t4305	o b5260 b4305
+B	b4306	t4305
+T	t4306	o2190 b4262 b4306
+B	b4307	t4306
+T	t4318	o2189 b4307 b17
+B	b4318	t4318
+T	t4324	o2188 b4318 b17
+B	b4325	t4324
+T	t4325	o4280 b2187 b4325 b17 b17
+B	b4337	t4325
+T	t4337	o2185 b4337
+B	b4346	t4337
+T	t3023	o4256 b17 b3022 b4346 b17
+B	b3023	t3023
+T	t3026	o3009 b3023
+B	b3026	t3026
+P	p3030	Number 37226
+P	p3031	Number 37526
+O	o3032	location p3030 p3031
+P	p4352	String div_fix_nonneg
+O	o4352	rule p4352
+T	t4364	o1976 b4260 b2168
+S	s4364	tbrarg\\ h2250\\ t4364
+B	b4364	s4364
+T	t4368	o2130 b4364
+B	b4368	t4368
+T	t4370	o2128 b2255 b4368
+B	b4370	t4370
+T	t4376	o2128 b3813 b4370
+B	b4376	t4376
+T	t3083	o2128 b3218 b4376
+B	b3086	t3083
+T	t3086	o2128 b7907 b3086
+B	b3087	t3086
+P	p4381	String "((ge_Transit << fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 0 'c >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (div_fix_mono thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); ((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 0 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1))])) thenT tryT (completeT autoT))]) thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (assumT 4 thenT nthHypT (-1))]])))"
+O	o4382	ext_rule p4381
+T	t4388	o b3812 b5395
+B	b4388	t4388
+T	t4389	o b3216 b4388
+B	b4389	t4389
+T	t4390	o b5260 b4389
+B	b4390	t4390
+T	t4391	o2190 b4364 b4390
+B	b4391	t4391
+T	t4393	o2189 b4391 b17
+B	b4393	t4393
+T	t4394	o2188 b4393 b17
+B	b4394	t4394
+T	t4407	o4382 b2187 b4394 b17 b17
+B	b4409	t4407
+T	t4409	o2185 b4409
+B	b4410	t4409
+T	t3088	o4352 b17 b3087 b4410 b17
+B	b3089	t3088
+T	t3115	o3032 b3089
+B	b3116	t3115
+P	p9	Number 37580
+P	p32	Number 37791
+O	o41	location p9 p32
+P	p3124	String sub_add_swap
+O	o3124	rule p3124
+T	t3138	o1087 b2205 b3214
+B	b3139	t3138
+T	t3139	o2302 b2448 b33
+B	b3140	t3139
+T	t3140	o2176 b3139 b3140
+S	s3140	tbrarg\\ h2250\\ t3140
+B	b3151	s3140
+T	t3151	o2130 b3151
+B	b3152	t3151
+T	t206	o2128 b3218 b3152
+B	b206	t206
+T	t278	o2128 b308 b206
+B	b278	t278
+T	t690	o2128 b7907 b278
+B	b1394	t690
+P	p3265	String "((rw (addrC [1] (sweepDnC unfold_sub)) 0 thenMT rw (addrC [2] (sweepDnC unfold_sub)) 0 thenMT rw (addrC [1] add_Assoc2_rw) 0 thenMT rw (addrC [1;2] add_Commut_rw) 0 thenMT rw (addrC [1] add_Assoc_rw) 0) thenT tryT (completeT autoT))"
+O	o3265	ext_rule p3265
+T	t3281	o b63 b3826
+B	b3282	t3281
+T	t3283	o b5260 b3282
+B	b3284	t3283
+T	t3284	o2190 b3151 b3284
+B	b3285	t3284
+T	t3285	o301 b3285 b17
+B	b3287	t3285
+T	t3287	o2188 b3287 b17
+B	b3288	t3287
+T	t3288	o3265 b2187 b3288 b17 b17
+B	b3292	t3288
+T	t3292	o2185 b3292
+B	b3303	t3292
+T	t1394	o3124 b17 b1394 b3303 b17
+B	b1486	t1394
+T	t1487	o41 b1486
+B	b1674	t1487
+P	p1681	Number 37793
+P	p1682	Number 38296
+O	o1682	location p1681 p1682
+P	p3310	String div_fix_add_ind
+O	o3310	rule p3310
+T	t3310	o1976 b3487 b2168
+B	b3316	t3310
+T	t3316	o1976 b1076 b852
+B	b3317	t3316
+T	t3317	o2302 b852 b3487
+B	b3318	t3317
+T	t3318	o1221 b1472 b3318
+B	b3319	t3318
+T	t3319	o1221 b3319 b3214
+B	b3351	t3319
+T	t3351	o2302 b3544 b3542
+B	b3360	t3351
+T	t3360	o1976 b3351 b3360
+B	b3367	t3360
+T	t3367	o3582 b3317 b3367
+B	b3368	t3367
+T	t3368	o3582 b3316 b3368
+B	b3369	t3368
+T	t3369	o3582 b3469 b3369
+B	b3371	t3369 y
+T	t3371	o8763 b2133 b3371
+B	b3372	t3371 x
+T	t3372	o8763 b2133 b3372
+B	b3373	t3372 n
+T	t3373	o8763 b2133 b3373
+S	s3373	tbrarg\\ h2250\\ t3373
+B	b3382	s3373
+T	t3382	o2130 b3382
+B	b3383	t3382
+T	t3383	o2128 b3813 b3383
+B	b3402	t3383
+T	t1789	o2128 b3218 b3402
+B	b1831	t1789
+P	p3415	String "((dT 0 thenMT dT (-1)) thenLT [tryT (completeT autoT); ((dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT (ge_lt_absurd << 0 >> << 'm >> << 'm -@ 1 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (ge_Transit << 'x >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 9; nthHypT 7]); (sub_one_lt thenT tryT (completeT autoT))])) thenT tryT (completeT autoT)); (((dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (le_lt_trans << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 6; (assumT 2 thenT nthHypT (-1))])])) thenMT (rw (addrC [2] add_Id2_rw) 0 thenMT (div_fix_mono thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); nthHypT 5; (add_ge_self2 thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 4])]))) thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 2 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); onSomeHypT nthHypT])]])) thenT tryT (completeT (dT 0 thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 2 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); onSomeHypT nthHypT])]]))))) thenT tryT (completeT autoT)); (((dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT (decideT << 'x < 'c >> thenLT [((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 10])) thenMT (rw (addrC [2] add_Id2_rw) 0 thenMT (div_fix_mono thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); nthHypT 8; (add_ge_self2 thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 7])]))); ((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ 'c) 'c)) >> 0 thenAT (div_fix_step thenLT [tryT (completeT autoT); tryT (completeT autoT); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])) thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x +@ 'y) 'c) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (('x +@ 'y) -@ 'c) 'c)) >> 0 thenAT (div_fix_step thenLT [tryT (completeT autoT); tryT (completeT autoT); (ge_Transit << 'x >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (add_ge_self thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 8]); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])])) thenMT (sqSubstT << (('x +@ 'y) -@ 'c) ~ (('x -@ 'c) +@ 'y) >> 0 thenAT (sub_add_swap thenT tryT (completeT autoT))) thenMT rw (addrC [2] add_Assoc2_rw) 0 thenMT (ge_addWeakMono2 thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); ((withT << 'x -@ 'c >> (dT 4) thenMT withT << 'y >> (dT (-1)) thenMT (dT (-1) thenLT [(assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); (dT (-1) thenLT [nthHypT 7; (dT (-1) thenLT [(div_step_bound thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 8; (assumT 2 thenT nthHypT (-1))]); idT])])])) thenMT nthHypT (-1))]))])) thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 2 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); onSomeHypT nthHypT])]])) thenT tryT (completeT (dT 0 thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 2 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assertT << 'x >= 'c >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); onSomeHypT nthHypT])]]))))) thenT tryT (completeT autoT))])"
+O	o3424	ext_rule p3415
+T	t3424	o2190 b3382 b4241
+B	b3424	t3424
+T	t3425	o301 b3424 b17
+B	b3425	t3425
+T	t3427	o2188 b3425 b17
+B	b3427	t3427
+T	t3428	o3424 b2187 b3427 b17 b17
+B	b3428	t3428
+T	t3429	o2185 b3428
+B	b3429	t3429
+T	t1831	o3310 b17 b1831 b3429 b17
+B	b1848	t1831
+T	t1941	o1682 b1848
+B	b2151	t1941
+P	p2151	Number 38298
+P	p2159	Number 38873
+O	o2161	location p2151 p2159
+P	p3434	String div_fix_add
+O	o3449	rule p3434
+T	t3455	o1221 b1472 b2205
+B	b3455	t3455
+T	t3456	o1221 b3455 b3214
+B	b3456	t3456
+T	t3457	o2302 b4260 b4258
+B	b3457	t3457
+T	t3461	o1976 b3456 b3457
+S	s3461	tbrarg\\ h2250\\ t3461
+B	b3461	s3461
+T	t3463	o2130 b3461
+B	b3463	t3463
+T	t3468	o2128 b1553 b3463
+B	b3468	t3468
+T	t3470	o2128 b2255 b3468
+B	b3470	t3470
+T	t3472	o2128 b3813 b3470
+B	b3472	t3472
+T	t2186	o2128 b3218 b3472
+B	b2186	t2186
+T	t2285	o2128 b308 b2186
+B	b2344	t2285
+T	t2344	o2128 b7907 b2344
+B	b2349	t2344
+P	p3482	String "((assertT << all n: int. all x: int. all y: int. ('x >= 0 => 'y >= 0 => 'n >= 'x => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x +@ 'y) 'c) >= ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'c) +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'y 'c)))) >> thenLT [(div_fix_add_ind thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); (withT << 'x >> (dT (-1)) thenMT withT << 'x >> (dT (-1)) thenMT withT << 'y >> (dT (-1)) thenMT (dT (-1) thenLT [(assumT 5 thenT nthHypT (-1)); (dT (-1) thenLT [(assumT 6 thenT nthHypT (-1)); (dT (-1) thenLT [tryT (completeT autoT); nthHypT (-1)])])]))]) thenT tryT (completeT autoT))"
+O	o3487	ext_rule p3482
+T	t3495	o b3812 b2361
+B	b3495	t3495
+T	t3503	o b3216 b3495
+B	b3503	t3503
+T	t3504	o b63 b3503
+B	b3504	t3504
+T	t3505	o b5260 b3504
+B	b3505	t3505
+T	t3508	o2190 b3461 b3505
+B	b3508	t3508
+T	t3513	o2189 b3508 b17
+B	b3513	t3513
+T	t3535	o2188 b3513 b17
+B	b3535	t3535
+T	t3537	o3487 b2187 b3535 b17 b17
+B	b3537	t3537
+T	t3538	o2185 b3537
+B	b3538	t3538
+T	t2452	o3449 b17 b2349 b3538 b17
+B	b2520	t2452
+T	t2539	o2161 b2520
+B	b2540	t2539
+P	p3541	Number 38875
+P	p3543	Number 39191
+O	o3550	location p3541 p3543
+P	p3550	String "((((sqSubstT << (('a +@ 'b) /@ 'c) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('a +@ 'b) 'c) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 1 thenT nthHypT (-1))]); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))])]); (assumT 3 thenT nthHypT (-1))])) thenMT (sqSubstT << ('a /@ 'c) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'c) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 1 thenT nthHypT (-1))]); (assumT 3 thenT nthHypT (-1))])) thenMT (sqSubstT << ('b /@ 'c) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'b 'c) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))]); (assumT 3 thenT nthHypT (-1))])) thenMT (div_fix_add thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 1 thenT nthHypT (-1))]); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))])])) thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 1 thenT nthHypT (-1))]); completeT (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 1 thenT nthHypT (-1))]); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))])])]])) thenT tryT (completeT (dT 0 thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 1 thenT nthHypT (-1))]); completeT (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 1 thenT nthHypT (-1))]); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))])])]]))))) thenT tryT (completeT autoT))"
+O	o3552	ext_rule p3550
+T	t3553	o301 b11333 b17
+B	b3553	t3553
+T	t3554	o2188 b3553 b17
+B	b3554	t3554
+T	t3555	o3552 b2187 b3554 b17 b17
+B	b3555	t3555
+T	t3556	o2185 b3555
+B	b3556	t3556
+T	t3564	o2694 b17 b5358 b3556 b17
+B	b3564	t3564
+T	t3565	o3550 b3564
+B	b3565	t3565
+P	p2548	String mul_succ
+O	o2549	rule p2548
+T	t2576	o2302 b2477 b2749
+B	b2576	t2576
+T	t2583	o2176 b2549 b2576
+S	s2583	tbrarg\\ h2250\\ t2583
+B	b2584	s2583
+T	t2584	o2130 b2584
+B	b2585	t2584
+T	t2585	o2128 b2752 b2585
+B	b2586	t2585
+T	t2586	o2128 b939 b2586
+B	b2604	t2586
+P	p2606	String "((rw (addrC [1] mul_add_Distrib3C) 0 thenMT rw (addrC [1] reduceC) 0) thenT tryT (completeT autoT))"
+O	o2612	ext_rule p2606
+T	t2748	o b938 b2788
+B	b2753	t2748
+T	t2794	o2190 b2584 b2753
+B	b2811	t2794
+T	t2811	o301 b2811 b17
+B	b2929	t2811
+T	t2969	o2188 b2929 b17
+B	b3005	t2969
+T	t3005	o2612 b2187 b3005 b17 b17
+B	b3006	t3005
+T	t3006	o2185 b3006
+B	b3007	t3006
+T	t3007	o2549 b17 b2604 b3007 b17
+B	b3024	t3007
+T	t3024	o1100 b3024
+B	b3028	t3024
+P	p3034	String sub_add_cancel
+O	o3035	rule p3034
+T	t3116	o2302 b2120 b2749
+B	b3117	t3116
+T	t3248	o2176 b3117 b5235
+S	s3248	tbrarg\\ h2250\\ t3248
+B	b3268	s3248
+T	t3282	o2130 b3268
+B	b3283	t3282
+T	t3355	o2128 b2752 b3283
+B	b3355	t3355
+T	t3404	o2128 b7906 b3355
+B	b3406	t3404
+P	p3424	String "((rw (addrC [1;1] (sweepDnC unfold_sub)) 0 thenMT rw (addrC [1] add_Assoc2_rw) 0 thenMT rw (addrC [1] reduceC) 0) thenT tryT (completeT autoT))"
+O	o3451	ext_rule p3424
+T	t3483	o2190 b3268 b2651
+B	b3483	t3483
+T	t3484	o301 b3483 b17
+B	b3484	t3484
+T	t3486	o2188 b3484 b17
+B	b3486	t3486
+T	t3541	o3451 b2187 b3486 b17 b17
+B	b3541	t3541
+T	t3566	o2185 b3541
+B	b3566	t3566
+T	t3567	o3035 b17 b3406 b3566 b17
+B	b3567	t3567
+T	t3569	o1100 b3567
+B	b3569	t3569
+P	p3571	String add_sub_cancel2
+O	o3573	rule p3571
+T	t3595	o2302 b3214 b33
+B	b3748	t3595
+T	t3748	o1087 b3748 b3214
+B	b3843	t3748
+T	t3843	o2176 b3843 b33
+S	s3843	tbrarg\\ h2250\\ t3843
+B	b3848	s3843
+T	t3848	o2130 b3848
+B	b3849	t3848
+T	t3951	o2128 b67 b3849
+B	b4017	t3951
+T	t4030	o2128 b3217 b4017
+B	b4035	t4030
+P	p4040	String "((rw (addrC [1] (sweepDnC unfold_sub)) 0 thenMT rw (addrC [1;1] add_Commut_rw) 0 thenMT rw (addrC [1] add_Assoc2_rw) 0 thenMT rw (addrC [1] reduceC) 0) thenT tryT (completeT autoT))"
+O	o4040	ext_rule p4040
+T	t4046	o b3216 b2727
+B	b4046	t4046
+T	t4047	o2190 b3848 b4046
+B	b4047	t4047
+T	t4048	o301 b4047 b17
+B	b4048	t4048
+T	t4053	o2188 b4048 b17
+B	b4054	t4053
+T	t4061	o4040 b2187 b4054 b17 b17
+B	b4061	t4061
+T	t4063	o2185 b4061
+B	b4063	t4063
+T	t4065	o3573 b17 b4035 b4063 b17
+B	b4065	t4065
+T	t4068	o1100 b4065
+B	b4068	t4068
+P	p4075	String mul_pos
+O	o4075	rule p4075
+T	t4078	o1330 b2168 b3227
+S	s4079	tbrarg\\ h2250\\ t4078
+B	b4079	s4079
+T	t4087	o2130 b4079
+B	b4088	t4087
+T	t4088	o2128 b3813 b4088
+B	b4089	t4088
+T	t4089	o2128 b5049 b4089
+B	b4092	t4089
+T	t4108	o2128 b3217 b4092
+B	b4108	t4108
+T	t4110	o2128 b2752 b4108
+B	b4110	t4110
+P	p4114	String "((assumT 4 thenT rw (unfold_lt thenC higherC (lt_mulPositMono_rw << 'b >>)) (-1) thenMT rw reduceC (-1) thenMT nthHypT 2) thenT tryT (completeT (assumT 3 thenT nthHypT (-1))) thenT tryT (completeT autoT))"
+O	o4115	ext_rule p4114
+T	t4118	o b5048 b4209
+B	b4118	t4118
+T	t4119	o b3216 b4118
+B	b4119	t4119
+T	t4152	o b2751 b4119
+B	b4168	t4152
+T	t4168	o2190 b4079 b4168
+B	b4207	t4168
+T	t4217	o301 b4207 b17
+B	b4219	t4217
+T	t4219	o2188 b4219 b17
+B	b4221	t4219
+T	t4221	o4115 b2187 b4221 b17 b17
+B	b4222	t4221
+T	t4222	o2185 b4222
+B	b4228	t4222
+T	t4247	o4075 b17 b4110 b4228 b17
+B	b4248	t4247
+T	t4248	o1100 b4248
+B	b4249	t4248
+P	p4255	String x_split
+O	o4255	rule p4255
+T	t4274	o1087 b5235 b3227
+B	b4278	t4274
+T	t4278	o2302 b3816 b4278
+B	b4279	t4278
+T	t4279	o2176 b4279 b5235
+S	s4279	tbrarg\\ h2250\\ t4279
+B	b4280	s4279
+T	t4280	o2130 b4280
+B	b4347	t4280
+T	t4349	o2128 b3217 b4347
+B	b4349	t4349
+T	t4350	o2128 b2752 b4349
+B	b4351	t4350
+T	t4351	o2128 b7906 b4351
+B	b4353	t4351
+P	p4359	String "((rw (addrC [1;1] mul_Commut_rw) 0 thenMT rw (addrC [1;2] (sweepDnC unfold_sub)) 0 thenMT rw (addrC [1;2] add_Commut_rw) 0 thenMT rw (addrC [1] add_Assoc_rw) 0 thenMT rw (addrC [1] reduceC) 0) thenT tryT (completeT autoT))"
+O	o4360	ext_rule p4359
+T	t4377	o b5260 b3827
+B	b4377	t4377
+T	t4378	o2190 b4280 b4377
+B	b4378	t4378
+T	t4386	o301 b4378 b17
+B	b4386	t4386
+T	t4410	o2188 b4386 b17
+B	b4411	t4410
+T	t4411	o4360 b2187 b4411 b17 b17
+B	b4412	t4411
+T	t4414	o2185 b4412
+B	b4414	t4414
+T	t4420	o4255 b17 b4353 b4414 b17
+B	b4420	t4420
+T	t4421	o1100 b4420
+B	b4421	t4421
+P	p4421	String div_fix_lt_ind
+O	o4421	rule p4421
+T	t4427	o1976 b1076 b2168
+B	b4427	t4427
+T	t4428	o1254 b1076 b2749
+B	b4428	t4428
+T	t4429	o1330 b852 b4428
+B	b4430	t4429
+T	t4430	o1221 b3543 b2749
+B	b4431	t4430
+T	t4431	o1330 b4431 b1076
+B	b4432	t4431
+T	t4432	o3582 b4430 b4432
+B	b4433	t4432
+T	t4439	o3582 b3469 b4433
+B	b4439	t4439 x
+T	t4440	o8763 b2133 b4439
+B	b4440	t4440
+T	t4442	o3582 b4427 b4440
+B	b4443	t4442 n
+T	t4445	o8763 b2133 b4443
+S	s4445	tbrarg\\ h2250\\ t4445
+B	b4446	s4445
+T	t4446	o2130 b4446
+B	b4448	t4446
+T	t4448	o2128 b5049 b4448
+B	b4449	t4448
+T	t4449	o2128 b2752 b4449
+B	b4450	t4449
+P	p4451	String "((dT 0 thenMT dT (-1)) thenLT [tryT (completeT autoT); ((dT 0 thenMT (ge_lt_absurd << 0 >> << 'm >> << 'm -@ 1 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; nthHypT 5; (sub_one_lt thenT tryT (completeT autoT))])) thenT tryT (completeT autoT)); ((dT 0 thenMT dT 0 thenMT dT 0 thenMT dT 0 thenMT rw reduceC 5 thenMT (ge_lt_absurd << 'x1 >> << 0 >> << 'x1 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 4; tryT (completeT autoT); nthHypT 5])) thenT tryT (completeT autoT)); (((dT 0 thenMT (dT 4 thenLT [nthHypT 3; (dT 0 thenMT dT 0 thenMT dT 0 thenMT (decideT << 'x1 < 'b >> thenLT [((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x1 'b) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 9])) thenMT (le_lt_trans << 'm >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (rw reduceC 0 thenT tryT (completeT autoT))])); ((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x1 'b) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x1 -@ 'b) 'b)) >> 0 thenAT (div_fix_step thenLT [tryT (completeT autoT); tryT (completeT autoT); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])) thenMT rw (addrC [1] add_Commut_rw) 0 thenMT rw reduceC 0 thenMT (withT << 'x1 -@ 'b >> (dT 5) thenMT (dT (-1) thenLT [(assertT << 'x1 >= 'b >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); (dT (-1) thenLT [(rw (lt_addMono_rw << 'b >>) 0 thenMT (sqSubstT << (('x1 -@ 'b) +@ 'b) ~ 'x1 >> 0 thenAT (sub_add_cancel thenT tryT (completeT autoT))) thenMT (sqSubstT << (('m +@ 1) *@ 'b) ~ (('m *@ 'b) +@ 'b) >> 7 thenAT (mul_succ thenT tryT (completeT autoT))) thenMT nthHypT 7); nthHypT (-1)])])))]))])) thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 2 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x1 >= 'b >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]]))) thenT tryT (completeT autoT))])"
+O	o4452	ext_rule p4451
+T	t4456	o2190 b4446 b980
+B	b4456	t4456
+T	t4458	o301 b4456 b17
+B	b4458	t4458
+T	t4466	o2188 b4458 b17
+B	b4466	t4466
+T	t4467	o4452 b2187 b4466 b17 b17
+B	b4467	t4467
+T	t4469	o2185 b4467
+B	b4469	t4469
+T	t4470	o4421 b17 b4450 b4469 b17
+B	b4470	t4470
+T	t4475	o1100 b4470
+B	b4475	t4475
+P	p4475	String div_fix_lt
+O	o4475	rule p4475
+T	t4488	o1330 b5235 b3816
+S	s4488	tbrarg\\ h2250\\ t4488
+B	b4489	s4488
+T	t4489	o2130 b4489
+B	b4491	t4489
+T	t4491	o1330 b1751 b3214
+S	s4491	tbrarg\\ h2250\\ t4491
+B	b4492	s4491
+T	t4500	o2130 b4492
+B	b4501	t4500
+T	t4501	o2128 b4491 b4501
+B	b4506	t4501
+T	t4506	o2128 b2255 b4506
+B	b4516	t4506
+T	t4516	o2128 b8584 b4516
+B	b4526	t4516
+T	t4540	o2128 b5049 b4526
+B	b4540	t4540
+T	t4550	o2128 b3217 b4540
+B	b4550	t4550
+T	t4554	o2128 b2752 b4550
+B	b4555	t4554
+T	t4555	o2128 b7906 b4555
+B	b4557	t4555
+P	p4559	String "((assertT << all n: int. ('n >= 0 => all x: int. ('x >= 0 => 'x < ('n *@ 'b) => (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) < 'n)) >> thenLT [(div_fix_lt_ind thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); (withT << 'c >> (dT (-1)) thenMT (dT (-1) thenLT [(assumT 5 thenT nthHypT (-1)); (withT << 'x >> (dT (-1)) thenMT (dT (-1) thenLT [(assumT 6 thenT nthHypT (-1)); (dT (-1) thenLT [(assumT 7 thenT nthHypT (-1)); nthHypT (-1)])]))]))]) thenT tryT (completeT autoT))"
+O	o4560	ext_rule p4559
+T	t4577	o b4489 b17
+B	b4578	t4577
+T	t4584	o b5394 b4578
+B	b4584	t4584
+T	t4593	o b8563 b4584
+B	b4593	t4593
+T	t4612	o b5048 b4593
+B	b4613	t4612
+T	t4615	o b3216 b4613
+B	b4626	t4615
+T	t4644	o b2751 b4626
+B	b4645	t4644
+T	t4645	o b5260 b4645
+B	b4649	t4645
+T	t4653	o2190 b4492 b4649
+B	b4654	t4653
+T	t4660	o2189 b4654 b17
+B	b4660	t4660
+T	t4662	o2188 b4660 b17
+B	b4662	t4662
+T	t4667	o4560 b2187 b4662 b17 b17
+B	b4667	t4667
+T	t4668	o2185 b4667
+B	b4669	t4668
+T	t4669	o4475 b17 b4557 b4669 b17
+B	b4679	t4669
+T	t4689	o1100 b4679
+B	b4690	t4689
+P	p4691	String div_fix_bc_step
+O	o4692	rule p4691
+T	t4697	o1976 b5235 b3227
+S	s4697	tbrarg\\ h2250\\ t4697
+B	b4697	s4697
+T	t4708	o2130 b4697
+B	b4709	t4708
+T	t4710	o1221 b1472 b4278
+B	b4710	t4710
+T	t4712	o1221 b4710 b2749
+B	b4713	t4712
+T	t4713	o2302 b3214 b4713
+B	b4718	t4713
+T	t4718	o2176 b1751 b4718
+S	s4718	tbrarg\\ h2250\\ t4718
+B	b4719	s4718
+T	t4719	o2130 b4719
+B	b4721	t4719
+T	t4728	o2128 b4709 b4721
+B	b4730	t4728
+T	t4730	o2128 b8584 b4730
+B	b4732	t4730
+T	t4733	o2128 b5049 b4732
+B	b4739	t4733
+T	t4760	o2128 b3217 b4739
+B	b4782	t4760
+T	t4782	o2128 b2752 b4782
+B	b4789	t4782
+T	t4795	o2128 b7906 b4789
+B	b4795	t4795
+P	p4795	String "((assertT << all m: int. ('m >= 0 => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (('m *@ 'b) +@ ('x -@ ('b *@ 'c))) 'b) ~ ('m +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ ('b *@ 'c)) 'b)))) >> thenLT [(div_fix_ind thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 4 thenT nthHypT (-1)); (assertT << 'x >= ('b *@ 'c) >> thenLT [(assumT 6 thenT nthHypT (-1)); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]); (withT << 'c >> (dT (-1)) thenMT (dT (-1) thenLT [(assumT 5 thenT nthHypT (-1)); ((sqSubstT << (('c *@ 'b) +@ ('x -@ ('b *@ 'c))) ~ 'x >> (-1) thenAT (x_split thenT tryT (completeT autoT))) thenMT nthHypT (-1))]))]) thenT tryT (completeT autoT))"
+O	o4795	ext_rule p4795
+T	t4796	o b4697 b17
+B	b4796	t4796
+T	t4804	o b8563 b4796
+B	b4804	t4804
+T	t4809	o b5048 b4804
+B	b4834	t4809
+T	t4839	o b3216 b4834
+B	b4839	t4839
+T	t4852	o b2751 b4839
+B	b4856	t4852
+T	t4863	o b5260 b4856
+B	b4863	t4863
+T	t4864	o2190 b4719 b4863
+B	b4864	t4864
+T	t4866	o2189 b4864 b17
+B	b4866	t4866
+T	t4867	o2188 b4866 b17
+B	b4867	t4867
+T	t4868	o4795 b2187 b4867 b17 b17
+B	b4868	t4868
+T	t4873	o2185 b4868
+B	b4873	t4873
+T	t4876	o4692 b17 b4795 b4873 b17
+B	b4877	t4876
+T	t4877	o1100 b4877
+B	b4878	t4877
+P	p4880	String div_fix_assoc_ind
+O	o4880	rule p4880
+T	t4880	o1221 b3543 b3227
+B	b4880	t4880
+T	t4895	o1221 b1472 b4431
+B	b4896	t4895
+T	t4918	o1221 b4896 b3214
+B	b4920	t4918
+T	t4939	o2176 b4880 b4920
+B	b4941	t4939
+T	t4941	o3582 b3317 b4941
+B	b4943	t4941
+T	t4943	o3582 b3469 b4943
+B	b4950	t4943 x
+T	t4950	o8763 b2133 b4950
+B	b5029	t4950 n
+T	t5029	o8763 b2133 b5029
+S	s5029	tbrarg\\ h2250\\ t5029
+B	b5030	s5029
+T	t5030	o2130 b5030
+B	b5039	t5030
+T	t5071	o2128 b3813 b5039
+B	b5075	t5071
+T	t5075	o2128 b5049 b5075
+B	b5077	t5075
+T	t5077	o2128 b3217 b5077
+B	b5078	t5077
+T	t5078	o2128 b2752 b5078
+B	b5079	t5078
+P	p5081	String "((dT 0 thenMT dT (-1)) thenLT [tryT (completeT autoT); ((dT 0 thenMT dT 0 thenMT dT 0 thenMT (ge_lt_absurd << 0 >> << 'm >> << 'm -@ 1 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (ge_Transit << 'x >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 7; nthHypT 6]); (sub_one_lt thenT tryT (completeT autoT))])) thenT tryT (completeT autoT)); ((((dT 0 thenMT dT 0 thenMT dT 0 thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x ('b *@ 'c)) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (le_lt_trans << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 4; (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assumT 4 thenT nthHypT (-1))])])])) thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (div_fix_lt thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); nthHypT 3; ((sqSubstT << ('c *@ 'b) ~ ('b *@ 'c) >> 0 thenAT (mul_Commut thenT tryT (completeT autoT))) thenMT (le_lt_trans << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 4; (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assumT 4 thenT nthHypT (-1))])]))])]))) thenT tryT (completeT autoT)) thenT tryT (completeT (div_fix_wf2 thenLT [firstT [completeT (assumT 3 thenT nthHypT (-1)); completeT (assumT 4 thenT nthHypT (-1)); completeT (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assumT 4 thenT nthHypT (-1))])]; tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); firstT [completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); firstT [completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]])])]])) thenT tryT (completeT (dT 0 thenT tryT (completeT autoT) thenT tryT (completeT (div_fix_wf2 thenLT [firstT [completeT (assumT 3 thenT nthHypT (-1)); completeT (assumT 4 thenT nthHypT (-1)); completeT (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assumT 4 thenT nthHypT (-1))])]; tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); firstT [completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); firstT [completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]])])]])))))); (((dT 0 thenMT dT 0 thenMT dT 0 thenMT (decideT << 'x < ('b *@ 'c) >> thenLT [((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x ('b *@ 'c)) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 8])) thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) 'c) ~ 0 >> 0 thenAT (div_fix_base thenLT [tryT (completeT autoT); tryT (completeT autoT); (div_fix_lt thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); nthHypT 6; ((sqSubstT << ('c *@ 'b) ~ ('b *@ 'c) >> 0 thenAT (mul_Commut thenT tryT (completeT autoT))) thenMT nthHypT 8)])]))); ((sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x ('b *@ 'c)) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ ('b *@ 'c)) ('b *@ 'c))) >> 0 thenAT (div_fix_step thenLT [tryT (completeT autoT); tryT (completeT autoT); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])) thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) ~ ('c +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ ('b *@ 'c)) 'b)) >> 0 thenAT (div_fix_bc_step thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])) thenMT (sqSubstT << (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('c +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ ('b *@ 'c)) 'b)) 'c) ~ (1 +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (('c +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ ('b *@ 'c)) 'b)) -@ 'c) 'c)) >> 0 thenAT (div_fix_step thenLT [tryT (completeT autoT); tryT (completeT autoT); (add_ge_self thenLT [tryT (completeT autoT); tryT (completeT autoT); (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])])])])) thenMT (sqSubstT << (('c +@ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ ('b *@ 'c)) 'b)) -@ 'c) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} ('x -@ ('b *@ 'c)) 'b) >> 0 thenAT (add_sub_cancel2 thenT tryT (completeT autoT))) thenMT (withT << 'x -@ ('b *@ 'c) >> (dT 4) thenMT (dT (-1) thenLT [(assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); (dT (-1) thenLT [(div_step_bound thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); nthHypT 6; (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assumT 4 thenT nthHypT (-1))])]); (hypSubstT (-1) 0 thenT tryT (completeT autoT))])])))])) thenT tryT (completeT (div_fix_wf2 thenLT [firstT [completeT (assumT 3 thenT nthHypT (-1)); completeT (assumT 4 thenT nthHypT (-1)); completeT (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assumT 4 thenT nthHypT (-1))])]; tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); firstT [completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); firstT [completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]])])]])) thenT tryT (completeT (dT 0 thenT tryT (completeT autoT) thenT tryT (completeT (div_fix_wf2 thenLT [firstT [completeT (assumT 3 thenT nthHypT (-1)); completeT (assumT 4 thenT nthHypT (-1)); completeT (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); (assumT 4 thenT nthHypT (-1))])]; tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))]); completeT (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); firstT [completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]]); completeT (add_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))]); (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); firstT [completeT (onSomeHypT nthHypT); completeT (assertT << 'x >= ('b *@ 'c) >> thenLT [(not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (rw ge_to_left_rw (-1) thenT tryT (completeT autoT))])]])])]]))))) thenT tryT (completeT autoT))])"
+O	o5081	ext_rule p5081
+T	t5084	o2190 b5030 b4168
+B	b5084	t5084
+T	t5093	o301 b5084 b17
+B	b5095	t5093
+T	t5095	o2188 b5095 b17
+B	b5103	t5095
+T	t5103	o5081 b2187 b5103 b17 b17
+B	b5104	t5103
+T	t5104	o2185 b5104
+B	b5105	t5104
+T	t5105	o4880 b17 b5079 b5105 b17
+B	b5111	t5105
+T	t5111	o1100 b5111
+B	b5117	t5111
+P	p5122	Number 41878
+P	p5123	Number 42186
+O	o5123	location p5122 p5123
+P	p5124	String "(((((sqSubstT << ('a /@ 'b) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 1 thenT nthHypT (-1)); (assumT 2 thenT nthHypT (-1))])) thenMT (sqSubstT << ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b) /@ 'c) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b) 'c) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); (assumT 1 thenT nthHypT (-1))]); (assumT 3 thenT nthHypT (-1))])) thenMT (sqSubstT << ('a /@ ('b *@ 'c)) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a ('b *@ 'c)) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 1 thenT nthHypT (-1)); (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); (assumT 3 thenT nthHypT (-1))])])) thenMT (assertT << all n: int. all x: int. ('x >= 0 => 'n >= 'x => ((fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x ('b *@ 'c)) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'x 'b) 'c))) >> thenLT [(div_fix_assoc_ind thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); (assumT 3 thenT nthHypT (-1))]); (withT << 'a >> (dT (-1)) thenMT withT << 'a >> (dT (-1)) thenMT (dT (-1) thenLT [(assumT 1 thenT nthHypT (-1)); (dT (-1) thenLT [tryT (completeT autoT); (hypSubstT (-1) 0 thenT tryT (completeT autoT))])]))])) thenT tryT (completeT (div_fix_wf2 thenLT [firstT [completeT (assumT 2 thenT nthHypT (-1)); completeT (assumT 3 thenT nthHypT (-1)); completeT (mul_pos thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); (assumT 3 thenT nthHypT (-1))])]; tryT (completeT autoT); tryT (completeT autoT); firstT [completeT (assumT 1 thenT nthHypT (-1)); completeT (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1)); (assumT 1 thenT nthHypT (-1))])]]))) thenT tryT (completeT autoT)))"
+O	o5124	ext_rule p5124
+T	t5128	o5124 b2187 b8946 b17 b17
+B	b5128	t5128
+T	t5133	o2185 b5128
+B	b5134	t5133
+T	t5134	o2710 b17 b5370 b5134 b17
+B	b5135	t5134
+T	t5135	o5123 b5135
+B	b5136	t5135
+P	p5137	Number 42188
+P	p5141	Number 42369
+O	o5141	location p5137 p5141
+T	t5144	o5141 b8949
+B	b5146	t5144
+P	p5149	Number 42371
+P	p5150	Number 42400
+O	o5150	location p5149 p5150
+O	o5151	str_let p5149 p5150
+P	p5151	Number 42375
+P	p5152	Number 42385
+O	o5152	patt_var p5151 p5152
+O	o5153	patt_done p5149 p5150
+T	t5167	o5153
+B	b5168	t5167 div_AssocC
+T	t5168	o5152 b5168
+B	b5169	t5168
+P	p5170	Number 42388
+O	o5172	lid p5170 p5150
+T	t5173	o5172 b2732
+B	b5173	t5173
+T	t5179	o5151 b5169 b5173
+B	b5186	t5179
+T	t5186	o2666 b5186 b2680
+B	b5187	t5186
+T	t5187	o5151 b5187
+B	b5194	t5187
+T	t5194	o1084 b5194
+B	b5223	t5194
+T	t5233	o5150 b5223
+B	b5265	t5233
+P	p5265	Number 42406
+P	p5269	Number 42478
+O	o5270	location p5265 p5269
+T	t5285	o5270 b9888
+B	b5286	t5285
+P	p5286	Number 42479
+P	p5287	Number 42695
+O	o5287	location p5286 p5287
+P	p2023	String "((rw (higherC unfold_rem) 0 thenMT rw (higherC div_baseReduce_rw) 0 thenMT rw reduceC 0) thenT tryT (completeT autoT))"
+O	o2023	ext_rule p2023
+T	t2033	o2023 b2187 b8788 b17 b17
+B	b2033	t2033
+T	t2057	o2185 b2033
+B	b2470	t2057
+T	t2589	o2504 b17 b5002 b2470 b17
+B	b2757	t2589
+T	t5296	o5287 b2757
+B	b5296	t5296
+P	p5299	Number 42697
+P	p5300	Number 42825
+O	o5300	location p5299 p5300
+T	t5305	o5300 b8791
+B	b5305	t5305
+P	p5305	Number 42827
+P	p5306	Number 42866
+O	o5306	location p5305 p5306
+O	o5307	str_let p5305 p5306
+P	p5307	Number 42831
+P	p5308	Number 42846
+O	o5308	patt_var p5307 p5308
+O	o5309	patt_done p5305 p5306
+T	t5325	o5309
+B	b5325	t5325 rem_baseReduceC
+T	t5331	o5308 b5325
+B	b5331	t5331
+P	p5332	Number 42849
+O	o5334	lid p5332 p5306
+T	t5339	o5334 b2531
+B	b5339	t5339
+T	t5344	o5307 b5331 b5339
+B	b5344	t5344
+T	t5354	o2666 b5344 b2680
+B	b5355	t5354
+T	t5358	o5307 b5355
+B	b5359	t5358
+T	t5390	o1084 b5359
+B	b5414	t5390
+T	t5414	o5306 b5414
+B	b5415	t5414
+P	p5415	Number 42868
+P	p5416	Number 42998
+O	o5416	location p5415 p5416
+P	p1932	String pos_neg_lt
+O	o1932	rule p1932
+S	s1932	tbrarg\\ h2250\\ t8248
+B	b1938	s1932
+T	t1938	o2130 b1938
+B	b1940	t1938
+T	t1940	o2128 b5049 b1940
+B	b1941	t1940
+T	t4494	o2128 b2763 b1941
+B	b4494	t4494
+T	t1942	o2190 b1938 b980
+B	b1946	t1942
+T	t1946	o301 b1946 b17
+B	b1956	t1946
+T	t1956	o2188 b1956 b17
+B	b1959	t1956
+T	t1959	o1513 b2187 b1959 b17 b17
+B	b1971	t1959
+T	t1971	o2185 b1971
+B	b1972	t1971
+T	t4496	o1932 b17 b4494 b1972 b17
+B	b4496	t4496
+T	t5418	o5416 b4496
+B	b5458	t5418
+P	p5458	Number 43084
+P	p5460	Number 43395
+O	o5460	location p5458 p5460
+P	p1978	String div_eval_np
+O	o1978	rule p1978
+S	s1978	tbrarg\\ h2250\\ t8084
+B	b1981	s1978
+T	t1981	o2130 b1981
+B	b1989	t1981
+T	t1989	o1221 b1122 b4884
+B	b1993	t1989
+T	t2015	o2421 b1993
+B	b2015	t2015
+T	t2021	o2176 b5119 b2015
+S	s2021	tbrarg\\ h2250\\ t2021
+B	b2021	s2021
+T	t2026	o2130 b2021
+B	b2026	t2026
+T	t2027	o2128 b1989 b2026
+B	b2027	t2027
+T	t2028	o2128 b4988 b2027
+B	b2028	t2028
+T	t4503	o2128 b2763 b2028
+B	b4503	t4503
+T	t4504	o2128 b2746 b4503
+B	b4504	t4504
+P	p2033	String "((rw (addrC [1] (higherC unfold_div)) 0 thenMT rw (addrC [1] reduceC) 0) thenT splitITE 0 thenLT [tryT (completeT autoT); (ge_lt_absurd << 'a >> << 0 >> << 'a >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1)); tryT (completeT autoT); (rw unfold_lt 0 thenT hypothesis 2)]); (splitITE 0 thenLT [tryT (completeT autoT); tryT (completeT autoT); (ge_lt_absurd << 'b >> << 0 >> << 'b >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 3); tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))])])])"
+O	o2035	ext_rule p2033
+T	t2046	o b1981 b17
+B	b2047	t2046
+T	t2047	o b4986 b2047
+B	b2048	t2047
+T	t2048	o b2751 b2048
+B	b2052	t2048
+T	t2052	o b2738 b2052
+B	b2059	t2052
+T	t2071	o2190 b2021 b2059
+B	b2072	t2071
+T	t2072	o301 b2072 b17
+B	b2073	t2072
+T	t2073	o2188 b2073 b17
+B	b2074	t2073
+T	t2074	o2035 b2187 b2074 b17 b17
+B	b2075	t2074
+T	t2075	o2185 b2075
+B	b2080	t2075
+T	t4505	o1978 b17 b4504 b2080 b17
+B	b4505	t4505
+T	t5460	o5460 b4505
+B	b5461	t5460
+P	p5461	Number 43397
+P	p5462	Number 43707
+O	o5462	location p5461 p5462
+P	p2088	String div_eval_pn
+O	o2089	rule p2088
+S	s2089	tbrarg\\ h2250\\ t8174
+B	b2132	s2089
+T	t2154	o2130 b2132
+B	b2154	t2154
+T	t2156	o1221 b1472 b4890
+B	b2179	t2156
+T	t2188	o1221 b2179 b2749
+B	b2189	t2188
+T	t2189	o2421 b2189
+B	b2190	t2189
+T	t2190	o2176 b5119 b2190
+S	s2190	tbrarg\\ h2250\\ t2190
+B	b2191	s2190
+T	t2191	o2130 b2191
+B	b2192	t2191
+T	t2192	o2128 b5049 b2192
+B	b2194	t2192
+T	t2194	o2128 b2154 b2194
+B	b2196	t2194
+T	t4513	o2128 b2763 b2196
+B	b4513	t4513
+T	t4514	o2128 b2746 b4513
+B	b4514	t4514
+P	p2256	String "((rw (addrC [1] (higherC unfold_div)) 0 thenMT rw (addrC [1] reduceC) 0) thenT splitITE 0 thenLT [tryT (completeT autoT); (splitITE 0 thenLT [tryT (completeT autoT); (lt_Asym << 0 >> << 'b >> thenLT [(assumT 4 thenT nthHypT (-1)); (rw unfold_lt 0 thenT hypothesis 3); tryT (completeT autoT); tryT (completeT autoT)]); tryT (completeT autoT)]); (ge_lt_absurd << 'a >> << 0 >> << 'a >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 2); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1))])])"
+O	o2261	ext_rule p2256
+T	t2267	o b2132 b979
+B	b2299	t2267
+T	t2299	o b2751 b2299
+B	b2302	t2299
+T	t2302	o b2738 b2302
+B	b2303	t2302
+T	t2303	o2190 b2191 b2303
+B	b2304	t2303
+T	t2304	o301 b2304 b17
+B	b2306	t2304
+T	t2349	o2188 b2306 b17
+B	b2350	t2349
+T	t2350	o2261 b2187 b2350 b17 b17
+B	b2388	t2350
+T	t2388	o2185 b2388
+B	b2413	t2388
+T	t4515	o2089 b17 b4514 b2413 b17
+B	b4515	t4515
+T	t5475	o5462 b4515
+B	b5476	t5475
+P	p5476	Number 43709
+P	p5477	Number 44019
+O	o5477	location p5476 p5477
+P	p2455	String div_eval_nn
+O	o2456	rule p2455
+T	t2540	o1221 b2179 b4884
+B	b2541	t2540
+T	t2541	o2176 b5119 b2541
+S	s2541	tbrarg\\ h2250\\ t2541
+B	b2542	s2541
+T	t2542	o2130 b2542
+B	b2543	t2542
+T	t2543	o2128 b1989 b2543
+B	b2579	t2543
+T	t2579	o2128 b2154 b2579
+B	b2580	t2579
+T	t4520	o2128 b2763 b2580
+B	b4520	t4520
+T	t4521	o2128 b2746 b4520
+B	b4522	t4521
+P	p2582	String "((rw (addrC [1] (higherC unfold_div)) 0 thenMT rw (addrC [1] reduceC) 0) thenT splitITE 0 thenLT [tryT (completeT autoT); (splitITE 0 thenLT [tryT (completeT autoT); tryT (completeT autoT); (ge_lt_absurd << 'b >> << 0 >> << 'b >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 3); tryT (completeT autoT); (assumT 4 thenT nthHypT (-1))])]); (ge_lt_absurd << 'a >> << 0 >> << 'a >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (rw (unfold_ge thenC higherC unfold_ge_bool) 0 thenT hypothesis 2); tryT (completeT autoT); (assumT 3 thenT nthHypT (-1))])])"
+O	o2601	ext_rule p2582
+T	t2637	o b2132 b2047
+B	b2641	t2637
+T	t2683	o b2751 b2641
+B	b2686	t2683
+T	t2686	o b2738 b2686
+B	b2715	t2686
+T	t2747	o2190 b2542 b2715
+B	b2867	t2747
+T	t2867	o301 b2867 b17
+B	b2868	t2867
+T	t2868	o2188 b2868 b17
+B	b2873	t2868
+T	t2876	o2601 b2187 b2873 b17 b17
+B	b2904	t2876
+T	t2904	o2185 b2904
+B	b2905	t2904
+T	t4522	o2456 b17 b4522 b2905 b17
+B	b4524	t4522
+T	t5483	o5477 b4524
+B	b5483	t5483
+P	p5484	Number 44021
+P	p2909	String div_neg_den
+O	o2922	rule p2909
+T	t2958	o1262 b2737 b4884
+B	b2958	t2958
+T	t2960	o2421 b5119
+B	b2960	t2960
+T	t2962	o2176 b2958 b2960
+S	s2962	tbrarg\\ h2250\\ t2962
+B	b2962	s2962
+T	t2989	o2130 b2962
+B	b2989	t2989
+T	t2991	o2128 b5097 b2989
+B	b2991	t2991
+T	t4531	o2128 b2763 b2991
+B	b4531	t4531
+T	t4538	o2128 b2746 b4531
+B	b4538	t4538
+P	p3032	String "((splitIntT << 'b >> << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); (splitIntT << 'a >> << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); (sqSubstT << ('a /@ (-'b)) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'a) (-'b))) >> 0 thenAT (div_eval_pn thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 2])]) thenMT sqSubstT << ('a /@ 'b) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'a) (-'b)) >> 0 thenAT (div_eval_nn thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; nthHypT 2])); ((sqSubstT << ('a /@ (-'b)) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a (-'b)) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (hypSubstT 3 0 thenT tryT (completeT autoT)); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 2])]) thenMT sqSubstT << ('a /@ 'b) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a (-'b))) >> 0 thenAT (div_eval_np thenLT [tryT (completeT autoT); tryT (completeT autoT); (hypSubstT 3 0 thenT tryT (completeT autoT)); nthHypT 2]) thenMT rw reduceC 0) thenT tryT (completeT (div_fix_wf2 thenLT [(neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 2]); tryT (completeT autoT); tryT (completeT autoT); (hypSubstT 3 0 thenT tryT (completeT autoT))]))); ((sqSubstT << ('a /@ (-'b)) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a (-'b)) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); nthHypT 3]); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 2])]) thenMT sqSubstT << ('a /@ 'b) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a (-'b))) >> 0 thenAT (div_eval_np thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); nthHypT 3]); nthHypT 2]) thenMT rw reduceC 0) thenT tryT (completeT (div_fix_wf2 thenLT [(neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 2]); tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); nthHypT 3])])))]); (assumT 3 thenT elim_nequal (-1) thenT sqSubstT << 'b ~ 0 >> 0 thenAT (int_sqequal thenT tryT (completeT autoT)) thenT rw reduceC 0 thenT tryT (completeT autoT)); (splitIntT << 'a >> << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); ((sqSubstT << ('a /@ (-'b)) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'a) (-(-'b))) >> 0 thenAT (div_eval_nn thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (pos_neg_lt thenLT [tryT (completeT autoT); nthHypT 2])]) thenMT sqSubstT << ('a /@ 'b) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'a) 'b)) >> 0 thenAT (div_eval_pn thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; nthHypT 2]) thenMT rw reduceC 0) thenT tryT (completeT (div_fix_wf2 thenLT [nthHypT 2; tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 3])])]))); (sqSubstT << ('a /@ (-'b)) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a (-(-'b)))) >> 0 thenAT (div_eval_np thenLT [tryT (completeT autoT); tryT (completeT autoT); (hypSubstT 3 0 thenT tryT (completeT autoT)); (pos_neg_lt thenLT [tryT (completeT autoT); nthHypT 2])]) thenMT sqSubstT << ('a /@ 'b) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (hypSubstT 3 0 thenT tryT (completeT autoT)); nthHypT 2]) thenMT rw reduceC 0); (sqSubstT << ('a /@ (-'b)) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a (-(-'b)))) >> 0 thenAT (div_eval_np thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); nthHypT 3]); (pos_neg_lt thenLT [tryT (completeT autoT); nthHypT 2])]) thenMT sqSubstT << ('a /@ 'b) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'b) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (pos_ge_zero thenLT [tryT (completeT autoT); nthHypT 3]); nthHypT 2]) thenMT rw reduceC 0)])]) thenT tryT (completeT autoT))"
+O	o3033	ext_rule p3032
+T	t3040	o b2751 b1616
+B	b3041	t3040
+T	t3041	o b2738 b3041
+B	b3049	t3041
+T	t3049	o2190 b2962 b3049
+B	b3051	t3049
+T	t3051	o2189 b3051 b17
+B	b3066	t3051
+T	t3066	o2188 b3066 b17
+B	b3069	t3066
+T	t3069	o3033 b2187 b3069 b17 b17
+B	b3080	t3069
+T	t3080	o2185 b3080
+B	b3083	t3080
+T	t4539	o2922 b17 b4538 b3083 b17
+B	b4539	t4539
+P	p3087	String pos_ne_zero
+O	o3087	rule p3087
+T	t3087	o2128 b5049 b5097
+B	b3088	t3087
+T	t4547	o2128 b2763 b3088
+B	b4547	t4547
+P	p3089	String "(rw (sweepDnC unfold_neq_int) 0 thenT dT 0 thenLT [tryT (completeT autoT); (dT 2 thenT assumT 2 thenT tryT (hypSubstT 2 3 thenT rw (unfold_lt thenC reduceC) 3 thenT dT 3) thenT tryT (completeT autoT))])"
+O	o3089	ext_rule p3089
+T	t3089	o2190 b5096 b980
+B	b3093	t3089
+T	t3093	o2189 b3093 b17
+B	b3094	t3093
+T	t3094	o2188 b3094 b17
+B	b3095	t3094
+T	t3095	o3089 b2187 b3095 b17 b17
+B	b3096	t3095
+T	t3113	o2185 b3096
+B	b3115	t3113
+T	t4548	o3087 b17 b4547 b3115 b17
+B	b4548	t4548
+P	p3118	String rem_ind_arith
+O	o3118	rule p3118
+Vq	q	q\\ H\\
+B	b3118	q
+T	t3118	o2132 b2133 b3118 b3118
+S	s3118	tbrarg\\ h2250\\ t3118
+B	b3119	s3118
+T	t3119	o2130 b3119
+B	b3120	t3119
+T	t4560	o2129 b3120
+B	b4560	t4560
+T	t3120	o2302 b2737 b3118
+B	b3121	t3120
+T	t3121	o1254 b3121 b2749
+B	b3132	t3121
+T	t3132	o1087 b5050 b3132
+B	b3134	t3132
+T	t3134	o1254 b3118 b2749
+B	b3135	t3134
+T	t3135	o1087 b3214 b3135
+B	b3136	t3135
+T	t3136	o2176 b3134 b3136
+S	s3136	tbrarg\\ h2250\\ t3136
+B	b3137	s3136
+T	t3137	o2130 b3137
+B	b3138	t3137
+T	t4561	o2128 b4560 b3138
+B	b4561	t4561
+T	t4563	o2128 b3218 b4561
+B	b4563	t4563
+T	t4564	o2128 b2763 b4563
+B	b4564	t4564
+T	t4568	o2128 b2746 b4564
+B	b4568	t4568
+P	p3154	String "((rw (addrC [1] (sweepDnC unfold_sub)) 0 thenMT rw (addrC [1;2;1] mul_add_Distrib3C) 0 thenMT rw (addrC [1;2] minus_add_Distrib_rw) 0 thenMT rw (addrC [1] add_Assoc2_rw) 0 thenMT rw (addrC [1;2] add_Assoc_rw) 0 thenMT rw (addrC [1;2;1] add_Commut_rw) 0 thenMT rw (addrC [1;2] add_Assoc2_rw) 0 thenMT rw (addrC [1] add_Assoc_rw) 0 thenMT rw (addrC [1] reduceC) 0 thenMT rw (addrC [2] (sweepDnC unfold_sub)) 0) thenT tryT (completeT autoT))"
+O	o3155	ext_rule p3154
+T	t3161	o b3119 b17
+B	b3161	t3161
+T	t3162	o b3216 b3161
+B	b3162	t3162
+T	t3163	o b2751 b3162
+B	b3163	t3163
+T	t3170	o b2738 b3163
+B	b3170	t3170
+T	t3171	o2190 b3137 b3170
+B	b3171	t3171
+T	t3172	o301 b3171 b17
+B	b3172	t3172
+T	t3180	o2188 b3172 b17
+B	b3180	t3180
+T	t3182	o3155 b2187 b3180 b17 b17
+B	b3182	t3182
+T	t3183	o2185 b3182
+B	b3183	t3183
+T	t4575	o3118 b17 b4568 b3183 b17
+B	b4577	t4575
+P	p4580	String "(((decideT << 'a < 0 >> thenLT [(decideT << 'b < 0 >> thenLT [((sqSubstT << ('a /@ 'c) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'a) 'c)) >> 0 thenAT (div_eval_pn thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 2; (assumT 1 thenT nthHypT (-1))])) thenMT (sqSubstT << ('b /@ 'c) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'b) 'c)) >> 0 thenAT (div_eval_pn thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 3; (assumT 1 thenT nthHypT (-1))])) thenMT (neg_ge_rev thenLT [tryT (completeT autoT); tryT (completeT autoT); (div_fix_mono thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 1 thenT nthHypT (-1)); (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 3])]); (neg_ge_rev thenLT [tryT (completeT autoT); tryT (completeT autoT); (lt_ge_weak thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))])])])])); ((sqSubstT << ('a /@ 'c) ~ (-(fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} (-'a) 'c)) >> 0 thenAT (div_eval_pn thenLT [tryT (completeT autoT); tryT (completeT autoT); nthHypT 2; (assumT 1 thenT nthHypT (-1))])) thenMT (sqSubstT << ('b /@ 'c) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'b 'c) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (assumT 1 thenT nthHypT (-1))])) thenMT (ge_Transit << 0 >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 1 thenT nthHypT (-1)); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])]); (neg_nonpos thenLT [tryT (completeT autoT); (div_fix_nonneg thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 1 thenT nthHypT (-1)); (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 2])])])])]))]); ((sqSubstT << ('a /@ 'c) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'a 'c) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (assumT 1 thenT nthHypT (-1))])) thenMT (sqSubstT << ('b /@ 'c) ~ (fix{div.lambda{a. lambda{b. if lt_bool{'a; 'b} then 0 else 1 +@ ('div ('a -@ 'b) 'b)}}} 'b 'c) >> 0 thenAT (div_pos_unfold thenLT [tryT (completeT autoT); tryT (completeT autoT); (ge_Transit << 'a >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (lt_ge_weak thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))]); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])]); (assumT 1 thenT nthHypT (-1))])) thenMT (div_fix_mono thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (assumT 1 thenT nthHypT (-1)); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); (lt_ge_weak thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))])]))]) thenT tryT (completeT (div_fix_wf2 thenLT [(assumT 1 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 2])]); completeT (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 3])]); completeT (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); completeT (ge_Transit << 'a >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (lt_ge_weak thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))]); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])]])) thenT tryT (completeT (dT 0 thenT (div_fix_wf2 thenLT [(assumT 1 thenT nthHypT (-1)); tryT (completeT autoT); tryT (completeT autoT); firstT [completeT autoT; completeT (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 2])]); completeT (pos_ge_zero thenLT [tryT (completeT autoT); (neg_lt_zero thenLT [tryT (completeT autoT); nthHypT 3])]); completeT (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)]); completeT (ge_Transit << 'a >> thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT autoT); (lt_ge_weak thenLT [tryT (completeT autoT); tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))]); (not_lt_ge thenLT [tryT (completeT autoT); tryT (completeT autoT); tryT (completeT (onSomeHypT nthHypT)) thenT tryT (completeT autoT)])])]])))) thenT tryT (completeT autoT))"
+O	o4580	ext_rule p4580
+T	t4580	o2188 b11320 b17
+B	b4580	t4580
+T	t4581	o4580 b2187 b4580 b17 b17
+B	b4581	t4581
+T	t4582	o2185 b4581
+B	b4582	t4582
+T	t4583	o2679 b5240 b5347 b4582 b17
+B	b4583	t4583
+T	t3194	o2130 b5789
+B	b3194	t3194
+T	t3195	o2128 b2763 b3194
+B	b3195	t3195
+T	t3196	o2128 b2746 b3195
+B	b3196	t3196
+T	t3197	o2128 b5097 b3196
+B	b3197	t3197
+P	p3198	String "((rw (sweepDnC unfold_rem) 0 thenMT sqSubstT << ('a /@ (-'b)) ~ (-('a /@ 'b)) >> 0 thenAT (div_neg_den thenT tryT (completeT autoT)) thenMT rw (addrC [2;2] minus_mul_assoc_rw) 0 thenMT rw (addrC [2;2;1] mul_Commut_rw) 0 thenMT rw (addrC [2;2;1] minus_mul_assoc_rw) 0 thenMT rw (addrC [2;2;1;1] mul_Commut_rw) 0 thenMT rw (addrC [2;2] minus_minus_reduce_rw) 0) thenT tryT (completeT autoT))"
+O	o3201	ext_rule p3198
+T	t3210	o301 b8806 b17
+B	b3212	t3210
+T	t3212	o2188 b3212 b17
+B	b3215	t3212
+T	t3215	o3201 b2187 b3215 b17 b17
+B	b3219	t3215
+T	t3219	o2185 b3219
+B	b3260	t3219
+T	t3260	o5788 b17 b3197 b3260 b17
+B	b3262	t3260
+P	p3267	String "(rem_neg thenT tryT (completeT autoT))"
+O	o3267	ext_rule p3267
+T	t3267	o2188 b8807 b17
+B	b3267	t3267
+T	t3269	o3267 b2187 b3267 b17 b17
+B	b3270	t3269
+T	t3270	o2185 b3270
+B	b3271	t3270
+T	t3271	o5803 b17 b5803 b1123 b5804 b3271 b17
+B	b3281	t3271
+T	t3326	o2128 b8584 b5057
+B	b3326	t3326
+T	t3327	o2128 b5049 b3326
+B	b3327	t3327
+T	t3328	o2128 b4988 b3327
+B	b3328	t3328
+P	p3330	String "((rw (sweepDnC unfold_rem) 0 thenMT sqSubstT << ((('a *@ 'b) +@ 'c) /@ 'b) ~ ('a +@ ('c /@ 'b)) >> 0 thenAT (div_indReduce thenT tryT (completeT autoT)) thenMT (rem_ind_arith thenT tryT (completeT autoT))) thenT tryT (completeT (div_wf thenLT [(pos_ne_zero thenLT [tryT (completeT autoT); (assumT 2 thenT nthHypT (-1))]); tryT (completeT autoT); tryT (completeT autoT)])))"
+O	o3330	ext_rule p3330
+T	t3335	o2190 b5053 b8590
+B	b3335	t3335
+T	t3336	o301 b3335 b17
+B	b3336	t3336
+T	t3337	o2188 b3336 b17
+B	b3337	t3337
+T	t3345	o3330 b2187 b3337 b17 b17
+B	b3345	t3345
+T	t3346	o2185 b3345
+B	b3346	t3346
+T	t3349	o2539 b17 b3328 b3346 b17
+B	b3349	t3349
+T	t3357	o2555 b17 b9506 b5067 b5068 b8830 b17
+B	b3357	t3357
+P	p3024	String "(rw (higherC unfold_rem) 0 thenT tryT (completeT autoT))"
+O	o3031	ext_rule p3024
+T	t3032	o2188 b11216 b17
+B	b3033	t3032
+T	t3037	o3031 b2187 b3033 b17 b17
+B	b3038	t3037
+T	t3038	o2185 b3038
+B	b3040	t3038
 P	p9042	String "byDefT unfold_int_seg"
 O	o9042	ext_rule p9042
 T	t9043	o9042 b2187 b11408 b17 b17
 B	b9043	t9043
 T	t9044	o2185 b9043
 B	b9044	t9044
-P	p6258	Number 33247
-P	p6268	Number 33254
-O	o6268	resource_defs p6258 p6268 p3497
-P	p6269	Number 33252
-O	o6269	uid p6269 p6268
-T	t6277	o6269 b2153
-B	b6277	t6277
-T	t6281	o b6277 b17
-B	b6281	t6281
-T	t6282	o6268 b1970 b6281
-B	b6282	t6282
-T	t6284	o b6282 b17
-B	b6284	t6284
-T	t6286	o4716 b8123 b6056 b9044 b6284
-B	b6286	t6286
-T	t6294	o6255 b6286
-B	b6294	t6294
-P	p6295	Number 33397
-P	p6296	Number 33500
-O	o6296	location p6295 p6296
-P	p6301	Number 33424
-P	p6305	Number 33431
-O	o6305	resource_defs p6301 p6305 p2730
-T	t6321	o6305 b1970 b17
-B	b6323	t6321
-T	t6323	o b6323 b17
-B	b6324	t6323
-T	t6324	o11417 b8123 b11419 b11424 b6324
-B	b6336	t6324
-T	t6336	o6296 b6336
-B	b6338	t6336
-P	p6338	Number 33506
-P	p6339	Number 33512
-O	o6340	location p6338 p6339
-T	t6356	o6340 b5869
-B	b6356	t6356
-T	t6357	o b6356 b17
-B	b6363	t6357
-T	t6363	o b6338 b6363
-B	b6367	t6363
-T	t6367	o b6294 b6367
-B	b6410	t6367
-T	t6410	o b6248 b6410
-B	b6412	t6410
-T	t6412	o b6220 b6412
-B	b6414	t6412
-T	t6414	o b6158 b6414
-B	b6416	t6414
-T	t6416	o b6128 b6416
-B	b6420	t6416
-T	t6420	o b6116 b6420
-B	b6422	t6420
-T	t6422	o b6080 b6422
-B	b6424	t6422
-T	t6424	o b6017 b6424
-B	b6426	t6424
-T	t6426	o b6007 b6426
-B	b6428	t6426
-T	t6428	o b6003 b6428
-B	b6430	t6428
-T	t6430	o b5970 b6430
-B	b6431	t6430
-T	t6431	o b5961 b6431
-B	b6432	t6431
-T	t6432	o b5960 b6432
-B	b6433	t6432
-T	t6433	o b5907 b6433
-B	b6436	t6433
-T	t6436	o b5905 b6436
-B	b6449	t6436
-T	t6449	o b5903 b6449
-B	b6451	t6449
-T	t6451	o b5902 b6451
-B	b6454	t6451
-T	t6454	o b5888 b6454
-B	b6457	t6454
-T	t6457	o b5886 b6457
-B	b6459	t6457
-T	t6459	o b5885 b6459
+P	p4624	Number 44214
+O	o5484	location p5484 p4624
+T	t5485	o5484 b4539
+B	b5485	t5485
+P	p5485	Number 44216
+P	p5486	Number 44345
+O	o5486	location p5485 p5486
+T	t5487	o5486 b4548
+B	b5487	t5487
+P	p5487	Number 44414
+P	p5488	Number 44691
+O	o5488	location p5487 p5488
+T	t5488	o5488 b4577
+B	b5488	t5488
+P	p5489	Number 44693
+P	p5490	Number 44953
+O	o5490	location p5489 p5490
+T	t5496	o5490 b4583
+B	b5497	t5496
+P	p5499	Number 44955
+P	p5501	Number 45141
+O	o5501	location p5499 p5501
+T	t5512	o5501 b3262
+B	b5512	t5512
+P	p5514	Number 45143
+P	p5515	Number 45258
+O	o5515	location p5514 p5515
+T	t5535	o5515 b3281
+B	b5536	t5535
+P	p5536	Number 45260
+P	p5542	Number 45285
+O	o5549	location p5536 p5542
+O	o5550	str_let p5536 p5542
+P	p5550	Number 45264
+P	p5551	Number 45272
+O	o5551	patt_var p5550 p5551
+O	o5552	patt_done p5536 p5542
+T	t5555	o5552
+B	b5556	t5555 rem_negC
+T	t5560	o5551 b5556
+B	b5562	t5560
+P	p5563	Number 45275
+O	o5564	lid p5563 p5542
+T	t5573	o5564 b5812
+B	b5577	t5573
+T	t5577	o5550 b5562 b5577
+B	b5579	t5577
+T	t5579	o2666 b5579 b2680
+B	b5580	t5579
+T	t5580	o5550 b5580
+B	b5582	t5580
+T	t5585	o1084 b5582
+B	b5586	t5585
+T	t5586	o5549 b5586
+B	b5587	t5586
+P	p5589	Number 45287
+P	p5590	Number 45600
+O	o5590	location p5589 p5590
+T	t5592	o5590 b3349
+B	b5592	t5592
+P	p5592	Number 45602
+P	p5594	Number 45788
+O	o5594	location p5592 p5594
+T	t5599	o5594 b3357
+B	b5599	t5599
+P	p5599	Number 45790
+P	p5600	Number 45827
+O	o5600	location p5599 p5600
+O	o5601	str_let p5599 p5600
+P	p5601	Number 45794
+P	p5602	Number 45808
+O	o5602	patt_var p5601 p5602
+O	o5603	patt_done p5599 p5600
+T	t5606	o5603
+B	b5608	t5606 rem_indReduceC
+T	t5608	o5602 b5608
+B	b5610	t5608
+P	p5614	Number 45811
+O	o5616	lid p5614 p5600
+T	t5621	o5616 b2564
+B	b5621	t5621
+T	t5624	o5601 b5610 b5621
+B	b5624	t5624
+T	t5625	o2666 b5624 b2680
+B	b5625	t5625
+T	t5633	o5601 b5625
+B	b5633	t5633
+T	t5647	o1084 b5633
+B	b5647	t5647
+T	t5653	o5600 b5647
+B	b5653	t5653
+P	p5653	Number 45829
+P	p5654	Number 46020
+O	o5654	location p5653 p5654
+P	p5655	Number 45851
+P	p5656	Number 45859
+O	o5656	resource_defs p5655 p5656 p3525
+P	p5657	Number 45857
+O	o5657	uid p5657 p5656
+T	t5660	o5657 b2153
+B	b5660	t5660
+T	t5662	o b5660 b17
+B	b5662	t5662
+T	t5663	o5656 b1970 b5662
+B	b5663	t5663
+T	t5664	o b5663 b17
+B	b5664	t5664
+T	t5667	o2572 b17 b5158 b3040 b5664
+B	b5667	t5667
+T	t5668	o5654 b5667
+B	b5668	t5668
+P	p5668	Number 46026
+P	p5670	Number 46083
+O	o5670	location p5668 p5670
+T	t5670	o5670 b10046
+B	b5670	t5670
+P	p5671	Number 46084
+P	p5676	Number 46244
+O	o5676	location p5671 p5676
+P	p5677	Number 46110
+P	p5679	Number 46118
+O	o5679	resource_defs p5677 p5679 p3525
+P	p5680	Number 46116
+O	o5680	uid p5680 p5679
+T	t5688	o5680 b2153
+B	b5689	t5688
+T	t5689	o b5689 b17
+B	b5693	t5689
+T	t5694	o5679 b1970 b5693
+B	b5694	t5694
+T	t5696	o b5694 b17
+B	b5696	t5696
+T	t5697	o25 b17 b645 b11374 b5696
+B	b5697	t5697
+T	t5698	o5676 b5697
+B	b5698	t5698
+P	p5698	Number 46246
+P	p5699	Number 46401
+O	o5699	location p5698 p5699
+P	p5700	Number 46272
+P	p5701	Number 46280
+O	o5701	resource_defs p5700 p5701 p3525
+P	p5702	Number 46278
+O	o5702	uid p5702 p5701
+T	t5709	o5702 b2153
+B	b5709	t5709
+T	t5711	o b5709 b17
+B	b5713	t5711
+T	t5713	o5701 b1970 b5713
+B	b5720	t5713
+T	t5720	o b5720 b17
+B	b5726	t5720
+T	t5726	o4645 b17 b5776 b11385 b5726
+B	b5728	t5726
+T	t5728	o5699 b5728
+B	b5732	t5728
+P	p5732	Number 46403
+P	p5738	Number 46680
+O	o5739	location p5732 p5738
+P	p5739	Number 46439
+P	p5740	Number 46447
+O	o5740	resource_defs p5739 p5740 p3525
+P	p5741	Number 46445
+O	o5741	uid p5741 p5740
+T	t5741	o5741 b2153
+B	b5741	t5741
+T	t5742	o b5741 b17
+B	b5742	t5742
+T	t5743	o5740 b1970 b5742
+B	b5743	t5743
+T	t5745	o b5743 b17
+B	b5745	t5745
+T	t5757	o4676 b17 b5927 b11396 b5745
+B	b5767	t5757
+T	t5780	o5739 b5767
+B	b5791	t5780
+P	p5791	Number 46682
+P	p5792	Number 46863
+O	o5792	location p5791 p5792
+P	p5793	Number 46715
+P	p5794	Number 46722
+O	o5794	resource_defs p5793 p5794 p3497
+P	p5795	Number 46720
+O	o5795	uid p5795 p5794
+T	t5799	o5795 b2153
+B	b5800	t5799
+T	t5800	o b5800 b17
+B	b5801	t5800
+T	t5801	o5794 b1970 b5801
+B	b5802	t5801
+T	t5802	o b5802 b17
+B	b5805	t5802
+T	t5805	o4716 b8123 b6056 b9044 b5805
+B	b5806	t5805
+T	t5806	o5792 b5806
+B	b5808	t5806
+P	p5808	Number 46865
+P	p5809	Number 46968
+O	o5809	location p5808 p5809
+P	p5810	Number 46892
+P	p5811	Number 46899
+O	o5811	resource_defs p5810 p5811 p2730
+T	t5813	o5811 b1970 b17
+B	b5813	t5813
+T	t5814	o b5813 b17
+B	b5814	t5814
+T	t5815	o11417 b8123 b11419 b11424 b5814
+B	b5815	t5815
+T	t5816	o5809 b5815
+B	b5816	t5816
+P	p5816	Number 46974
+P	p5817	Number 46980
+O	o5817	location p5816 p5817
+T	t5819	o5817 b5869
+B	b5819	t5819
+T	t5821	o b5819 b17
+B	b5821	t5821
+T	t5823	o b5816 b5821
+B	b5823	t5823
+T	t5825	o b5808 b5823
+B	b5825	t5825
+T	t5826	o b5791 b5825
+B	b5826	t5826
+T	t5827	o b5732 b5826
+B	b5827	t5827
+T	t5828	o b5698 b5827
+B	b5828	t5828
+T	t5832	o b5670 b5828
+B	b5832	t5832
+T	t5833	o b5668 b5832
+B	b5833	t5833
+T	t5834	o b5653 b5833
+B	b5834	t5834
+T	t5835	o b5599 b5834
+B	b5835	t5835
+T	t5836	o b5592 b5835
+B	b5836	t5836
+T	t5837	o b5587 b5836
+B	b5837	t5837
+T	t5838	o b5536 b5837
+B	b5838	t5838
+T	t5839	o b5512 b5838
+B	b5839	t5839
+T	t5850	o b5497 b5839
+B	b5851	t5850
+T	t5852	o b5488 b5851
+B	b5852	t5852
+T	t5854	o b5487 b5852
+B	b5854	t5854
+T	t5857	o b5485 b5854
+B	b5857	t5857
+T	t5865	o b5483 b5857
+B	b5865	t5865
+T	t5866	o b5476 b5865
+B	b6112	t5866
+T	t6112	o b5461 b6112
+B	b6113	t6112
+T	t6113	o b5458 b6113
+B	b6114	t6113
+T	t6114	o b5415 b6114
+B	b6115	t6114
+T	t6115	o b5305 b6115
+B	b6116	t6115
+T	t6116	o b5296 b6116
+B	b6117	t6116
+T	t6117	o b5286 b6117
+B	b6118	t6117
+T	t6118	o b5265 b6118
+B	b6119	t6118
+T	t6119	o b5146 b6119
+B	b6120	t6119
+T	t6120	o b5136 b6120
+B	b6121	t6120
+T	t6121	o b5117 b6121
+B	b6122	t6121
+T	t6122	o b4878 b6122
+B	b6123	t6122
+T	t6123	o b4690 b6123
+B	b6124	t6123
+T	t6124	o b4475 b6124
+B	b6125	t6124
+T	t6125	o b4421 b6125
+B	b6126	t6125
+T	t6126	o b4249 b6126
+B	b6127	t6126
+T	t6127	o b4068 b6127
+B	b6128	t6127
+T	t6128	o b3569 b6128
+B	b6129	t6128
+T	t6129	o b3028 b6129
+B	b6130	t6129
+T	t6130	o b3565 b6130
+B	b6131	t6130
+T	t6131	o b2540 b6131
+B	b6133	t6131
+T	t6133	o b2151 b6133
+B	b6134	t6133
+T	t6134	o b1674 b6134
+B	b6135	t6134
+T	t6135	o b3116 b6135
+B	b6136	t6135
+T	t6136	o b3026 b6136
+B	b6137	t6136
+T	t6137	o b3004 b6137
+B	b6138	t6137
+T	t6138	o b2995 b6138
+B	b6139	t6138
+T	t6139	o b2969 b6139
+B	b6140	t6139
+T	t6140	o b2583 b6140
+B	b6141	t6140
+T	t6141	o b2452 b6141
+B	b6142	t6141
+T	t6142	o b2086 b6142
+B	b6143	t6142
+T	t6143	o b1978 b6143
+B	b6144	t6143
+T	t6144	o b2957 b6144
+B	b6145	t6144
+T	t6145	o b2951 b6145
+B	b6147	t6145
+T	t6147	o b2902 b6147
+B	b6148	t6147
+T	t6148	o b2876 b6148
+B	b6149	t6148
+T	t6149	o b1929 b6149
+B	b6150	t6149
+T	t6150	o b1916 b6150
+B	b6151	t6150
+T	t6151	o b1904 b6151
+B	b6152	t6151
+T	t6152	o b1876 b6152
+B	b6153	t6152
+T	t6153	o b1828 b6153
+B	b6154	t6153
+T	t6154	o b1815 b6154
+B	b6155	t6154
+T	t6155	o b1807 b6155
+B	b6156	t6155
+T	t6156	o b1788 b6156
+B	b6157	t6156
+T	t6157	o b1775 b6157
+B	b6158	t6157
+T	t6158	o b1769 b6158
+B	b6160	t6158
+T	t6160	o b1747 b6160
+B	b6161	t6160
+T	t6161	o b1728 b6161
+B	b6163	t6161
+T	t6163	o b1099 b6163
+B	b6164	t6163
+T	t6164	o b1003 b6164
+B	b6165	t6164
+T	t6165	o b994 b6165
+B	b6166	t6165
+T	t6166	o b978 b6166
+B	b6167	t6166
+T	t6167	o b958 b6167
+B	b6168	t6167
+T	t6168	o b957 b6168
+B	b6169	t6168
+T	t6169	o b946 b6169
+B	b6170	t6169
+T	t6170	o b921 b6170
+B	b6171	t6170
+T	t6171	o b889 b6171
+B	b6172	t6171
+T	t6172	o b813 b6172
+B	b6173	t6172
+T	t6173	o b5754 b6173
+B	b6174	t6173
+T	t6174	o b5733 b6174
+B	b6175	t6174
+T	t6175	o b5730 b6175
+B	b6176	t6175
+T	t6176	o b28 b6176
+B	b6179	t6176
+T	t6179	o b5666 b6179
+B	b6181	t6179
+T	t6181	o b5644 b6181
+B	b6182	t6181
+T	t6182	o b5641 b6182
+B	b6183	t6182
+T	t6183	o b5634 b6183
+B	b6184	t6183
+T	t6184	o b5630 b6184
+B	b6192	t6184
+T	t6192	o b5629 b6192
+B	b6193	t6192
+T	t6193	o b5623 b6193
+B	b6195	t6193
+T	t6195	o b5622 b6195
+B	b6197	t6195
+T	t6197	o b5609 b6197
+B	b6198	t6197
+T	t6198	o b5607 b6198
+B	b6201	t6198
+T	t6201	o b5606 b6201
+B	b6202	t6201
+T	t6202	o b5605 b6202
+B	b6203	t6202
+T	t6203	o b5585 b6203
+B	b6208	t6203
+T	t6208	o b5575 b6208
+B	b6210	t6208
+T	t6210	o b5574 b6210
+B	b6212	t6210
+T	t6212	o b5543 b6212
+B	b6213	t6212
+T	t6213	o b5537 b6213
+B	b6214	t6213
+T	t6214	o b5521 b6214
+B	b6218	t6214
+T	t6218	o b5519 b6218
+B	b6219	t6218
+T	t6219	o b5511 b6219
+B	b6220	t6219
+T	t6220	o b5496 b6220
+B	b6221	t6220
+T	t6221	o b5234 b6221
+B	b6222	t6221
+T	t6222	o b5233 b6222
+B	b6223	t6222
+T	t6223	o b5185 b6223
+B	b6224	t6223
+T	t6224	o b5181 b6224
+B	b6225	t6224
+T	t6225	o b5166 b6225
+B	b6226	t6225
+T	t6226	o b5145 b6226
+B	b6227	t6226
+T	t6227	o b5144 b6227
+B	b6228	t6227
+T	t6228	o b5133 b6228
+B	b6229	t6228
+T	t6229	o b5116 b6229
+B	b6230	t6229
+T	t6230	o b5115 b6230
+B	b6231	t6230
+T	t6231	o b5102 b6231
+B	b6232	t6231
+T	t6232	o b5100 b6232
+B	b6233	t6232
+T	t6233	o b5094 b6233
+B	b6234	t6233
+T	t6234	o b5093 b6234
+B	b6235	t6234
+T	t6235	o b5083 b6235
+B	b6236	t6235
+T	t6236	o b5076 b6236
+B	b6238	t6236
+T	t6238	o b5074 b6238
+B	b6245	t6238
+T	t6245	o b5028 b6245
+B	b6246	t6245
+T	t6246	o b4918 b6246
+B	b6247	t6246
+T	t6247	o b4876 b6247
+B	b6248	t6247
+T	t6248	o b4853 b6248
+B	b6249	t6248
+T	t6249	o b4793 b6249
+B	b6250	t6249
+T	t6250	o b4792 b6250
+B	b6251	t6250
+T	t6251	o b4781 b6251
+B	b6252	t6251
+T	t6252	o b4728 b6252
+B	b6253	t6252
+T	t6253	o b4717 b6253
+B	b6254	t6253
+T	t6254	o b4708 b6254
+B	b6255	t6254
+T	t6255	o b4696 b6255
+B	b6256	t6255
+T	t6256	o b4665 b6256
+B	b6257	t6256
+T	t6257	o b4644 b6257
+B	b6258	t6257
+T	t6258	o b4612 b6258
+B	b6259	t6258
+T	t6259	o b4576 b6259
+B	b6260	t6259
+T	t6260	o b4575 b6260
+B	b6261	t6260
+T	t6261	o b4552 b6261
+B	b6262	t6261
+T	t6262	o b4551 b6262
+B	b6263	t6262
+T	t6263	o b4537 b6263
+B	b6264	t6263
+T	t6264	o b4500 b6264
+B	b6266	t6264
+T	t6266	o b4441 b6266
+B	b6271	t6266
+T	t6271	o b4408 b6271
+B	b6275	t6271
+T	t6275	o b4373 b6275
+B	b6276	t6275
+T	t6276	o b4336 b6276
+B	b6277	t6276
+T	t6277	o b4324 b6277
+B	b6278	t6277
+T	t6278	o b4316 b6278
+B	b6279	t6278
+T	t6279	o b4299 b6279
+B	b6280	t6279
+T	t6280	o b4274 b6280
+B	b6281	t6280
+T	t6281	o b4247 b6281
+B	b6282	t6281
+T	t6282	o b4217 b6282
+B	b6283	t6282
+T	t6283	o b4187 b6283
+B	b6284	t6283
+T	t6284	o b4166 b6284
+B	b6285	t6284
+T	t6285	o b4132 b6285
+B	b6286	t6285
+T	t6286	o b4115 b6286
+B	b6287	t6286
+T	t6287	o b4104 b6287
+B	b6288	t6287
+T	t6288	o b4086 b6288
+B	b6289	t6288
+T	t6289	o b4064 b6289
+B	b6290	t6289
+T	t6290	o b4044 b6290
+B	b6291	t6290
+T	t6291	o b4033 b6291
+B	b6292	t6291
+T	t6292	o b4007 b6292
+B	b6293	t6292
+T	t6293	o b3758 b6293
+B	b6294	t6293
+T	t6294	o b3745 b6294
+B	b6295	t6294
+T	t6295	o b3707 b6295
+B	b6296	t6295
+T	t6296	o b3410 b6296
+B	b6297	t6296
+T	t6297	o b3408 b6297
+B	b6299	t6297
+T	t6299	o b3405 b6299
+B	b6300	t6299
+T	t6300	o b3403 b6300
+B	b6302	t6300
+T	t6302	o b3401 b6302
+B	b6303	t6302
+T	t6303	o b3400 b6303
+B	b6304	t6303
+T	t6304	o b3381 b6304
+B	b6305	t6304
+T	t6305	o b3370 b6305
+B	b6306	t6305
+T	t6306	o b3366 b6306
+B	b6307	t6306
+T	t6307	o b3350 b6307
+B	b6308	t6307
+T	t6308	o b3348 b6308
+B	b6311	t6308
+T	t6311	o b3347 b6311
+B	b6312	t6311
+T	t6312	o b3343 b6312
+B	b6313	t6312
+T	t6313	o b3334 b6313
+B	b6455	t6313
+T	t6455	o b3325 b6455
+B	b6457	t6455
+T	t6457	o b3315 b6457
+B	b6458	t6457
+T	t6458	o b3314 b6458
+B	b6459	t6458
+T	t6459	o b3298 b6459
 B	b6460	t6459
-T	t6460	o b5881 b6460
+T	t6460	o b3280 b6460
 B	b6461	t6460
-T	t6461	o b5880 b6461
-B	b6464	t6461
-T	t6464	o b5873 b6464
-B	b6468	t6464
-T	t6468	o b5831 b6468
+T	t6461	o b3261 b6461
+B	b6462	t6461
+T	t6462	o b3249 b6462
+B	b6463	t6462
+T	t6463	o b3230 b6463
+B	b6464	t6463
+T	t6464	o b3213 b6464
+B	b6465	t6464
+T	t6465	o b3211 b6465
+B	b6466	t6465
+T	t6466	o b3210 b6466
+B	b6467	t6466
+T	t6467	o b3193 b6467
+B	b6468	t6467
+T	t6468	o b3181 b6468
 B	b6469	t6468
-T	t6469	o b5811 b6469
+T	t6469	o b3179 b6469
 B	b6470	t6469
-T	t6470	o b5790 b6470
+T	t6470	o b3178 b6470
 B	b6471	t6470
-T	t6474	o b5754 b6471
-B	b6476	t6474
-T	t6476	o b5733 b6476
-B	b6480	t6476
-T	t6480	o b5730 b6480
+T	t6472	o b3169 b6471
+B	b6473	t6472
+T	t6473	o b3160 b6473
+B	b6474	t6473
+T	t6474	o b3150 b6474
+B	b6475	t6474
+T	t6475	o b3131 b6475
+B	b6476	t6475
+T	t6476	o b3114 b6476
+B	b6477	t6476
+T	t6477	o b3113 b6477
+B	b6478	t6477
+T	t6478	o b3021 b6478
+B	b6479	t6478
+T	t6479	o b3002 b6479
+B	b6480	t6479
+T	t6480	o b2942 b6480
 B	b6481	t6480
-T	t6481	o b5720 b6481
+T	t6481	o b2900 b6481
 B	b6482	t6481
-T	t6482	o b5666 b6482
+T	t6482	o b2840 b6482
 B	b6483	t6482
-T	t6483	o b5644 b6483
-B	b6485	t6483
-T	t6485	o b5641 b6485
-B	b6487	t6485
-T	t6487	o b5634 b6487
-B	b6530	t6487
-T	t6530	o b5630 b6530
+T	t6483	o b2838 b6483
+B	b6484	t6483
+T	t6484	o b2832 b6484
+B	b6485	t6484
+T	t6485	o b2827 b6485
+B	b6486	t6485
+T	t6486	o b2825 b6486
+B	b6487	t6486
+T	t6487	o b2824 b6487
+B	b6489	t6487
+T	t6489	o b2818 b6489
+B	b6490	t6489
+T	t6490	o b2807 b6490
+B	b6492	t6490
+T	t6492	o b2806 b6492
+B	b6493	t6492
+T	t6493	o b2804 b6493
+B	b6494	t6493
+T	t6494	o b2801 b6494
+B	b6497	t6494
+T	t6497	o b2794 b6497
+B	b6498	t6497
+T	t6498	o b2769 b6498
+B	b6499	t6498
+T	t6499	o b2767 b6499
+B	b6502	t6499
+T	t6502	o b2766 b6502
+B	b6504	t6502
+T	t6504	o b2764 b6504
+B	b6509	t6504
+T	t6509	o b2759 b6509
+B	b6510	t6509
+T	t6510	o b2755 b6510
+B	b6511	t6510
+T	t6511	o b2754 b6511
+B	b6516	t6511
+T	t6516	o b2748 b6516
+B	b6521	t6516
+T	t6521	o b2744 b6521
+B	b6522	t6521
+T	t6522	o b2740 b6522
+B	b6524	t6522
+T	t6524	o b2739 b6524
+B	b6525	t6524
+T	t6525	o b2735 b6525
+B	b6526	t6525
+T	t6526	o b2731 b6526
+B	b6528	t6526
+T	t6528	o b2728 b6528
+B	b6530	t6528
+T	t6530	o b2723 b6530
 B	b6531	t6530
-T	t6531	o b5629 b6531
-B	b6535	t6531
-T	t6535	o b5623 b6535
-B	b6539	t6535
-T	t6539	o b5622 b6539
+T	t6531	o b2555 b6531
+B	b6532	t6531
+T	t6532	o b2539 b6532
+B	b6533	t6532
+T	t6533	o b2506 b6533
+B	b6534	t6533
+T	t6534	o b2484 b6534
+B	b6535	t6534
+T	t6535	o b2464 b6535
+B	b6536	t6535
+T	t6536	o b2449 b6536
+B	b6537	t6536
+T	t6537	o b2420 b6537
+B	b6538	t6537
+T	t6538	o b2400 b6538
+B	b6539	t6538
+T	t6539	o b2385 b6539
 B	b6540	t6539
-T	t6540	o b5609 b6540
-B	b6545	t6540
-T	t6545	o b5607 b6545
-B	b6564	t6545
-T	t6564	o b5606 b6564
+T	t6540	o b2367 b6540
+B	b6543	t6540
+T	t6543	o b2345 b6543
+B	b6544	t6543
+T	t6544	o b2183 b6544
+B	b6545	t6544
+T	t6545	o b2135 b6545
+B	b6546	t6545
+T	t6546	o b2071 b6546
+B	b6547	t6546
+T	t6547	o b2046 b6547
+B	b6548	t6547
+T	t6548	o b2025 b6548
+B	b6549	t6548
+T	t6549	o b2024 b6549
+B	b6550	t6549
+T	t6550	o b2020 b6550
+B	b6551	t6550
+T	t6551	o b2016 b6551
+B	b6552	t6551
+T	t6552	o b2013 b6552
+B	b6553	t6552
+T	t6553	o b2012 b6553
+B	b6554	t6553
+T	t6554	o b2010 b6554
+B	b6555	t6554
+T	t6555	o b2007 b6555
+B	b6556	t6555
+T	t6556	o b2004 b6556
+B	b6557	t6556
+T	t6557	o b1992 b6557
+B	b6558	t6557
+T	t6558	o b1991 b6558
+B	b6559	t6558
+T	t6559	o b1988 b6559
+B	b6560	t6559
+T	t6560	o b1987 b6560
+B	b6561	t6560
+T	t6561	o b1984 b6561
+B	b6562	t6561
+T	t6562	o b1980 b6562
+B	b6563	t6562
+T	t6563	o b1976 b6563
+B	b6564	t6563
+T	t6564	o b1969 b6564
 B	b6565	t6564
-T	t6565	o b5605 b6565
-B	b6570	t6565
-T	t6570	o b5585 b6570
-B	b6574	t6570
-T	t6574	o b5575 b6574
-B	b6576	t6574
-T	t6576	o b5574 b6576
-B	b6578	t6576
-T	t6578	o b5543 b6578
-B	b6588	t6578
-T	t6602	o b5537 b6588
+T	t6565	o b1954 b6565
+B	b6567	t6565
+T	t6567	o b1937 b6567
+B	b6568	t6567
+T	t6568	o b1923 b6568
+B	b6569	t6568
+T	t6569	o b1900 b6569
+B	b6570	t6569
+T	t6570	o b1887 b6570
+B	b6571	t6570
+T	t6571	o b1872 b6571
+B	b6572	t6571
+T	t6572	o b1841 b6572
+B	b6573	t6572
+T	t6573	o b1827 b6573
+B	b6574	t6573
+T	t6574	o b1787 b6574
+B	b6575	t6574
+T	t6575	o b1767 b6575
+B	b6576	t6575
+T	t6576	o b1741 b6576
+B	b6577	t6576
+T	t6577	o b1722 b6577
+B	b6578	t6577
+T	t6578	o b1705 b6578
+B	b6579	t6578
+T	t6579	o b1691 b6579
+B	b6580	t6579
+T	t6580	o b1670 b6580
+B	b6581	t6580
+T	t6581	o b1499 b6581
+B	b6582	t6581
+T	t6582	o b1496 b6582
+B	b6583	t6582
+T	t6583	o b1490 b6583
+B	b6584	t6583
+T	t6584	o b1487 b6584
+B	b6585	t6584
+T	t6585	o b1485 b6585
+B	b6586	t6585
+T	t6586	o b1477 b6586
+B	b6588	t6586
+T	t6589	o b1467 b6588
+B	b6589	t6589
+T	t6593	o b1460 b6589
+B	b6594	t6593
+T	t6594	o b1459 b6594
+B	b6595	t6594
+T	t6595	o b1451 b6595
+B	b6596	t6595
+T	t6596	o b1445 b6596
+B	b6597	t6596
+T	t6597	o b1441 b6597
+B	b6598	t6597
+T	t6598	o b1435 b6598
+B	b6599	t6598
+T	t6599	o b1432 b6599
+B	b6600	t6599
+T	t6600	o b1428 b6600
+B	b6601	t6600
+T	t6601	o b1036 b6601
+B	b6602	t6601
+T	t6602	o b1425 b6602
 B	b6603	t6602
-T	t6603	o b5521 b6603
+T	t6603	o b1418 b6603
 B	b6604	t6603
-T	t6604	o b5519 b6604
-B	b6614	t6604
-T	t6637	o b5511 b6614
+T	t6604	o b1354 b6604
+B	b6605	t6604
+T	t6605	o b1339 b6605
+B	b6613	t6605
+T	t6613	o b1199 b6613
+B	b6614	t6613
+T	t6615	o b891 b6614
+B	b6615	t6615
+T	t6626	o b888 b6615
+B	b6626	t6626
+T	t6627	o b1710 b6626
+B	b6627	t6627
+T	t6628	o b1693 b6627
+B	b6628	t6628
+T	t6629	o b1690 b6628
+B	b6629	t6629
+T	t6630	o b1688 b6629
+B	b6630	t6630
+T	t6633	o b1687 b6630
+B	b6634	t6633
+T	t6634	o b1676 b6634
+B	b6635	t6634
+T	t6635	o b1671 b6635
+B	b6636	t6635
+T	t6636	o b1669 b6636
+B	b6637	t6636
+T	t6637	o b1558 b6637
 B	b6638	t6637
-T	t6638	o b5496 b6638
+T	t6638	o b1491 b6638
 B	b6639	t6638
-T	t6639	o b5234 b6639
-B	b6641	t6639
-T	t6641	o b5233 b6641
-B	b6667	t6641
-T	t6667	o b5185 b6667
-B	b6679	t6667
-T	t6679	o b5181 b6679
-B	b6681	t6679
-T	t6681	o b5166 b6681
-B	b6689	t6681
-T	t6689	o b5145 b6689
-B	b6691	t6689
-T	t6691	o b5144 b6691
-B	b6693	t6691
-T	t6693	o b5133 b6693
-B	b6703	t6693
-T	t6703	o b5116 b6703
-B	b6705	t6703
-T	t6705	o b5115 b6705
-B	b6727	t6705
-T	t6727	o b5102 b6727
-B	b6728	t6727
-T	t6728	o b5100 b6728
-B	b6729	t6728
-T	t6729	o b5094 b6729
-B	b6730	t6729
-T	t6730	o b5093 b6730
-B	b6741	t6730
-T	t6741	o b5083 b6741
-B	b6742	t6741
-T	t6742	o b5076 b6742
-B	b6743	t6742
-T	t6743	o b5074 b6743
-B	b6744	t6743
-T	t6744	o b5028 b6744
-B	b6745	t6744
-T	t6745	o b4918 b6745
-B	b6756	t6745
-T	t6756	o b4876 b6756
-B	b6757	t6756
-T	t6758	o b4853 b6757
-B	b6765	t6758
-T	t6765	o b4793 b6765
-B	b6766	t6765
-T	t6766	o b4792 b6766
-B	b6767	t6766
-T	t6767	o b4781 b6767
-B	b6774	t6767
-T	t6774	o b4728 b6774
-B	b6775	t6774
-T	t6775	o b4717 b6775
-B	b6776	t6775
-T	t6776	o b4708 b6776
-B	b6784	t6776
-T	t6784	o b4696 b6784
-B	b6786	t6784
-T	t6786	o b4665 b6786
-B	b6787	t6786
-T	t6787	o b4644 b6787
-B	b6788	t6787
-T	t6788	o b4612 b6788
-B	b6802	t6788
-T	t6802	o b4576 b6802
-B	b6803	t6802
-T	t6803	o b4575 b6803
-B	b6804	t6803
-T	t6804	o b4552 b6804
-B	b6805	t6804
-T	t6805	o b4551 b6805
-B	b6817	t6805
-T	t6817	o b4537 b6817
-B	b6819	t6817
-T	t6819	o b4500 b6819
-B	b6820	t6819
-T	t6820	o b4441 b6820
-B	b6821	t6820
-T	t6821	o b4408 b6821
-B	b6822	t6821
-T	t6822	o b4373 b6822
-B	b6834	t6822
-T	t6834	o b4336 b6834
-B	b6851	t6834
-T	t6851	o b4324 b6851
-B	b6852	t6851
-T	t6852	o b4316 b6852
-B	b6853	t6852
-T	t6853	o b4299 b6853
-B	b6862	t6853
-T	t6862	o b4274 b6862
-B	b6863	t6862
-T	t6863	o b4247 b6863
-B	b6865	t6863
-T	t6865	o b4217 b6865
-B	b6866	t6865
-T	t6866	o b4187 b6866
-B	b6882	t6866
-T	t6882	o b4166 b6882
-B	b6887	t6882
-T	t6887	o b4132 b6887
-B	b6899	t6887
-T	t6899	o b4115 b6899
-B	b6900	t6899
-T	t6900	o b4104 b6900
-B	b6901	t6900
-T	t6901	o b4086 b6901
-B	b6903	t6901
-T	t6903	o b4064 b6903
-B	b6904	t6903
-T	t6904	o b4044 b6904
-B	b6915	t6904
-T	t6915	o b4033 b6915
-B	b6916	t6915
-T	t6916	o b4007 b6916
-B	b6917	t6916
-T	t6917	o b3758 b6917
-B	b6918	t6917
-T	t6918	o b3745 b6918
-B	b6925	t6918
-T	t6925	o b3707 b6925
-B	b6926	t6925
-T	t6926	o b3410 b6926
-B	b6927	t6926
-T	t6927	o b3408 b6927
-B	b6934	t6927
-T	t6934	o b3405 b6934
-B	b6935	t6934
-T	t6935	o b3403 b6935
-B	b6936	t6935
-T	t6936	o b3401 b6936
-B	b6944	t6936
-T	t6944	o b3400 b6944
-B	b6946	t6944
-T	t6946	o b3381 b6946
-B	b6948	t6946
-T	t6948	o b3370 b6948
-B	b6949	t6948
-T	t6949	o b3366 b6949
-B	b6950	t6949
-T	t6950	o b3350 b6950
-B	b6951	t6950
-T	t6951	o b3348 b6951
-B	b6960	t6951
-T	t6960	o b3347 b6960
-B	b6983	t6960
-T	t6983	o b3343 b6983
-B	b6984	t6983
-T	t6984	o b3334 b6984
-B	b6985	t6984
-T	t6985	o b3325 b6985
-B	b6994	t6985
-T	t6994	o b3315 b6994
-B	b6995	t6994
-T	t6995	o b3314 b6995
-B	b6996	t6995
-T	t6996	o b3298 b6996
-B	b6999	t6996
-T	t6999	o b3280 b6999
-B	b7012	t6999
-T	t7012	o b3261 b7012
-B	b7015	t7012
-T	t7015	o b3249 b7015
-B	b7017	t7015
-T	t7017	o b3230 b7017
-B	b7019	t7017
-T	t7019	o b3213 b7019
-B	b7020	t7019
-T	t7020	o b3211 b7020
-B	b7021	t7020
-T	t7021	o b3210 b7021
-B	b7022	t7021
-T	t7022	o b3193 b7022
-B	b7025	t7022
-T	t7025	o b3181 b7025
-B	b7026	t7025
-T	t7026	o b3179 b7026
-B	b7027	t7026
-T	t7027	o b3178 b7027
-B	b7028	t7027
-T	t7028	o b3169 b7028
-B	b7029	t7028
-T	t7029	o b3160 b7029
-B	b7030	t7029
-T	t7030	o b3150 b7030
-B	b7031	t7030
-T	t7031	o b3131 b7031
-B	b7033	t7031
-T	t7033	o b3114 b7033
-B	b7034	t7033
-T	t7034	o b3113 b7034
-B	b7035	t7034
-T	t7035	o b3021 b7035
-B	b7036	t7035
-T	t7036	o b3002 b7036
-B	b7037	t7036
-T	t7037	o b2942 b7037
-B	b7038	t7037
-T	t7038	o b2900 b7038
-B	b7039	t7038
-T	t7039	o b2840 b7039
-B	b7040	t7039
-T	t7040	o b2838 b7040
-B	b7041	t7040
-T	t7041	o b2832 b7041
-B	b7042	t7041
-T	t7042	o b2827 b7042
-B	b7043	t7042
-T	t7043	o b2825 b7043
-B	b7044	t7043
-T	t7044	o b2824 b7044
-B	b7045	t7044
-T	t7045	o b2818 b7045
-B	b7046	t7045
-T	t7046	o b2807 b7046
-B	b7048	t7046
-T	t7048	o b2806 b7048
-B	b7049	t7048
-T	t7049	o b2804 b7049
-B	b7051	t7049
-T	t7051	o b2801 b7051
-B	b7059	t7051
-T	t7059	o b2794 b7059
-B	b7061	t7059
-T	t7061	o b2769 b7061
-B	b7062	t7061
-T	t7062	o b2767 b7062
-B	b7079	t7062
-T	t7079	o b2766 b7079
-B	b7080	t7079
-T	t7080	o b2764 b7080
-B	b7094	t7080
-T	t7094	o b2759 b7094
-B	b7108	t7094
-T	t7108	o b2755 b7108
-B	b7109	t7108
-T	t7109	o b2754 b7109
-B	b7110	t7109
-T	t7110	o b2748 b7110
-B	b7111	t7110
-T	t7114	o b2744 b7111
-B	b7114	t7114
-T	t7115	o b2740 b7114
-B	b7115	t7115
-T	t7116	o b2739 b7115
-B	b7117	t7116
-T	t7117	o b2735 b7117
-B	b7118	t7117
-T	t7118	o b2731 b7118
-B	b7120	t7118
-T	t7120	o b2728 b7120
-B	b7125	t7120
-T	t7125	o b2723 b7125
-B	b7127	t7125
-T	t7127	o b2555 b7127
-B	b7128	t7127
-T	t7128	o b2539 b7128
-B	b7159	t7128
-T	t7159	o b2506 b7159
-B	b7160	t7159
-T	t7160	o b2484 b7160
-B	b7161	t7160
-T	t7161	o b2464 b7161
-B	b7178	t7161
-T	t7178	o b2449 b7178
-B	b7179	t7178
-T	t7179	o b2420 b7179
-B	b7190	t7179
-T	t7190	o b2400 b7190
-B	b7191	t7190
-T	t7191	o b2385 b7191
-B	b7198	t7191
-T	t7198	o b2367 b7198
-B	b7199	t7198
-T	t7199	o b2345 b7199
-B	b7200	t7199
-T	t7200	o b2183 b7200
-B	b7201	t7200
-T	t7201	o b2135 b7201
-B	b7202	t7201
-T	t7202	o b2071 b7202
-B	b7203	t7202
-T	t7203	o b2046 b7203
-B	b7205	t7203
-T	t7205	o b2025 b7205
-B	b7207	t7205
-T	t7207	o b2024 b7207
-B	b7213	t7207
-T	t7213	o b2020 b7213
-B	b7226	t7213
-T	t7226	o b2016 b7226
-B	b7227	t7226
-T	t7227	o b2013 b7227
-B	b7253	t7227
-T	t7253	o b2012 b7253
-B	b7254	t7253
-T	t7254	o b2010 b7254
-B	b7255	t7254
-T	t7255	o b2007 b7255
-B	b7263	t7255
-T	t7263	o b2004 b7263
-B	b7268	t7263
-T	t7268	o b1992 b7268
-B	b7269	t7268
-T	t7269	o b1991 b7269
-B	b7270	t7269
-T	t7270	o b1988 b7270
-B	b7275	t7270
-T	t7275	o b1987 b7275
-B	b7277	t7275
-T	t7277	o b1984 b7277
-B	b7279	t7277
-T	t7279	o b1980 b7279
-B	b7280	t7279
-T	t7280	o b1976 b7280
-B	b7281	t7280
-T	t7281	o b1969 b7281
-B	b7282	t7281
-T	t7282	o b1954 b7282
-B	b7292	t7282
-T	t7292	o b1937 b7292
-B	b7293	t7292
-T	t7293	o b1923 b7293
-B	b7294	t7293
-T	t7294	o b1900 b7294
-B	b7301	t7294
-T	t7301	o b1887 b7301
-B	b7302	t7301
-T	t7302	o b1872 b7302
-B	b7303	t7302
-T	t7303	o b1841 b7303
-B	b7304	t7303
-T	t7304	o b1827 b7304
-B	b7309	t7304
-T	t7309	o b1787 b7309
-B	b7312	t7309
-T	t7312	o b1767 b7312
-B	b7313	t7312
-T	t7313	o b1741 b7313
-B	b7314	t7313
-T	t7314	o b1722 b7314
-B	b7321	t7314
-T	t7321	o b1705 b7321
-B	b7322	t7321
-T	t7322	o b1691 b7322
-B	b7323	t7322
-T	t7323	o b1670 b7323
-B	b7324	t7323
-T	t7324	o b1499 b7324
-B	b7331	t7324
-T	t7331	o b1496 b7331
-B	b7332	t7331
-T	t7332	o b1490 b7332
-B	b7333	t7332
-T	t7333	o b1487 b7333
-B	b7334	t7333
-T	t7334	o b1485 b7334
-B	b7341	t7334
-T	t7341	o b1477 b7341
-B	b7342	t7341
-T	t7342	o b1467 b7342
-B	b7343	t7342
-T	t7343	o b1460 b7343
-B	b7344	t7343
-T	t7344	o b1459 b7344
-B	b7351	t7344
-T	t7351	o b1451 b7351
-B	b7352	t7351
-T	t7352	o b1445 b7352
-B	b7353	t7352
-T	t7353	o b1441 b7353
-B	b7360	t7353
-T	t7360	o b1435 b7360
-B	b7361	t7360
-T	t7361	o b1432 b7361
-B	b7362	t7361
-T	t7362	o b1428 b7362
-B	b7369	t7362
-T	t7369	o b1036 b7369
-B	b7370	t7369
-T	t7370	o b1425 b7370
-B	b7371	t7370
-T	t7371	o b1418 b7371
-B	b7378	t7371
-T	t7378	o b1354 b7378
-B	b7379	t7378
-T	t7379	o b1339 b7379
-B	b7380	t7379
-T	t7380	o b1199 b7380
-B	b7387	t7380
-T	t7387	o b891 b7387
-B	b7388	t7387
-T	t7388	o b888 b7388
-B	b7389	t7388
-T	t7389	o b13 b7389
-B	b7396	t7389
-T	t7396	o b533 b7396
-B	b7397	t7396
-T	t7397	o b446 b7397
-B	b7398	t7397
-T	t7398	o b336 b7398
-B	b7399	t7398
-T	t7399	o b313 b7399
-B	b7400	t7399
-T	t7400	o b292 b7400
-B	b7405	t7400
-T	t7405	o b291 b7405
-B	b7406	t7405
-T	t7406	o b281 b7406
-B	b7411	t7406
-T	t7411	o b280 b7411
-B	b7412	t7411
-T	t7412	o b278 b7412
-B	b7413	t7412
-T	t7413	o b206 b7413
-B	b7414	t7413
-T	t7414	o b202 b7414
-B	b7416	t7414
-T	t7416	o b25 b7416
+T	t6639	o b1101 b6639
+B	b6640	t6639
+T	t6640	o b934 b6640
+B	b6641	t6640
+T	t6641	o b893 b6641

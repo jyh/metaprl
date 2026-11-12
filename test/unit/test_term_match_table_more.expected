@@ -1,0 +1,14 @@
+resource table, f{c}: f-c
+resource table, f{d}: f-any
+resource table, g{c}: none
+resource rmap, g{c}: g-to-h -> [h{c}]
+resource rmap, g{k{c}}: g-to-h -> [h{k{c}}]
+resource rmap, f{c}: none
+sequent, y: A; z: B >- C: two-hyps
+sequent, <J>; z: B >- C: one-hyp
+sequent, z: B; <J> >- C: none
+sequent, >- C: none
+f{'a;'a} then f{'a;'b}: f{c; c} any · f{c; d} any · bucket f{c; d} [any] · bucket f{c; c} without "any" [same]
+f{'a;'b} then f{'a;'a}: f{c; c} same · f{c; d} any · bucket f{c; d} [any] · bucket f{c; c} without "any" [same]
+add_map k{'a<H;J>}, k{c}: k-to-m -> [m{c}; n]
+add_map <H> >- k{'a<H>}, <J> >- k{c}: refused (Rewrite_util.check_arity)

@@ -153,9 +153,7 @@ let editor =
       let file = Filename.concat (home ()) "editor" in
          try
             let inx = open_in file in
-            let editor = input_line inx in
-               close_in inx;
-               editor
+               Fun.protect ~finally:(fun () -> close_in inx) (fun () -> input_line inx)
          with
             Sys_error _
           | End_of_file ->

@@ -1,0 +1,41 @@
+Rewrite                      1 term(s); back as [Rewrite]; same terms
+CondRewrite                  1 term(s); back as [CondRewrite]; same terms
+Rule                         1 term(s); back as [Rule]; same terms
+Rule (MetaFunction)          1 term(s); back as [Rule]; same terms
+MLRewrite (no def)           1 term(s); back as [MLRewrite]; same terms
+MLRewrite (def)              1 term(s); back as [MLRewrite]; same terms
+MLAxiom                      1 term(s); back as [MLAxiom]; same terms
+Parent                       1 term(s); back as [Parent]; same terms
+Module                       1 term(s); back as [Module]; same terms
+DForm (Modes, two)           1 term(s); back as [DForm]; TERMS DIFFER; wrote {Modes [prl; tex]; []}, read {Modes [tex; prl]; []}
+DForm (ExceptModes, two)     1 term(s); back as [DForm]; TERMS DIFFER; wrote {ExceptModes [html; tex]; []}, read {ExceptModes [tex; html]; []}
+DForm (DFormInheritPrec)     1 term(s); of_term_list raises Refine_error.MakeRefineError(TermType)(ParamType).RefineError("dest_string_param", _)
+DForm (MLDForm)              1 term(s); back as [DForm]; same terms
+DForm (NoDForm, AllModes)    1 term(s); back as [DForm]; same terms
+DForm (PrimitiveModes)       1 term(s); back as [DForm]; same terms; wrote {PrimitiveModes; []}, read {AllModes; []}
+Prec                         1 term(s); back as [Prec]; same terms
+PrecRel LT                   1 term(s); back as [PrecRel]; same terms
+PrecRel EQ                   1 term(s); back as [PrecRel]; same terms
+PrecRel GT                   1 term(s); back as [PrecRel]; same terms
+PrecRel No                   1 term(s); back as [PrecRel]; same terms
+Id                           1 term(s); back as [Id]; same terms
+Resource                     1 term(s); back as [Resource]; same terms
+Improve (Public)             1 term(s); back as [Improve]; same terms
+Improve (Private)            1 term(s); back as [Improve]; same terms
+MLGramUpd Infix              1 term(s); back as [MLGramUpd]; same terms
+MLGramUpd Suffix             1 term(s); back as [MLGramUpd]; same terms
+SummaryItem                  1 term(s); back as [SummaryItem]; same terms
+ToploopItem                  1 term(s); back as [ToploopItem]; same terms
+MagicBlock                   1 term(s); back as [MagicBlock]; same terms
+Comment                      1 term(s); back as [Comment]; same terms
+InputForm                    1 term(s); back as [InputForm]; same terms
+PRLGrammar (empty)           0 term(s); back as []; same terms
+DeclareTypeClass (none)      1 term(s); back as [DeclareTypeClass]; same terms
+DeclareTypeClass (extends)   1 term(s); back as [DeclareTypeClass]; same terms
+DeclareTypeClass (include)   1 term(s); back as [DeclareTypeClass]; same terms
+DeclareType                  1 term(s); back as [DeclareType]; same terms
+DeclareTerm                  1 term(s); back as [DeclareTerm]; same terms
+DefineTerm (opaque)          1 term(s); back as [DefineTerm]; same terms
+DefineTerm                   1 term(s); back as [DefineTerm]; same terms
+DeclareTypeRewrite           1 term(s); back as [DeclareTypeRewrite]; same terms
+all 39 items in one module: raises Refine_error.MakeRefineError(TermType)(ParamType).RefineError("dest_string_param", _)

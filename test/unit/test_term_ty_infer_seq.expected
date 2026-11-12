@@ -1,0 +1,33 @@
+== sequents
+infer sarg: x: zero >- succ{x}                   Perv!Judgment
+infer sarg: <H>; x: zero >- x                    Perv!Judgment
+infer sarg: x: tt >- zero (a Prop hypothesis)    Perv!Judgment
+infer sarg: x: eq{zero; zero} >- zero            REFUSED: type error
+infer sarg: >- tt (a Prop conclusion)            Perv!Judgment
+infer parg: >- tt                                Perv!Judgment
+infer parg: >- zero (a Term where a Prop is due) REFUSED: type error
+infer zero as the sequent argument               REFUSED: type error
+infer carg: x: zero >- x                         Perv!Judgment
+infer carg: x: tt >- zero                        Perv!Judgment
+infer carg: x: eq{zero; zero} >- zero            REFUSED: type error
+infer varg: x: zero >- x (x is a Prop)           Perv!Judgment
+infer varg: x: tt >- zero                        REFUSED: type error
+infer sarg: <H>; x: zero >- 'a<|H|>['x]          Perv!Judgment
+infer sarg: <H>; x: zero; <J<|H|>['x]> >- zero   Perv!Judgment
+infer sarg: <H> >- C<|H|>[succ{zero}] (a context term) Perv!Judgment
+infer sarg: <H> >- C<|H|>[eq{zero; zero}]        Perv!Judgment
+infer sarg: <H>; x: zero; <J<|H|>[eq{x; x}]> >- zero Perv!Judgment
+== meta-parameters
+infer num[@n]                                    Perv!Term
+infer name[@s]                                   Perv!Term
+infer tag[@t] (a token meta-parameter)           Perv!Term
+infer eq{tag[@t]; ptag[@t]} (t names a Prop, then a Term) Perv!Judgment
+infer eq{ptag[@t]; tag[@t]} (t names a Term, then a Prop) REFUSED: type error
+infer num[@n:s] (a string meta-parameter)        REFUSED: Term_ty_infer.tenv_find_type: unknown term
+== rules over sequents
+rule <H>; x: zero >- succ{x}  -->  <H> >- lam    OK
+rule with <H> then <H['x]> (context arity)       REFUSED: Term_ty_infer.infer_sequent_hyps: context arity mismatch
+rule with a parg subgoal under a sarg goal       OK
+rule with <H> in a carg subgoal, sarg goal       REFUSED: type error
+rule with <J>; <H<|J|>> in a subgoal, <H> in the goal REFUSED: Term_ty_infer.venv_find_var: unbound variable
+rule whose context is a hypothesis elsewhere     OK

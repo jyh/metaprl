@@ -7,9 +7,9 @@ MLRewrite (def)              1 term(s); back as [MLRewrite]; same terms
 MLAxiom                      1 term(s); back as [MLAxiom]; same terms
 Parent                       1 term(s); back as [Parent]; same terms
 Module                       1 term(s); back as [Module]; same terms
-DForm (Modes, two)           1 term(s); back as [DForm]; TERMS DIFFER; wrote {Modes [prl; tex]; []}, read {Modes [tex; prl]; []}
-DForm (ExceptModes, two)     1 term(s); back as [DForm]; TERMS DIFFER; wrote {ExceptModes [html; tex]; []}, read {ExceptModes [tex; html]; []}
-DForm (DFormInheritPrec)     1 term(s); of_term_list raises Refine_error.MakeRefineError(TermType)(ParamType).RefineError("dest_string_param", _)
+DForm (Modes, two)           1 term(s); back as [DForm]; same terms
+DForm (ExceptModes, two)     1 term(s); back as [DForm]; same terms
+DForm (DFormInheritPrec)     1 term(s); back as [DForm]; same terms
 DForm (MLDForm)              1 term(s); back as [DForm]; same terms
 DForm (NoDForm, AllModes)    1 term(s); back as [DForm]; same terms
 DForm (PrimitiveModes)       1 term(s); back as [DForm]; same terms; wrote {PrimitiveModes; []}, read {AllModes; []}
@@ -38,4 +38,4 @@ DeclareTerm                  1 term(s); back as [DeclareTerm]; same terms
 DefineTerm (opaque)          1 term(s); back as [DefineTerm]; same terms
 DefineTerm                   1 term(s); back as [DefineTerm]; same terms
 DeclareTypeRewrite           1 term(s); back as [DeclareTypeRewrite]; same terms
-all 39 items in one module: raises Refine_error.MakeRefineError(TermType)(ParamType).RefineError("dest_string_param", _)
+all 39 items in one module: 39 back, kinds in the same order

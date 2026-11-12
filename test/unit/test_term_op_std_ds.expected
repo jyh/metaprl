@@ -10,4 +10,18 @@ rewrite{sequent; context}  map_up:   rewrite{sequent{<J<||>()>; x: A<|H,J|>(); <
   ds: same
 rewrite{sequent; context}  iter_down visits 10, iter_up visits 10
   ds: same
-0 of 6 lines differ
+is_no_subterms_term c c: true
+  ds: same
+is_no_subterms_term c d: false
+  ds: same
+is_no_subterms_term c c{d}: false
+  ds: same
+is_no_subterms_term c x: false
+  ds: same
+one_subterm c{d}: d
+  ds: same
+one_subterm c: refused (one_subterm)
+  ds: same
+one_subterm c{d; e}: refused (one_subterm)
+  ds: same
+0 of 13 lines differ

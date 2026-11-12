@@ -73,9 +73,9 @@ let describe e =
   match describe_extract e with
   | EDRule a -> "EDRule " ^ ed a
   | EDRewrite None -> "EDRewrite None"
-  | EDRewrite (Some (o, a)) -> Printf.sprintf "EDRewrite %s at %s" (List.hd (Opname.dest_opname o)) (addr a)
+  | EDRewrite (Some (o, i, a)) -> Printf.sprintf "EDRewrite %s%s at %s" (List.hd (Opname.dest_opname o)) (if i = 0 then "" else Printf.sprintf " assum %d" i) (addr a)
   | EDCondRewrite None -> "EDCondRewrite None"
-  | EDCondRewrite (Some (a, at)) -> "EDCondRewrite " ^ ed a ^ " at " ^ addr at
+  | EDCondRewrite (Some (a, i, at)) -> "EDCondRewrite " ^ ed a ^ (if i = 0 then "" else Printf.sprintf " assum %d" i) ^ " at " ^ addr at
   | EDComposition -> "EDComposition"
   | EDNthHyp i -> "EDNthHyp " ^ string_of_int i
   | EDCut t -> "EDCut " ^ show_t t

@@ -1,0 +1,5 @@
+hc under lam, instance x                   RefineError apply_crwaddr at [[1]] hc: Rewrite condition has free variable where it is not allowed x
+hc under lam, instance g{x}                RefineError apply_crwaddr at [[1]] hc: Rewrite condition has free variable where it is not allowed x
+hc under lam, instance c (no x)            subgoals lam{'x. c} | p{c}
+hk under lam, instance x ('a not in cond)  subgoals lam{'x. 'x} | c
+hc at the root, instance c                 subgoals c | p{c}

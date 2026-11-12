@@ -1,0 +1,9 @@
+univ[1]                      Perv!Term
+univ['x]                     Perv!Term
+univ[7:n] (a number)         REFUSED: Term_ty_infer.tenv_find_type: unknown term
+opr[zero]                    Perv!Term
+opr[tt]                      Perv!Term
+opr[@o] (operator var)       Perv!Term
+opr[1] (a level)             REFUSED: Term_ty_infer.tenv_find_type: unknown term
+num[3]                       Perv!Term
+num[1] (a level)             REFUSED: Term_ty_infer.tenv_find_type: unknown term

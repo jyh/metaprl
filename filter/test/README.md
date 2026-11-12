@@ -30,6 +30,10 @@ Run it against a built tree, with that tree's compilers on `PATH`:
     sh filter/test/run_pin_filter_ocaml.sh <tree> out.txt $(ls filter/test/corpus/*.ml | sort)
     sh filter/test/compare_pin.sh filter/test/pin_filter_ocaml.expected out.txt
 
+CI runs exactly these two commands after the unit tests, on both OCaml legs
+of the Linux build (`.github/workflows/build.yml`); the Windows lane does
+not run them.
+
 What must match is the term's **structure** (`shape=`: the MD5 of the term
 with each node's location pair blanked), the round trip and the free
 variables. `compare_pin.sh` fails on any difference there. The full MD5
@@ -42,6 +46,15 @@ output. Renaming one term operator (`str_open`) in the reference filter
 changes 33 lines. Making `free_vars` drop every variable changes 183 lines.
 238 items carry free variables; for 14 of them the old `free_vars` raises,
 and that is pinned as it is.
+
+The `fv=` fields are no longer the reference's, since the `Free_vars` fix
+that followed `test/unit/test_free_vars`: `free_vars` now examines a let's
+body and a case's `when` guard, and binds a `let rec`'s names in its
+right-hand sides. Measured on one tree before and after that fix, it changes
+the `fv=` field of 70 items and nothing else (69 gain variables; one, in
+`mllib_http_simple.ml`, loses `split`, which its own `let rec` binds). The
+14 items that raise still raise. The expected file carries the fixed
+values; the reference's are in its history.
 
 Not covered:
 - The old filter overflows the stack on `let f ?(x = 1) () = ...`, and the

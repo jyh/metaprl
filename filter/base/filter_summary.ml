@@ -957,8 +957,8 @@ struct
          List.iter dest_opt tl;
          begin match !modes, !except with
             [], [] -> AllModes
-          | [], except -> ExceptModes except
-          | modes, [] -> Modes modes
+          | [], except -> ExceptModes (List.rev except)
+          | modes, [] -> Modes (List.rev modes)
           | _ -> raise (Invalid_argument "dest_dform_opt")
          end, List.rev !options
 
@@ -1614,7 +1614,7 @@ struct
 
    let mk_dform_opt = function
       Filter_type.DFormInheritPrec ->
-         mk_simple_term dform_prec_op []
+         mk_simple_term dform_inherit_op []
     | Filter_type.DFormPrec s ->
          mk_string_term dform_prec_op s
     | Filter_type.DFormParens ->

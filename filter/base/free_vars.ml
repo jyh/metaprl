@@ -138,8 +138,13 @@ let free_vars expr =
          free_pwel bvars l pwel
     | <:expr< if $e1$ then $e2$ else $e3$ >> ->
          free bvars (free bvars (free bvars l e1) e2) e3
-    | MLast.ExLet (_, _, Ploc.VaVal pel, e) ->
-         free_pel bvars l e pel
+    | MLast.ExLet (_, rf, Ploc.VaVal pel, e) ->
+         (* The names a let binds are bound in its body, and in the
+          * right-hand sides only when it is recursive. *)
+         let bvars' = List.fold_left (fun bvars (p, _, _) -> patt_bvars bvars p) bvars pel in
+         let rhs_bvars = if rf = Ploc.VaVal true then bvars' else bvars in
+         let l = List.fold_left (fun l (_, e, _) -> free rhs_bvars l e) l pel in
+            free bvars' l e
     | <:expr< match $e$ with [ $list:pwel$ ] >>
     | <:expr< try $e$ with [ $list:pwel$ ] >> ->
          free_pwel bvars (free bvars l e) pwel
@@ -155,15 +160,17 @@ let free_vars expr =
     | _ ->
          raise (Failure "free_vars: expression not recognized")
    and free_pwel bvars l = function
-      (patt, _, e)::tl ->
-          free_pwel bvars (free (patt_bvars bvars patt) l e) tl
+      (patt, guard, e)::tl ->
+          (* A case binds its pattern's variables in its guard and body. *)
+          let bvars' = patt_bvars bvars patt in
+          let l =
+             match guard with
+                Ploc.VaVal (Some g) -> free bvars' l g
+              | _ -> l
+          in
+             free_pwel bvars (free bvars' l e) tl
      | [] ->
           l
-   and free_pel bvars l e = function
-      (patt, e, _)::tl ->
-          free_pel (patt_bvars bvars patt) (free bvars l e) e tl
-     | [] ->
-          free bvars l e
    in
       free [] [] expr
 

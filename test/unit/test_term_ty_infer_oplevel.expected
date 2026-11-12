@@ -1,0 +1,6 @@
+infer opk[a] (an operator parameter)     Perv!Term
+infer opk[b]                             Perv!Term
+infer lev[1] (a constant level)          Perv!Term
+infer lev['x] (a level variable)         Perv!Term
+infer lev["s"] (a string, not a level)   REFUSED: Term_ty_infer.tenv_find_type: unknown term
+infer opk[3] (a number, not an operator) REFUSED: Term_ty_infer.tenv_find_type: unknown term

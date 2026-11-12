@@ -47,16 +47,24 @@ if [ ! -f "$root/tactics/proof/prooflib.cma" ] && [ -f "$root/tactics/proof/proo
 else
    comp="ocamlfind ocamlc"; a=cma
 fi
+# A test whose first line is exactly "(* unit-link: filter *)" is also
+# linked against the term library (library/library) and the filter
+# (filter/prlc), which no other test needs; every other test's link is as
+# it was.
 # A test whose output is platform-specific (Setup's default editor is
 # notepad.exe on Win32) keeps a second file, test_*.expected.win32, used
 # when the compiler's os_type is Win32.
 os_type=$(ocamlfind ocamlc -config-var os_type 2>/dev/null)
 for src in "$here"/test_*.ml; do
    name=$(basename "$src" .ml)
+   extra=""
+   if [ "$(head -n 1 "$src" | tr -d '\r')" = "(* unit-link: filter *)" ]; then
+      extra="-I $root/library -I $root/filter/base $root/library/library.$a $root/filter/prlc.$a"
+   fi
    cp "$src" "$tmp/"
    if ! (cd "$tmp" && $comp -package unix,threads.posix,camlp5 -thread -linkpkg -rectypes \
            $includes "$root/libmojave/lm.$a" "$root/mllib/util.$a" "$root/refiner/refiner.$a" \
-           "$root/tactics/null/trefiner.$a" "$root/tactics/proof/prooflib.$a" $clibs \
+           "$root/tactics/null/trefiner.$a" "$root/tactics/proof/prooflib.$a" $extra $clibs \
            "$name.ml" -o "$name") > "$tmp/$name.build" 2>&1; then
       echo "FAIL $name: does not build"; cat "$tmp/$name.build"; status=1; continue
    fi

@@ -187,8 +187,8 @@ sig
    
    type extract_description =
       EDRule of ed_args
-    | EDRewrite of (opname * address) option
-    | EDCondRewrite of (ed_args * address) option
+    | EDRewrite of (opname * int * address) option
+    | EDCondRewrite of (ed_args * int * address) option
     | EDComposition (* any compilcated steps will fall into this category *)
     | EDNthHyp of int
     | EDCut of term

@@ -895,7 +895,7 @@ let type_subst v t ty =
             TypeHypCases (List.map (fun (ty_var, ty_hyp) -> subst ty_var, subst ty_hyp) cases)
        | TypeExists (v', ty_var, ty) ->
             let ty = if Lm_symbol.eq v' v then ty else subst ty in
-               TypeExists (v, subst ty_var, subst ty)
+               TypeExists (v', subst ty_var, ty)
        | TypeSequent (ty_hyp, ty_concl, ty_seq) ->
             TypeSequent (subst ty_hyp, subst ty_concl, subst ty_seq)
    in

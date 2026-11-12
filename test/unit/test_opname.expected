@@ -23,8 +23,8 @@ marshalled copy: normalize_opname copy == original   true
 marshalled copy: mk_opname c copy == [c; a; b]       true
 marshalled copy: compare copy original               0
 dst_opname [a; b]: eq rest [b]                       true
-marshalled copy: dst_opname, eq rest [b]             false
-marshalled copy: dst_opname, intern rest == intern [b] false
+marshalled copy: dst_opname, eq rest [b]             true
+marshalled copy: dst_opname, intern rest == intern [b] true
 marshalled copy: OpnameSet.mem copy {original}       true
 special var_opname                                   var
 special context_opname                               context

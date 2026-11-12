@@ -141,7 +141,21 @@ debug: a reference to an undefined name:     raised Invalid_argument("ASCII IO: 
    read back: f["tok":t, "g[]{}":sh]{c}
    alpha-equal to the term saved: true
 == save: N tok2 duplicates tok, a Token parameter names it
-   write_term raised Invalid_argument("ASCII IO: invalid entry encountered by add_items")
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+   read back: f["tok":t, "g[]{}":sh]{c}
+   alpha-equal to the term saved: true
 == save: N g2 duplicates g, an operator names it
    Nf	f	f NIL
    Ntok	tok	tok NIL
@@ -159,7 +173,21 @@ debug: a reference to an undefined name:     raised Invalid_argument("ASCII IO: 
    read back: f["tok":t, "g[]{}":sh]{c}
    alpha-equal to the term saved: true
 == save: T tdup duplicates t, a Shape parameter names it
-   write_term raised Invalid_argument("ASCII IO: invalid entry encountered by add_items")
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+   read back: f["tok":t, "g[]{}":sh]{c}
+   alpha-equal to the term saved: true
 == save: T tc duplicates t2, a bound term names it
    Nf	f	f NIL
    Ntok	tok	tok NIL

@@ -7,6 +7,10 @@ alpha lam x. lam y. g{x;y} = lam y. lam x. g{y;x} agree  true
 alpha lam x. lam x. x = lam y. lam x. x  agree  true
 alpha lam x. lam x. x = lam y. lam x. y  agree  false
 alpha lam x. g{lam y. x; y} = lam y. g{lam y. y; y} agree  false
+alpha lam x. lam y. lam x. g{x;y} = lam a. lam b. lam x. g{x;b} agree  true
+alpha lam x. lam y. lam x. g{x;y} = lam a. lam b. lam x. g{a;b} agree  false
+is_some_var_free [] g{x}                 agree  false
+is_some_var_free [y; x] g{x}             agree  true
 alpha f{x. a} = f{x,y. a} (binder lengths) agree  false
 alpha_equal_vars g{x} x / g{y} y         agree  true
 alpha_equal_vars g{x} x / g{y} y,z (lengths) agree  false

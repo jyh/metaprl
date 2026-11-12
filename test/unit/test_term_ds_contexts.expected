@@ -1,0 +1,18 @@
+term_subterm t1 [1;1]                    agree  a
+term_subterm t1 [1;2]                    agree  b
+term_subterm t1 [1;3] (the hole)         agree  g{x}
+term_subterm t1 [1;4]                    agree  both refused (std refused (make_index), ds refused (getnth))
+subterm_addresses t1                     agree  1
+subterm_addresses t2                     agree  5
+apply_fun_higher (g -> h) t1             agree  f{C<H>[[h{x}]][a;b]} count 1
+apply_fun_higher (g -> h) t2             agree  {<H<>[]>; x:A; <J<H>[x]>; y:h{x} >- h{f{x; y}}} count 2
+apply_fun_higher (nothing) t2            agree  {<H<>[]>; x:A; <J<H>[x]>; y:g{x} >- g{f{x; y}}} count 0
+alpha_equal t3 t3' (binder renamed)      agree  true
+alpha_equal t3 (C -> D)                  agree  false
+alpha_equal t3 (conts H -> K)            agree  false
+subst lam y. f{x;y}, x := y              agree  alpha_equal to the capture-free answer true, free vars [y]
+subst lam y. C[[f{x;y}]][y], x := y      agree  alpha_equal to the capture-free answer true, free vars [H,y]
+subst lam y. f{x; C[[y]][]}, x := y      agree  alpha_equal to the capture-free answer true, free vars [H,y]
+subst {y: A >- f{x;y}}, x := y           agree  alpha_equal to the capture-free answer true, free vars [y]
+subst t1, x := c                         agree  f{C<H>[[g{c}]][a;b]}
+var_subst t1, g{x} -> z                  agree  f{C<H>[[z]][a;b]}

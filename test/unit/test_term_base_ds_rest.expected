@@ -1,0 +1,17 @@
+dest_var of the body of (lam x. z)[y/z]  agree  y
+dest_term of f{z}[g{y}/z]                agree  f/1
+opname_of_term of h{z}[c/z]              agree  h
+opname_of_term of a context              agree  context
+opname_of_term of a sequent              agree  Perv!sequent
+subst lam z. g{z; w} [y/z; c/w]          agree  lam{z. g{z; c}}
+subst lam z. g{z; w} [c/w; y/z]          agree  lam{z. g{z; c}}
+subst lam z. g{z} [y/z; c/w]             agree  lam{z. g{z}}
+subst lam2 z w. g{z; w; u} [y/z; c/w; d/u] agree  lam2{z,w. g{z; w; d}}
+subst f{lam z. g{z; w}; z} [y/z; c/w]    agree  f{lam{z. g{z; c}}; y}
+subst f{lam z. g{z}; z} [y/z]            agree  f{lam{z. g{z}}; y}
+subst f{lam2 z w. g{z; w; u}; z; w} [y/z; c/w; d/u] agree  f{lam2{z,w. g{z; w; d}}; y; c}
+context rebuilt, binder renamed C to D   agree  C<H>[[g{C}]][a]
+context rebuilt, body unchanged (mentions C) agree  both refused (std refused (Invalid_argument Term_man_gen.dest_context: free variable got captured by a context variable), ds refused (Invalid_argument Term_base_ds.collect_context: variable clash))
+context rebuilt, body mentions C and D   agree  both refused (std refused (Invalid_argument Term_man_gen.dest_context: free variable got captured by a context variable), ds refused (Invalid_argument Term_base_ds.collect_context: variable clash))
+level 2 + i, j+1                         agree  2 i+0 j+1
+make_level of dest_level                 agree  1 k+2

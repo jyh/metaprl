@@ -21,3 +21,7 @@ rule_labels_not_allowed [select_crw]: passes
 rule_labels_not_allowed [a]: refused
 rule_labels_not_allowed [select_crw; a]: refused
 rule_labels_empty allowed by the empty table: true
+rule_labels_of_opt_terms None, a excluded: allowed true
+rule_labels_of_opt_terms Some [], a excluded: allowed true
+rule_labels_of_opt_terms Some [a], a excluded: allowed false
+rule_labels_of_opt_terms Some [b], a excluded: allowed true

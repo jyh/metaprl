@@ -1,0 +1,74 @@
+== built: nodes 4/9, partial
+  root   C[A]                           node
+    1      C[A]                           node
+      1.1    A[A]                           node
+      1.2    C[A,A]                         leaf
+    2      C[A,C]                         node
+== set_goal C [D, A]: nodes 4/9, incomplete
+  root   C[D,A]                         node
+    1      C[A]                           node
+      1.1    A[A]                           node
+      1.2    C[A,A]                         leaf
+    2      C[A,C]                         node
+== then expand: nodes 4/9, incomplete
+  root   C[D,A]                         node
+    1      C[D,A]                         node
+      1.1    A[D,A]                         node
+      1.2    C[D,A,A]                       leaf
+    2      C[D,A,C]                       node
+== set_goal C [A, D], then expand: nodes 4/9, incomplete
+  root   C[A,D]                         node
+    1      C[A,D]                         node
+      1.1    A[A,D]                         node
+      1.2    C[A,D,A]                       leaf
+    2      C[A,D,C]                       node
+== set_goal C [], then expand: nodes 4/9, incomplete
+  root   C[]                            node
+    1      C[]                            node
+      1.1    A[]                            node
+      1.2    C[A]                           leaf
+    2      C[C]                           node
+== set_goal E [A], then expand: nodes 3/8, partial
+  root   E[A]                           node
+    1      C[A]                           node
+      1.1    A[A]                           node
+      1.2    C[A,A]                         leaf
+    2      E[A,C]                         leaf
+    3      C[A,C]                         node
+== initialize_goal
+init called 1 time(s); label at [1]: assertion
+== initialize_goal at [1] with B [A, D]: nodes 2/5, partial
+  root   C[A]                           node
+    1      C[A]                           leaf
+    2      C[A,C]                         node
+    3      B[A,D]                         node
+      3.1    A[A]                           node
+      3.2    C[A,A]                         leaf
+label at [1] after initialize_goal with its own goal C [A]: init
+== initialize_goal at [1] with its own goal C [A]: nodes 4/9, incomplete
+  root   C[A]                           node
+    1      C[A]                           node
+      1.1    A[A]                           node
+      1.2    C[A,A]                         leaf
+    2      C[A,C]                         node
+== sequent goals
+== built (x: A >- C): nodes 2/5, partial
+  root   Arg: sequent Hyps: 1.x :A Goal:C[] node
+    1      Arg: sequent Hyps: 1.x :A Goal:C[] leaf
+    2      Arg: sequent Hyps: 1.x :A Goal:C[Arg: sequent Hyps: 1.x :A Goal:C] node
+== set_goal x: A; y: B >- C, then expand: nodes 2/5, incomplete
+  root   Arg: sequent Hyps: 1.x :A 2.y :B Goal:C[] node
+    1      Arg: sequent Hyps: 1.x :A Goal:C[] node
+    2      Arg: sequent Hyps: 1.x :A 2.y :B Goal:C[Arg: sequent Hyps: 1.x :A Goal:C] leaf
+== set_goal y: B; x: A >- C, then expand: nodes 2/5, incomplete
+  root   Arg: sequent Hyps: 1.y :B 2.x :A Goal:C[] node
+    1      Arg: sequent Hyps: 1.x :A Goal:C[] node
+    2      Arg: sequent Hyps: 1.y :B 2.x :A Goal:C[Arg: sequent Hyps: 1.x :A Goal:C] leaf
+== set_goal >- C, then expand: nodes 2/5, incomplete
+  root   Arg: sequent Hyps: Goal:C[]    node
+    1      Arg: sequent Hyps: 1.x :A Goal:C[] node
+    2      Arg: sequent Hyps: Goal:C[Arg: sequent Hyps: 1.x :A Goal:C] leaf
+== set_goal x: B >- C, then expand: nodes 2/5, incomplete
+  root   Arg: sequent Hyps: 1.x :B Goal:C[] node
+    1      Arg: sequent Hyps: 1.x :A Goal:C[] node
+    2      Arg: sequent Hyps: 1.x :B Goal:C[Arg: sequent Hyps: 1.x :A Goal:C] leaf

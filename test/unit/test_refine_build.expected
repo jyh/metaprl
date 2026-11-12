@@ -28,6 +28,12 @@ find_sentinal rb in B: rb                                    refused
 check_sentinal: failed test_refine_build_a!ra
 find_sentinal ra in B (through the join): ra                 refused
 find_sentinal of a name B does not have                      Not_found
+check_sentinal: failed test_refine_build_e!re0
+find_sentinal re0 in E (re0 before E joined A): re0          refused
+check_sentinal: failed test_refine_build_a!ra
+  ra                                                         refused
+find_sentinal re1 in E (re1 after the join): re0             accepted
+  ra                                                         accepted
 an ML rule under a sentinel of its refiner                   accepted
 an ML rewrite under a sentinel of its refiner                rewrites to c
 find_sentinal of an ML rule                                  refused (test_refine_build_ml!mlr: ML rules/rewrites can't be justified)

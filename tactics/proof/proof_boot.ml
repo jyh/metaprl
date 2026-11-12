@@ -1335,7 +1335,9 @@ struct
           | EDComposition ->
                StringStringArgList ("<tactic>", "thenT", "<tactic>")
           | EDNthHyp i ->
-               IntArgList ("nthAssumT", i)
+               (* The refiner counts assumptions from 0 (nthAssumT i passes i - 1
+                  to Refine.nth_hyp); describe the step with the tactic's number. *)
+               IntArgList ("nthAssumT", i + 1)
           | EDCut t ->
                TermArgList ("cutT", t)
           | EDIdentity ->

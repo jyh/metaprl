@@ -1,0 +1,27 @@
+== parameters
+s["a"] on s["a"]                                     MATCH []
+s["a"] on s["b"]                                     REFUSED: match_redex_params
+t[a:t] on t[a:t]                                     MATCH []
+t[a:t] on t[b:t]                                     REFUSED: match_redex_params
+n[3:n] on n[3:n]                                     MATCH []
+n[3:n] on n[4:n]                                     REFUSED: match_redex_params
+== meta parameters in the target
+n[@i:n] on n[@k:n] (a meta number)                   MATCH [meta-num k]
+s[@i:s] on s[@k:s] (a meta string)                   MATCH [meta-string k]
+t[@i:t] on t[@k:t] (a meta token)                    MATCH [meta-token k]
+n[@i:n] on n[5:n]                                    MATCH [num 5]
+n[3:n] on n[@k:n] (constant against a meta)          REFUSED: match_redex_params
+pair{n[@i]; n[@i]} on pair{n[@k]; n[@k]}             MATCH [meta-num k]
+pair{n[@i]; n[@i]} on pair{n[@k]; n[@m]}             REFUSED: update_redex_params
+pair{n[@i]; n[@i]} on pair{n[@k]; n[5]}              REFUSED: update_redex_params
+== sequent contexts, Strict
+C sees H, J: concl f{z}                              MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+C sees H only: concl f{x}                            MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+C sees H only: concl f{y}                            MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+C sees H only: concl f{z} (z bound in J)             REFUSED: check_cont_bvars_hyps (Variable appears free where it is not allowed to: z)
+the same, Relaxed                                    MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+C sees H only: J empty, concl f{x}                   MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+A sees nothing: x: g{y} after y: T                   REFUSED: check_cont_bvars_hyps (Variable appears free where it is not allowed to: y)
+A sees nothing: x: T after y: T                      MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+J sees nothing: z: g{y}                              REFUSED: check_cont_bvars_hyps (Variable appears free where it is not allowed to: y)
+J sees nothing: z: g{x}                              MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]

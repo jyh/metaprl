@@ -84,4 +84,10 @@ let () =
   check "[select_crw]" (Some [ mk_label_term (Opname.make_opname [ "select_crw"; "Perv" ]) ]);
   check "[a]" (Some [ mk_label_term labels.(0) ]);
   check "[select_crw; a]" (Some [ mk_label_term (Opname.make_opname [ "select_crw"; "Perv" ]); mk_label_term labels.(0) ]);
-  Printf.printf "rule_labels_empty allowed by the empty table: %b\n" (rule_labels_are_allowed options_empty rule_labels_empty)
+  Printf.printf "rule_labels_empty allowed by the empty table: %b\n" (rule_labels_are_allowed options_empty rule_labels_empty);
+  (* rule_labels_of_opt_terms: the optional label list of a rule as the filter passes it *)
+  let excl_a = add_option options_empty (mk_label_term labels.(0)) OptionExclude in
+  List.iter (fun (name, l) ->
+      Printf.printf "rule_labels_of_opt_terms %s, a excluded: allowed %b\n" name
+        (rule_labels_are_allowed excl_a (rule_labels_of_opt_terms l)))
+    [ "None", None; "Some []", Some []; "Some [a]", Some [ mk_label_term labels.(0) ]; "Some [b]", Some [ mk_label_term labels.(1) ] ]

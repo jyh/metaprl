@@ -12,15 +12,14 @@
      nthAssumT i     nthAssumT i, the tactic's own number (the refiner
                      counts from 0, and make_extract_expr adds 1 back)
      idT             the identity step (not an Extract)
-     rw c 0 addr     rw <name> <address> for one rewrite: the address of rw
+     rw c i addr     rw <name> <address> for one rewrite at the goal (i = 0),
+                     rw <name> <i> <address> at assumption i > 0: the address of rw
                      composed with addrC's or addrLiteralC's; <rewrite> for
                      a composite one (thenC, or higherC with two matches)
      a conditional   the same, with <conditional-rewrite>; a conditional
        rewrite       rewrite with parameters is rw ( <name> <params> ) addr
      a rule          its name and its arguments
    Measured and printed as fixed cases, not modelled:
-     - rw c i addr at an assumption i > 0 is described like rw c 0 addr:
-       the assumption number is not in the description;
      - higherC around ONE rewrite is described with the address of the rw
        (here the root), not the address where the rewrite happened:
        describe_rw passes its own address through RewriteHigher (_, [rw]);
@@ -129,5 +128,7 @@ let () =
   case "rw (higherC cung) 0 concl (two g)" (seq [] (f (g a) (g c))) [] (rw (higherC cung) 0 concl) [ [ 0 ] ];
   case "rw (cung thenC cung) 0 concl" (seq [] (g (g a))) [] (rw (prefix_thenC cung cung) 0 concl) [ [ 0 ] ];
   case "rw cpar[c] 0 concl" (seq [] (g (f a b))) [] (rw cpar 0 concl) [ [ 0 ] ];
+  case "rw cung 1 concl" a [ seq [] (g (f a b)) ] (rw cung 1 concl) [ [ 0 ] ];
+  case "rw cpar[c] 1 concl" a [ seq [] (g (f a b)) ] (rw cpar 1 concl) [ [ 0 ] ];
   case "rule ax_a" a [] (axiom "ax_a" a) [ []; [ 0 ] ];
   case "rule ax_a2 (goal a)" b [] (axiom "ax_a2" a) [ [ 0 ] ]

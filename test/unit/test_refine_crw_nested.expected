@@ -1,0 +1,2 @@
+hp on lam{x. h{x}} at [] (no match)          refused (Rewrite.apply_rewrite) other
+hp on lam{x. lam{x. h{x}}} at [1;1]          refused (apply_crwaddr at [1; 1], hp): Rewrite condition has free variable where it is not allowed: x1

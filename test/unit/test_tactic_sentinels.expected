@@ -1,0 +1,18 @@
+theory sentinel, r1                                  main: c
+theory sentinel, r2 (labels wf, None)                wf: c || main: c
+sentinel of object r2, r1                            main: c
+check_sentinal: failed tsent!r2
+sentinel of object r2, r2                            refused (check_sentinal)
+Warning: using default refiner for nosuch
+sentinel of object nosuch (a warning), r2            wf: c || main: c
+taking the sentinel of a theory never recorded       refused (get_theory: theory is not found nosuchthy)
+null_sentinal, r1                                    refused (Refine)
+compile_rule with one label for two subgoals         refused (make_subgoals)
+compile_rule with three labels for two subgoals      refused (make_subgoals)
+compile_ml_rule on r2                                main: c || main: c
+get_strings k  (withStringT k x (j y (k z ...)))     [x; z]
+get_strings none                                     []
+alpha_equal_concl  c |- r1{c}  vs  |- r1{c}          true
+alpha_equal_concl  |- r1{c}  vs  r1{c}               true
+alpha_equal_concl  |- r1{c}  vs  |- r2{c}            false
+argfun2T (fun x y p -> ...) "a" "b"                  ab main

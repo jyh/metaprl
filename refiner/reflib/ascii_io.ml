@@ -455,7 +455,7 @@ struct
           | ('C' | 'V'), [var::rest] -> (* XXX HACK: format versions <= 1.0.7 compatibility *)
                let rest' = Lm_list_util.smap rename rest in if rest == rest' then record else [var::rest']
           | 'P', [[("Token"|"Shape"|"Operator" as knd); s]] ->
-               let s' = rename s in if s == s' then record else [[knd; s]]
+               let s' = rename s in if s == s' then record else [[knd; s']]
           | 'P', _ ->
                record
           | _ ->

@@ -1,0 +1,62 @@
+== s[shape S] on s[shape of g{_}]
+MATCH [shape Ri!g[]{0}]
+== s[shape S] on s[shape var T]
+MATCH [shape-var T]
+== o[operator O] on o[operator h]
+MATCH [operator Ri!h]
+== o[operator O] on o[operator var P]
+MATCH [operator-var P]
+== l[level L] on l[level 2]
+MATCH [level Ri!lv[2:l]]
+== l[level L] on l[level i]
+MATCH [level Ri!lv['i:l]]
+== l[level L] on l[level i+1 | 3]
+MATCH [level Ri!lv[{3 | 'i'}:l]]
+== w[var X] on w[var y]
+REFUSED: compile_so_redex_param
+== s[shape S] on o[operator h] (no match)
+REFUSED: match_redex_term
+== f{lam x. 'b['x]; 'b['a]; 'a}
+Redex: Stack:
+          RStack: 3
+	FOVar x
+	SOVarPattern b<>[1]
+	SOVarPattern a<>[0]
+
+Terms:
+    RWComposite Ri!f
+    Bterm 0()
+       RWComposite Ri!lam
+          Bterm 1(stack:0 (default x))
+             RWSOVar (1, 0)
+    Bterm 0()
+       RWSOInstance (1)
+          RWSOVar (2, )
+    Bterm 0()
+       RWSOVar (2, )
+MATCH [string-var x; unsupported; term Ri!c]
+==   same, on f{lam x. g{x}; g{d}; c}
+REFUSED: check_simple_match
+== f{lam x. 'b['x]; 'b['a]; 'a; 'a}
+Redex: Stack:
+          RStack: 3
+	FOVar x
+	SOVarPattern b<>[1]
+	SOVarPattern a<>[0]
+
+Terms:
+    RWComposite Ri!f
+    Bterm 0()
+       RWComposite Ri!lam
+          Bterm 1(stack:0 (default x))
+             RWSOVar (1, 0)
+    Bterm 0()
+       RWSOInstance (1)
+          RWSOVar (2, )
+    Bterm 0()
+       RWSOVar (2, )
+    Bterm 0()
+       RWSOVar (2, )
+MATCH [string-var x; unsupported; term Ri!c]
+== f{lam x. 'b['x]; 'b['a]; lam y. 'a['y]} (arities)
+REFUSED: Rewrite_util.check_arity

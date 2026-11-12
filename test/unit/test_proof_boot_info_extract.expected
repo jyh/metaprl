@@ -58,6 +58,10 @@ rw (cung thenC cung) 0 concl on Arg: Perv!xnil Hyps: Goal:g{g{a}}
   info [0]    extract ("<conditional-rewrite>"), complete, 1 subgoal(s)
 rw cpar[c] 0 concl on Arg: Perv!xnil Hyps: Goal:g{f{a; b}}
   info [0]    extract ("rw", "(", "Test_proof_boot_info_extract.cpar", term c, ")", addr []), complete, 1 subgoal(s)
+rw cung 1 concl on a
+  info [0]    extract ("rw", "Test_proof_boot_info_extract.cung", addr []), complete, 1 subgoal(s)
+rw cpar[c] 1 concl on a
+  info [0]    extract ("rw", "(", "Test_proof_boot_info_extract.cpar", term c, ")", addr []), complete, 1 subgoal(s)
 rule ax_a on a
   info []     rule rule ax_a, complete, 0 subgoal(s)
   info [0]    extract ("Test_proof_boot_info_extract.ax_a"), complete, 0 subgoal(s)

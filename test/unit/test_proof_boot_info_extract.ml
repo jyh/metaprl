@@ -19,8 +19,9 @@
        rewrite       rewrite with parameters is rw ( <name> <params> ) addr
      a rule          its name and its arguments
    Measured and printed as fixed cases, not modelled:
-     - rw c i addr at an assumption i > 0 is described like rw c 0 addr:
-       the assumption number is not in the description;
+     - rw c i addr at an assumption i > 0 is described like rw c 0 addr,
+       for a rewrite and a conditional rewrite: the assumption number is
+       not in the description;
      - higherC around ONE rewrite is described with the address of the rw
        (here the root), not the address where the rewrite happened:
        describe_rw passes its own address through RewriteHigher (_, [rw]);
@@ -129,5 +130,7 @@ let () =
   case "rw (higherC cung) 0 concl (two g)" (seq [] (f (g a) (g c))) [] (rw (higherC cung) 0 concl) [ [ 0 ] ];
   case "rw (cung thenC cung) 0 concl" (seq [] (g (g a))) [] (rw (prefix_thenC cung cung) 0 concl) [ [ 0 ] ];
   case "rw cpar[c] 0 concl" (seq [] (g (f a b))) [] (rw cpar 0 concl) [ [ 0 ] ];
+  case "rw cung 1 concl" a [ seq [] (g (f a b)) ] (rw cung 1 concl) [ [ 0 ] ];
+  case "rw cpar[c] 1 concl" a [ seq [] (g (f a b)) ] (rw cpar 1 concl) [ [ 0 ] ];
   case "rule ax_a" a [] (axiom "ax_a" a) [ []; [ 0 ] ];
   case "rule ax_a2 (goal a)" b [] (axiom "ax_a2" a) [ [ 0 ] ]

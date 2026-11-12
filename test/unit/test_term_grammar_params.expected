@@ -1,0 +1,35 @@
+casts in quotation text:
+  foo[3:n]             [Number 3]
+  foo[x:n]             [MNumber x]
+  foo["s":n]           refused: Filter_type.BadParamCast(_, "n")
+  foo[3:s]             [String 3]
+  foo["s":s]           [String s]
+  foo[x:s]             [MString x]
+  foo[3:t]             [Token 3]
+  foo["s":t]           [Token s]
+  foo[x:t]             [MToken x]
+  foo[3:v]             [Var 3]
+  foo["s":v]           [Var s]
+  foo[x:v]             [Var x]
+  foo[3:l]             [MLevel max(3)]
+  foo[x:l]             [MLevel max(0, x)]
+  foo[x':l]            [MLevel max(1, x+1)]
+  foo[x'':l]           [MLevel max(2, x+2)]
+  foo["s":l]           refused: Filter_type.BadParamCast(_, "l")
+  foo[x:sh]            [MShape x]
+  foo["s":sh]          refused: Filter_type.BadParamCast(_, "sh")
+  foo[x:op]            [MOperator x]
+  foo[3:op]            refused: Filter_type.BadParamCast(_, "op")
+  foo[x:cls]           [MToken x]
+  foo[3:cls]           [Token 3]
+dest_xparam on base_grammar's terms:
+  3              Number 3
+  -3             Number -3
+  "s"            String s
+  i              MString i
+  i'             refused: RefineError dest_xparam_exp
+  i''            refused: RefineError dest_xparam_exp
+  2'             refused: RefineError dest_xparam_exp
+  i | j          MLevel max(0, i, j)
+  i' | 2         refused: RefineError dest_xparam_exp
+  i | 3          MLevel max(3, i)

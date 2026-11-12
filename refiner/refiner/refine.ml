@@ -272,8 +272,8 @@ struct
    and ext_just =
       RuleJust of rule_just
     | MLJust of rule_just * ml_extract * int
-    | RewriteJust of msequent * rewrite_just
-    | CondRewriteJust of msequent * cond_rewrite_just
+    | RewriteJust of msequent * int * rewrite_just
+    | CondRewriteJust of msequent * int * cond_rewrite_just
     | ComposeJust of ext_just * ext_just list
     | NthHypJust of msequent * int
     | CutJust of cut_just
@@ -456,8 +456,8 @@ struct
 
    type extract_description =
       EDRule of ed_args
-    | EDRewrite of (opname * address) option
-    | EDCondRewrite of (ed_args * address) option
+    | EDRewrite of (opname * int * address) option
+    | EDCondRewrite of (ed_args * int * address) option
     | EDComposition (* any complicated steps will fall into this category *)
     | EDNthHyp of int
     | EDCut of term
@@ -615,7 +615,7 @@ struct
          else
             { mseq with mseq_assums = Lm_list_util.replace_nth (pred i) t' mseq.mseq_assums }
       in
-         [subgoal], RewriteJust (mseq, just)
+         [subgoal], RewriteJust (mseq, i, just)
 
    (*
     * Apply a rewrite at an address.
@@ -735,7 +735,7 @@ struct
          in
          let cond = if i = 0 then t else t' in
          let subgoals = subgoal :: List.map (replace_subgoal seq cond) subgoals in
-            subgoals, CondRewriteJust (seq, just)
+            subgoals, CondRewriteJust (seq, i, just)
 
    (*
     * Apply the rewrite at the outermost terms where it does not fail.
@@ -883,26 +883,26 @@ struct
    let describe name args params =
       name, Array.to_list args.arg_ints, Array.to_list args.arg_addrs, params
 
-   let rec describe_rw addr = function
+   let rec describe_rw i addr = function
       RewriteHere (_, nm)
     | RewriteML (_, nm) ->
-         EDRewrite( Some ((nm, addr)))
+         EDRewrite( Some ((nm, i, addr)))
     | RewriteHigher(_, [rw]) ->
-         describe_rw addr rw
+         describe_rw i addr rw
     | RewriteAddress(_, addr', rw) ->
-         describe_rw (compose_address addr addr') rw
+         describe_rw i (compose_address addr addr') rw
     | _ ->
          EDRewrite None
 
-   let rec describe_crw addr = function
+   let rec describe_crw i addr = function
       CondRewriteHere crh
     | CondRewriteML (crh, _, _) ->
          EDCondRewrite (Some (
-            (describe crh.cjust_refiner crh.cjust_addrs crh.cjust_params), addr))
+            (describe crh.cjust_refiner crh.cjust_addrs crh.cjust_params), i, addr))
     | CondRewriteHigher(_, [crw]) ->
-         describe_crw addr crw
+         describe_crw i addr crw
     | CondRewriteAddress(_, addr', crw) ->
-         describe_crw (compose_address addr addr') crw
+         describe_crw i (compose_address addr addr') crw
     | _ ->
          EDCondRewrite None
 
@@ -910,8 +910,8 @@ struct
       match ext.ext_just with
          RuleJust j | MLJust (j, _, _) ->
             EDRule (describe j.just_refiner j.just_addrs j.just_params)
-       | RewriteJust (_, rw) -> describe_rw null_address rw
-       | CondRewriteJust (_, crw) -> describe_crw null_address crw
+       | RewriteJust (_, i, rw) -> describe_rw i null_address rw
+       | CondRewriteJust (_, i, crw) -> describe_crw i null_address crw
        | ComposeJust _ -> EDComposition
        | NthHypJust (_, i) -> EDNthHyp i
        | CutJust j -> EDCut j.cut_hyp
@@ -1005,7 +1005,7 @@ struct
          i
     | RewriteJust _ ->
          1
-    | CondRewriteJust (_, cond) ->
+    | CondRewriteJust (_, _, cond) ->
          cond_rewrite_just_subgoal_count find cond
     | ComposeJust (_, justl) ->
          List.fold_left (fun count just -> count + just_subgoal_count find just) 0 justl
@@ -1345,9 +1345,9 @@ struct
          compute_deps_rule (find.find_rule just.just_refiner)
     | MLJust (just, _, _) ->
          DepSet.singleton (DepRule, just.just_refiner)
-    | RewriteJust (_, just) ->
+    | RewriteJust (_, _, just) ->
          compute_deps_rwjust find.find_rewrite just
-    | CondRewriteJust (_, just) ->
+    | CondRewriteJust (_, _, just) ->
          compute_deps_crwjust find.find_cond_rewrite just
     | ComposeJust (just, justl) ->
          List.fold_left (fun ds j -> DepSet.union ds (compute_deps_ext find j)) (compute_deps_ext find just) justl

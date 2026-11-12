@@ -1,0 +1,24 @@
+== unzip_mfunction, labels
+u: (l, m: A) -> B -> G                       [l; m] 'u Tmp!A | [] - Tmp!B => Tmp!G
+a label on an iff                            REFUSED: unzip_mfunction
+== term_of_parsed_term, second-order variables
+lam{x. 'x<|H|>} (bound, no arguments)        Tmp!lam{'x. 'x}
+f{'a<|H|>[c]}                                Tmp!f{'a<|H|>[Tmp!c]}
+f{'a<|!!|>[c]}                               Tmp!f{'a<||>[Tmp!c]}
+f{'a<|H|>['b<|!!|>]}                         Tmp!f{'a<|H|>['b<||>]}
+<J>; x: 'A<|!!|> >- C (a hypothesis converted) Arg: Tmp!arg Hyps:       1.<J<||>>       2.x :'A<|J|> Goal:Tmp!C
+<J>; x: A; y: 'B<|!!|> >- C (x kept, y converted) Arg: Tmp!arg Hyps:       1.<J<||>>       2.x :Tmp!A       3.y :'B<|J|> Goal:Tmp!C
+f{z} (a free variable)                       Tmp!f{'z<||>}
+== term_of_parsed_term_with_vars
+f{'a<|!!|>}                                  Tmp!f{'a<||>}
+f{z} (a free variable)                       Tmp!f{'z}
+<J> >- 'C<|!!|>                              Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>
+== display_term_of_term
+<J> >- 'C<|J|> (the enclosing contexts)      Arg: Tmp!arg Hyps:       1.Base_dform!df_context{'J<|!!|>} Goal:'C<|!!|>
+<J> >- 'C<|K|> (others)                      Arg: Tmp!arg Hyps:       1.Base_dform!df_context{'J<|!!|>} Goal:'C<|K|>
+<J> >- 'C<||>                                Arg: Tmp!arg Hyps:       1.Base_dform!df_context{'J<|!!|>} Goal:'C<||>
+== context_subst_of_terms, hypotheses and context terms
+lookup A/1                                   Some [H]
+lookup D/1                                   Some [H]
+lookup E/0                                   Some [K]
+lookup D/2                                   FAILURE: Variable arity mismatch

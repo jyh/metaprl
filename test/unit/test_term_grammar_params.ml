@@ -14,11 +14,10 @@
  * reach none of the casts from a number or a string, and no xparam
  * succ or max.
  *
- * Pinned as found (the expected file is the output of the code as
- * written): Term_grammar names xparam_succ_opname "xparam_string", so
- * the term xparam_succ{p} that base_grammar builds for p' is not
- * recognised, and every level successor in that syntax is refused as
- * "not a parameter" (i', 2', i' | 2).
+ * The expected file is the output of the code.  Before the fix that
+ * followed this test, Term_grammar named xparam_succ_opname
+ * "xparam_string", so the term xparam_succ{p} that base_grammar builds
+ * for p' was refused as "not a parameter" (i', i'', 2', i' | 2).
  *)
 open Filter_type
 open Refiner.Refiner.TermType

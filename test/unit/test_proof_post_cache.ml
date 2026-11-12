@@ -8,12 +8,10 @@
    one line per entry (a refine also caches its rule box, so a refined and
    posted goal has two).  The expected file is the output of the code as
    written, never typed.
-   Pinned as found, not changed:
-     - when the posted address no longer exists in the new proof, reading
-       the entry raises RefineError "Proof_boot.index" instead of giving
-       the node seen before: compute_ext catches ProofRefineError and
-       ExtRefineError, but index turns a ProofRefineError into a
-       RefineError. *)
+   When the posted address no longer exists in the new proof, reading the
+   entry gives the node seen before.  It raised RefineError
+   "Proof_boot.index" while compute_ext called index, which turns the
+   ProofRefineError its handler catches into a RefineError. *)
 open Refiner.Refiner
 open Refiner.Refiner.Term
 open Tactic_boot

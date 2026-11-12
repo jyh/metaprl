@@ -27,7 +27,7 @@ address [1] disappears (goal H by cutT K)
   posted                     1 entry
     0: nodes (0, 1), partial, root goal/0
   after unrefine             1 entry
-    0: raised RefineError (Proof_boot.index)
+    0: nodes (0, 1), partial, root goal/0
 post twice (goal M)
   get_cache M|M              3 entries
     0: nodes (0, 1), partial, root goal/0

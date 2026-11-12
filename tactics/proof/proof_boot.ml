@@ -1219,7 +1219,9 @@ struct
          try
             let new_proof = f () in
             if !old_proof==new_proof then !old_node else
-               let new_node = index new_proof addr in
+               (* index_ext, not index: index turns a ProofRefineError into a
+                  RefineError, which the handler below would not catch *)
+               let new_node = index_ext new_proof new_proof [] addr in
                if msequent_alpha_equal (goal_ext new_node).ref_goal old_goal then
                   begin
                      if !debug_proof_pending then begin

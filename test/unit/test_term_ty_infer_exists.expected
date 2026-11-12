@@ -12,3 +12,12 @@ tkt{diag}                          REFUSED: type error
 tk3{some3}                         Perv!Term
 tkd3{some3}                        REFUSED: type error
 tk3{pair{zero; pair{tt; zero}}}    Perv!Term
+shadow                             Perv!ty_exists{Perv!Ty; 'a. Perv!ty_exists{Perv!Ty; 'a. Test!Pair{'a; 'a}}}
+tksh{some2}                        REFUSED: type error
+tksh{diag}                         Perv!Term
+tksh{shadow}                       Perv!Term
+tksh{pair{zero; tt}}               REFUSED: type error
+tksh{pair{zero; zero}}             Perv!Term
+tkd{shadow}                        Perv!Term
+tk2{shadow}                        Perv!Term
+tkt{shadow}                        REFUSED: type error

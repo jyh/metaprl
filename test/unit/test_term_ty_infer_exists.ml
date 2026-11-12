@@ -11,7 +11,8 @@
      some2 : exst a: Ty. exst b: Ty. Pair{'a; 'b}
      diag  : exst a: Ty. Pair{'a; 'a}
      some3 : exst a: Ty. exst b: Ty. exst c: Ty. Pair{'a; Pair{'b; 'c}}
-   and takers tk2 (some2's type), tks (Pair{'b; 'a}), tkd (diag's type),
+     shadow : exst a: Ty. exst a: Ty. Pair{'a; 'a} (the inner a shadows)
+   and takers tksh (shadow's type), tk2 (some2's type), tks (Pair{'b; 'a}), tkd (diag's type),
    tk3 (some3's type), tkd3 (exst a. exst b. Pair{'a; Pair{'b; 'b}}) and
    tkt (Pair{Term; Term}).  Each case prints the inferred type, or the
    first string of the error raised; the expected file is the output of
@@ -57,6 +58,7 @@ let some2_ty = ex "a" type_c (ex "b" type_c (pair_ty (var "a") (var "b")))
 let swap2_ty = ex "a" type_c (ex "b" type_c (pair_ty (var "b") (var "a")))
 let diag_ty = ex "a" type_c (pair_ty (var "a") (var "a"))
 let some3_ty = ex "a" type_c (ex "b" type_c (ex "c" type_c (pair_ty (var "a") (pair_ty (var "b") (var "c")))))
+let shadow_ty = ex "a" type_c (ex "a" type_c (pair_ty (var "a") (var "a")))
 let diag3_ty = ex "a" type_c (ex "b" type_c (pair_ty (var "a") (pair_ty (var "b") (var "b"))))
 
 let typeenv =
@@ -88,6 +90,8 @@ let termenv =
          decl (uop "tkd") [ bt diag_ty ] term_c (tk "tkd" zero);
          decl (uop "tk3") [ bt some3_ty ] term_c (tk "tk3" zero);
          decl (uop "tkd3") [ bt diag3_ty ] term_c (tk "tkd3" zero);
+         decl (uop "shadow") [] shadow_ty (c0 "shadow");
+         decl (uop "tksh") [ bt shadow_ty ] term_c (tk "tksh" zero);
          decl (uop "tkt") [ bt (pair_ty term_c term_c) ] term_c (tk "tkt" zero) ])
 
 let tenv =
@@ -123,4 +127,13 @@ let () =
   infer "tkt{diag}" (tk "tkt" (c0 "diag"));
   infer "tk3{some3}" (tk "tk3" (c0 "some3"));
   infer "tkd3{some3}" (tk "tkd3" (c0 "some3"));
-  infer "tk3{pair{zero; pair{tt; zero}}}" (tk "tk3" (pair zero (pair tt zero)))
+  infer "tk3{pair{zero; pair{tt; zero}}}" (tk "tk3" (pair zero (pair tt zero)));
+  infer "shadow" (c0 "shadow");
+  infer "tksh{some2}" (tk "tksh" (c0 "some2"));
+  infer "tksh{diag}" (tk "tksh" (c0 "diag"));
+  infer "tksh{shadow}" (tk "tksh" (c0 "shadow"));
+  infer "tksh{pair{zero; tt}}" (tk "tksh" (pair zero tt));
+  infer "tksh{pair{zero; zero}}" (tk "tksh" (pair zero zero));
+  infer "tkd{shadow}" (tk "tkd" (c0 "shadow"));
+  infer "tk2{shadow}" (tk "tk2" (c0 "shadow"));
+  infer "tkt{shadow}" (tk "tkt" (c0 "shadow"))

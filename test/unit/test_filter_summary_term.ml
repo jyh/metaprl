@@ -21,15 +21,12 @@
  * modes and options read back when they differ from those written.  The
  * expected file is the output of the code as written.
  *
- * Pinned as found:
- * - a dform's DFormInheritPrec option is written as a prec_df term with
- *   no parameter, which the reader takes for DFormPrec and refuses
- *   (dest_string_param), so a module with such a dform cannot be read
- *   back at all (the line for all items in one module raises too);
- * - Modes and ExceptModes come back in reverse order (the reader pushes
- *   them and does not reverse, as it does for the options);
- * - PrimitiveModes is written as no modes, so it comes back as AllModes.
+ * Pinned as found: PrimitiveModes is written as no modes, so it comes
+ * back as AllModes (keeping it needs a term of its own, a format change).
  * An empty PRLGrammar writes no term and comes back as no item.
+ * Fixed after this test was written: DFormInheritPrec was written as a
+ * prec_df with no parameter, which the reader refused, and Modes and
+ * ExceptModes came back reversed.
  *)
 
 open Lm_symbol

@@ -1,0 +1,35 @@
+post at [] (A by nthAssumT 1, A in hyps)
+  proof                      nodes (1, 2), complete, root rule nthAssumT 1/0
+  post returns               nodes (1, 2), complete, root rule nthAssumT 1/0
+  get_cache A|A              2 entries
+    0: nodes (1, 2), complete, root rule nthAssumT 1/0
+    1: nodes (1, 2), complete, root rule nthAssumT 1/0
+  get_cache A|-              0 entries
+  get_cache B|A              0 entries
+post at [1] (D by cutT E, subgoal 1 is E)
+  proof                      nodes (1, 4), partial, root rule cutT E/2
+  goal [1]                   goal/0
+  post returns               nodes (1, 4), partial, root rule cutT E/2
+  get_cache E|-              1 entry
+    0: nodes (0, 1), partial, root goal/0
+  get_cache p [1]            1 entry
+    0: nodes (0, 1), partial, root goal/0
+re-read after the proof changes (goal F)
+  unchanged                  1 entry
+    0: nodes (0, 1), partial, root goal/0
+  same goal, refined         2 entries
+    0: nodes (1, 2), complete, root rule nthAssumT 1/0
+    1: nodes (1, 2), complete, root rule nthAssumT 1/0
+  goal changed to G          2 entries
+    0: nodes (1, 2), complete, root rule nthAssumT 1/0
+    1: nodes (1, 2), complete, root rule nthAssumT 1/0
+address [1] disappears (goal H by cutT K)
+  posted                     1 entry
+    0: nodes (0, 1), partial, root goal/0
+  after unrefine             1 entry
+    0: nodes (0, 1), partial, root goal/0
+post twice (goal M)
+  get_cache M|M              3 entries
+    0: nodes (0, 1), partial, root goal/0
+    1: nodes (1, 2), complete, root rule nthAssumT 1/0
+    2: nodes (1, 2), complete, root rule nthAssumT 1/0

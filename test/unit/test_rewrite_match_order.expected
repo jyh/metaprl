@@ -1,0 +1,32 @@
+== free first-order variables (RWMatchFreeFOVar)
+pair{x; x} on pair{y; y}                             MATCH [term 'y]
+pair{x; x} on pair{y; z}                             REFUSED: match_redex_term
+pair{x; x} on pair{y; k}                             REFUSED: dest_var
+== second-order variable instance before / after its pattern
+pair{'a[k]; lam{x.'a['x]}} on pair{f{k}; lam{x.f{x}}} MATCH [unsupported; meta-string x]
+pair{'a[k]; lam{x.'a['x]}} on pair{f{j}; lam{x.f{x}}} REFUSED: match_redex_term
+pair{lam{x.'a['x]}; 'a[k]} on pair{lam{x.f{x}}; f{k}} MATCH [meta-string x; unsupported]
+pair{lam{x.'a['x]}; 'a[k]} on pair{lam{x.f{x}}; f{j}} REFUSED: match_redex_term
+tri{'a[k]; 'a[j]; lam{x.'a['x]}} on tri{f{k}; f{j}; lam{x.f{x}}} MATCH [unsupported; meta-string x]
+tri{'a[k]; 'a[j]; lam{x.'a['x]}} on tri{f{k}; f{k}; lam{x.f{x}}} REFUSED: match_redex_term
+== bound-variable counts
+f{'a} on f{x.x}                                      REFUSED: match_redex_bterms
+lam{x.'a['x]} on lam2{x,y.x}                         REFUSED: match_redex_bterms
+== parameter counts
+p[a;b] on p[a]                                       REFUSED: Rewrite.match_redex_params_iter (length mismatch)
+== context hypotheses in the target
+H = <K>: <K>; x: T                                   MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+J = <L>: y: T; x: T; <L>                             MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+J = <x>: y: T; x: T; <x> (context named x)           MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+H empty, J = <L>: x: T; <L>                          MATCH [unsupported; term Rmp!T; meta-string x; unsupported; unsupported]
+== a free variable as a rule argument, restricted from <H>
+arg y; y: T >- f{y} (H's y renamed)                  MATCH [term 'y; unsupported; term Rmp!f{'y1}]
+arg y; <K>; y: T >- f{y}                             MATCH [term 'y; unsupported; term Rmp!f{'y1}]
+arg y; z: T >- f{y} (no clash)                       MATCH [term 'y; unsupported; term Rmp!f{'y}]
+arg y; <y> >- f{y} (a context named y)               REFUSED: Rewrite_match_redex.hyp_clashes (Context variable occures freely where it is not allowed: y)
+the same, Relaxed                                    MATCH [term 'y; unsupported; term Rmp!f{'y}]
+args y, z; y: T; z: T >- g{y; z} (both renamed)      MATCH [term 'y; term 'z; unsupported; term Rmp!g{'y1; 'z1}]
+== a free variable in the goal, restricted from <H> (already matched)
+<H> >- f{x} on y: T >- f{w}                          MATCH [unsupported; term 'w]
+<H> >- f{x} on y: T >- f{y}                          REFUSED: check_cont_bvars_hyps (Variable appears free where it is not allowed to: y)
+<H> >- f{x} on <y> >- f{y}                           REFUSED: check_cont_bvars_hyps (Variable appears free where it is not allowed to: y)

@@ -10,6 +10,9 @@ subst lam2 z w. g{z; w; u} [y/z; c/w; d/u] agree  lam2{z,w. g{z; w; d}}
 subst f{lam z. g{z; w}; z} [y/z; c/w]    agree  f{lam{z. g{z; c}}; y}
 subst f{lam z. g{z}; z} [y/z]            agree  f{lam{z. g{z}}; y}
 subst f{lam2 z w. g{z; w; u}; z; w} [y/z; c/w; d/u] agree  f{lam2{z,w. g{z; w; d}}; y; c}
+subst h{z. g{z}; z} [y/z]                agree  h{z. g{z}; y}
+subst h{z. g{z; w}; z} [y/z; c/w]        agree  h{z. g{z; c}; y}
+subst h{z. g{z; w; u}; z} [c/w; y/z; d/u] agree  h{z. g{z; c; d}; y}
 context rebuilt, binder renamed C to D   agree  C<H>[[g{C}]][a]
 context rebuilt, body unchanged (mentions C) agree  both refused (std refused (Invalid_argument Term_man_gen.dest_context: free variable got captured by a context variable), ds refused (Invalid_argument Term_base_ds.collect_context: variable clash))
 context rebuilt, body mentions C and D   agree  both refused (std refused (Invalid_argument Term_man_gen.dest_context: free variable got captured by a context variable), ds refused (Invalid_argument Term_base_ds.collect_context: variable clash))

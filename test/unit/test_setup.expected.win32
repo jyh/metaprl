@@ -29,6 +29,12 @@ editor: no file, no EDITOR (exit 0)
     editor: notepad.exe
 editor: .metaprl/editor holds emacs (exit 0)
     editor: emacs -nw
+editor: .metaprl/editor holds emacs, file closed after (exit 0)
+    editor: emacs -nw
+    the editor file is closed again: true
+editor: .metaprl/editor is empty, file closed after (exit 0)
+    editor: notepad.exe
+    the editor file is closed again: true
 hostname from MP_BROWSER_HOSTNAME (exit 0)
     gethostname: test.example
     after sethostname: gethostname: other.example

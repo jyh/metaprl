@@ -132,7 +132,8 @@ module MakeSingletonCombo (Info : FileTypeInfoSig) :
                         if Lm_list_util.find_index magic' magics > magic then begin
                            Lm_printf.eprintf "File %s: expected magic 0x%x, gotten 0x%x (full list: [%s])%t" filename (List.nth magics magic) magic' (String.concat "; " (List.map (Printf.sprintf "0x%x") magics)) Lm_printf.eflush;
                            raise (Failure (Printf.sprintf "File %s has been modified, write operation failed" filename))
-                        end
+                        end;
+                        close_in inx
                   with
                      End_of_file ->
                         close_in inx

@@ -1,0 +1,18 @@
+[<H>; x:A; y:B]                          [<H>; z:A]                   code 2       model 2
+[<H>; x:A; y:B]                          [<H>; z:B]                   code 2       model 2
+[<H>; x:A]                               [<H>; z:A; w:B]              code 2       model 2
+[<H>; x:A]                               [<H>; z:B; w:A]              code 1       model 1
+[x:A; y:B]                               [z:A; w:B]                   code 2       model 2
+[x:A; y:B]                               [z:B]                        code 1       model 1
+[x:A; y:B]                               [z:D]                        code 1       model 0  (pinned: none matched)
+[x:A]                                    [z:D; w:A]                   code 1       model 0  (pinned: none matched)
+[x:A]                                    []                           code 1       model 0  (pinned: none matched)
+[]                                       [z:A]                        code 1       model 0  (pinned: none matched)
+[x:A; y:g{'x}]                           [z:A; w:g{'z}]               code 2       model 2
+[x:A; y:g{'x}]                           [z:B; w:g{'z}]               code 1       model 0  (pinned: none matched)
+[x:A; x:A; y:g{'x2}]                     [z:A; w:g{'z}]               code 1       model 2  (pinned: greedy, not maximal)
+[<H>; x:A; <J>]                          [<H>; <J>]                   code 2       model 2
+[<H>; x:A]                               [<H>; z:A; <J>]              code refused model refused
+[<J>; x:A]                               [<H>; z:A]                   code refused model refused
+[<H[a]>; x:A]                            [<H[a]>; z:A]                code 2       model 2
+[<H[a]>; x:A]                            [<H[b]>; z:A]                code refused model refused

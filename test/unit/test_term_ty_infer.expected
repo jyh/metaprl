@@ -1,0 +1,67 @@
+== infer_term
+infer zero                                       Perv!Term
+infer succ{zero}                                 Perv!Term
+infer succ{tt} (Prop below Term)                 Perv!Term
+infer eq{zero; tt}                               Perv!Judgment
+infer succ{eq{zero; zero}} (Judgment is no Term) REFUSED: type error
+infer lam{x. succ{x}}                            Perv!Term
+infer lam{x. eq{x; x}} (body must be a Term)     REFUSED: type error
+infer num[3]                                     Perv!Term
+infer name["a"] (string parameter)               Perv!Term
+infer name[a] (token where a string is declared) REFUSED: Term_ty_infer.tenv_find_type: unknown term
+infer tag[tt] (tt : Prop)                        Perv!Term
+infer tag[zero] (zero : Term, no Prop)           REFUSED: type error
+infer tag[undeclared]                            REFUSED: Term_ty_infer.tenv_find_type: unknown term
+infer bad{x. zero} (declared without its binder) REFUSED: Term_ty_infer.infer_bterms: arity mismatch
+infer odd[1] (declared with a string parameter)  REFUSED: Term_ty_infer.infer_params: param mismatch
+infer a free variable x                          a type variable
+infer succ{x} (free x)                           Perv!Term
+infer eq{x; succ{x}} (free x)                    Perv!Judgment
+infer 'a[zero] (second-order variable)           a type variable
+infer succ{'a[zero]}                             Perv!Term
+infer an undeclared term                         REFUSED: Term_ty_infer.tenv_find_type: unknown term
+infer succ with two subterms                     REFUSED: Term_ty_infer.tenv_find_type: unknown term
+infer the typeclass term Term                    Perv!Ty
+infer the typeclass term Prop                    Perv!Ty
+infer zero constrained to Term                   REFUSED: Term_ty_infer.tenv_find_type: unknown term
+== check_rule
+rule eq{zero; zero}                              OK
+rule zero (goal is no Judgment)                  REFUSED: type error
+rule eq{x;x} --> eq{succ{x}; succ{x}}            OK
+rule with subgoal zero (no Judgment)             REFUSED: type error
+rule with argument succ{zero}                    OK
+rule with argument eq{.} constrained to Term     REFUSED: type error
+== check_rewrite
+rewrite succ{zero} <--> zero                     OK
+rewrite succ{'a} <--> 'a                         OK
+rewrite zero <--> tt (Prop below Term)           REFUSED: type error
+rewrite tt <--> zero (Term not below Prop)       REFUSED: type error
+rewrite zero <--> eq{zero; zero}                 REFUSED: type error
+rewrite with condition zero                      OK
+rewrite with condition eq{.} (no Term)           REFUSED: type error
+== check_type_rewrite, check_dform, check_iform, check_production
+type rewrite Prop --> Term                       OK
+type rewrite zero --> Term (zero is no type)     REFUSED: type error
+dform df{zero} = df{succ{zero}}                  OK
+dform df{zero} = zero (no Dform)                 REFUSED: type error
+iform succ{zero} <--> eq{zero; zero}             OK
+iform of an undeclared term                      REFUSED: Term_ty_infer.tenv_find_type: unknown term
+production nt nt --> nt                          OK
+production nt --> zero (no Nonterminal)          REFUSED: type error
+== erase
+the constrained term                             Perv!ty_constrain{Test!succ{Perv!ty_constrain{Test!succ{Perv!ty_constrain{Test!zero;
+                       Perv!Term}}; Perv!Term}}; Perv!Term}
+erase_term                                       Test!succ{Test!succ{Test!zero}}
+erase_arg_term                                   Test!succ{Perv!ty_constrain{Test!succ{Perv!ty_constrain{Test!zero; Perv!Term}};
+   Perv!Term}}
+erase_arg_term of an unconstrained term          Test!zero
+erase_meta_term                                  Test!succ{Test!succ{Test!zero}} / Test!zero
+== is_seq_ignore_bindings_tp
+a sequent binding Ignore                         true
+a sequent binding Term, hypothesis Ignore        false
+a sequent binding Term                           false
+a sequent with hypothesis cases                  false
+not a sequent type                               false
+== dest_ty_sequent_cases
+two cases                                        Perv!Term:Perv!Prop, Perv!Ty:Perv!Ignore | Perv!Dform | Perv!Judgment
+one hypothesis                                   Perv!Term:Perv!Prop

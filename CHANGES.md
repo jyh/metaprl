@@ -119,6 +119,83 @@ against libmojave 1.1.1 or later:
   div and rem explicit definitions; the earlier axiom `rem_neg` had the
   right form.
 
+- `itt_int_ext` could prove False (#144): the definition of `div` recursed
+  as `else div (a - b) b`, dropping the `1 +@`, so unfolding gave
+  `7 /@ 2 ~ 0` where the primitive literal rewrite gives 3. `rem`, defined
+  from `div`, inherited it. The definition now adds the 1; `div_neg` is
+  re-proved with a new lemma `ge_zero_both`. Test:
+  `editor/ml/tests/int_div_def.sh` (unfolds both definitions on literals,
+  never through `byDefT`; all six cases fail on the old definition).
+- The ITT core could prove `void` (#145):
+  `itt_inv_typing.independentProductTypeElimination` inferred `type{B}`
+  from `type{A * B}`, which is false when `A` is empty (`type{void * B}`
+  holds for every `B`); a 42-step derivation reached `void`. The rule now
+  adds `w: (A -> type{B})`, the form `functionTypeElimination` uses.
+  `itt_record0.recordTypeElimination`, the one stored proof that depended
+  on the old form, is re-proved. Test: `editor/ml/tests/inv_typing_sound.sh`
+  (the derivation must not close; its true first step must).
+- Every division and remainder rule of `itt_int_ext` is now proved (#244):
+  `div_wf`, `rem_wf`, `div_remProperty`, `rem_baseReduce`, `div_indReduce`,
+  `rem_neg`, `rem_neg_rw`, `rem_indReduce`, `lt_divMono`, `add_divReduce`
+  and `div_Assoc`, on the corrected `div`, so no rule in the module is
+  unproved.
+- `Proof_boot.make_assum` added each node's own conclusion as an assumption
+  instead of the chosen goal's, because a local binding shadowed the
+  parameter (#156; pinned by #155). Its one caller is the proof editor's
+  `make_assum` command.
+- `rewrite_of_parsed_rewrite` parsed the contractum before the redex (an
+  OCaml tuple is evaluated right to left), so a second-order variable's
+  default contexts came from the contractum (#181; pinned by #179). Three
+  theories' rewrites now parse with the context they name (`cic_ind_type`,
+  `itt_vec_dform`, `s4_logic`); no proof status changes.
+- `expand` of an unchanged proof could move a sub-proof to another subgoal:
+  a leaf's fuzzy match could take the sub-proof made for a later leaf that
+  matched it exactly (26 of 300 random proofs). Every leaf now gets its
+  exact match first (#183; pinned by #182).
+- `Rewrite_compile_redex` looked a free-variable context's restriction up
+  by its address index instead of its stack index, so under a binder
+  `Not_found` escaped `compile_redices`, or the context silently got another
+  variable's restriction (#199; pinned by #198).
+- `Unify_mm` raised on a sequent at the top level under `TERMS = ds` (the
+  default), and its sequent view built generic terms that std and ds read
+  differently; it now has a private sequent symbol (#162).
+- `type_subst` on a nested existential type rebuilt it with the substituted
+  variable's name, leaving the inner variable free, so
+  `exst a: Ty. exst b: Ty. Pair{'a; 'b}` was accepted where
+  `exst a: Ty. Pair{'a; 'a}` is required (#231). Latent in the theories (no
+  theory build reaches the arm).
+- `Proof.post`: reading the cache after the posted address disappeared
+  raised `RefineError "Proof_boot.index"` instead of giving the old node
+  (#232). No shell path to it was found.
+- `Ascii_io` renamed a duplicate named by a Token, Shape or Operator
+  parameter and then wrote the old name, so saving such a (hand-edited)
+  file raised (#214; pinned by #213).
+- `Opname.dst_opname` on an un-normalized marshalled copy returned a
+  remainder that `eq` judged different from the shared opname (#251). No
+  caller is affected today.
+- `File_type_base`'s `check` left the channel open on every save over an
+  existing file; on Windows the handle stopped the file from being removed
+  (#246). `Setup.editor` left `~/.metaprl/editor` open when the file is
+  empty (#250).
+- `Proof.info` described `nthAssumT i` as `nthAssumT (i - 1)` (#230), and a
+  rewrite at an assumption i > 0 like the same rewrite at the goal (#236).
+  Display only.
+- `Proof_boot.replace_child` had an unreachable arm with an off-by-one
+  index; it now refuses like `select_child` (#233).
+- `lambdaSqSubstT` (itt_struct2) found its subterm with a stateful
+  predicate, which gave a different answer on a second run (#161). The
+  default build gets the same address and argument as before.
+- The `TERMS = both` differential checker (`Refiner_debug`, which runs
+  every refiner call on term_std and term_ds and reports any disagreement)
+  did not build on master and, once built, lost 1,149 of 5,191 proof
+  statuses to its own defects: polymorphic comparison of caller-supplied
+  results, exceptions of the wrong module (#160), binder names std and ds
+  may legitimately choose differently (#163, #164, #167, #168), and
+  callbacks run once per implementation (#165, #166; the cause of four
+  modules growing past 8 GB). With these and #161 / #162 the `TERMS = both`
+  census replays 264 of 264 modules with no disagreement. The default build
+  does not use `Refiner_debug`.
+
 ### Tests
 
 - Unit tests for MetaPRL's OCaml libraries (`test/unit/`, #51): each
@@ -532,15 +609,135 @@ against libmojave 1.1.1 or later:
   filter `cygpath -m` paths and join `MP_INCLUDE` with `;` under Cygwin
   (before, every case failed there); the goldens print byte-identically on
   Windows and Linux.
+- Tests added 2026-11-03 to 2026-11-12, one line per pull request; each
+  description gives the cases, what is pinned, and the mutants run against
+  the real source:
+  - Options_boot's option table against a model (#146).
+  - The conversion combinators of Conversionals_boot against a model (#147).
+  - Sequent_boot's goal accessors against a list model (#148).
+  - Tacticals_boot combinators against a model (#149).
+  - Tacticals_boot clause tacticals against a model (#150).
+  - Rewrite_boot's rw tactic against a model (#151).
+  - Exn_boot.format_exn's Unix and fall-through forms (#152).
+  - Proof_convert and the proof io round trips (#153).
+  - Proof_boot's tree accessors against a model (#154).
+  - Proof_boot's editing operations against a model (#155).
+  - Pin refine.ml rules (create_rule, prim_rule, sentinels) against a model
+    (#157).
+  - Pin refine.ml conditional rewrites against a model (#158).
+  - Pin refine.ml extracts (derived/delayed rules, extract_term,
+    compute_dependencies) (#159).
+  - A weekly TERMS = both proof census that fails on any std/ds disagreement
+    (#169).
+  - Pin Term_ty_infer (inference and the six check_* functions) (#170).
+  - Pin Dform (mode selection, precedence and parentheses, slots) (#171).
+  - JProver on first-order formulas, and its LJ proof reconstruction (#172).
+  - Pin Rewrite_match_redex's parameter, meta-parameter and Strict-context
+    branches (#173).
+  - SupInf's min/max forms (MakeSAF) against a pointwise model (#174).
+  - Pin Rewrite_compile_redex's instance, address-context and
+    argument-restriction branches (#175).
+  - Pin Rewrite_build_contractum (parameters, binder renaming, context fill,
+    hypothesis substitution) (#176).
+  - Pin Rewrite_compile_contractum's remaining census-only branches (#177).
+  - Pin the remaining Tacticals_boot tacticals (label filters, sequencing,
+    assumptions, arguments) (#178).
+  - Pin Term_meta_gen's parser-side conversions (pins a rewrite-parsing
+    order defect) (#179).
+  - Pin the clause and assumption rewrite tactics of Conversionals_boot
+    (#180).
+  - Pin Proof.expand and Proof.kreitz (expand moves sub-proofs between
+    subgoals) (#182).
+  - Pin Tactic_boot's attribute and option tacticals (#184).
+  - Term_ds against term_std on context terms and sequents (#185).
+  - `test_refine_build`: how the refiner is built and checked (#186).
+  - Tests for Refine_exn's error printer and conditional rewrites in
+    Rewrite_boot (#187).
+  - `test_tactic_sentinels`: theory sentinels and rule tactics in
+    Tactic_boot (#188).
+  - `test_refine_derived_rw`: derived and delayed rewrites in the refiner
+    (#189).
+  - `test_term_ty_infer_seq`: Term_ty_infer on sequents, contexts and
+    meta-parameters (#190).
+  - `test_proof_composite`: Proof on refinements by composite tactics
+    (#191).
+  - `test_rewrite_seq_redex`: contexts with arguments in two sequents of a
+    redex (#192).
+  - `test_dform_prims`: Dform's formatting primitives (#193).
+  - `test_rewrite_opparam`: operator parameters in the rewriter (#194).
+  - JProver in S4, and its LJ rule permutations (#195).
+  - Jtunify's S4 prefix unification, unifiers checked (#196).
+  - SupInf's Tree, infinities, term_of and sources (#197).
+  - Rewrite_compile_redex's argument restrictions, as compiled (#198).
+  - Term_subst_ds against term_std on binder renaming and contexts (#200).
+  - Mp_resource's imperative processors, improve_list and the top resource
+    (#201).
+  - Match_seq.match_some_hyps against a model; two behaviours pinned (#202).
+  - Unify_mm with second-order variables, mixed symbols and constants
+    (#203).
+  - Term_base_ds against term_std on pending substitutions and contexts
+    (#204).
+  - Term copying across implementations, levels and meta-terms (#205).
+  - Term_man_ds against term_std on parameter kinds (#206).
+  - Term_match_table's resource adapters, sequent patterns and buckets
+    (#207).
+  - File_base, the multi-format store of a theory's compiled files (#208).
+  - Term_addr_ds against term_std on contexts, SO variables and bad
+    addresses (#209).
+  - Rewrite's parameter items and Rewrite_util's maybe-patterns (#210).
+  - A matched context re-instantiated with other arguments in a contractum
+    (#211).
+  - WhileProgressMT, onSomeHypT, thinning and int arguments, options (#212).
+  - Ascii_io's parameter kinds, old-format readers and save path (#213).
+  - Proof_term_boot's attribute and node kinds, and hand-edited proof terms
+    (#215).
+  - The refiner's extracts and dependencies through rewrite steps (#216).
+  - Refine_exn on every refine_error constructor and exception kind (#217).
+  - Tactic_boot's arglist compression, printers and attribute removal
+    (#218).
+  - Proof_boot's editor operations on attribute and composite nodes (#219).
+  - Proof_boot's editor operations below the root (#220).
+  - The refiner's extracts and dependencies through conditional rewrites
+    (#221).
+  - Refiner extracts of sequents with hypotheses (upd_term) (#222).
+  - Term_ty_infer on polymorphic declarations (#223).
+  - Term_ty_infer on sequent types as values and existential hypotheses
+    (#224).
+  - Proof_boot editing operations on nested and reloaded proofs (#225).
+  - Term_ty_infer on quoted terms and non-term types as values (#226).
+  - Proof.info at a step's extract (make_extract_expr) (#227).
+  - Term_ty_infer unify_equal_params on Quote, level, shape and Nuprl5
+    params (#228).
+  - Proof edit operations at a step's extract address (#229).
+  - Proof_boot edits at the extract of a composed or annotated step (#234).
+  - Proof_boot's save path on edited and posted proofs (#235).
+  - A conditional rewrite refuses a condition with a bound variable (#237).
+  - Terms declared with a level or an operator parameter (#238).
+  - Rewrite matching, instances before patterns and argument restrictions
+    (#239).
+  - Term_meta_gen conversions the census reaches (#240).
+  - Term_ds arms the census reaches (#241).
+  - Term_dtable's right-to-left entries with a ground right side (#242).
+  - Expand after the goal has changed, and initialize_goal (#245).
+  - The archive format's magic and version checks; fix a leaked channel in
+    check (#246).
+  - File_base picks the newest of several specs of one format (#247).
+  - Conditional rewrite refusals, no match and a renamed inner binder
+    (#248).
+  - Find_sentinal of a rule defined before its refiner joined another
+    (#249).
+  - Opname; fix dst_opname on a marshalled copy (#251).
+  - Dform's built-in commands (breaks, zones, pushm, fonts) (#252).
+  - Term_ty_infer on operator and level parameters (#253).
+  - Reach term_base_ds's filter_sub_vars; correct #204's header claim
+    (#254).
+  - Term_subst_ds remove_var below the head; is_some_var_free (#255).
+  - Rule_labels_of_opt_terms; get_pos_assum_num (#256).
+  - Is_no_subterms_term and one_subterm refusals, std against ds (#257).
+  - Jall's prover entry point (LJ, one conclusion) (#258).
+  - Opname.eq with the marshalled copy second (#259).
 
 ### Known not to work
-
-- 11 of `itt_int_ext`'s division and remainder rules have no complete proof:
-  `div_indReduce` (21 of its rule boxes done), `div_wf`, `div_remProperty`,
-  `lt_divMono`, `add_divReduce`, `div_Assoc`, `rem_baseReduce`, `rem_neg`,
-  `rem_neg_rw`, `rem_indReduce` and `rem_wf`, and through them the rewrites
-  built on them. `div_wf` (a quotient is an integer) is the one the others
-  need.
 
 - `Term_order.compare_params` on every kind of parameter
   (`test/unit/test_term_order_params.ml`), levels and operator parameters
@@ -556,6 +753,24 @@ against libmojave 1.1.1 or later:
   the search path reaches 8 atoms the unifications sampled took 30-230 ms
   each. Changing the search to avoid this is not
   attempted here.
+- `foldC` at an assumption i > 0 rewrites the goal: it is a cut closed with
+  `nthAssumT` against the goal, so it is refused unless the goal equals the
+  unfolded assumption, and when it succeeds the goal is folded and the
+  assumption is left as it was (pinned by #151, `test_rewrite_boot`).
+- `Rewrite_compile_redex`: an argument restricted to `H` is not refused when
+  it mentions a variable bound in `J`; the goal's clashing hypothesis is
+  renamed instead (pinned by #175).
+- `expand` on a sequent goal attaches the `nthAssumT 1` step made for the
+  goal with itself assumed to the goal with no assumption, and leaves the
+  other an open leaf (pinned by #245; possibly a defect).
+- `Term_dtable` keys a right-to-left entry by its right side only, so
+  `a <= w{b}` is answered with the derivation of `b <= w{b}` (pinned by
+  #242).
+- `File_type_base.pack_version` refuses a minor or revision of 255,
+  although 255 fits the byte `unpack_version` reads (pinned by #246).
+- `Filter_cache.AsciiIO.read_table` leaves its channel open when the table
+  read raises (found by #250's census; `filter/base` is not linked by the
+  unit harness, so it has no test yet).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

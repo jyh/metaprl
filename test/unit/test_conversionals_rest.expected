@@ -1,0 +1,29 @@
+== clauses of the goal (rw, rwc)
+rw ung 0 (the conclusion)    Arg: arg Hyps: 1.x :g{a} 2.y :f{a; b} Goal:f{a; b}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rw ung 1 (x: g{a})           Arg: arg Hyps: 1.x :a 2.y :f{a; b} Goal:g{f{a; b}}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rw swap 2 (y: f{a; b})       Arg: arg Hyps: 1.x :g{a} 2.y :f{b; a} Goal:g{f{a; b}}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rw ung 2 (no g there)        refused (Rewrite.apply_rewrite)
+rw ung 5 (no such clause)    refused (getnth)
+rwc ung 1 1 (assumption 1)   Arg: arg Hyps: 1.x :g{a} 2.y :f{a; b} Goal:g{f{a; b}}  with  Arg: arg Hyps: 1.z :c Goal:f{c; a}
+rwc swap 1 0                 Arg: arg Hyps: 1.x :g{a} 2.y :f{a; b} Goal:g{f{a; b}}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{a; c}
+== every subterm (rwcAll, rwAll, rwAllAll)
+rwAll ung                    refused (Rewrite.apply_rewrite)
+rwAll (tryC ung)             Arg: arg Hyps: 1.x :a 2.y :f{a; b} Goal:f{a; b}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rwcAll (tryC ung) 1          Arg: arg Hyps: 1.x :g{a} 2.y :f{a; b} Goal:g{f{a; b}}  with  Arg: arg Hyps: 1.z :c Goal:f{c; a}
+rwAllAll (tryC ung)          Arg: arg Hyps: 1.x :a 2.y :f{a; b} Goal:f{a; b}  with  Arg: arg Hyps: 1.z :c Goal:f{c; a}
+== higherC forms
+rwh ung 0                    Arg: arg Hyps: 1.x :g{a} 2.y :f{a; b} Goal:f{a; b}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rwch ung 1 0                 Arg: arg Hyps: 1.x :g{a} 2.y :f{a; b} Goal:g{f{a; b}}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rwhAll ung                   Arg: arg Hyps: 1.x :a 2.y :f{a; b} Goal:f{a; b}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rwchAll ung 1                Arg: arg Hyps: 1.x :g{a} 2.y :f{a; b} Goal:g{f{a; b}}  with  Arg: arg Hyps: 1.z :c Goal:f{c; a}
+rwhAllAll ung                Arg: arg Hyps: 1.x :a 2.y :f{a; b} Goal:f{a; b}  with  Arg: arg Hyps: 1.z :c Goal:f{c; a}
+== applyAllC forms
+rwa [ung; swap] 0            Arg: arg Hyps: 1.x :g{a} 2.y :f{a; b} Goal:f{b; a}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rwa [ung; swap] 2            Arg: arg Hyps: 1.x :g{a} 2.y :f{b; a} Goal:g{f{a; b}}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rwaAll [ung]                 Arg: arg Hyps: 1.x :a 2.y :f{a; b} Goal:f{a; b}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+rwaAllAll [ung]              Arg: arg Hyps: 1.x :a 2.y :f{a; b} Goal:f{a; b}  with  Arg: arg Hyps: 1.z :c Goal:f{c; a}
+== allSubThenC, sweepUpFailC
+allSubThenC ung idC on g{g{a}} Arg: arg Hyps: Goal:g{a}  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}
+allSubThenC ung idC on g{f{a;b}} refused (failWithC)
+sweepUpFailC ung on g{g{a}}  refused (Rewrite.apply_rewrite)
+sweepUpC ung on g{g{a}}      Arg: arg Hyps: Goal:a  with  Arg: arg Hyps: 1.z :g{c} Goal:f{c; a}

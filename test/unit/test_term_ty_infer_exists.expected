@@ -1,0 +1,14 @@
+some2                              Perv!ty_exists{Perv!Ty; 'a. Perv!ty_exists{Perv!Ty; 'b. Test!Pair{'a; 'b}}}
+tk2{some2}                         Perv!Term
+tks{some2}                         Perv!Term
+tkd{some2}                         Perv!Term
+tkd{diag}                          Perv!Term
+tk2{diag}                          Perv!Term
+tk2{pair{zero; tt}}                Perv!Term
+tkd{pair{zero; tt}}                REFUSED: type error
+tkd{pair{zero; zero}}              Perv!Term
+tkt{some2}                         REFUSED: type error
+tkt{diag}                          REFUSED: type error
+tk3{some3}                         Perv!Term
+tkd3{some3}                        Perv!Term
+tk3{pair{zero; pair{tt; zero}}}    Perv!Term

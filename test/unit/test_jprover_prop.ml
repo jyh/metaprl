@@ -116,4 +116,11 @@ let () =
   Printf.printf "%d formulas, %d skipped (did not finish in 10 s), %d tautologies, %d proved in LJ\n" n !skipped !nt !nlj;
   Array.iteri (fun k name ->
       Printf.printf "%-40s %4d of %4d\n" name ok.(k) tried.(k);
-      match first.(k) with None -> () | Some w -> Printf.printf "  first difference: %s\n" w) names
+      match first.(k) with None -> () | Some w -> Printf.printf "  first difference: %s\n" w) names;
+  (* Jall's prover: gen_prover in LJ (Intuit SingleConcl) on one conclusion, as the
+     convenience entry point; each answer is compared with gen_prover's *)
+  List.iter (fun f ->
+      let p = (try ignore (P.prover (Some 3) [] (build f)); true with Refiner.Refiner.RefineError.RefineError _ -> false) in
+      Printf.printf "prover %s: %s, gen_prover LJ agrees %b\n" (show f) (if p then "proved" else "refused")
+        (p = proved (prove (Intuit SingleConcl) f)))
+    [ Imp (A 0, A 0); Or (A 0, Not (A 0)); Not (Not (Or (A 0, Not (A 0)))) ]

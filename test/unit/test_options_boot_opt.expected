@@ -1,0 +1,7 @@
+exclude a; rule labelled a         false
+exclude a; rule labelled b         true
+exclude a; rule with no labels     true
+exclude a; rule with Some []       true
+allow a; rule labelled a           true
+allow a; rule with no labels       true
+allow a; rule labelled a and b     true

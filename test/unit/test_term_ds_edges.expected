@@ -1,0 +1,30 @@
+== is_no_subterms_term / one_subterm
+a, is a                                              true
+b, is a                                              false
+a{c}, is a                                           false
+x, is a                                              false
+one_subterm f{c}                                     Tds!c
+one_subterm c                                        REFUSED: one_subterm
+one_subterm f{c; d}                                  REFUSED: one_subterm
+== is_some_var_free
+[] in f{x}                                           false
+[x] in f{x}                                          true
+[y] in f{x}                                          false
+== subst under a binder that shadows it
+pair{x; lam{x. f{x}}} [x := a]                       Tds!pair{Tds!a; Tds!lam{'x. Tds!f{'x}}}
+pair{g{x;y}; lam{x. f{x;y}}} [x := a; y := b]        Tds!pair{Tds!g{Tds!a; Tds!b}; Tds!lam{'x. Tds!f{'x; Tds!b}}}
+the same, [y := b; x := a]                           Tds!pair{Tds!g{Tds!a; Tds!b}; Tds!lam{'x. Tds!f{'x; Tds!b}}}
+lam{x,y. f{x;y;z}} with x, y, z := a, b, c           Tds!pair{Tds!g{Tds!a; Tds!b; Tds!c}; Tds!lam{'x, 'y. Tds!f{'x; 'y; Tds!c}}}
+pair{x; x. f{x}} [x := a] (x shadowed)               Tds!pair{Tds!a; 'x. Tds!f{'x}}
+pair{x; x. f{x; y}} [x := a; y := b]                 Tds!pair{Tds!a; 'x. Tds!f{'x; Tds!b}}
+pair{x; y. f{x; y}} [x := a; y := b]                 Tds!pair{Tds!a; 'y. Tds!f{Tds!a; 'y}}
+pair{x; y. f{x; y}} [x := y] (y captured, renamed)   Tds!pair{'y; 'y1. Tds!f{'y; 'y1}}
+== alpha_equal with an inner binder of the same name
+lam2{x,y. f{x;y}} = lam2{a,b. f{a;b}}                true
+lam2{x,y. f{x;y}} = lam2{a,b. f{b;a}}                false
+lam2{x,y. lam{x. f{x;y}}} = lam2{a,b. lam{x. f{x;b}}} true
+lam2{x,y. lam{x. f{x;y}}} = lam2{a,b. lam{x. f{x;a}}} false
+lam2{x,y. lam{y. f{x;y}}} = lam2{a,b. lam{y. f{a;y}}} true
+lam2{x,y. lam{x. g{x}}} = lam2{a,b. lam{x. g{x}}}    true
+lam2{x,y. pair{lam{x. g{x}}; y}} = lam2{a,b. pair{lam{x. g{x}}; b}} true
+lam2{x,y. lam{x. f{x;y;z}}} = lam2{x,b. lam{x. f{x;b;z}}} true

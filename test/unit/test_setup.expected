@@ -34,7 +34,7 @@ editor: .metaprl/editor holds emacs, file closed after (exit 0)
     the editor file is closed again: true
 editor: .metaprl/editor is empty, file closed after (exit 0)
     editor: xterm -e ed
-    the editor file is closed again: false
+    the editor file is closed again: true
 hostname from MP_BROWSER_HOSTNAME (exit 0)
     gethostname: test.example
     after sethostname: gethostname: other.example

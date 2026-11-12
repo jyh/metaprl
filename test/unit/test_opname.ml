@@ -44,6 +44,7 @@ let () =
   line "marshalled copy == original" (b (m == ab));
   line "marshalled copy: string_of_opname" (string_of_opname m);
   line "marshalled copy: eq copy original" (b (eq m ab));
+  line "marshalled copy: eq original copy" (b (eq ab (copy ab)));
   line "marshalled copy: eq copy [b; a]" (b (eq (copy ab) (make_opname [ "b"; "a" ])));
   line "marshalled copy: intern copy == intern original" (b (intern (copy ab) == intern ab));
   line "marshalled copy: normalize_opname copy == original" (b (normalize_opname (copy ab) == ab));

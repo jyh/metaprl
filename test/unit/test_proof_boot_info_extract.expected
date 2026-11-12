@@ -4,7 +4,7 @@ cutT b on a
   info [0;0]  refused (Proof_boot.index)
 nthAssumT 2 on a
   info []     rule nthAssumT 2, complete, 0 subgoal(s)
-  info [0]    extract ("nthAssumT", int 1), complete, 0 subgoal(s)
+  info [0]    extract ("nthAssumT", int 2), complete, 0 subgoal(s)
 idT on a
   info []     rule idT, complete, 1 subgoal(s)
   info [0]    identity, complete, 1 subgoal(s)
@@ -14,7 +14,7 @@ wrapped cutT b on a
   info [0;0]  extract ("cutT", term b), complete, 2 subgoal(s)
 wrapped nthAssumT 1 on a
   info [0]    wrapped ("wrapped", int 7), complete, 0 subgoal(s)
-  info [0;0]  extract ("nthAssumT", int 0), complete, 0 subgoal(s)
+  info [0;0]  extract ("nthAssumT", int 1), complete, 0 subgoal(s)
 rw swap 0 [] on f{g{a}; f{b; c}}
   info []     rule rw swap 0 [], complete, 1 subgoal(s)
   info [0]    extract ("rw", "Swap.swap", addr []), complete, 1 subgoal(s)

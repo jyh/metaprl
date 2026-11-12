@@ -43,6 +43,15 @@ changes 33 lines. Making `free_vars` drop every variable changes 183 lines.
 238 items carry free variables; for 14 of them the old `free_vars` raises,
 and that is pinned as it is.
 
+The `fv=` fields are no longer the reference's, since the `Free_vars` fix
+that followed `test/unit/test_free_vars`: `free_vars` now examines a let's
+body and a case's `when` guard, and binds a `let rec`'s names in its
+right-hand sides. Measured on one tree before and after that fix, it changes
+the `fv=` field of 70 items and nothing else (69 gain variables; one, in
+`mllib_http_simple.ml`, loses `split`, which its own `let rec` binds). The
+14 items that raise still raise. The expected file carries the fixed
+values; the reference's are in its history.
+
 Not covered:
 - The old filter overflows the stack on `let f ?(x = 1) () = ...`, and the
   camlp5 7 parser rejects `type t = ..` and `match ... with exception`, so

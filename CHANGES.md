@@ -195,6 +195,14 @@ against libmojave 1.1.1 or later:
   modules growing past 8 GB). With these and #161 / #162 the `TERMS = both`
   census replays 264 of 264 modules with no disagreement. The default build
   does not use `Refiner_debug`.
+- `Free_vars.free_vars` (filter/base) did not examine a let's body (the
+  last right-hand side was examined in its place, so `let x = a in b` gave
+  `[a]`) or a case's `when` guard, and did not bind a `let rec`'s names in
+  its right-hand sides; so `new_vars` could return a name free in the
+  expression. Pinned by #261 (`test_free_vars`: on 2,000 random expressions
+  it disagreed with OCaml's scoping on 529, now on 0). Nothing in metaprl
+  calls it except the camlp5 parity pin, whose `fv=` fields change on 70 of
+  328 items (`filter/test/README.md`).
 
 ### Tests
 
@@ -736,6 +744,9 @@ against libmojave 1.1.1 or later:
   - Is_no_subterms_term and one_subterm refusals, std against ds (#257).
   - Jall's prover entry point (LJ, one conclusion) (#258).
   - Opname.eq with the marshalled copy second (#259).
+  - `test_free_vars`: Free_vars against a model; the first unit test of
+    `filter/`, which `run.sh` links for a test whose first line is
+    `(* unit-link: filter *)` (#261).
 
 ### Known not to work
 

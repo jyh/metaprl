@@ -3,3 +3,6 @@ C proves F iff F is a tautology           383 of  383
 what LJ proves is a tautology             383 of  383
 LJ proves ~~F iff F is a tautology        383 of  383
 LJ and LJmc prove the same                383 of  383
+prover (p => p): proved, gen_prover LJ agrees true
+prover (p | ~p): refused, gen_prover LJ agrees true
+prover ~~(p | ~p): proved, gen_prover LJ agrees true

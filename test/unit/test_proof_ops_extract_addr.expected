@@ -1,0 +1,96 @@
+cutT B at [0]
+    (unchanged)      nodes (1, 4), partial, root rule t/2, [0] extract/2
+    squash           nodes (1, 4), incomplete, root rule t/2, [0] unjustified/2
+    clean            nodes (1, 4), partial, root rule t/2, [0] extract/2
+    kreitz           nodes (2, 5), incomplete, root rule t/1, [0] rule idT/1
+    make_assum       nodes (1, 4), incomplete, root rule t/2, [0] unjustified/2
+    expand           nodes (1, 4), partial, root rule t/2, [0] extract/2
+    refine idT       nodes (2, 5), partial, root rule t/1, [0] rule idT/1
+    refine cutT C    nodes (2, 7), partial, root rule t/2, [0] rule cutT C/2
+    copy to [1]      nodes (1, 4), incomplete, root rule t/2, [0] extract/2
+    copy [1] to it   nodes (1, 3), partial, root rule t/1, [0] goal/0
+    set_goal B       nodes (1, 4), incomplete, root rule t/2, [0] unjustified/2
+    paste a goal     nodes (1, 3), partial, root rule t/1, [0] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete
+nthAssumT 1 at [0]
+    (unchanged)      nodes (1, 2), complete, root rule t/0, [0] extract/0
+    squash           nodes (1, 2), incomplete, root rule t/0, [0] unjustified/0
+    clean            nodes (1, 2), complete, root rule t/0, [0] extract/0
+    kreitz           nodes (2, 5), incomplete, root rule t/1, [0] rule idT/1
+    make_assum       nodes (1, 2), incomplete, root rule t/0, [0] unjustified/0
+    expand           nodes (1, 2), complete, root rule t/0, [0] extract/0
+    refine idT       nodes (2, 5), partial, root rule t/1, [0] rule idT/1
+    refine cutT C    nodes (2, 7), partial, root rule t/2, [0] rule cutT C/2
+    copy to [1]      refused (Proof_boot.index)
+    copy [1] to it   refused (Proof_boot.index)
+    set_goal B       nodes (1, 2), incomplete, root rule t/0, [0] unjustified/0
+    paste a goal     nodes (1, 3), partial, root rule t/1, [0] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      complete, complete
+idT at [0]
+    (unchanged)      nodes (1, 3), partial, root rule t/1, [0] identity/1
+    squash           nodes (1, 3), partial, root rule t/1, [0] identity/1
+    clean            nodes (1, 3), partial, root rule t/1, [0] identity/1
+    kreitz           nodes (2, 5), incomplete, root rule t/1, [0] rule idT/1
+    make_assum       nodes (1, 3), partial, root rule t/1, [0] identity/1
+    expand           nodes (1, 3), partial, root rule t/1, [0] identity/1
+    refine idT       nodes (2, 5), partial, root rule t/1, [0] rule idT/1
+    refine cutT C    nodes (2, 7), partial, root rule t/2, [0] rule cutT C/2
+    copy to [1]      nodes (1, 3), incomplete, root rule t/1, [0] identity/1
+    copy [1] to it   nodes (1, 3), partial, root rule t/1, [0] goal/0
+    set_goal B       nodes (1, 3), incomplete, root rule t/1, [0] unjustified/1
+    paste a goal     nodes (1, 3), partial, root rule t/1, [0] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete
+wrapped cutT B at [0]
+    (unchanged)      nodes (1, 5), partial, root rule t/2, [0] wrapped/2
+    squash           nodes (1, 5), incomplete, root rule t/2, [0] wrapped/2
+    clean            nodes (1, 5), partial, root rule t/2, [0] wrapped/2
+    kreitz           nodes (2, 5), incomplete, root rule t/1, [0] rule idT/1
+    make_assum       nodes (1, 5), incomplete, root rule t/2, [0] wrapped/2
+    expand           nodes (1, 5), partial, root rule t/2, [0] wrapped/2
+    refine idT       nodes (2, 5), partial, root rule t/1, [0] rule idT/1
+    refine cutT C    nodes (2, 7), partial, root rule t/2, [0] rule cutT C/2
+    copy to [1]      nodes (1, 5), incomplete, root rule t/2, [0] wrapped/2
+    copy [1] to it   nodes (1, 3), partial, root rule t/1, [0] goal/0
+    set_goal B       nodes (1, 4), incomplete, root rule t/2, [0] unjustified/2
+    paste a goal     nodes (1, 3), partial, root rule t/1, [0] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete
+wrapped cutT B at [0;0]
+    (unchanged)      nodes (1, 5), partial, root rule t/2, [0] wrapped/2
+    squash           nodes (1, 5), incomplete, root rule t/2, [0] wrapped/2
+    clean            nodes (1, 5), partial, root rule t/2, [0] wrapped/2
+    kreitz           nodes (2, 6), incomplete, root rule t/1, [0] wrapped/1
+    make_assum       nodes (1, 5), incomplete, root rule t/2, [0] wrapped/2
+    expand           nodes (1, 5), partial, root rule t/2, [0] wrapped/2
+    refine idT       nodes (2, 6), partial, root rule t/1, [0] wrapped/1
+    refine cutT C    nodes (2, 8), partial, root rule t/2, [0] wrapped/2
+    copy to [1]      nodes (1, 5), incomplete, root rule t/2, [0] wrapped/2
+    copy [1] to it   nodes (1, 4), partial, root rule t/1, [0] wrapped/0
+    set_goal B       nodes (1, 5), incomplete, root rule t/2, [0] wrapped/2
+    paste a goal     nodes (1, 4), partial, root rule t/1, [0] wrapped/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete, complete
+wrapped nthAssumT 1 at [0;0]
+    (unchanged)      nodes (1, 3), complete, root rule t/0, [0] wrapped/0
+    squash           nodes (1, 3), incomplete, root rule t/0, [0] wrapped/0
+    clean            nodes (1, 3), complete, root rule t/0, [0] wrapped/0
+    kreitz           nodes (2, 6), incomplete, root rule t/1, [0] wrapped/1
+    make_assum       nodes (1, 3), incomplete, root rule t/0, [0] wrapped/0
+    expand           nodes (1, 3), complete, root rule t/0, [0] wrapped/0
+    refine idT       nodes (2, 6), partial, root rule t/1, [0] wrapped/1
+    refine cutT C    nodes (2, 8), partial, root rule t/2, [0] wrapped/2
+    copy to [1]      refused (Proof_boot.index)
+    copy [1] to it   refused (Proof_boot.index)
+    set_goal B       nodes (1, 3), incomplete, root rule t/0, [0] wrapped/0
+    paste a goal     nodes (1, 4), partial, root rule t/1, [0] wrapped/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      complete, complete, complete

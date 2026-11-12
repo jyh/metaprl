@@ -1,0 +1,27 @@
+same{q; q}                                           Perv!Term
+same{l0; l0}                                         Perv!Term
+same{l0; l1}                                         Perv!Term
+same{l1; l0}                                         Perv!Term
+same{l0; lx}                                         Perv!Term
+same{lx; lx}                                         Perv!Term
+same{s0; s0}                                         REFUSED: type error
+same{s0; s1}                                         REFUSED: type error
+same{s0; sm}                                         REFUSED: type error
+same{sm; s0}                                         REFUSED: type error
+same{sm; sm}                                         REFUSED: type error
+same{q; l0}                                          REFUSED: type error
+same{o1; o1}                                         INVALID_ARGUMENT: Term.shape_of_term
+same{p1; p1}                                         INVALID_ARGUMENT: Term.shape_of_term
+cons{q; cons{q; nil}}                                Test!List{Test!Q[@]}
+cons{l0; cons{l0; nil}}                              Test!List{Test!Lv[0:l]}
+cons{s0; cons{s0; nil}}                              REFUSED: type error
+cons{sm; cons{sm; nil}}                              REFUSED: type error
+cons{o1; cons{o1; nil}}                              INVALID_ARGUMENT: Term.shape_of_term
+cons{p1; cons{p1; nil}}                              INVALID_ARGUMENT: Term.shape_of_term
+q                                                    Test!Q[@]
+l0                                                   Test!Lv[0:l]
+lx                                                   Test!Lv['x:l]
+s0                                                   Test!Sh["Test!zero[]{}":sh]
+sm                                                   Test!Sh[s:sh]
+o1                                                   Test!Ob[<object-id>]
+p1                                                   Test!Pl[[1:n]]

@@ -1,0 +1,12 @@
+d      functional [1; 2; 10; 20]         imperative [1; 2; 10; 20]         model [1; 2; 10; 20]
+a      functional [1; 2; 3]              imperative [1; 2; 3]              model [1; 2; 3]
+b      functional [1; 2; 10]             imperative [1; 2; 10]             model [1; 2; 10]
+c      functional [1; 2; 20]             imperative [1; 2; 20]             model [1; 2; 20]
+top    functional [1; 2; 10; 20]         imperative [1; 2; 10; 20]         model [1; 2; 10; 20]
+e      functional [30; 40]               imperative [30; 40]               model [30; 40]
+top    functional [1; 2; 10; 20]         imperative [1; 2; 10; 20]         model [1; 2; 10; 20]
+top'   functional [1; 2; 10; 20; 30]     imperative [1; 2; 10; 20; 30]     model [1; 2; 10; 20; 30]
+order at a: functional 3 2 1 · imperative 3 2 1
+order at d: functional 20 10 2 1 · imperative 20 10 2 1
+order at top': functional 30 20 10 2 1 · imperative 30 20 10 2 1
+parents of d: mpr_b, mpr_c

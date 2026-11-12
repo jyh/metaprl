@@ -1,0 +1,44 @@
+ff                                       f{c; c} -> g{c}
+   step: EDRewrite ff at [[]]
+   extract q{k} (model q{k})
+   dependencies ax ff gi
+ff at [1]                                g{f{c; c}} -> g{g{c}}
+   step: EDRewrite ff at [[1]]
+   extract q{q{k}} (model q{q{k}})
+   dependencies ax ff gi
+ff at [2] of f                           f{c; f{g{c}; g{c}}} -> f{c; g{g{c}}}
+   step: EDRewrite ff at [[2]]
+   extract p{k; q{q{k}}} (model p{k; q{q{k}}})
+   dependencies ax ff fi gi
+ff andthen gg                            f{g{c}; g{c}} -> g{c}
+   step: EDRewrite None
+   extract q{k} (model q{k})
+   dependencies ax ff gg gi
+gg orelse ff (gg fails)                  f{c; c} -> g{c}
+   step: EDRewrite ff at [[]]
+   extract q{k} (model q{k})
+   dependencies ax ff gi
+ff orelse gg (ff succeeds)               f{c; c} -> g{c}
+   step: EDRewrite ff at [[]]
+   extract q{k} (model q{k})
+   dependencies ax ff gi
+rwhigher ff                              g{f{c; c}} -> g{g{c}}
+   step: EDRewrite ff at [[]]
+   extract q{q{k}} (model q{q{k}})
+   dependencies ax ff gi
+rwhigher ff, two redexes                 f{f{c; c}; f{c; c}} -> g{f{c; c}}
+   step: EDRewrite ff at [[]]
+   extract q{p{k; k}} (model q{p{k; k}})
+   dependencies ax ff fi gi
+rwhigher ff, two redexes below the root  f{g{f{c; c}}; f{c; c}} -> f{g{g{c}}; g{c}}
+   step: EDRewrite None
+   extract p{q{q{k}}; q{k}} (model p{q{q{k}}; q{k}})
+   dependencies ax ff fi gi
+ff on a goal it does not match           g{c}: the rewrite is refused
+g{c} --> g{f{c; c}}: gi, ff, then nth_hyp extract with 'e for the subgoal: q{'e<||>}
+   dependencies ff gi
+a rule step (gi)                         EDRule gi ints [] addrs [] terms []
+nth_hyp 0                                EDNthHyp 0
+cut g{c}                                 EDCut g{c}
+identity                                 EDIdentity
+a composition (gi then ax)               EDComposition

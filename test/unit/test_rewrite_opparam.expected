@@ -1,0 +1,14 @@
+lit on h[f/0]                            c
+lit on h[g/0]                            refused
+lit on h[f/1]                            refused
+lit on h[f/0,0]                          refused
+meta on h[f/2]                           k[f/2]
+meta on h[@p] (a schema)                 k[@p]
+twice on pair{h[f/0]; h[f/0]}            c
+twice on pair{h[f/0]; h[g/0]}            refused
+twice on pair{h[f/0]; h[f/1]}            refused
+twice on pair{h[@p]; h[@p]} (a schema)   c
+twice on pair{h[@p]; h[@q]}              refused
+lit on h[@p] (a schema)                  refused
+ttwice on pair{t[Foo]; t[Foo]}           c
+ttwice on pair{t[Foo]; t[Bar]}           refused

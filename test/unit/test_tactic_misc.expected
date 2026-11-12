@@ -1,0 +1,25 @@
+== whileProgressMT
+whileProgressMT (cut P)            left [assertion main]  log [step]
+whileProgressMT rec                left [main]  log [r@:C]
+== onSomeHypT on x: A; y: B >- C
+onSomeHypT (only 1 succeeds)       left [main]  log [try 1; try 2; h1@main:Arg: arg
+Hyps:
+      1.x :A
+      2.y :B
+Goal:C]
+onSomeHypT (only 2 succeeds)       left [main]  log [try 1; try 2; h2@main:Arg: arg
+Hyps:
+      1.x :A
+      2.y :B
+Goal:C]
+onSomeHypT (none succeeds)         left [refused (failT)]  log [try 1; try 2]
+== arguments
+get_thinning_arg                   left [main]  log [thin true]
+withBoolT thin false get_thinning_arg left [main]  log [thin false]
+withIntT n 3                       left [main]  log [n 3]
+withIntT n 3 (withoutIntT n)       left [main]  log [n none]
+withoutIntT n                      left [main]  log [n none]
+withIntT n 3 (withIntT m 4 (withoutIntT m)) left [main]  log [n 3]
+== TacticInternal
+get_resource calls its function with the bookmark's resource: called
+set_options (get_options): goal kept true, label main

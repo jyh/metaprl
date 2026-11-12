@@ -1,0 +1,18 @@
+'a['x] =? 'a['y]                               unifiable true  unify {x := 'y} unifier
+'a['x; c] =? 'a[g{'y}; 'z]                     unifiable true  unify {x := g{'y}, z := c} unifier
+'a['x] =? 'b['x]                               unifiable false unify refused (unify_mm)
+'a<H>[c] =? 'a<J>[c]                           unifiable false unify refused (unify_mm)
+'a<H>[c] =? 'a<H>[c]                           unifiable true  unify {} unifier
+'a['x] =? 'a['x; 'y] (arities)                 unifiable false unify refused (unify_mm)
+f{'a[c]} =? f{g{c}}                            unifiable false unify refused (unify_mm)
+f{g{c}} =? f{'a[c]}                            unifiable false unify refused (unify_mm)
+f{'x} =? f{'a['y]}                             unifiable true  unify {x := 'a<||>['y]} unifier
+f{'x} =? f{'a<H>['y]}                          unifiable true  unify {x := 'a<|H|>['y]} unifier
+'x =? 'a['x] (cycle)                           unifiable false unify refused (unify_mm)
+f{c} =? f{c; c} (arities)                      unifiable false unify refused (unify_mm)
+h{f{'x}; f{c; 'y}} =? h{f{c}; f{c; c}}         unifiable true  unify {x := c, y := c} unifier
+h{'z; 'z} =? h{f{c}; f{c; c}}                  unifiable false unify refused (unify_mm)
+lam x. f{'x; 'z} =? lam y. f{'y; c}, consts {x} unifiable true  unify {z := c} unifier
+lam x. f{'x; 'z} =? 'w, consts {x}             unifiable true  unify {w := lam{'x. f{'x; 'z}}} unifier
+f{lam x. 'x; 'z} =? f{'w; lam y. 'y}, consts {x; y} unifiable true  unify {w := lam{'x1. 'x1}, z := lam{'y1. 'y1}} unifier
+'x =? c, consts {x}                            unifiable false unify refused (unify_mm)

@@ -1,0 +1,49 @@
+== precedence and parentheses (prl)
+prl 1 + 2                          Dft!num[1:n] + Dft!num[2:n]
+prl (1 + 2) + 3                    (Dft!num[1:n] + Dft!num[2:n]) + Dft!num[3:n]
+prl 1 + (2 + 3)                    Dft!num[1:n] + Dft!num[2:n] + Dft!num[3:n]
+prl (1 * 2) + 3                    Dft!num[1:n] * Dft!num[2:n] + Dft!num[3:n]
+prl 1 + (2 * 3)                    Dft!num[1:n] + Dft!num[2:n] * Dft!num[3:n]
+prl (1 + 2) * 3                    (Dft!num[1:n] + Dft!num[2:n]) * Dft!num[3:n]
+prl 1 * (2 + 3)                    Dft!num[1:n] * (Dft!num[2:n] + Dft!num[3:n])
+prl (1 * 2) * 3                    (Dft!num[1:n] * Dft!num[2:n]) * Dft!num[3:n]
+prl 1 * (2 * 3)                    Dft!num[1:n] * Dft!num[2:n] * Dft!num[3:n]
+prl box{1 + 2} * 3                 [(Dft!num[1:n] + Dft!num[2:n])] * Dft!num[3:n]
+prl box{1 + 2}                     [(Dft!num[1:n] + Dft!num[2:n])]
+prl pair{1 + 2; 3 * 1}             <Dft!num[1:n] + Dft!num[2:n],Dft!num[3:n] * Dft!num[1:n]>
+prl plus{x; 'v}                    'x<|!|> + 'v<|!!|>
+prl an undisplayed term            Dft!other{Dft!num[1:n]}
+prl num[1] (no form)               Dft!num[1:n]
+== modes
+prl neg{1}                         Dft!neg{Dft!num[1:n]}
+prl hide{1}                        hidden
+prl 1 + 2                          Dft!num[1:n] + Dft!num[2:n]
+tex neg{1}                         ~Dft!num[1:n]
+tex hide{1}                        hidden
+tex 1 + 2                          Dft!num[1:n] + Dft!num[2:n]
+html neg{1}                        Dft!neg{Dft!num[1:n]}
+html hide{1}                       Dft!hide{Dft!num[1:n]}
+html 1 + 2                         Dft!num[1:n] + Dft!num[2:n]
+src neg{1}                         Dft!neg{Dft!num[1:n]}
+src hide{1}                        Dft!hide{Dft!num[1:n]}
+src 1 + 2                          Dft!plus{Dft!num[1:n]; Dft!num[2:n]}
+raw neg{1}                         Dft!neg{Dft!num[1:n]}
+raw hide{1}                        Dft!hide{Dft!num[1:n]}
+raw 1 + 2                          Dft!plus{Dft!num[1:n]; Dft!num[2:n]}
+== parameters through slot
+prl lit["a\tb"q"]                  a	b"q|a\tb\"q|a\tb\042q
+== errors
+prl boom                           INVALID_ARGUMENT: Dform boom raised an exception when trying to print Dft!boom: Failure("boom")
+prl plus{boom; 1}                  INVALID_ARGUMENT: Dform boom raised an exception when trying to print Dft!boom: Failure("boom")
+a theory with a form naming raw    INVALID_ARGUMENT: Dform.add_dform: raw mode is built-in and can not be mentioned
+an unknown bookmark                FAILURE: Dform.get_mode_base: can not find display forms for No_such_theory.
+== meta terms and bound terms
+prl rule 1 + 2 --> 2 * 3           Dft!num[1:n] + Dft!num[2:n] --> Dft!num[2:n] * Dft!num[3:n]
+prl rewrite 1 + 2 <--> 3           Dft!num[1:n] + Dft!num[2:n] <--> Dft!num[3:n]
+prl bterm y. y + 1                 y. 'y<|!|> + Dft!num[1:n]
+== slot terms
+printed with slot tags             Dft!num[1:n] + Dft!num[2:n] * Dft!num[3:n]
+  tag slot0                        Dft!num[1:n]
+  tag slot1                        Dft!num[2:n] * Dft!num[3:n]
+  tag slot2                        Dft!num[2:n]
+  tag slot3                        Dft!num[3:n]

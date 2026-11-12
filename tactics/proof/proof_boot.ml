@@ -937,18 +937,6 @@ struct
          let subgoals', extras' = match_subgoals (leaves_ext goal) subgoals' extras' in
             goal, subgoals', extras', Lm_list_util.compare_eq subgoals subgoals' && Lm_list_util.compare_eq extras extras'
 
-   let replace_subterm proof node raddr goal subgoals i = function
-      Goal goal' ->
-         if i < 0 || i > List.length subgoals then
-            raise_replace_error proof node raddr i
-         else if i = 0 then
-            goal', subgoals, goal' == goal
-         else
-            let subgoal = List.nth subgoals i in
-               goal, Lm_list_util.replace_nth i goal' subgoals, goal' == subgoal
-    | _ ->
-         raise_replace_error proof node raddr i
-
    (*
     * Replace a child at the given index.
     *
@@ -961,18 +949,12 @@ struct
       match node with
          Goal _
        | Identity _
-       | Annotate _ ->
+       | Annotate _
+       | Extract _
+       | Unjustified _ ->
+            (* select_child refuses every child of these nodes, so no path
+               reaches one here; refuse the same way it does *)
             raise_replace_error proof node raddr i
-       | Extract (goal, subgoals, _)
-       | Unjustified (goal, subgoals) ->
-            let goal, subgoals, unchanged = replace_subterm proof node raddr goal subgoals i node' in
-            let node =
-               if unchanged then
-                  node
-               else
-                  Unjustified (goal, subgoals)
-            in
-               false, false, node
        | Compose { comp_goal = goal; comp_subgoals = subgoals; comp_extras = extras; _ } -> begin
             match node' with
                RuleBox _ ->

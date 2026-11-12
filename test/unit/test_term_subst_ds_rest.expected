@@ -1,0 +1,36 @@
+subst lam2 x x. g{x;z} [y/z]             agree  alpha_equal to the capture-free answer true, free vars [y]
+subst lam2 x y. g{x;y;z} [x/z] (clash)   agree  alpha_equal to the capture-free answer true, free vars [x]
+subst lam2 x x. g{x;z} [x/z] (repeat+clash) agree  alpha_equal to the capture-free answer true, free vars [x]
+alpha lam2 x y. g{x;y} = lam2 y x. g{y;x} agree  true
+alpha lam2 x y. g{x;y} = lam2 y x. g{x;y} agree  false
+alpha lam x. lam y. g{x;y} = lam y. lam x. g{y;x} agree  true
+alpha lam x. lam x. x = lam y. lam x. x  agree  true
+alpha lam x. lam x. x = lam y. lam x. y  agree  false
+alpha lam x. g{lam y. x; y} = lam y. g{lam y. y; y} agree  false
+alpha f{x. a} = f{x,y. a} (binder lengths) agree  false
+alpha_equal_vars g{x} x / g{y} y         agree  true
+alpha_equal_vars g{x} x / g{y} y,z (lengths) agree  false
+var_subst g{y} by z in {y: A >- h{g{y}}} agree  free vars [], substituting back gives t true
+var_subst g{y} by z in {y: g{y} >- g{y}} agree  free vars [z], substituting back gives t true
+var_subst g{y} by z in {x: g{y}; y: A >- g{y}} agree  free vars [z], substituting back gives t true
+alpha C<H>[[x]][a] = C<H>[[x]][a]        agree  true
+alpha C<H>[[x]][a] = C<J>[[x]][a]        agree  false
+alpha C<H>[[C]][a] = C<H>[[C]][b]        agree  false
+alpha C<H>[[g]] = D<H>[[g]]              agree  false
+alpha lam x. C<H>[[x]][x] = lam y. C<H>[[y]][y] agree  true
+alpha {x: A; y: g{x} >- f{x;y}} = {u: A; w: g{u} >- f{u;w}} agree  true
+alpha {x: A; <K>; y: x >- y} = {u: A; <K>; y: u >- y} agree  true
+alpha lam C. C<H>[[C]][C] = lam D. C<H>[[D]][D] agree  false
+alpha lam C. C<H>[[C]] = lam D. C<H>[[C]] agree  true
+alpha lam x. lam y. C<H>[[g{x;y}]] = lam y. lam x. C<H>[[g{y;x}]] agree  true
+var_subst h{y} by z in lam2 y w. g{h{y}; w} agree  free vars [], substituting back gives t true
+var_subst h{y} by z in lam3 y w u. g{h{y}; w; u} agree  free vars [], substituting back gives t true
+var_subst h{y} by z in lam2 w y. g{h{y}; w} agree  free vars [], substituting back gives t true
+var_subst h{y} by z in lam2 y y. g{h{y}} agree  free vars [], substituting back gives t true
+alpha_equal_fun C<H>[[z]] / C<H>[[a]] (z ~ a) agree  true
+alpha_equal_fun C<H>[[z]][z] / C<H>[[a]][a] (z ~ a) agree  true
+alpha_equal_fun C<H>[[z]] / C<J>[[a]] (z ~ a) agree  false
+alpha_equal_fun C<H>[[C]] / C<H>[[a]] (C ~ a) agree  false
+match_terms f{x} with g{x}               agree  both refused (std refused (Term_subst_std.match_terms), ds refused (Term_subst_ds.match_terms))
+match_terms C<H>[[x]] with C<H>[[g]]     agree  x := g
+match_terms C<H>[[x]] with C<J>[[g]]     DIFFER std x := g, H := J | ds refused (Term_subst_ds.match_terms)

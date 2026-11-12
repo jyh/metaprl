@@ -1,0 +1,27 @@
+== term_of_parsed_term
+x: A; y: B >- f{x; y}                        Arg: Tmp!arg Hyps:       1.x :Tmp!A       2.y :Tmp!B Goal:Tmp!f{'x; 'y}
+two unnamed hypotheses                       Arg: Tmp!arg Hyps:       1.Tmp!A       2.Tmp!B Goal:Tmp!C
+x: A; x: B >- f{x} (x repeated)              Arg: Tmp!arg Hyps:       1.x :Tmp!A       2.x :Tmp!B Goal:Tmp!f{'x}
+x: A >- C, bindings not allowed              REFUSED: Term_meta.rename_hyp_bvars (A sequent has a meta-type that does not allow bindings, but a binding is used in it: x)
+unnamed: A >- C, bindings not allowed        Arg: Tmp!arg Hyps:       1.Tmp!A Goal:Tmp!C
+<J>; x: A >- 'C<|!!|> (default contexts)     Arg: Tmp!arg Hyps:       1.<J<||>>       2.x :Tmp!A Goal:'C<|J|>
+<J>; <K> >- 'C<|#;K|> (# drops J... )        Arg: Tmp!arg Hyps:       1.<J<||>>       2.<K<|J|>> Goal:'C<|K|>
+<J> >- 'C<|#|> (a so-var), no bindings       Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<||>
+<J>; <K<|#|>> >- C (a context), no bindings  REFUSED: Term_meta_gen.parse_contexts (The < C<|#|> > construct should not be used when the sequent argument is already declared with a meta-type that does not allow bindings.: K)
+<J>; <K<|#|>> >- C (a context)               Arg: Tmp!arg Hyps:       1.<J<||>>       2.<K<||>> Goal:Tmp!C
+an encoded free variable z                   Tmp!f{'z}
+<J>; x: A >- 'z<|!|> (encoded, x free in it?) INVALID_ARGUMENT: Parsing: !x is used, but the variable x is bound
+a context term D<|!!|>[g{x}] in a sequent    Arg: Tmp!arg Hyps:       1.<J<||>>       2.x :Tmp!A Goal:'D<|J|>[[Tmp!g{'x}]]
+== context_subst_of_terms
+lookup J/1                                   Some [H]
+lookup C/2                                   Some [J]
+lookup D/0                                   Some []
+lookup E/0                                   None
+lookup C/3                                   FAILURE: Variable arity mismatch
+two arities for one variable                 INVALID_ARGUMENT: context_subst_of_terms: mismatch
+== meta terms and rewrites
+mterms_of_parsed_mterms on a labelled term   lbl: Arg: Tmp!arg Hyps:       1.Tmp!A Goal:Tmp!C
+mterms: <J> >- 'C<|!!|> (the memoising parser) Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>
+term_of_parsed_term: <J> >- 'C<|!!|>         Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>
+mrewrite: the same redex and contractum      Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>  ==>  Tmp!k{'C<|J|>}
+rewrite: 'C<|!!|> in the redex, then the contractum Arg: Tmp!arg Hyps:       1.<J<||>> Goal:'C<|J|>  ==>  Tmp!k{'C<|J|>}

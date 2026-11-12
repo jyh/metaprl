@@ -1,0 +1,16 @@
+== a meta parameter of another kind (Relaxed)
+h[@n:n] --> k[@n:s] on h[7:n]                    Rcc!k["7":s]
+h[@n:n] --> k[@n:v] on h[7:n]                    INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+h[@n:n] --> k[@n:op] on h[7:n]                   INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+the first, Strict                                REFUSED: Rewrite_compile_contractum.compile_so_contractum_param
+== operator and token parameters
+h[@o:op] --> k[@o:op] on h[f:op]                 Rcc!k[(Rcc!f{0; 1}):op]
+c --> k[g:op] (a literal operator)               Rcc!k[(Rcc!g{0; 1}):op]
+c --> k[a:t] (a literal token, copied as is)     Rcc!k["Rcc!a":t]
+h[@n:n] --> k[a:t; @n:n] (a token beside a meta) Rcc!k["Rcc!a":t, 7:n]
+== a contractum variable naming a redex binder
+lam x. 'b['x] --> f{'x} on lam z. g{z}           Rcc!f{'z}
+lam x. 'b['x] --> lam x. f{'x}                   Rcc!lam{'z. Rcc!f{'z}}
+== a context in a Strict contractum
+f{C[g{'x}]} --> f{C[m{'x}]}, Strict              Rcc!f{Rcc!h{Rcc!k{Rcc!d; Rcc!m{Rcc!c}}}}
+the same, Relaxed                                Rcc!f{Rcc!h{Rcc!k{Rcc!d; Rcc!m{Rcc!c}}}}

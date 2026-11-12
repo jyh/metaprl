@@ -1297,6 +1297,11 @@ struct
 
    let rwarg = StringArg "rw"
 
+   (* A rewrite at assumption i > 0 is described with its number, as in rw c i addr;
+      one at the goal (0) keeps the short form. *)
+   let assum_arg i =
+      if i = 0 then [||] else [| IntArg i |]
+
    let make_extract_expr ext =
       let arglist =
          match Refine.describe_extract ext with
@@ -1304,17 +1309,17 @@ struct
                GeneralArgList (describe_args args)
           | EDRewrite None ->
                NoneArgList "<rewrite>"
-          | EDRewrite ( Some (op, addr)) ->
-               GeneralArgList [| rwarg; StringArg (string_of_opname op); AddrArg addr |]
+          | EDRewrite ( Some (op, i, addr)) ->
+               GeneralArgList (Array.concat [[| rwarg; StringArg (string_of_opname op) |]; assum_arg i; [| AddrArg addr |]])
           | EDCondRewrite None ->
                NoneArgList "<conditional-rewrite>"
-          | EDCondRewrite (Some (args, addr)) ->
+          | EDCondRewrite (Some (args, i, addr)) ->
                let args = describe_args args in
                   GeneralArgList (Array.concat (
                      if (Array.length args) > 1 then
-                        [ [| rwarg; StringArg "(" |]; args; [| StringArg ")"; AddrArg addr |] ]
+                        [ [| rwarg; StringArg "(" |]; args; [| StringArg ")" |]; assum_arg i; [| AddrArg addr |] ]
                      else
-                        [ [| rwarg |]; args; [| AddrArg addr |] ]
+                        [ [| rwarg |]; args; assum_arg i; [| AddrArg addr |] ]
                   ))
           | EDComposition ->
                StringStringArgList ("<tactic>", "thenT", "<tactic>")

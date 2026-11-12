@@ -74,7 +74,7 @@ let describe e =
       (String.concat ";" (List.map string_of_int ints)) (String.concat ";" (List.map addr addrs)) (String.concat ";" (List.map show_t ts)) in
   match describe_extract e with
   | EDCondRewrite None -> "EDCondRewrite None"
-  | EDCondRewrite (Some (a, at)) -> "EDCondRewrite " ^ ed a ^ " at " ^ addr at
+  | EDCondRewrite (Some (a, i, at)) -> "EDCondRewrite " ^ ed a ^ (if i = 0 then "" else Printf.sprintf " assum %d" i) ^ " at " ^ addr at
   | EDRewrite _ -> "EDRewrite" | EDRule _ -> "EDRule" | EDComposition -> "EDComposition"
   | EDNthHyp _ -> "EDNthHyp" | EDCut _ -> "EDCut" | EDIdentity -> "EDIdentity"
 let deps n = String.concat " " (List.sort_uniq compare (List.map (fun (_, o) -> List.hd (Opname.dest_opname o)) (compute_dependencies (refiner_of_build build) (opname n))))

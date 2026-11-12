@@ -142,8 +142,8 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
 
       type extract_description =
          EDRule of ed_args
-       | EDRewrite of (opname * address) option
-       | EDCondRewrite of (ed_args * address) option
+       | EDRewrite of (opname * int * address) option
+       | EDCondRewrite of (ed_args * int * address) option
        | EDComposition
        | EDNthHyp of int
        | EDCut of term
@@ -1135,11 +1135,11 @@ module MakeRefinerDebug (Refiner1 : RefinerSig) (Refiner2 : RefinerSig) = struct
       match ed1, ed2 with
          Refine1.EDRule (o1, il1, al1, tl1), Refine2.EDRule (o2, il2, al2, tl2) ->
             EDRule (merge_opname x o1 o2, merge_ints x il1 il2, merge_addresss x al1 al2, merge_terms x tl1 tl2)
-       | Refine1.EDRewrite (Some (o1, a1)), Refine2.EDRewrite (Some (o2, a2)) ->
-            EDRewrite (Some ((merge_opname x o1 o2, merge_address x a1 a2)))
-       | Refine1.EDCondRewrite (Some ((o1, il1, al1, tl1), a1)),
-         Refine2.EDCondRewrite (Some ((o2, il2, al2, tl2), a2))->
-            EDCondRewrite (Some ((merge_opname x o1 o2, merge_ints x il1 il2, merge_addresss x al1 al2, merge_terms x tl1 tl2), merge_address x a1 a2))
+       | Refine1.EDRewrite (Some (o1, i1, a1)), Refine2.EDRewrite (Some (o2, i2, a2)) ->
+            EDRewrite (Some ((merge_opname x o1 o2, merge_int x i1 i2, merge_address x a1 a2)))
+       | Refine1.EDCondRewrite (Some ((o1, il1, al1, tl1), i1, a1)),
+         Refine2.EDCondRewrite (Some ((o2, il2, al2, tl2), i2, a2))->
+            EDCondRewrite (Some ((merge_opname x o1 o2, merge_ints x il1 il2, merge_addresss x al1 al2, merge_terms x tl1 tl2), merge_int x i1 i2, merge_address x a1 a2))
        | Refine1.EDRewrite None, Refine2.EDRewrite None -> EDRewrite None
        | Refine1.EDCondRewrite None, Refine2.EDCondRewrite None -> EDCondRewrite None
        | Refine1.EDComposition, Refine2.EDComposition -> EDComposition

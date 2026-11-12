@@ -1,0 +1,19 @@
+save                                               saved                                    on disk: magic 0x111 version 5
+find_file                                          hello/5                                  on disk: magic 0x111 version 5
+set_magic 1, save                                  saved                                    on disk: magic 0x222 version 5
+find_file                                          hello/5                                  on disk: magic 0x222 version 5
+set_magic 0, save over the magic-1 file            raised Failure: <file> has been modified, write operation failed on disk: magic 0x222 version 5
+find_file                                          hello/5                                  on disk: magic 0x222 version 5
+find_file, version 9 on disk                       raised Bad_version (wanted [5; 4], read 9) on disk: magic 0x111 version 9
+find_file, an unknown magic on disk                raised Bad_magic                         on disk: magic 0x999 version 5
+save over an unknown magic                         raised Bad_magic                         on disk: magic 0x999 version 5
+find_file, cut inside the value                    raised Failure: Failed to find the specified format of m on disk: magic 0x111 version 5
+== pack_version
+pack_version 1 2 3                                 0x010203 -> 1.2.3                        on disk: (none)
+pack_version 254 254 254                           0xfefefe -> 254.254.254                  on disk: (none)
+pack_version 255 0 0                               0xff0000 -> 255.0.0                      on disk: (none)
+pack_version 32767 0 0                             0x7fff0000 -> 32767.0.0                  on disk: (none)
+pack_version 32768 0 0                             raised Invalid_argument: File_type_base.pack_version: major number is too big on disk: (none)
+pack_version 0 255 0                               raised Invalid_argument: File_type_base.pack_version: minor number is too big on disk: (none)
+pack_version 0 0 255                               raised Invalid_argument: File_type_base.pack_version: revision number is too big on disk: (none)
+pack_version -1 0 0                                raised Invalid_argument: File_type_base.pack_version: version components must be non-negative on disk: (none)

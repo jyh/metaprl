@@ -1,0 +1,36 @@
+string_of_opname [a; b]                              b!a
+opname_root [a; b]                                   b
+dest_opname [a; b]                                   ["a"; "b"]
+string_of_opname nil                                 ""
+opname_root nil                                      ""
+dest_opname nil                                      []
+make_opname [] == nil_opname                         true
+make_opname [a; b] == make_opname [a; b]             true
+mk_opname a (make_opname [b]) == [a; b]              true
+dst_opname [a; b]                                    a, ["b"] (shared: false)
+dst_opname nil                                       Invalid_argument dst_opname
+eq [a; b] [a; b]                                     true
+eq [a; b] [b; a]                                     false
+eq [a; b] [a]                                        false
+compare [a; b] [a; b]                                0
+compare [a] [b] < 0                                  true
+marshalled copy == original                          false
+marshalled copy: string_of_opname                    b!a
+marshalled copy: eq copy original                    true
+marshalled copy: eq copy [b; a]                      false
+marshalled copy: intern copy == intern original      true
+marshalled copy: normalize_opname copy == original   true
+marshalled copy: mk_opname c copy == [c; a; b]       true
+marshalled copy: compare copy original               0
+dst_opname [a; b]: eq rest [b]                       true
+marshalled copy: dst_opname, eq rest [b]             true
+marshalled copy: dst_opname, intern rest == intern [b] true
+marshalled copy: OpnameSet.mem copy {original}       true
+special var_opname                                   var
+special context_opname                               context
+special xperv                                        Perv
+special sequent_opname                               Perv!sequent
+special xnil_opname                                  Perv!xnil
+special xcons_opname                                 Perv!xcons
+special xconcl_opname                                Perv!xconcl
+sequent_opname == make_opname [sequent; Perv]        true

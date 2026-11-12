@@ -4,7 +4,8 @@
    term whose substitution is still pending (term_ds substitutes lazily:
    dest_var, dest_term and opname_of_term force it), the operator name of
    a context term, a substitution under a binder that shadows some of its
-   variables (filter_sub_vars), a context term rebuilt by mk_term from its
+   variables (filter_sub_vars, reached only when the binder belongs to the
+   term the substitution is pending on: h{z. ..; z}), a context term rebuilt by mk_term from its
    destructed form with its binder renamed (collect_context), and level
    expressions (make_level, make_level_var).  Same harness as
    test_term_subst_ds_rest: both implementations, terms built separately
@@ -67,6 +68,7 @@ module Ops (R : Refiner_sig.RefinerSig) = struct
   let t3' = lam "z" (ctx "C" (app "g" [ var "z" ]) [ var "z" ])
 
   let show_subst l = String.concat ", " (List.map (fun (x, t) -> Lm_symbol.to_string x ^ " := " ^ show t) l)
+  let hz body = mk_term (mk_op (op "h") []) [ mk_bterm [ v "z" ] body; mk_bterm [] (var "z") ]
   let lam2 x y t = mk_term (mk_op (op "lam2") []) [ mk_bterm [ v x; v y ] t ]
   let b = R.TermSubst.alpha_equal
   let sb x = string_of_bool x
@@ -101,6 +103,14 @@ module Ops (R : Refiner_sig.RefinerSig) = struct
     "subst f{lam2 z w. g{z; w; u}; z; w} [y/z; c/w; d/u]", guard (fun () ->
         show (R.TermSubst.subst (app "f" [ mk_term (mk_op (op "lam2") []) [ mk_bterm [ v "z"; v "w" ] (app "g" [ var "z"; var "w"; var "u" ]) ]; var "z"; var "w" ])
                 [ v "z"; v "w"; v "u" ] [ var "y"; c0 "c"; c0 "d" ]));
+    (* h's own bound term binds z while z is free in its other subterm, so the pending
+       substitution reaches that binder and filter_sub_vars drops z (the cases above
+       never do: their binders sit one operator deeper, where z is not free) *)
+    "subst h{z. g{z}; z} [y/z]", guard (fun () -> show (R.TermSubst.subst (hz (app "g" [ var "z" ])) [ v "z" ] [ var "y" ]));
+    "subst h{z. g{z; w}; z} [y/z; c/w]", guard (fun () ->
+        show (R.TermSubst.subst (hz (app "g" [ var "z"; var "w" ])) [ v "z"; v "w" ] [ var "y"; c0 "c" ]));
+    "subst h{z. g{z; w; u}; z} [c/w; y/z; d/u]", guard (fun () ->
+        show (R.TermSubst.subst (hz (app "g" [ var "z"; var "w"; var "u" ])) [ v "w"; v "z"; v "u" ] [ c0 "c"; var "y"; c0 "d" ]));
     "context rebuilt, binder renamed C to D", guard (fun () -> rebuilt (fun b -> R.TermSubst.subst1 b (v "C") (var "D")));
     "context rebuilt, body unchanged (mentions C)", guard (fun () -> rebuilt (fun b -> b));
     "context rebuilt, body mentions C and D", guard (fun () -> rebuilt (fun b -> app "k" [ b; var "D" ]));

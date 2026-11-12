@@ -10,16 +10,12 @@
  * language: variables, application, tuples, sequences, if, fun, match and
  * try with guards, and let / let rec with one or two bindings.
  *
- * Pinned as found (the expected file is the output of the code as
- * written):
- * - the body of a let is not examined: the binding list's last right-hand
- *   side is examined a second time in its place, so `let x = a in b`
- *   gives [a];
- * - a `when` guard is not examined, so `match a with x when g -> b`
- *   gives [a,b].
- * The let rec cases record a third shape: a right-hand side is examined
- * with the outer bound variables only, so a recursive call is reported
- * free.
+ * The expected file is the output of the code.  Before the fix that
+ * followed this test, the body of a let was not examined (the last
+ * right-hand side was examined in its place, so `let x = a in b` gave
+ * [a]), a `when` guard was not examined, and a let rec's right-hand sides
+ * did not see its names; the hand cases and the model now agree on all
+ * of them.
  *)
 
 let loc = Ploc.dummy

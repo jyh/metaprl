@@ -17,6 +17,7 @@ compare [a] [b] < 0                                  true
 marshalled copy == original                          false
 marshalled copy: string_of_opname                    b!a
 marshalled copy: eq copy original                    true
+marshalled copy: eq original copy                    true
 marshalled copy: eq copy [b; a]                      false
 marshalled copy: intern copy == intern original      true
 marshalled copy: normalize_opname copy == original   true

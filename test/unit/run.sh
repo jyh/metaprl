@@ -50,7 +50,8 @@ fi
 # A test whose first line is exactly "(* unit-link: filter *)" is also
 # linked against the term library (library/library) and the filter
 # (filter/prlc), which no other test needs; every other test's link is as
-# it was.
+# it was.  Such a test also runs with MP_ROOT and MPLIB set to this tree:
+# the filter's Setup reads both when it is loaded (Term_grammar links it).
 # A test whose output is platform-specific (Setup's default editor is
 # notepad.exe on Win32) keeps a second file, test_*.expected.win32, used
 # when the compiler's os_type is Win32.
@@ -58,8 +59,10 @@ os_type=$(ocamlfind ocamlc -config-var os_type 2>/dev/null)
 for src in "$here"/test_*.ml; do
    name=$(basename "$src" .ml)
    extra=""
+   runenv=""
    if [ "$(head -n 1 "$src" | tr -d '\r')" = "(* unit-link: filter *)" ]; then
-      extra="-I $root/library -I $root/filter/base $root/library/library.$a $root/filter/prlc.$a"
+      extra="-I $root/library -I $root/filter/base -I $root/filter/filter $root/library/library.$a $root/filter/prlc.$a"
+      runenv="MP_ROOT=$root MPLIB=$root/lib"
    fi
    cp "$src" "$tmp/"
    if ! (cd "$tmp" && $comp -package unix,threads.posix,camlp5 -thread -linkpkg -rectypes \
@@ -68,7 +71,7 @@ for src in "$here"/test_*.ml; do
            "$name.ml" -o "$name") > "$tmp/$name.build" 2>&1; then
       echo "FAIL $name: does not build"; cat "$tmp/$name.build"; status=1; continue
    fi
-   if ! (cd "$tmp" && "./$name") > "$tmp/$name.out" 2>&1; then
+   if ! (cd "$tmp" && env $runenv "./$name") > "$tmp/$name.out" 2>&1; then
       echo "FAIL $name: exited non-zero"; cat "$tmp/$name.out"; status=1; continue
    fi
    # OCaml's stdout is in text mode on Windows: ignore the CRs it adds.

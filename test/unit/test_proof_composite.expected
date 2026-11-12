@@ -1,0 +1,9 @@
+proofs agreeing with TacticInternal.refine       600 of 600
+composite tactics                                413
+refused by both                                  320
+subgoals                                         710 (315 closed by nthAssumT)
+nodes (node_count, summed)                       1962
+cutT B thenT cutT B thenT cutT B on A
+  assertion:B[] | main:B[B] | assertion:B[B] | main:B[B,B] | assertion:B[B] | main:B[B,B] | assertion:B[B,B] | main:A[B,B,B]
+after nthAssumT 1 at [3]
+  assertion:B[] | assertion:B[B] | assertion:B[B,B] | main:A[B,B,B]

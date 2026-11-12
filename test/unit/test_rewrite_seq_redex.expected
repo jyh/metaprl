@@ -1,0 +1,13 @@
+swapJ, the same hypotheses                     pair{sequent{ u: b; x: a; y: g{'x} >- c }; sequent{ u: b; x: a; y: g{'x} >- g{'x} }}
+swapJ, J's part differs (g{x} vs g{u})         refused
+swapJ, J's part has one hypothesis more        refused
+swapJ, H differs                               refused
+swapJ, x's hypothesis differs                  refused
+swapJ, the variable named differently in each  pair{sequent{ x: a; y: g{'x} >- 'x }; sequent{ x: a; y: g{'x} >- 'x }}
+swapJ on schemas <K>; x: a; <L<|K|>['x]>, equal pair{sequent{ <K>; x: a; <L> >- b }; sequent{ <K>; x: a; <L> >- c }}
+swapJ on schemas, L vs M                       refused
+swapJ on schemas, L['x] vs L[c]                refused
+swapJ on schemas, L<|K|> vs L<||>              refused
+same, lam{x. g{x}} and lam{y. g{y}}            g{c}
+same, lam{x. g{x}} and lam{y. c}               refused
+same, lam{x. c} and lam{y. c}                  c

@@ -1,0 +1,390 @@
+== every parameter kind
+   Nf	f	f NIL
+   P	p	Number 7
+   P	p1	String "s t"
+   Ntok	tok	tok NIL
+   P	p2	Token tok
+   P	p3	Var x
+   Ng	g	g NIL
+   P	p4	MNumber n
+   P	p5	MToken t
+   O	o	g p4 p5
+   Vt	t	t\\ \\
+   B	b	t
+   B	b5	t x
+   T	t5	o b b5
+   P	p6	Shape t5
+   Nh	h	h NIL
+   P	p7	Number 3
+   O	o7	h p7
+   B	b7	t x x
+   T	t7	o7 b7
+   P	p8	Operator t7
+   P	p9	Quote
+   P	p10	MString s
+   P	p11	MToken k
+   P	p12	MShape sh
+   P	p13	MOperator o
+   P	p14	MLevel 1 i 0 j 2
+   O	o14	f p p1 p2 p3 p6 p8 p9 p4 p10 p11 p12 p13 p14
+   T	t14	o14
+   read back: f[7:n,
+   "s t":s,
+   "tok":t,
+   x:v,
+   "g[NT]{0;1}":sh, (h3:n{2}):op, @, n:n, s:s, k:t, sh:sh, o:op, {'i | 'j''}:l]
+   alpha-equal: true
+== old formats (read_table + get_term; the last line is the term read)
+current: sequent x: a >- a:                  Arg: sa
+Hyps:
+      1.x :a
+Goal:a
+<= 1.0.10: hypothesis with no variable:      Arg: sa
+Hyps:
+      1.a
+Goal:a
+Warning: converting a term read from an old .prla file
+<= 1.0.7: context as v::terms:               Arg: sa
+Hyps:
+      1.<H[a]>
+Goal:a
+<= 1.0.6: S args::hyps, then G:              Arg: sa
+Hyps:
+      1.x :a
+Goal:a
+<= 1.0.6: G with no S before it:             raised Invalid_argument("ASCII IO: invalid entry encountered by add_goal")
+<= 1.0.14: two conclusions (the first kept): Arg: sa
+Hyps:
+Goal:a
+<= 1.0.14: no conclusion, no t4:             raised Invalid_argument("ASCII IO: invalid entry encountered by get_term - empty file")
+<= 1.0.14: no conclusion, t4 defined:        Arg: sa
+Hyps:
+Goal:a
+<= 1.0.7: var opname with subterms:          'x[a]
+<= 1.0.7: var opname, bound subterm:         raised Invalid_argument("Ascii_io: invalid old-style variable term")
+<= 1.0.5: MVar parameter:                    a[x:v]
+a parameter kind that does not exist:        raised Invalid_argument("ASCII IO: invalid entry encountered by add_param")
+MLevel with an odd variable list:            raised Invalid_argument("ASCII IO: invalid entry encountered by level_exp_vars")
+== malformed lines (the term is the last line)
+O with no fields:                            raised Invalid_argument("ASCII IO: invalid entry encountered by add_op")
+N with three fields:                         raised Invalid_argument("ASCII IO: invalid entry encountered by add_name")
+B with no fields:                            raised Invalid_argument("ASCII IO: invalid entry encountered by add_bterm")
+H with three fields:                         raised Invalid_argument("ASCII IO: invalid entry encountered by add_hyp")
+C with an empty field list:                  raised Invalid_argument("ASCII IO: invalid entry encountered by add_context")
+S with four groups:                          raised Invalid_argument("ASCII IO: invalid entry encountered by add_seq")
+V with one group:                            raised Invalid_argument("ASCII IO: invalid entry encountered by add_var")
+var opname, a Number parameter:              raised Invalid_argument("Term.base_ds.make_term with var_opname, but the term does not look like a variable")
+a comment and a blank line:                  a
+Ascii_io: syntax error on line 4
+a line with one field, then a term z:        a
+a name defined twice:                        raised Invalid_argument("ASCII IO: invalid entry encountered by hash_add_new key=t9")
+Warning: converting a term read from an old .prla file
+== get_named_term on a <= 1.0.7 file: Arg: sa
+Hyps:
+      1.<H[a]>
+Goal:a
+== with the ascii_io debug flag on (each item is printed on stderr)
+Na a a NIL
+O o1 a
+T t1 o1
+B b t1
+debug: a well-formed file:                   a{a}
+Na a a NIL
+O o1 a
+T t1 o1
+B b t8
+debug: a reference to an undefined name:     raised Invalid_argument("ASCII IO: invalid entry encountered by add_items_debug: B b ...")
+== the file the saves below start from
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+== save: as written
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+   read back: f["tok":t, "g[]{}":sh]{c}
+   alpha-equal to the term saved: true
+== save: N tok2 duplicates tok, unreferenced
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+   read back: f["tok":t, "g[]{}":sh]{c}
+   alpha-equal to the term saved: true
+== save: N tok2 duplicates tok, a Token parameter names it
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+   read back: f["tok":t, "g[]{}":sh]{c}
+   alpha-equal to the term saved: true
+== save: N g2 duplicates g, an operator names it
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+   read back: f["tok":t, "g[]{}":sh]{c}
+   alpha-equal to the term saved: true
+== save: T tdup duplicates t, a Shape parameter names it
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+   read back: f["tok":t, "g[]{}":sh]{c}
+   alpha-equal to the term saved: true
+== save: T tc duplicates t2, a bound term names it
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nc	c	c NIL
+   O	o2	c
+   T	t2	o2
+   B	b	t2
+   T	t3	o1 b
+   read back: f["tok":t, "g[]{}":sh]{c}
+   alpha-equal to the term saved: true
+== save: a line of an unknown kind X
+   write_term raised Invalid_argument("ASCII IO: internal error: clean_inputs does not know what to do with X")
+== save: P p7 Number 007 (the value of 7, another spelling)
+   Ng	g	g NIL
+   P	p7	Number 7
+   O	o7	g p7
+   T	t7	o7
+   read back: g[7:n]
+   alpha-equal to the term saved: true
+== the sequent file the saves below start from
+   Nsa	sa	sa NIL
+   O	o	sa
+   T	t	o
+   Na	a	a NIL
+   O	o1	a
+   T	t1	o1
+   H	h	x t1
+   C	h1	J\\ \\ t1
+   VC	C	C\\ \\ t1
+   S	s	t\\ h h1\\ C
+== save: H hdup duplicates h, the sequent names it
+   Nsa	sa	sa NIL
+   O	o	sa
+   T	t	o
+   Na	a	a NIL
+   O	o1	a
+   T	t1	o1
+   H	h	x t1
+   C	h1	J\\ \\ t1
+   VC	C	C\\ \\ t1
+   S	s	t\\ h h1\\ C
+   read back: Arg: sa
+Hyps:
+      1.x :a
+      2.<J<||>[a]>
+Goal:'C<||>[a]
+   alpha-equal to the term saved: true
+== save: T t1dup duplicates t1, the context and the variable name it
+   Nsa	sa	sa NIL
+   O	o	sa
+   T	t	o
+   Na	a	a NIL
+   O	o1	a
+   T	t1	o1
+   H	h	x t1
+   C	h1	J\\ \\ t1
+   VC	C	C\\ \\ t1
+   S	s	t\\ h h1\\ C
+   read back: Arg: sa
+Hyps:
+      1.x :a
+      2.<J<||>[a]>
+Goal:'C<||>[a]
+   alpha-equal to the term saved: true
+== save: the hypothesis in the <= 1.0.10 form (no variable)
+   Nsa	sa	sa NIL
+   O	o	sa
+   T	t	o
+   Na	a	a NIL
+   O	o1	a
+   T	t1	o1
+   H	h2	x t1
+   C	h1	J\\ \\ t1
+   VC	C	C\\ \\ t1
+   S	s2	t\\ h2 h1\\ C
+   read back: Arg: sa
+Hyps:
+      1.x :a
+      2.<J<||>[a]>
+Goal:'C<||>[a]
+   alpha-equal to the term saved: true
+== save: the context in the <= 1.0.7 form (v::terms)
+   Nsa	sa	sa NIL
+   O	o	sa
+   T	t	o
+   Na	a	a NIL
+   O	o1	a
+   T	t1	o1
+   H	h	x t1
+   C	h2	J\\ \\ t1
+   VC	C	C\\ \\ t1
+   S	s2	t\\ h h2\\ C
+   read back: Arg: sa
+Hyps:
+      1.x :a
+      2.<J<||>[a]>
+Goal:'C<||>[a]
+   alpha-equal to the term saved: true
+== a nested opname's file
+   Ny	y	y NIL
+   Ny!x	x	x y
+   O	o	x
+   T	t	o
+== save: N ydup duplicates the inner opname y, the outer N names it
+   Ny	y	y NIL
+   Ny!x	x1	x y
+   O	o1	x1
+   T	t1	o1
+   read back: y!x
+   alpha-equal to the term saved: true
+== save: N ydup duplicates y, the outer N still names y
+   Ny	y	y NIL
+   Ny!x	x	x y
+   O	o	x
+   T	t	o
+   read back: y!x
+   alpha-equal to the term saved: true
+== save: N ydup before y, the outer N names y
+   Ny	ydup	y NIL
+   Ny!x	x	x ydup
+   O	o	x
+   T	t	o
+   read back: y!x
+   alpha-equal to the term saved: true
+== save: N ydup before y, the outer N names ydup
+   Ny	y	y NIL
+   Ny!x	x1	x y
+   O	o1	x1
+   T	t1	o1
+   read back: y!x
+   alpha-equal to the term saved: true
+== save: the term changed (c -> d)
+   Nf	f	f NIL
+   Ntok	tok	tok NIL
+   P	p	Token tok
+   Ng	g	g NIL
+   O	o	g
+   T	t	o
+   P	p1	Shape t
+   O	o1	f p p1
+   Nd	d	d NIL
+   O	o3	d
+   T	t4	o3
+   B	b4	t4
+   T	t5	o1 b4
+   read back: f["tok":t, "g[]{}":sh]{d}
+   alpha-equal to the term saved: true
+== save: a different term
+   Ne	e	e NIL
+   O	o3	e
+   T	t4	o3
+   read back: e
+   alpha-equal to the term saved: true
+== save: a sequent, unchanged
+   Nsa	sa	sa NIL
+   O	o	sa
+   T	t	o
+   Na	a	a NIL
+   O	o1	a
+   T	t1	o1
+   H	h	x t1
+   Nvar	var	var NIL
+   P	p	Var x
+   O	o2	var p
+   T	t2	o2
+   VC	C	C\\ \\ t2
+   S	s	t\\ h\\ C
+   read back: Arg: sa
+Hyps:
+      1.x :a
+Goal:'C<||>['x]
+   alpha-equal to the term saved: true
+   (the S line replaced by: S s t h / G s C)
+== save: a sequent, its file in the <= 1.0.6 S/G form
+   Nsa	sa	sa NIL
+   O	o	sa
+   T	t	o
+   Na	a	a NIL
+   O	o1	a
+   T	t1	o1
+   H	h	x t1
+   Nvar	var	var NIL
+   P	p	Var x
+   O	o2	var p
+   T	t2	o2
+   VC	C	C\\ \\ t2
+   S	s	t\\ h\\ C
+   read back: Arg: sa
+Hyps:
+      1.x :a
+Goal:'C<||>['x]
+   alpha-equal to the term saved: true
+== save: a sequent, the <= 1.0.6 form with G first
+   write_term raised Invalid_argument("ASCII IO: invalid entry encountered by add_goal")

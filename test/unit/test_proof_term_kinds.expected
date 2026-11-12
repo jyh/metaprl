@@ -1,0 +1,49 @@
+== part 1: real proofs
+withTermT w B (cutT B)             ext_rule status_incomplete ext_compose ext_identity ext_compose ext_unjustified arg_named arg_term arg_named arg_term arg_named arg_term ext_identity ext_identity ext_goal ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/4, after 1/4, squashed 1/4
+withTypeT w B (cutT B)             ext_rule status_incomplete ext_compose ext_identity ext_compose ext_unjustified arg_named arg_type arg_named arg_type arg_named arg_type ext_identity ext_identity ext_goal ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/4, after 1/4, squashed 1/4
+withBoolT w true (cutT B)          ext_rule status_incomplete ext_compose ext_identity ext_compose ext_unjustified arg_named arg_bool arg_named arg_bool arg_named arg_bool ext_identity ext_identity ext_goal ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/4, after 1/4, squashed 1/4
+withIntT w 3 (cutT B)              ext_rule status_incomplete ext_compose ext_identity ext_compose ext_unjustified arg_named arg_int arg_named arg_int arg_named arg_int ext_identity ext_identity ext_goal ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/4, after 1/4, squashed 1/4
+withStringT w s (cutT B)           ext_rule status_incomplete ext_compose ext_identity ext_compose ext_unjustified arg_named arg_string arg_named arg_string arg_named arg_string ext_identity ext_identity ext_goal ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/4, after 1/4, squashed 1/4
+withTermListT w [B; C] (cutT B)    ext_rule status_incomplete ext_compose ext_identity ext_compose ext_unjustified arg_named arg_term_list arg_named arg_term_list arg_named arg_term_list ext_identity ext_identity ext_goal ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/4, after 1/4, squashed 1/4
+addTermT w B                       ext_rule status_incomplete ext_annotate arg_named arg_term ext_goal arg_named arg_term
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/3, after 1/3, squashed 1/3
+addTypeT w B                       ext_rule status_incomplete ext_annotate arg_named arg_type ext_goal arg_named arg_type
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/3, after 1/3, squashed 1/3
+addBoolT w false                   ext_rule status_incomplete ext_annotate arg_named arg_bool ext_goal arg_named arg_bool
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/3, after 1/3, squashed 1/3
+addIntT w 3                        ext_rule status_incomplete ext_annotate arg_named arg_int ext_goal arg_named arg_int
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/3, after 1/3, squashed 1/3
+addStringT w s                     ext_rule status_incomplete ext_annotate arg_named arg_string ext_goal arg_named arg_string
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/3, after 1/3, squashed 1/3
+addTermListT w [B; C]              ext_rule status_incomplete ext_annotate arg_named arg_term_list ext_goal arg_named arg_term_list
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/3, after 1/3, squashed 1/3
+cutT B thenT idT                   ext_rule status_incomplete ext_unjustified ext_goal ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/4, after 1/4, squashed 1/4
+cutT B thenLT [idT; nthAssumT 1]   ext_rule status_incomplete ext_compose ext_unjustified ext_identity ext_unjustified ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/6, after 1/3, squashed 1/3
+nthAssumT 1 (complete)             ext_rule status_incomplete ext_unjustified
+   via term_io ok, via term -> raw vs squashed ok | status complete, after the term trip incomplete | nodes 1/2, after 1/2, squashed 1/2
+withIntT k 3 (cutT B thenT addIntT j 4) ext_rule status_incomplete ext_compose ext_identity ext_compose ext_compose ext_unjustified arg_named arg_int arg_named arg_int arg_named arg_int ext_annotate arg_named arg_int arg_named arg_int arg_named arg_int ext_annotate arg_named arg_int arg_named arg_int arg_named arg_int ext_identity ext_identity ext_goal ext_goal
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/7, after 1/4, squashed 1/4
+== part 2: hand-edited proof terms, read back (term -> raw -> term)
+(base) addIntT w 3                 ext_rule status_incomplete ext_annotate arg_named arg_int ext_goal arg_named arg_int
+   via term_io ok, via term -> raw vs squashed ok | status partial, after the term trip incomplete | nodes 1/3, after 1/3, squashed 1/3
+status replaced by status_bad      status incomplete | ext_rule status_incomplete ext_annotate arg_named arg_int ext_goal arg_named arg_int
+status replaced by status_partial  status incomplete | ext_rule status_incomplete ext_annotate arg_named arg_int ext_goal arg_named arg_int
+status replaced by status_complete status incomplete | ext_rule status_incomplete ext_annotate arg_named arg_int ext_goal arg_named arg_int
+status replaced by status_unknown  status incomplete | ext_rule status_incomplete ext_annotate arg_named arg_int ext_goal arg_named arg_int
+arg_int -> arg_address [subterm 2; arg; clause 1] status incomplete | ext_rule status_incomplete ext_annotate ext_goal
+arg_int -> arg_address [an unknown address] refused (Proof_boot.dest_addr)
+arg_int -> arg_type{B}             status incomplete | ext_rule status_incomplete ext_annotate arg_named arg_type ext_goal arg_named arg_type
+arg_int -> arg_term_list[B; C]     status incomplete | ext_rule status_incomplete ext_annotate arg_named arg_term_list ext_goal arg_named arg_term_list
+arg_int -> arg_bool "true"         status incomplete | ext_rule status_incomplete ext_annotate arg_named arg_bool ext_goal arg_named arg_bool
+arg_int -> arg_unknown{B}          refused (Proof_boot.attribute_header_of_term)
+arg_named -> a plain term          refused (Proof_boot.named_attribute_header_of_term)
+ext_annotate -> ext_unknown        refused (Proof_boot.term_make_extract_header)
+tactic_arg -> a plain term         refused (Proof_boot.tactic_arg_header_of_term)

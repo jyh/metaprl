@@ -1,0 +1,7 @@
+hp on h{c}                                   subgoals c, p{c}
+hp on lam{x. h{c}} at [1]                    subgoals lam{'x. c}, p{c}
+hp on lam{x. h{x}} at [1]                    refused (apply_crwaddr at [1], hp): Rewrite condition has free variable where it is not allowed: x
+hc on lam{x. h{x}} at [1]                    subgoals lam{'x. 'x}, c
+hp on lam{x. h{g{x}}} at [1]                 refused (apply_crwaddr at [1], hp): Rewrite condition has free variable where it is not allowed: x
+hp on lam{x. h{x}} at [] (no match)          refused (Rewrite.apply_rewrite) other
+hp on lam{x. lam{x. h{x}}} at [1;1]          refused (apply_crwaddr at [1; 1], hp): Rewrite condition has free variable where it is not allowed: x1

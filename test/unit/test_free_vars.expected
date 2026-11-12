@@ -1,0 +1,31 @@
+hand cases (code vs OCaml's free variables):
+  a                              [a]        agree
+  a b                            [a,b]      agree
+  (a, b, a)                      [a,b]      agree
+  1                              []         agree
+  fun x -> x y                   [y]        agree
+  if a then b else c             [a,b,c]    agree
+  do { a; b }                    [a,b]      agree
+  let x = a in b                 [a]        DIFFER, OCaml gives [a,b]
+  let x = a in x                 [a]        agree
+  let x = a in x b               [a]        DIFFER, OCaml gives [a,b]
+  let x = a and y = x in y       [a]        DIFFER, OCaml gives [a,x]
+  let rec f = f in f             [f]        DIFFER, OCaml gives []
+  let rec f = g in b             [g]        DIFFER, OCaml gives [b,g]
+  match a with x when g -> b     [a,b]      DIFFER, OCaml gives [a,b,g]
+  match a with x when x -> x     [a]        agree
+  try a with x -> b              [a,b]      agree
+  fun x when g -> x              []         DIFFER, OCaml gives [g]
+patt_vars:
+  x                              [x]
+  _                              []
+  (x, y, x)                      [x,y]
+  (x : t)                        [x]
+new_vars [x; y; z] in x0 (x1 y0): [x2,y1,z0]
+new_vars [x] in let q = a in x0: [x0]
+model, 2000 random expressions (depth 1-3, names a b x y):
+  no let, no guard   0 of 855 disagree
+  with a let         224 of 459 disagree (first: (match (let b = y and y = a in x) with a when (fun x when x -> x) -> (a, a) | a when (if x then y else b) -> (fun x -> a)) gives [a,y], OCaml [a,b,x,y])
+  with a let rec     249 of 463 disagree (first: (let rec b = ((let rec b = x and b = y in b), (if y then x else y)) and x = (match b with b when (fun b when y -> x) -> b | b when (match x with a when y -> y | y -> a) -> (y, a)) in (let rec a = (let a = x and b = b in x) in (let y = a in y))) gives [a,x,y], OCaml [a,y])
+  with a guard       369 of 822 disagree (first: (match (let b = y and y = a in x) with a when (fun x when x -> x) -> (a, a) | a when (if x then y else b) -> (fun x -> a)) gives [a,y], OCaml [a,b,x,y])
+  all                529 of 2000 disagree (first: (match (let b = y and y = a in x) with a when (fun x when x -> x) -> (a, a) | a when (if x then y else b) -> (fun x -> a)) gives [a,y], OCaml [a,b,x,y])

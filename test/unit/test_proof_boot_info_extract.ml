@@ -9,7 +9,8 @@
    step is wrapped: the step's expression, its status and its number of
    subgoals.  The expressions are:
      cutT t          cutT t
-     nthAssumT i     nthAssumT (i - 1): the refiner's number, from 0
+     nthAssumT i     nthAssumT i, the tactic's own number (the refiner
+                     counts from 0, and make_extract_expr adds 1 back)
      idT             the identity step (not an Extract)
      rw c 0 addr     rw <name> <address> for one rewrite: the address of rw
                      composed with addrC's or addrLiteralC's; <rewrite> for
@@ -18,10 +19,6 @@
        rewrite       rewrite with parameters is rw ( <name> <params> ) addr
      a rule          its name and its arguments
    Measured and printed as fixed cases, not modelled:
-     - nthAssumT i is described as nthAssumT (i - 1): the tactic counts
-       assumptions from 1 and passes i - 1 to Refine.nth_hyp, whose number
-       describe_extract returns, so the description names the assumption
-       before the one used (and nthAssumT 0 for nthAssumT 1);
      - rw c i addr at an assumption i > 0 is described like rw c 0 addr:
        the assumption number is not in the description;
      - higherC around ONE rewrite is described with the address of the rw

@@ -84,6 +84,11 @@ jobs:
       - name: unit tests of the OCaml libraries (test/unit/run.sh)
         working-directory: metaprl
         run: opam exec -- sh test/unit/run.sh
+      - name: Filter_ocaml and Free_vars give the pinned terms and free variables (filter/test, compare_pin.sh)
+        working-directory: metaprl
+        run: |
+          opam exec -- sh filter/test/run_pin_filter_ocaml.sh . "$RUNNER_TEMP/pin.txt" $(ls filter/test/corpus/*.ml | LC_ALL=C sort)
+          sh filter/test/compare_pin.sh filter/test/pin_filter_ocaml.expected "$RUNNER_TEMP/pin.txt"
       - name: the filter refuses ill-typed term declarations (test/filter_types/run.sh)
         working-directory: metaprl
         run: opam exec -- sh test/filter_types/run.sh

@@ -1,0 +1,9 @@
+explode p[3]                             agree  p[num 3 int 3]
+explode p[div_num 1 2]                   agree  p[num 0 int 0]
+explode p[div_num 4 2]                   agree  p[num 2 int 2]
+explode p["s"; tok; level 1|i; 'x]       agree  p[string s; token tok!M; level; var x]
+explode p[@n; @s; @t]                    agree  p[unsupported; unsupported; unsupported]
+param_vars_info p[3; @n; level; @s; @t]  agree  {n,s,t}
+param_vars_info f{p[3]; p[@m]; x}        agree  {m}
+all_vars_info p[3; @n; level; @s; @t]    agree  {n:param, s:param, t:param}
+all_vars_info f{p[3]; 'a['x]; x}         agree  {a:so0/1, x:fo}

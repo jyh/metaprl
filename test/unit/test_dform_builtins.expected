@@ -1,0 +1,101 @@
+TERM set: false
+== hbreak["Y"; "N"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons{N; Perv!xcons{Perv!string["b":s]; Perv!xnil}}}
+== hbreak[y:s; n:s]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons{n; Perv!xcons{Perv!string["b":s]; Perv!xnil}}}
+== sbreak[y:s; n:s]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons{n; Perv!xcons{Perv!string["b":s]; Perv!xnil}}}
+== cbreak[y:s; n:s]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons{n; Perv!xcons{Perv!string["b":s]; Perv!xnil}}}
+== tzone[t:s]
+Perv!xcons{; Perv!xcons{Perv!string["x":s]; Perv!xcons{; Perv!xnil}}}
+== tzone["tag"]
+Perv!xcons{; Perv!xcons{Perv!string["x":s]; Perv!xcons{; Perv!xnil}}}
+== pushm[3]
+Perv!xcons{; Perv!xcons{Perv!string["x":s]; Perv!xcons{; Perv!xnil}}}
+== pushm[i:n]
+Perv!xcons{; Perv!xcons{Perv!string["x":s]; Perv!xcons{; Perv!xnil}}}
+== pushm["2"]
+Perv!xcons{; Perv!xcons{Perv!string["x":s]; Perv!xcons{; Perv!xnil}}}
+== pushm[]
+Perv!xcons{; Perv!xcons{Perv!string["x":s]; Perv!xcons{; Perv!xnil}}}
+== pushfont["bf"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons
+         {;
+          Perv!xcons
+              {Perv!string["b":s];
+               Perv!xcons{; Perv!xcons{Perv!string["c":s]; Perv!xnil}}}}}
+== pushfont["it"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons
+         {;
+          Perv!xcons
+              {Perv!string["b":s];
+               Perv!xcons{; Perv!xcons{Perv!string["c":s]; Perv!xnil}}}}}
+== pushfont["em"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons
+         {;
+          Perv!xcons
+              {Perv!string["b":s];
+               Perv!xcons{; Perv!xcons{Perv!string["c":s]; Perv!xnil}}}}}
+== pushfont["rm"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons
+         {;
+          Perv!xcons
+              {Perv!string["b":s];
+               Perv!xcons{; Perv!xcons{Perv!string["c":s]; Perv!xnil}}}}}
+== pushfont["sub"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons
+         {;
+          Perv!xcons
+              {Perv!string["b":s];
+               Perv!xcons{; Perv!xcons{Perv!string["c":s]; Perv!xnil}}}}}
+== pushfont["sup"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons
+         {;
+          Perv!xcons
+              {Perv!string["b":s];
+               Perv!xcons{; Perv!xcons{Perv!string["c":s]; Perv!xnil}}}}}
+== pushfont["ul"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons
+         {;
+          Perv!xcons
+              {Perv!string["b":s];
+               Perv!xcons{; Perv!xcons{Perv!string["c":s]; Perv!xnil}}}}}
+== pushfont["other"]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons
+         {;
+          Perv!xcons
+              {Perv!string["b":s];
+               Perv!xcons{; Perv!xcons{Perv!string["c":s]; Perv!xnil}}}}}
+== pushfont[plain:s]
+Perv!xcons
+    {Perv!string["a":s];
+     Perv!xcons{; Perv!xcons{Perv!string["b":s]; Perv!xcons{; Perv!xnil}}}}
+== a variable x
+'x<|!|>
+== a second-order variable v
+'v<|!!|>['x<|!|>]

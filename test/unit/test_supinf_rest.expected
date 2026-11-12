@@ -1,0 +1,75 @@
+treeMap: leaves mapped, shape kept       2000 of 2000
+treeProduct: leaves f a b, t1-major      2000 of 2000
+leftBranch/rightBranch                   2000 of 2000
+== treeMergeLeft / treeMergeRight (leaves a*100+b)
+leaf[1], leaf[2]
+   left  leaf [102]
+   right leaf [102]
+leaf[1], left(leaf)[2]
+   left  leaf [102]
+   right Invalid_argument: Incompatible trees leaf left(leaf) in treeMergeRight
+leaf[1], right(leaf)[2]
+   left  leaf [102]
+   right Invalid_argument: Incompatible trees leaf right(leaf) in treeMergeRight
+left(leaf)[1], pair(leaf,leaf)[2 3]
+   left  leaf [102]
+   right pair(leaf,leaf) [102 103]
+right(leaf)[1], pair(leaf,leaf)[2 3]
+   left  leaf [103]
+   right pair(leaf,leaf) [102 103]
+pair(leaf,leaf)[1 2], pair(leaf,leaf)[3 4]
+   left  pair(leaf,leaf) [103 204]
+   right pair(leaf,leaf) [103 204]
+pair(leaf,ignore)[1], leaf[3]
+   left  leaf [103]
+   right Invalid_argument: Incompatible trees pair(leaf,ignore) leaf in treeMergeRight
+pair(ignore,leaf)[2], leaf[3]
+   left  leaf [203]
+   right Invalid_argument: Incompatible trees pair(ignore,leaf) leaf in treeMergeRight
+pair(leaf,leaf)[1 2], leaf[3]
+   left  pair(leaf,leaf) [103 203]
+   right Invalid_argument: Incompatible trees pair(leaf,leaf) leaf in treeMergeRight
+pair(leaf,leaf)[1 2], left(leaf)[3]
+   left  pair(leaf,leaf) [103 203]
+   right leaf [103]
+pair(leaf,leaf)[1 2], right(leaf)[3]
+   left  pair(leaf,leaf) [103 203]
+   right leaf [203]
+ignore[], leaf[1]
+   left  ignore []
+   right ignore []
+leaf[1], ignore[]
+   left  ignore []
+   right ignore []
+left(leaf)[1], leaf[2]
+   left  Invalid_argument: Incompatible trees left(leaf) leaf in treeMergeLeft
+   right leaf [102]
+== AF infinities
+mk_number +oo: isPlusInfinity true · mk_number -oo: isMinusInfinity true
++oo + +oo  = (++oo1)
+-oo + -oo  = (+-oo1)
++oo + -oo  = Invalid_argument: MinusInfinity+PlusInfinity is undefined
+-oo + +oo  = Invalid_argument: MinusInfinity+PlusInfinity is undefined
++oo + 1    = (++oo1)
+1 + -oo    = (+-oo1)
+== term_of
+AF 2*x1 + 3       add{3/1; mul{2/1; x1}}
+AF x2 - x3        add{mul{1/1; x2}; mul{-1/1; x3}}
+AF x1 - x1        0/1
+AF 5              5/1
+AF x3             mul{1/1; x3}
+SAF affine        add{3/1; mul{2/1; x1}}
+SAF max           max{add{3/1; mul{2/1; x1}}; add{mul{1/1; x2}; mul{-1/1; x3}}}
+SAF min           min{add{3/1; mul{2/1; x1}}; add{mul{1/1; x2}; mul{-1/1; x3}}}
+SAF min(max,_)    min{max{add{3/1; mul{2/1; x1}}; add{mul{1/1; x2}; mul{-1/1; x3}}};
+     add{3/1; mul{2/1; x1}}}
+== sources
+hypSource 4            hyp 4
+extract2leftSource 2   extr2left(2,hyp 4)
+extract2rightSource 3  extr2right(3,hyp 4)
+contrSource            contrad(hyp 4)
+setSource Signore      ignore
+transitiveLeftSource   transL(1,hyp 4,hyp 7)
+transitiveRightSource  transR(1,hyp 4,hyp 7)
+min(+oo, x2 - x3): isAffine true, source min(ignore,sum(trivVar(2),scale(-1/1,trivVar(3))))
+min(+oo from hyp 9, x2 - x3): isAffine true, source min(ignore,sum(trivVar(2),scale(-1/1,trivVar(3))))

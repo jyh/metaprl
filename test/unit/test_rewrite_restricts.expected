@@ -1,0 +1,798 @@
+== goal, argument 'T<H> (Strict)
+Redex: Stack:
+          RStack: 6
+	SOVarPattern T<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWSOFreeVarsVar (0, ) <4> []
+
+== goal, argument 'A<H> (the hypothesis' variable) (Strict)
+Redex: Stack:
+          RStack: 5
+	SOVarPattern A<H>[0]
+	CVar H<>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:2 (default x)
+       RWSOVar (0, )
+    RWSeqContext (-1, 3, [2])
+ Goals:
+    RWSOVar (4, 2)
+
+    RWSOFreeVarsVar (0, ) <3> []
+
+== goal, argument 'C<H;J>['x] (Strict)
+REFUSED: check_stack
+== goal, argument 'C<H>['x] (Strict)
+REFUSED: Rewrite_util.check_arity (bound contexts mismatch: C)
+== goal, argument J<H>['x] (a context) (Strict)
+REFUSED: compile_so_redex_term
+== goal, argument g{z} (z free) (Strict)
+Redex: Stack:
+          RStack: 6
+	FreeFOVarPattern z
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWComposite Rr!g
+    Bterm 0()
+       RWMatchFreeFOVar <0> [1; 4] []
+
+== goal, argument x (the bound x) (Strict)
+Redex: Stack:
+          RStack: 6
+	FreeFOVarPattern x
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWMatchFreeFOVar <0> [1; 4] []
+
+== f{C<|H|>[g{'a}]}, argument C<H>[c] (Strict)
+REFUSED: compile_so_redex_term
+== f{lam y. 'b['y]}, argument 'b<H>['w] (Strict)
+REFUSED: Rewrite_util.check_arity (bound contexts mismatch: b)
+== f{'a; g{'a}}, argument 'a<H> (Strict)
+REFUSED: Rewrite_util.check_arity (bound contexts mismatch: a)
+== f{z} (z free), argument z (Strict)
+Redex: Stack:
+          RStack: 1
+	FreeFOVarPattern z
+
+Terms:
+    RWComposite Rr!f
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+
+    RWMatchFreeFOVar <0> [] []
+
+== f{z} (z free), argument g{z} (Strict)
+Redex: Stack:
+          RStack: 1
+	FreeFOVarPattern z
+
+Terms:
+    RWComposite Rr!f
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+
+    RWComposite Rr!g
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+
+== goal, argument <K<H>> >- c (a sequent) (Strict)
+Redex: Stack:
+          RStack: 6
+	CVar K<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqFreeVarsContext (<0; 4>): -1, 0, []
+ Goals:
+    RWComposite Rr!c
+
+== goal, argument <K<H>>; w: d >- c (Strict)
+REFUSED: compile_so_redex_sequent_inner (Last context of the sequent does not need to be passed in as an argument: K)
+== goal, argument <K<H>['x]> >- c (Strict)
+REFUSED: var_index
+== goal, argument D<H>[g{'a}] (address D) (Strict)
+Redex: Stack:
+          RStack: 7
+	CVar D<H>[0]
+	SOVarPattern a<>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 2, [])
+    RWSeqHyp: stack:4 (default x)
+       RWSOVar (3, )
+    RWSeqContext (-1, 5, [4])
+ Goals:
+    RWSOVar (6, 4)
+
+    RWSOContext (<0; 5>: 0, 0, [])
+    RWComposite Rr!g
+       Bterm 0()
+          RWSOFreeVarsVar (1, ) <0; 2; 5> []
+
+== goal, argument lam y. D<H>[g{'a}] (address D) (Strict)
+Redex: Stack:
+          RStack: 8
+	FOVar y
+	CVar D<H>[0]
+	SOVarPattern a<>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 3, [])
+    RWSeqHyp: stack:5 (default x)
+       RWSOVar (4, )
+    RWSeqContext (-1, 6, [5])
+ Goals:
+    RWSOVar (7, 5)
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWSOContext (<1; 6>0: 0, 1, [])
+          RWComposite Rr!g
+             Bterm 0()
+                RWSOFreeVarsVar (2, ) <1; 3; 6> [0]
+
+== goal, argument g{'e; lam y. D<H>[g{'a}]} (address D) (Strict)
+Redex: Stack:
+          RStack: 9
+	SOVarPattern e<>[0]
+	FOVar y
+	CVar D<H>[0]
+	SOVarPattern a<>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 4, [])
+    RWSeqHyp: stack:6 (default x)
+       RWSOVar (5, )
+    RWSeqContext (-1, 7, [6])
+ Goals:
+    RWSOVar (8, 6)
+
+    RWComposite Rr!g
+    Bterm 0()
+       RWSOFreeVarsVar (0, ) <2; 4; 7> []
+    Bterm 0()
+       RWComposite Rr!lam
+          Bterm 1(stack:1 (default y))
+             RWSOContext (<2; 7>1: 0, 2, [])
+                RWComposite Rr!g
+                   Bterm 0()
+                      RWSOFreeVarsVar (3, ) <2; 4; 7> [1]
+
+== goal, argument lam y. 'b<H> (Strict)
+Redex: Stack:
+          RStack: 7
+	FOVar y
+	SOVarPattern b<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 2, [])
+    RWSeqHyp: stack:4 (default x)
+       RWSOVar (3, )
+    RWSeqContext (-1, 5, [4])
+ Goals:
+    RWSOVar (6, 4)
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWSOFreeVarsVar (1, ) <5> [0]
+
+== goal, argument lam y. (<K<H>> >- c) (Strict)
+Redex: Stack:
+          RStack: 7
+	FOVar y
+	CVar K<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 2, [])
+    RWSeqHyp: stack:4 (default x)
+       RWSOVar (3, )
+    RWSeqContext (-1, 5, [4])
+ Goals:
+    RWSOVar (6, 4)
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWSequent:
+       Arg:
+          RWComposite Rr!arg
+       Hyps:
+          RWSeqFreeVarsContext (<1; 5>0): -1, 1, []
+       Goals:
+          RWComposite Rr!c
+
+== goal, argument <K<H>> >- g{<K>} (Strict)
+Redex: Stack:
+          RStack: 6
+	CVar K<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqFreeVarsContext (<0; 4>): -1, 0, []
+ Goals:
+    RWComposite Rr!g
+       Bterm 0()
+          RWSequent:
+          Arg:
+             RWComposite Rr!arg
+          Hyps:
+             RWSeqContextInstance (0)
+          Goals:
+             RWComposite Rr!c
+
+== f{c}, argument lam y. z (z free) (Strict)
+Redex: Stack:
+          RStack: 2
+	FOVar y
+	FreeFOVarPattern z
+
+Terms:
+    RWComposite Rr!f
+    Bterm 0()
+       RWComposite Rr!c
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWMatchFreeFOVar <1> [] [0]
+
+== <H>; x: 'A<H>; y: 'A<H> >- 'C<H> (Strict)
+Redex: Stack:
+          RStack: 5
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	FOVar y
+	SOVarPattern C<H>[0]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (-3, 0, [])
+    RWSeqHyp: stack:2 (default x)
+       RWSOVar (1, )
+    RWSeqHyp: stack:3 (default y)
+       RWSOFreeVarsVar (1, ) <> [2]
+ Goals:
+    RWSOFreeVarsVar (4, ) <> [3; 2]
+
+== goal, argument 'T<H> (Relaxed)
+Redex: Stack:
+          RStack: 6
+	SOVarPattern T<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWSOVar (0, )
+
+== goal, argument 'A<H> (the hypothesis' variable) (Relaxed)
+Redex: Stack:
+          RStack: 5
+	SOVarPattern A<H>[0]
+	CVar H<>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:2 (default x)
+       RWSOVar (0, )
+    RWSeqContext (-1, 3, [2])
+ Goals:
+    RWSOVar (4, 2)
+
+    RWSOVar (0, )
+
+== goal, argument 'C<H;J>['x] (Relaxed)
+REFUSED: check_stack
+== goal, argument 'C<H>['x] (Relaxed)
+REFUSED: Rewrite_util.check_arity (bound contexts mismatch: C)
+== goal, argument J<H>['x] (a context) (Relaxed)
+REFUSED: compile_so_redex_term
+== goal, argument g{z} (z free) (Relaxed)
+Redex: Stack:
+          RStack: 6
+	FreeFOVarPattern z
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWComposite Rr!g
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+
+== goal, argument x (the bound x) (Relaxed)
+Redex: Stack:
+          RStack: 6
+	FreeFOVarPattern x
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWMatchFreeFOVar <0> [] []
+
+== f{C<|H|>[g{'a}]}, argument C<H>[c] (Relaxed)
+REFUSED: compile_so_redex_term
+== f{lam y. 'b['y]}, argument 'b<H>['w] (Relaxed)
+REFUSED: Rewrite_util.check_arity (bound contexts mismatch: b)
+== f{'a; g{'a}}, argument 'a<H> (Relaxed)
+REFUSED: Rewrite_util.check_arity (bound contexts mismatch: a)
+== f{z} (z free), argument z (Relaxed)
+Redex: Stack:
+          RStack: 1
+	FreeFOVarPattern z
+
+Terms:
+    RWComposite Rr!f
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+
+    RWMatchFreeFOVar <0> [] []
+
+== f{z} (z free), argument g{z} (Relaxed)
+Redex: Stack:
+          RStack: 1
+	FreeFOVarPattern z
+
+Terms:
+    RWComposite Rr!f
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+
+    RWComposite Rr!g
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+
+== goal, argument <K<H>> >- c (a sequent) (Relaxed)
+Redex: Stack:
+          RStack: 6
+	CVar K<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (-1, 0, [])
+ Goals:
+    RWComposite Rr!c
+
+== goal, argument <K<H>>; w: d >- c (Relaxed)
+REFUSED: compile_so_redex_sequent_inner (Last context of the sequent does not need to be passed in as an argument: K)
+== goal, argument <K<H>['x]> >- c (Relaxed)
+REFUSED: var_index
+== goal, argument D<H>[g{'a}] (address D) (Relaxed)
+Redex: Stack:
+          RStack: 7
+	CVar D<H>[0]
+	SOVarPattern a<>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 2, [])
+    RWSeqHyp: stack:4 (default x)
+       RWSOVar (3, )
+    RWSeqContext (-1, 5, [4])
+ Goals:
+    RWSOVar (6, 4)
+
+    RWSOContext (0, 0, [])
+    RWComposite Rr!g
+       Bterm 0()
+          RWSOVar (1, )
+
+== goal, argument lam y. D<H>[g{'a}] (address D) (Relaxed)
+Redex: Stack:
+          RStack: 8
+	FOVar y
+	CVar D<H>[0]
+	SOVarPattern a<>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 3, [])
+    RWSeqHyp: stack:5 (default x)
+       RWSOVar (4, )
+    RWSeqContext (-1, 6, [5])
+ Goals:
+    RWSOVar (7, 5)
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWSOContext (0, 1, [])
+          RWComposite Rr!g
+             Bterm 0()
+                RWSOVar (2, )
+
+== goal, argument g{'e; lam y. D<H>[g{'a}]} (address D) (Relaxed)
+Redex: Stack:
+          RStack: 9
+	SOVarPattern e<>[0]
+	FOVar y
+	CVar D<H>[0]
+	SOVarPattern a<>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 4, [])
+    RWSeqHyp: stack:6 (default x)
+       RWSOVar (5, )
+    RWSeqContext (-1, 7, [6])
+ Goals:
+    RWSOVar (8, 6)
+
+    RWComposite Rr!g
+    Bterm 0()
+       RWSOVar (0, )
+    Bterm 0()
+       RWComposite Rr!lam
+          Bterm 1(stack:1 (default y))
+             RWSOContext (0, 2, [])
+                RWComposite Rr!g
+                   Bterm 0()
+                      RWSOVar (3, )
+
+== goal, argument lam y. 'b<H> (Relaxed)
+Redex: Stack:
+          RStack: 7
+	FOVar y
+	SOVarPattern b<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 2, [])
+    RWSeqHyp: stack:4 (default x)
+       RWSOVar (3, )
+    RWSeqContext (-1, 5, [4])
+ Goals:
+    RWSOVar (6, 4)
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWSOVar (1, )
+
+== goal, argument lam y. (<K<H>> >- c) (Relaxed)
+Redex: Stack:
+          RStack: 7
+	FOVar y
+	CVar K<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 2, [])
+    RWSeqHyp: stack:4 (default x)
+       RWSOVar (3, )
+    RWSeqContext (-1, 5, [4])
+ Goals:
+    RWSOVar (6, 4)
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWSequent:
+       Arg:
+          RWComposite Rr!arg
+       Hyps:
+          RWSeqContext (-1, 1, [])
+       Goals:
+          RWComposite Rr!c
+
+== goal, argument <K<H>> >- g{<K>} (Relaxed)
+Redex: Stack:
+          RStack: 6
+	CVar K<H>[0]
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	CVar J<H>[1]
+	SOVarPattern C<H,J>[1]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (0, 1, [])
+    RWSeqHyp: stack:3 (default x)
+       RWSOVar (2, )
+    RWSeqContext (-1, 4, [3])
+ Goals:
+    RWSOVar (5, 3)
+
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (-1, 0, [])
+ Goals:
+    RWComposite Rr!g
+       Bterm 0()
+          RWSequent:
+          Arg:
+             RWComposite Rr!arg
+          Hyps:
+             RWSeqContextInstance (0)
+          Goals:
+             RWComposite Rr!c
+
+== f{c}, argument lam y. z (z free) (Relaxed)
+Redex: Stack:
+          RStack: 2
+	FOVar y
+	FreeFOVarPattern z
+
+Terms:
+    RWComposite Rr!f
+    Bterm 0()
+       RWComposite Rr!c
+
+    RWComposite Rr!lam
+    Bterm 1(stack:0 (default y))
+       RWMatchFreeFOVar <1> [] []
+
+== <H>; x: 'A<H>; y: 'A<H> >- 'C<H> (Relaxed)
+Redex: Stack:
+          RStack: 5
+	CVar H<>[0]
+	SOVarPattern A<H>[0]
+	FOVar x
+	FOVar y
+	SOVarPattern C<H>[0]
+
+Terms:
+    RWSequent:
+ Arg:
+    RWComposite Rr!arg
+ Hyps:
+    RWSeqContext (-3, 0, [])
+    RWSeqHyp: stack:2 (default x)
+       RWSOVar (1, )
+    RWSeqHyp: stack:3 (default y)
+       RWSOVar (1, )
+ Goals:
+    RWSOVar (4, )
+

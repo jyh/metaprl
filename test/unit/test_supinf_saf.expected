@@ -1,0 +1,19 @@
+3000 forms: 1243 mixtures predicted, 697 affine results
+value at 6 points = the model's                   1757 of  1757
+occurs v only if v occurs in an operand, and if the value depends on v  1757 of  1757
+a mixture raises exactly when the model says      3000 of  3000
+value_of a constant result = its value             199 of   199
+== infinities and sources
+min(v1, +oo)             (+1/1v1)                       source min(hyp 1,ignore)
+min(v1, -oo)             (+-oo1)                        source min(ignore,hyp 5)
+max(v1, +oo)             (++oo1)                        source min(ignore,hyp 4)
+max(v1, -oo)             (+1/1v1)                       source min(hyp 1,ignore)
+min(3, 5)                (+3/11)                        source min(hyp 2,ignore)
+max(3, 5)                (+5/11)                        source min(ignore,hyp 3)
+min(v1, 3)               min((+1/1v1); (+3/11))         source min(hyp 1,hyp 2)
+max(v1, 3)               max((+1/1v1); (+3/11))         source min(hyp 1,hyp 2)
+max(max(v1,3), max(v1,5)) max(max((+1/1v1); (+3/11)); max((+1/1v1); (+5/11))) source max(min(hyp 1,hyp 2),min(hyp 1,hyp 3))
+-2 * min(v1, 3)          max((+-2/1v1); (+-6/11))       source scale(-2/1,min(hyp 1,hyp 2))
+0 * max(v1, 3)           (+0/11)                        source trivConst(0/1)
+min(v1, 3) + 5           min((+5/11+1/1v1); (+8/11))    source sum(min(hyp 1,hyp 2),hyp 3)
+isPlusInfinity +oo true · isMinusInfinity -oo true · isInfinite v1 false

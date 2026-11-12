@@ -1,0 +1,92 @@
+== compress_arglist / expand_arglist
+String name, String s              String         expands back: true
+String name, Bool true             Bool           expands back: true
+String name, Int 3                 Int            expands back: true
+String name, Term T                Term           expands back: true
+String name, String s, String s2   StringString   expands back: true
+String name, String s, Bool false  StringBool     expands back: true
+String name, String s, Int 4       StringInt      expands back: true
+String name, String s, Term U      StringTerm     expands back: true
+String name, Bool true, String s2  BoolString     expands back: true
+String name, Bool true, Bool false BoolBool       expands back: true
+String name, Bool true, Int 4      BoolInt        expands back: true
+String name, Bool true, Term U     BoolTerm       expands back: true
+String name, Int 3, String s2      IntString      expands back: true
+String name, Int 3, Bool false     IntBool        expands back: true
+String name, Int 3, Int 4          IntInt         expands back: true
+String name, Int 3, Term U         IntTerm        expands back: true
+String name, Term T, String s2     TermString     expands back: true
+String name, Term T, Bool false    TermBool       expands back: true
+String name, Term T, Int 4         TermInt        expands back: true
+String name, Term T, Term U        TermTerm       expands back: true
+String name                        None           expands back: true
+String name, Int 1, Int 2, Int 3   General(4)     expands back: true
+String name, Type T                General(2)     expands back: true
+String name, TermList(1)           General(2)     expands back: true
+Int 1                              General(1)     expands back: true
+                                   General(0)     expands back: true
+== format_extract (width 100)
+-- idT
+Identity: A with attrs < >
+-- cutT B
+Extract: A with attrs < > -> B with attrs < >; A with attrs < >;
+-- nthAssumT 1
+Extract: A with attrs < > -> []
+-- wrapT (cutT B)
+Wrapped [w...] : Extract: A with attrs < > -> B with attrs < >; A with attrs < >;
+-- addIntT k 3
+Annotate: A with attrs < > A with attrs < ints = [ k->3 ]; >
+-- cutT B thenLT [idT; nthAssumT 1]
+Compose:
+  0. Extract:
+       A with attrs < >
+       ->
+            B with attrs < >;
+            A with attrs < >;
+  1. Identity:
+       B with attrs < >
+  2. Extract:
+       A with attrs < >
+       -> []
+-- withTermT w C (cutT B)
+Compose:
+  0. Identity:
+       A with attrs < >
+  1. Compose:
+       0. Extract:
+            A with attrs < terms = [ w->C ]; >
+            ->
+                 B with attrs < terms = [ w->C ]; >;
+                 A with attrs < terms = [ w->C ]; >;
+       1. Identity:
+            B with attrs < >
+       2. Identity:
+            A with attrs < >
+== format_attrs after add*T of every kind (width 100)
+<
+  terms = [ t->T ];
+  term_lists = [ tl->[ T; U ] ];
+  types = [ ty->Ty ]; ints = [ i->5 ]; bools = [ b->tt ]; strings = [ s->two; s->str ]; >
+get_strings s: [str; two]; mem_string s two: true; mem_string s three: false
+== remove*T and without*T
+all added                        term term_list type bool int string
+removeTermT t                    term_list type bool int string | strings str,two
+removeTermListT tl               term type bool int string | strings str,two
+removeTypeT ty                   term term_list bool int string | strings str,two
+removeBoolT b                    term term_list type int string | strings str,two
+removeIntT i                     term term_list type bool string | strings str,two
+removeStringT s                  term term_list type bool int string | strings str
+removeStringValT s two           term term_list type bool int string | strings str
+removeStringValT s str           term term_list type bool int string | strings two
+withoutTermT t                   term_list type bool int string | strings str,two
+withoutTermListT tl              term type bool int string | strings str,two
+withoutTypeT ty                  term term_list bool int string | strings str,two
+withoutBoolT b                   term term_list type int string | strings str,two
+withoutIntT i                    term term_list type bool string | strings str,two
+withoutStringT s                 term term_list type bool int string | strings str
+withoutStringValT s two          term term_list type bool int string | strings str
+withoutStringValT s str          term term_list type bool int string | strings two
+== accessors
+set_goal: goal G, assumptions 1
+set_label: lbl
+set_msequent: goal H, all_assums P Q

@@ -1,0 +1,11 @@
+t1, the subgoal's name x                     Arg: Perv!xnil Hyps: Goal:lam{'x1. 'e<||>['x1]}
+t1, another name y                           Arg: Perv!xnil Hyps: Goal:lam{'x. 'e<||>['x]}
+t1, another name and type y: d               Arg: Perv!xnil Hyps: Goal:lam{'x. 'e<||>['x]}
+t1, two hypotheses y, z                      refused (match_redex_sequent_hyps)
+t1, no hypothesis                            refused (Rewrite_match_redex.match_redex_sequent_hyps)
+t1, not a sequent                            refused (Term_man_ds.explode_sequent)
+t1, a context where x is                     refused (Rewrite_match_redex.match_redex_sequent_hyps)
+t2, the subgoal's names J, x                 Arg: Perv!xnil Hyps:       1.<J<||>> Goal:lam{'x1. 'e<|J|>['x1]}
+t2, J and another name y                     Arg: Perv!xnil Hyps:       1.<J<||>> Goal:lam{'x. 'e<|J|>['x]}
+t2, another context K, y                     refused (Rewrite_match_redex.match_context_instance)
+t2, a hypothesis where J is                  refused (Rewrite_match_redex.match_context_instance)

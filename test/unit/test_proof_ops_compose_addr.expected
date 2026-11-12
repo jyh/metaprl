@@ -1,0 +1,112 @@
+cutT B thenLT [idT; idT] at [0]
+    (unchanged)      nodes (1, 4), partial, root rule t/2, [0] extract/2, at [0] extract/2
+    squash           nodes (1, 4), incomplete, root rule t/2, [0] unjustified/2, at [0] unjustified/2
+    clean            nodes (1, 4), partial, root rule t/2, [0] extract/2, at [0] extract/2
+    kreitz           nodes (2, 5), incomplete, root rule t/1, [0] rule idT/1, at [0] rule idT/1
+    make_assum       nodes (1, 4), incomplete, root rule t/2, [0] unjustified/2, at [0] unjustified/2
+    expand           nodes (1, 4), partial, root rule t/2, [0] extract/2, at [0] extract/2
+    refine idT       nodes (2, 5), partial, root rule t/1, [0] rule idT/1, at [0] rule idT/1
+    refine cutT C    nodes (2, 7), partial, root rule t/2, [0] rule cutT C/2, at [0] rule cutT C/2
+    copy to [1]      nodes (1, 4), incomplete, root rule t/2, [0] extract/2, at [0] extract/2
+    copy [1] to it   nodes (1, 3), partial, root rule t/1, [0] goal/0, at [0] goal/0
+    set_goal B       nodes (1, 4), incomplete, root rule t/2, [0] unjustified/2, at [0] unjustified/2
+    paste a goal     nodes (1, 3), partial, root rule t/1, [0] goal/0, at [0] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete
+cutT B thenLT [idT; idT] at [0;0]
+    (unchanged)      nodes (1, 4), partial, root rule t/2, [0] extract/2, at [0;0] refused (Proof_boot.index)
+    squash           refused (Proof_boot.index)
+    clean            refused (Proof_boot.index)
+    kreitz           refused (Proof_boot.index)
+    make_assum       refused (Proof_boot.index)
+    expand           refused (Proof_boot.index)
+    refine idT       refused (Proof_boot.index)
+    refine cutT C    refused (Proof_boot.index)
+    copy to [1]      refused (Proof_boot.index)
+    copy [1] to it   refused (Proof_boot.index)
+    set_goal B       refused (Proof_boot.index)
+    paste a goal     refused (Proof_boot.index)
+    find_subgoal 0   refused (Proof_boot.index)
+    is_leaf          refused (Proof_boot.index)
+    path_status      partial, complete
+cutT B thenLT [idT; idT] at [0;1]
+    (unchanged)      nodes (1, 4), partial, root rule t/2, [0] extract/2, at [0;1] refused (Proof_boot.index)
+    squash           refused (Proof_boot.index)
+    clean            refused (Proof_boot.index)
+    kreitz           refused (Proof_boot.index)
+    make_assum       refused (Proof_boot.index)
+    expand           refused (Proof_boot.index)
+    refine idT       refused (Proof_boot.index)
+    refine cutT C    refused (Proof_boot.index)
+    copy to [1]      refused (Proof_boot.index)
+    copy [1] to it   refused (Proof_boot.index)
+    set_goal B       refused (Proof_boot.index)
+    paste a goal     refused (Proof_boot.index)
+    find_subgoal 0   refused (Proof_boot.index)
+    is_leaf          refused (Proof_boot.index)
+    path_status      partial, complete
+cutT B thenLT [cutT C; idT] at [0]
+    (unchanged)      nodes (1, 8), partial, root rule t/3, [0] compose(extract)/2, at [0] compose(extract)/2
+    squash           nodes (1, 8), incomplete, root rule t/3, [0] compose(unjustified)/2, at [0] compose(unjustified)/2
+    clean            nodes (1, 8), partial, root rule t/3, [0] compose(extract)/2, at [0] compose(extract)/2
+    kreitz           nodes (2, 5), incomplete, root rule t/1, [0] rule idT/1, at [0] rule idT/1
+    make_assum       nodes (1, 8), incomplete, root rule t/3, [0] compose(unjustified)/2, at [0] compose(unjustified)/2
+    expand           nodes (1, 8), partial, root rule t/3, [0] compose(extract)/2, at [0] compose(extract)/2
+    refine idT       nodes (2, 5), partial, root rule t/1, [0] rule idT/1, at [0] rule idT/1
+    refine cutT C    nodes (2, 7), partial, root rule t/2, [0] rule cutT C/2, at [0] rule cutT C/2
+    copy to [1]      nodes (1, 8), incomplete, root rule t/3, [0] compose(extract)/2, at [0] compose(extract)/2
+    copy [1] to it   nodes (1, 3), partial, root rule t/1, [0] goal/0, at [0] goal/0
+    set_goal B       nodes (1, 5), incomplete, root rule t/3, [0] unjustified/3, at [0] unjustified/3
+    paste a goal     nodes (1, 3), partial, root rule t/1, [0] goal/0, at [0] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete
+cutT B thenLT [cutT C; idT] at [0;1]
+    (unchanged)      nodes (1, 8), partial, root rule t/3, [0] compose(extract)/2, at [0;1] extract/2
+    squash           nodes (1, 8), incomplete, root rule t/3, [0] compose(extract)/2, at [0;1] unjustified/2
+    clean            nodes (1, 8), partial, root rule t/3, [0] compose(extract)/2, at [0;1] extract/2
+    kreitz           ProofRefineError (replace at [0])
+    make_assum       nodes (1, 8), incomplete, root rule t/3, [0] compose(unjustified)/2, at [0;1] unjustified/2
+    expand           nodes (1, 8), partial, root rule t/3, [0] compose(extract)/2, at [0;1] extract/2
+    refine idT       ProofRefineError (replace at [0])
+    refine cutT C    ProofRefineError (replace at [0])
+    copy to [1]      nodes (1, 8), incomplete, root rule t/3, [0] compose(extract)/2, at [0;1] extract/2
+    copy [1] to it   nodes (1, 7), partial, root rule t/2, [0] compose(extract)/2, at [0;1] goal/0
+    set_goal B       nodes (1, 7), partial, root rule t/2, [0] compose(extract)/2, at [0;1] goal/0
+    paste a goal     nodes (1, 7), partial, root rule t/2, [0] compose(extract)/2, at [0;1] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete, complete
+addIntT k 3 at [0]
+    (unchanged)      nodes (1, 3), partial, root rule t/1, [0] annotate/1, at [0] annotate/1
+    squash           nodes (1, 3), partial, root rule t/1, [0] annotate/1, at [0] annotate/1
+    clean            nodes (1, 3), partial, root rule t/1, [0] annotate/1, at [0] annotate/1
+    kreitz           nodes (2, 5), incomplete, root rule t/1, [0] rule idT/1, at [0] rule idT/1
+    make_assum       nodes (1, 3), partial, root rule t/1, [0] annotate/1, at [0] annotate/1
+    expand           nodes (1, 3), partial, root rule t/1, [0] annotate/1, at [0] annotate/1
+    refine idT       nodes (2, 5), partial, root rule t/1, [0] rule idT/1, at [0] rule idT/1
+    refine cutT C    nodes (2, 7), partial, root rule t/2, [0] rule cutT C/2, at [0] rule cutT C/2
+    copy to [1]      nodes (1, 3), partial, root rule t/1, [0] annotate/1, at [0] annotate/1
+    copy [1] to it   nodes (1, 3), partial, root rule t/1, [0] goal/0, at [0] goal/0
+    set_goal B       nodes (1, 3), incomplete, root rule t/1, [0] unjustified/1, at [0] unjustified/1
+    paste a goal     nodes (1, 3), partial, root rule t/1, [0] goal/0, at [0] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete
+wrapped addIntT k 3 at [0;0]
+    (unchanged)      nodes (1, 4), partial, root rule t/1, [0] wrapped/1, at [0;0] annotate/1
+    squash           nodes (1, 4), partial, root rule t/1, [0] wrapped/1, at [0;0] annotate/1
+    clean            nodes (1, 4), partial, root rule t/1, [0] wrapped/1, at [0;0] annotate/1
+    kreitz           nodes (2, 6), incomplete, root rule t/1, [0] wrapped/1, at [0;0] rule idT/1
+    make_assum       nodes (1, 4), partial, root rule t/1, [0] wrapped/1, at [0;0] annotate/1
+    expand           nodes (1, 4), partial, root rule t/1, [0] wrapped/1, at [0;0] annotate/1
+    refine idT       nodes (2, 6), partial, root rule t/1, [0] wrapped/1, at [0;0] rule idT/1
+    refine cutT C    nodes (2, 8), partial, root rule t/2, [0] wrapped/2, at [0;0] rule cutT C/2
+    copy to [1]      nodes (1, 4), partial, root rule t/1, [0] wrapped/1, at [0;0] annotate/1
+    copy [1] to it   nodes (1, 4), partial, root rule t/1, [0] wrapped/0, at [0;0] goal/0
+    set_goal B       nodes (1, 4), incomplete, root rule t/1, [0] wrapped/1, at [0;0] unjustified/1
+    paste a goal     nodes (1, 4), partial, root rule t/1, [0] wrapped/0, at [0;0] goal/0
+    find_subgoal 0   []
+    is_leaf          false
+    path_status      partial, complete, complete

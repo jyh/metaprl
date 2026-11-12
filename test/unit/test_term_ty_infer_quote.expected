@@ -1,0 +1,55 @@
+infer zero                                       Perv!Term
+infer 'zero                                      Perv!Quote
+infer 'tt                                        Perv!Quote
+infer 'succ{zero}                                REFUSED: type error
+infer 'succ{'zero}                               Perv!Quote
+infer succ{'zero}                                Perv!Term
+infer 'num[3]                                    Perv!Quote
+infer 'name["a"]                                 Perv!Quote
+infer 'tag[tt]                                   Perv!Quote
+infer 'lam{x. x}                                 Perv!Quote
+infer 'lam{x. 'zero}                             Perv!Quote
+infer 'nil                                       Perv!Quote
+infer 'cons{'zero; 'nil}                         Perv!Quote
+infer cons{'zero; nil}                           Test!List{Perv!Quote}
+infer cons{'zero; cons{zero; nil}}               REFUSED: type error
+infer cons{zero; cons{'zero; nil}}               REFUSED: type error
+infer same{'zero; zero}                          REFUSED: type error
+infer same{zero; 'zero}                          Perv!Term
+infer same{'zero; 'tt}                           Perv!Term
+infer eq{'zero; zero}                            Perv!Judgment
+infer ''zero                                     REFUSED: Term_ty_infer.tenv_find_type: unknown term
+infer 'unknown                                   REFUSED: Term_ty_infer.tenv_find_type: unknown term
+infer 'sarg                                      Perv!Quote
+infer 'List{tt}                                  REFUSED: type error
+infer same{'zero; 'zero}                         Perv!Term
+infer cons{'zero; cons{'tt; nil}}                Test!List{Perv!Quote}
+infer same{zero; sarg}                           Perv!Term
+infer same{tt; sarg}                             REFUSED: type error
+infer same{'zero; sarg}                          REFUSED: type error
+infer same{nil; sarg}                            REFUSED: type error
+infer succ{sarg}                                 Perv!Term
+infer succ{carg}                                 Perv!Term
+infer cons{zero; cons{sarg; nil}}                REFUSED: type error
+infer same{zero; earg: x: zero >- x}             REFUSED: type error
+infer same{zero; lam{x. x}}                      Perv!Term
+infer hy                                         Perv!ty_hyp{Perv!Term; Perv!Term}
+infer hc                                         Perv!ty_hyp_cases{Perv!xcons{Perv!ty_hyp_case{Perv!Term; Perv!Term}; Perv!xcons{Perv!ty_hyp_case{Perv!Prop; Perv!Prop}; Perv!xnil}}}
+infer ex                                         Perv!ty_exists{Perv!Ty; 'v. 'v}
+infer same{zero; hy}                             Perv!Term
+infer same{tt; hy}                               REFUSED: type error
+infer same{zero; hc}                             Perv!Term
+infer same{zero; ex}                             Perv!Term
+infer same{tt; ex}                               REFUSED: type error
+infer succ{hy}                                   Perv!Term
+infer succ{hc}                                   Perv!Term
+infer succ{ex}                                   Perv!Term
+infer same{nil; hy}                              REFUSED: type error
+infer same{hy; zero}                             REFUSED: type error
+infer eq{same{zero; C}; succ{C[zero]}}           Perv!Judgment
+infer eq{succ{C[zero]}; same{zero; C}}           Perv!Judgment
+infer eq{succ{C[zero]}; succ{C}}                 Perv!Judgment
+infer eq{succ{'a[zero]}; same{zero; a}}          Perv!Judgment
+infer eq{succ{'a[zero]}; succ{a}}                Perv!Judgment
+infer eq{same{<H> >- zero; sarg}; same{zero; H}} REFUSED: type error
+infer eq{succ{<H> >- zero}; succ{H}}             REFUSED: type error

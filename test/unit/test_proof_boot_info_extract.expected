@@ -4,7 +4,7 @@ cutT b on a
   info [0;0]  refused (Proof_boot.index)
 nthAssumT 2 on a
   info []     rule nthAssumT 2, complete, 0 subgoal(s)
-  info [0]    extract ("nthAssumT", int 1), complete, 0 subgoal(s)
+  info [0]    extract ("nthAssumT", int 2), complete, 0 subgoal(s)
 idT on a
   info []     rule idT, complete, 1 subgoal(s)
   info [0]    identity, complete, 1 subgoal(s)
@@ -14,7 +14,7 @@ wrapped cutT b on a
   info [0;0]  extract ("cutT", term b), complete, 2 subgoal(s)
 wrapped nthAssumT 1 on a
   info [0]    wrapped ("wrapped", int 7), complete, 0 subgoal(s)
-  info [0;0]  extract ("nthAssumT", int 0), complete, 0 subgoal(s)
+  info [0;0]  extract ("nthAssumT", int 1), complete, 0 subgoal(s)
 rw swap 0 [] on f{g{a}; f{b; c}}
   info []     rule rw swap 0 [], complete, 1 subgoal(s)
   info [0]    extract ("rw", "Swap.swap", addr []), complete, 1 subgoal(s)
@@ -37,7 +37,7 @@ rw (swap thenC addrC [1] ung) 0 [] on f{b; g{a}}
 rw (cutC b) 0 [] on f{g{a}; f{b; c}}
   info [0]    extract ("cutT", term b), complete, 2 subgoal(s)
 rw swap 1 [] on a
-  info [0]    extract ("rw", "Swap.swap", addr []), complete, 1 subgoal(s)
+  info [0]    extract ("rw", "Swap.swap", int 1, addr []), complete, 1 subgoal(s)
 wrapped rw swap 0 [] on f{g{a}; f{b; c}}
   info [0]    wrapped ("wrapped", int 7), complete, 1 subgoal(s)
   info [0;0]  extract ("rw", "Swap.swap", addr []), complete, 1 subgoal(s)
@@ -58,6 +58,10 @@ rw (cung thenC cung) 0 concl on Arg: Perv!xnil Hyps: Goal:g{g{a}}
   info [0]    extract ("<conditional-rewrite>"), complete, 1 subgoal(s)
 rw cpar[c] 0 concl on Arg: Perv!xnil Hyps: Goal:g{f{a; b}}
   info [0]    extract ("rw", "(", "Test_proof_boot_info_extract.cpar", term c, ")", addr []), complete, 1 subgoal(s)
+rw cung 1 concl on a
+  info [0]    extract ("rw", "Test_proof_boot_info_extract.cung", int 1, addr []), complete, 1 subgoal(s)
+rw cpar[c] 1 concl on a
+  info [0]    extract ("rw", "(", "Test_proof_boot_info_extract.cpar", term c, ")", int 1, addr []), complete, 1 subgoal(s)
 rule ax_a on a
   info []     rule rule ax_a, complete, 0 subgoal(s)
   info [0]    extract ("Test_proof_boot_info_extract.ax_a"), complete, 0 subgoal(s)

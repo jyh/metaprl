@@ -1,5 +1,5 @@
 (* Setup (mllib): where MetaPRL finds its tree and keeps its state —
-   MP_ROOT, MPLIB (or $MP_ROOT/lib), doc_dir, $HOME/.metaprl, the editor,
+   MP_ROOT, MPLIB (or $MP_ROOT/lib), doc_dir, $HOME/.metaprl, the editor (and that reading its file closes it),
    the browser hostname (and, through home, the unexported ensure_dir). Every value is computed
    once per process from the environment, so each case is a child process
    (this executable again) whose HOME and MP_ROOT point into a temporary
@@ -38,6 +38,20 @@ let child case =
       attempt ".metaprl is a directory" (fun () ->
           string_of_bool (Sys.is_directory (Filename.concat (Sys.getenv "HOME") ".metaprl")))
   | "editor" -> attempt "editor" Setup.editor
+  | "editor-closed" ->
+      (* Whether reading .metaprl/editor leaves that file open: on Win32 an open handle keeps the file from
+         being removed; elsewhere the next descriptor opened is the same number only if the file was closed. *)
+      let file = Filename.concat (Filename.concat (Sys.getenv "HOME") ".metaprl") "editor" in
+      let fd0 = Unix.openfile Filename.null [ Unix.O_RDONLY ] 0 in
+      Unix.close fd0;
+      attempt "editor" Setup.editor;
+      attempt "the editor file is closed again" (fun () ->
+          string_of_bool
+            (if Sys.os_type = "Win32" then (try Sys.remove file; true with Sys_error _ -> false)
+             else begin
+               let fd1 = Unix.openfile Filename.null [ Unix.O_RDONLY ] 0 in
+               Unix.close fd1; fd1 = fd0
+             end))
   | "hostname" ->
       attempt "gethostname" Setup.gethostname;
       Setup.sethostname "other.example";
@@ -87,6 +101,12 @@ let () =
     run "editor: .metaprl/editor holds emacs" "editor" [ "HOME=" ^ at "h"; "EDITOR=ed" ] (fun () ->
         mkdirs [ "h"; "h/.metaprl" ];
         let oc = open_out (at "h/.metaprl/editor") in output_string oc "emacs -nw\nsecond line\n"; close_out oc);
+    run "editor: .metaprl/editor holds emacs, file closed after" "editor-closed" [ "HOME=" ^ at "h"; "EDITOR=ed" ]
+      (fun () ->
+        mkdirs [ "h"; "h/.metaprl" ];
+        let oc = open_out (at "h/.metaprl/editor") in output_string oc "emacs -nw\n"; close_out oc);
+    run "editor: .metaprl/editor is empty, file closed after" "editor-closed" [ "HOME=" ^ at "h"; "EDITOR=ed" ]
+      (fun () -> mkdirs [ "h"; "h/.metaprl" ]; close_out (open_out (at "h/.metaprl/editor")));
     run "hostname from MP_BROWSER_HOSTNAME" "hostname" [ "HOME=" ^ at "h"; "MP_BROWSER_HOSTNAME=test.example" ]
       (fun () -> mkdirs [ "h" ]);
     run "HOME/.metaprl is a plain file" "home" [ "HOME=" ^ at "h" ] (fun () ->

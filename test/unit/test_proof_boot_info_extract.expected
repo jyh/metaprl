@@ -1,0 +1,64 @@
+cutT b on a
+  info []     rule cutT b, complete, 2 subgoal(s)
+  info [0]    extract ("cutT", term b), complete, 2 subgoal(s)
+  info [0;0]  refused (Proof_boot.index)
+nthAssumT 2 on a
+  info []     rule nthAssumT 2, complete, 0 subgoal(s)
+  info [0]    extract ("nthAssumT", int 1), complete, 0 subgoal(s)
+idT on a
+  info []     rule idT, complete, 1 subgoal(s)
+  info [0]    identity, complete, 1 subgoal(s)
+wrapped cutT b on a
+  info []     rule wrapped cutT b, complete, 2 subgoal(s)
+  info [0]    wrapped ("wrapped", int 7), complete, 2 subgoal(s)
+  info [0;0]  extract ("cutT", term b), complete, 2 subgoal(s)
+wrapped nthAssumT 1 on a
+  info [0]    wrapped ("wrapped", int 7), complete, 0 subgoal(s)
+  info [0;0]  extract ("nthAssumT", int 0), complete, 0 subgoal(s)
+rw swap 0 [] on f{g{a}; f{b; c}}
+  info []     rule rw swap 0 [], complete, 1 subgoal(s)
+  info [0]    extract ("rw", "Swap.swap", addr []), complete, 1 subgoal(s)
+rw swap 0 [2] on f{g{a}; f{b; c}}
+  info [0]    extract ("rw", "Swap.swap", addr [2]), complete, 1 subgoal(s)
+rw (addrC [2] swap) 0 [] on f{g{a}; f{b; c}}
+  info [0]    extract ("rw", "Swap.swap", addr [2]), complete, 1 subgoal(s)
+rw (addrLiteralC [2] ung) 0 [1] on f{f{a; g{b}}; c}
+  info [0]    extract ("rw", "Ung.ung", addr [1; 2]), complete, 1 subgoal(s)
+rw (addrC [2] cung) 0 concl on Arg: Perv!xnil Hyps: Goal:f{a; g{c}}
+  info [0]    extract ("rw", "Test_proof_boot_info_extract.cung", addr [2]), complete, 1 subgoal(s)
+rw (higherC ung) 0 [] (one g) on f{g{a}; f{b; c}}
+  info [0]    extract ("rw", "Ung.ung", addr []), complete, 1 subgoal(s)
+rw (higherC ung) 0 [] (two g) on f{g{a}; g{b}}
+  info [0]    extract ("<rewrite>"), complete, 1 subgoal(s)
+rw (higherC swap) 0 [] (no f) on a
+  info [0]    extract ("<rewrite>"), complete, 1 subgoal(s)
+rw (swap thenC addrC [1] ung) 0 [] on f{b; g{a}}
+  info [0]    extract ("<rewrite>"), complete, 1 subgoal(s)
+rw (cutC b) 0 [] on f{g{a}; f{b; c}}
+  info [0]    extract ("cutT", term b), complete, 2 subgoal(s)
+rw swap 1 [] on a
+  info [0]    extract ("rw", "Swap.swap", addr []), complete, 1 subgoal(s)
+wrapped rw swap 0 [] on f{g{a}; f{b; c}}
+  info [0]    wrapped ("wrapped", int 7), complete, 1 subgoal(s)
+  info [0;0]  extract ("rw", "Swap.swap", addr []), complete, 1 subgoal(s)
+rw cung 0 concl on Arg: Perv!xnil Hyps: Goal:g{f{a; b}}
+  info []     rule rw cung 0 concl, complete, 1 subgoal(s)
+  info [0]    extract ("rw", "Test_proof_boot_info_extract.cung", addr []), complete, 1 subgoal(s)
+rw cswap 0 concl (one condition) on Arg: Perv!xnil Hyps: Goal:f{a; g{c}}
+  info [0]    extract ("rw", "Test_proof_boot_info_extract.cswap", addr []), complete, 2 subgoal(s)
+rw cung 0 concl.2 on Arg: Perv!xnil Hyps: Goal:f{a; g{c}}
+  info [0]    extract ("rw", "Test_proof_boot_info_extract.cung", addr [2]), complete, 1 subgoal(s)
+rw (addrC [1] cung) 0 concl.2 on Arg: Perv!xnil Hyps: Goal:f{a; f{g{c}; b}}
+  info [0]    extract ("rw", "Test_proof_boot_info_extract.cung", addr [2; 1]), complete, 1 subgoal(s)
+rw (higherC cung) 0 concl (one g) on Arg: Perv!xnil Hyps: Goal:f{a; g{c}}
+  info [0]    extract ("rw", "Test_proof_boot_info_extract.cung", addr [2]), complete, 1 subgoal(s)
+rw (higherC cung) 0 concl (two g) on Arg: Perv!xnil Hyps: Goal:f{g{a}; g{c}}
+  info [0]    compose, complete, 1 subgoal(s)
+rw (cung thenC cung) 0 concl on Arg: Perv!xnil Hyps: Goal:g{g{a}}
+  info [0]    extract ("<conditional-rewrite>"), complete, 1 subgoal(s)
+rw cpar[c] 0 concl on Arg: Perv!xnil Hyps: Goal:g{f{a; b}}
+  info [0]    extract ("rw", "(", "Test_proof_boot_info_extract.cpar", term c, ")", addr []), complete, 1 subgoal(s)
+rule ax_a on a
+  info []     rule rule ax_a, complete, 0 subgoal(s)
+  info [0]    extract ("Test_proof_boot_info_extract.ax_a"), complete, 0 subgoal(s)
+rule ax_a2 (goal a) on b: refused (Rewrite.apply_rewrite)

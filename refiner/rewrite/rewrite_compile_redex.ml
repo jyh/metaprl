@@ -554,7 +554,7 @@ struct
     | RWSOFreeVarsContext(rconts, rvars, i, j, t, il) ->
          let t = map_restricts_term restr t in
             if List.mem_assoc j restr then
-               RWSOFreeVarsContext((List.assoc i restr) @ rconts, rvars, i, j, t, il)
+               RWSOFreeVarsContext((List.assoc j restr) @ rconts, rvars, i, j, t, il)
             else
                RWSOFreeVarsContext(rconts, rvars, i, j, t, il)
     | RWCheckVar _ as t ->

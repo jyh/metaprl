@@ -1,0 +1,24 @@
+szone "head:" pushm[3] a space b space c popm ezone
+  w80 "head:aaaaaa bbbbbb cccccc"
+  w16 "head:aaaaaa\n   bbbbbb\n   cccccc"
+azone a space b space c ezone
+  w80 "Invalid_argument dform error: soft break in azone"
+  w16 "Invalid_argument dform error: soft break in azone"
+szone a hspace b hspace c ezone
+  w80 "aaaaaa bbbbbb cccccc"
+  w16 "aaaaaa\nbbbbbb\ncccccc"
+szone "head:" pushm["--"] ... popm ezone
+  w80 "head:aaaaaa bbbbbb cccccc"
+  w16 "head:aaaaaa\n  bbbbbb cccccc"
+szone "head:" pushm ... popm ezone
+  w80 "head:aaaaaa bbbbbb cccccc"
+  w16 "head:aaaaaa\nbbbbbb cccccc"
+n[7]: "#" slot[@k]
+  w80 "#7"
+  w16 "#7"
+t[Foo]: "@" slot[@o] (a token)
+  w80 "@Bar!Foo"
+  w16 "@Bar!Foo"
+s["q"]: "$" slot[@s]
+  w80 "$q"
+  w16 "$q"

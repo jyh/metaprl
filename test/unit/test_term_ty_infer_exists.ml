@@ -16,11 +16,11 @@
    tkt (Pair{Term; Term}).  Each case prints the inferred type, or the
    first string of the error raised; the expected file is the output of
    the code as written, never typed.
-   Pinned as found, not changed:
-     - tkd{some2} and tkd3{some3} are ACCEPTED: an exists over two
-       variables is taken where an exists over one, used twice, is
-       required.  The single-binder cases refuse correctly
-       (tkd{pair{zero; tt}}, tkt{some2}). *)
+   tkd{some2} and tkd3{some3} are refused: an exists over two variables
+   is not an exists over one variable used twice.  They were accepted
+   while type_subst rebuilt an inner exst under the substituted
+   variable's name and substituted its body a second time, which left
+   the inner variable free. *)
 open Lm_symbol
 open Opname
 open Term_sig

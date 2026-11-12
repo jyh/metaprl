@@ -1,0 +1,6 @@
+a <= w{a}                wrap[a <= w{a}]
+a <= w{b}                wrap[b <= w{b}]
+a <= w{w{a}}             wrap[w{a} <= w{w{a}}]
+a <= w2{a; b}            wrap2[a <= w2{a; b}](ab[a <= b])
+a <= w2{a; c}            Not_found
+a <= b                   ab[a <= b]

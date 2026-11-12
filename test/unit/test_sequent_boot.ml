@@ -5,6 +5,7 @@
    accessors are compared with a list model:
      hyp_count            every entry, contexts included
      get_pos_hyp_num i    i when i >= 0, else hyp_count + i + 1
+     get_pos_assum_num i  the same over the assumptions (num_assums), printed once
      nth_hyp / nth_binding at that 1-based position: the hypothesis'
                           type / variable; a context there, position 0 or
                           a position past the end is refused
@@ -75,4 +76,11 @@ let () =
     Printf.printf "i=%2d pos=%d nth_hyp=%s\n" i (Sequent.get_pos_hyp_num p i)
       (match opt (fun () -> s (Sequent.nth_hyp p i)) with Some x -> x | None -> "refused")
   done;
-  Printf.printf "all_hyps %s; args %s\n" (String.concat "," (List.map s (Sequent.all_hyps p))) (String.concat "," (List.map s (Sequent.args p)))
+  Printf.printf "all_hyps %s; args %s\n" (String.concat "," (List.map s (Sequent.all_hyps p))) (String.concat "," (List.map s (Sequent.args p)));
+  (* get_pos_assum_num counts from the end for i < 0, as get_pos_hyp_num does, over
+     the tactic argument's assumptions (three here) *)
+  let goal = mkseq [ H 0 ] 0 in
+  let pa = { (arg goal) with TacticInternalType.ref_goal = Refine.mk_msequent goal [ mkseq [] 0; mkseq [ H 1 ] 0; mkseq [ H 1; H 2 ] 0 ] } in
+  Printf.printf "num_assums %d:" (Sequent.num_assums pa);
+  for i = -4 to 4 do Printf.printf " %d->%d" i (Sequent.get_pos_assum_num pa i) done;
+  print_newline ()

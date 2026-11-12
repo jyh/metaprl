@@ -61,6 +61,15 @@ module P (R : Refiner_sig.RefinerSig) = struct
           name ^ "  map_up:   " ^ sg (R.TermOp.map_up map t);
           name ^ "  iter_down visits " ^ string_of_int (count R.TermOp.iter_down t)
           ^ ", iter_up visits " ^ string_of_int (count R.TermOp.iter_up t) ]) terms
+    (* the refusing arms of two small recognisers: is_no_subterms_term on terms it is not,
+       and one_subterm on a term without exactly one subterm *)
+    @ List.map (fun (name, t) -> "is_no_subterms_term c " ^ name ^ ": " ^ string_of_bool (R.TermOp.is_no_subterms_term (op "c") t))
+        [ "c", mk_simple_term (op "c") []; "d", mk_simple_term (op "d") []; "c{d}", mk_simple_term (op "c") [ mk_simple_term (op "d") [] ];
+          "x", mk_var_term (v "x") ]
+    @ List.map (fun (name, t) -> "one_subterm " ^ name ^ ": "
+                  ^ (try sg (R.TermOp.one_subterm t) with R.RefineError.RefineError (f, _) -> "refused (" ^ f ^ ")"))
+        [ "c{d}", mk_simple_term (op "c") [ mk_simple_term (op "d") [] ]; "c", mk_simple_term (op "c") [];
+          "c{d; e}", mk_simple_term (op "c") [ mk_simple_term (op "d") []; mk_simple_term (op "e") [] ] ]
 end
 
 module S = P (Refiner_std.Refiner)

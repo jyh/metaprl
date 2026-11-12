@@ -1,0 +1,359 @@
+trying multiplicity 1
+matrix proof found
+ 0 valid    |- ([1]p => p)
+   proved
+trying multiplicity 1
+matrix proof found
+ 1 valid    |- ([1]p => [1][1]p)
+   proved
+trying multiplicity 1
+matrix proof found
+ 2 valid    |- ([1](p => q) => ([1]p => [1]q))
+   proved
+trying multiplicity 1
+trying multiplicity 2
+matrix proof found
+ 3 valid    |- ([1](p & q) => ([1]p & [1]q))
+   proved
+trying multiplicity 1
+matrix proof found
+ 4 valid    |- (([1]p & [1]q) => [1](p & q))
+   proved
+trying multiplicity 1
+matrix proof found
+ 5 valid    |- (([1]p | [1]q) => [1](p | q))
+   proved
+trying multiplicity 1
+matrix proof found
+ 6 valid    |- ([1]p => ~[1]~p)
+   proved
+trying multiplicity 1
+matrix proof found
+ 7 valid    |- (p => ~[1]~p)
+   proved
+trying multiplicity 1
+matrix proof found
+ 8 valid    |- [1](p | ~p)
+   proved
+trying multiplicity 1
+matrix proof found
+ 9 valid    |- ([1][2]p => [2]p)
+   proved
+trying multiplicity 1
+matrix proof found
+10 valid    |- ([1][2]p => [1][2][2]p)
+   proved
+trying multiplicity 1
+matrix proof found
+11 valid   [1]p, [1](p => q) |- [1]q
+   proved
+trying multiplicity 1
+matrix proof found
+12 valid   [1]p |- q, p
+   proved
+trying multiplicity 1
+matrix proof found
+13 valid    |- ([1](p => q) => ([1](q => r) => [1](p => r)))
+   proved
+trying multiplicity 1
+14 invalid  |- (p => [1]p)
+   not provable
+trying multiplicity 1
+trying multiplicity 2
+trying multiplicity 3
+15 invalid  |- ([1](p | q) => ([1]p | [1]q))
+   not provable
+trying multiplicity 1
+trying multiplicity 2
+trying multiplicity 3
+16 invalid  |- (~[1]p => [1]~[1]p)
+   not provable
+trying multiplicity 1
+trying multiplicity 2
+trying multiplicity 3
+17 invalid  |- ([1]p => [2]p)
+   not provable
+trying multiplicity 1
+trying multiplicity 2
+trying multiplicity 3
+18 invalid  |- ([1][2]p => [2][1]p)
+   not provable
+trying multiplicity 1
+trying multiplicity 2
+trying multiplicity 3
+19 invalid  |- (~[1]~p => [1]~[1]~p)
+   not provable
+trying multiplicity 1
+trying multiplicity 2
+trying multiplicity 3
+20 invalid [1]p |- [1]q
+   not provable
+trying multiplicity 1
+21 invalid  |- [1]p, [1]~p
+   not provable
+trying multiplicity 1
+matrix proof found
+22 valid    |- ([0]p => [1]p)
+   proved
+trying multiplicity 1
+trying multiplicity 2
+trying multiplicity 3
+23 invalid  |- ([1]p => [0]p)
+   not provable
+trying multiplicity 1
+matrix proof found
+24 valid    |- ([0]p => [1][2]p)
+   proved
+trying multiplicity 1
+matrix proof found
+25 valid    |- ([0]p => [0][1]p)
+   proved
+trying multiplicity 1
+matrix proof found
+26 valid    |- ([0]p => p)
+   proved
+trying multiplicity 1
+matrix proof found
+27 valid    |- ([0]p => [0][0]p)
+   proved
+trying multiplicity 1
+matrix proof found
+28 valid    |- ([1][0]p => [0]p)
+   proved
+trying multiplicity 1
+matrix proof found
+29 valid    |- ([0](p => q) => ([1]p => [1]q))
+   proved
+trying multiplicity 1
+trying multiplicity 2
+trying multiplicity 3
+30 invalid  |- ([0]p => [0]q)
+   not provable
+trying multiplicity 1
+matrix proof found
+31 valid   [0]p, [1](p => q) |- [1]q
+   proved
+trying multiplicity 1
+matrix proof found
+32 valid    |- ([0][1]p => [2][1]p)
+   proved
+trying multiplicity 1
+matrix proof found
+33 valid    |- ([1][0]p => [2]p)
+   proved
+S4 proof of 0,  |- ([1]p => p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Impr  implies{box[1:n]{p}; p}  /  Perv!xnil
+S4 proof of 1,  |- ([1]p => [1][1]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{box[1:n]{p}}  /  Perv!xnil
+   Impr  implies{box[1:n]{p}; box[1:n]{box[1:n]{p}}}  /  Perv!xnil
+S4 proof of 2,  |- ([1](p => q) => ([1]p => [1]q)):
+trying multiplicity 1
+matrix proof found
+   Ax  q  /  Perv!xnil
+   Ax  p  /  Perv!xnil
+   Impl  implies{p; q}  /  Perv!xnil
+   Boxl  box[1:n]{implies{p; q}}  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{q}  /  Perv!xnil
+   Impr  implies{box[1:n]{p}; box[1:n]{q}}  /  Perv!xnil
+   Impr  implies{box[1:n]{implies{p; q}}; implies{box[1:n]{p}; box[1:n]{q}}}  /  Perv!xnil
+S4 proof of 3,  |- ([1](p & q) => ([1]p & [1]q)):
+trying multiplicity 1
+trying multiplicity 2
+matrix proof found
+   Ax  q  /  Perv!xnil
+   Andl  and{p; q}  /  Perv!xnil
+   Boxl  box[1:n]{and{p; q}}  /  Perv!xnil
+   Boxr  box[1:n]{q}  /  Perv!xnil
+   Ax  p  /  Perv!xnil
+   Andl  and{p; q}  /  Perv!xnil
+   Boxl  box[1:n]{and{p; q}}  /  Perv!xnil
+   Boxr  box[1:n]{p}  /  Perv!xnil
+   Andr  and{box[1:n]{p}; box[1:n]{q}}  /  Perv!xnil
+   Impr  implies{box[1:n]{and{p; q}}; and{box[1:n]{p}; box[1:n]{q}}}  /  Perv!xnil
+S4 proof of 4,  |- (([1]p & [1]q) => [1](p & q)):
+trying multiplicity 1
+matrix proof found
+   Ax  q  /  Perv!xnil
+   Ax  p  /  Perv!xnil
+   Andr  and{p; q}  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Boxl  box[1:n]{q}  /  Perv!xnil
+   Boxr  box[1:n]{and{p; q}}  /  Perv!xnil
+   Andl  and{box[1:n]{p}; box[1:n]{q}}  /  Perv!xnil
+   Impr  implies{and{box[1:n]{p}; box[1:n]{q}}; box[1:n]{and{p; q}}}  /  Perv!xnil
+S4 proof of 5,  |- (([1]p | [1]q) => [1](p | q)):
+trying multiplicity 1
+matrix proof found
+   Ax  q  /  Perv!xnil
+   Boxl  box[1:n]{q}  /  Perv!xnil
+   Orr  or{p; q}  /  Perv!xnil
+   Boxr  box[1:n]{or{p; q}}  /  Perv!xnil
+   Ax  p  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Orr  or{p; q}  /  Perv!xnil
+   Boxr  box[1:n]{or{p; q}}  /  Perv!xnil
+   Orl  or{box[1:n]{p}; box[1:n]{q}}  /  Perv!xnil
+   Impr  implies{or{box[1:n]{p}; box[1:n]{q}}; box[1:n]{or{p; q}}}  /  Perv!xnil
+S4 proof of 6,  |- ([1]p => ~[1]~p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Negl  not{p}  /  Perv!xnil
+   Boxl  box[1:n]{not{p}}  /  Perv!xnil
+   Negr  not{box[1:n]{not{p}}}  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Impr  implies{box[1:n]{p}; not{box[1:n]{not{p}}}}  /  Perv!xnil
+S4 proof of 7,  |- (p => ~[1]~p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Negl  not{p}  /  Perv!xnil
+   Boxl  box[1:n]{not{p}}  /  Perv!xnil
+   Negr  not{box[1:n]{not{p}}}  /  Perv!xnil
+   Impr  implies{p; not{box[1:n]{not{p}}}}  /  Perv!xnil
+S4 proof of 8,  |- [1](p | ~p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Negr  not{p}  /  Perv!xnil
+   Orr  or{p; not{p}}  /  Perv!xnil
+   Boxr  box[1:n]{or{p; not{p}}}  /  Perv!xnil
+S4 proof of 9,  |- ([1][2]p => [2]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[2:n]{p}  /  Perv!xnil
+   Boxr  box[2:n]{p}  /  Perv!xnil
+   Boxl  box[1:n]{box[2:n]{p}}  /  Perv!xnil
+   Impr  implies{box[1:n]{box[2:n]{p}}; box[2:n]{p}}  /  Perv!xnil
+S4 proof of 10,  |- ([1][2]p => [1][2][2]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[2:n]{p}  /  Perv!xnil
+   Boxr  box[2:n]{p}  /  Perv!xnil
+   Boxr  box[2:n]{box[2:n]{p}}  /  Perv!xnil
+   Boxl  box[1:n]{box[2:n]{p}}  /  Perv!xnil
+   Boxr  box[1:n]{box[2:n]{box[2:n]{p}}}  /  Perv!xnil
+   Impr  implies{box[1:n]{box[2:n]{p}}; box[1:n]{box[2:n]{box[2:n]{p}}}}  /  Perv!xnil
+S4 proof of 11, [1]p, [1](p => q) |- [1]q:
+trying multiplicity 1
+matrix proof found
+   Ax  q  /  Perv!xnil
+   Ax  p  /  Perv!xnil
+   Impl  implies{p; q}  /  Perv!xnil
+   Boxl  box[1:n]{implies{p; q}}  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{q}  /  Perv!xnil
+S4 proof of 12, [1]p |- q, p:
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+S4 proof of 13,  |- ([1](p => q) => ([1](q => r) => [1](p => r))):
+trying multiplicity 1
+matrix proof found
+   Ax  r  /  Perv!xnil
+   Ax  q  /  Perv!xnil
+   Impl  implies{q; r}  /  Perv!xnil
+   Boxl  box[1:n]{implies{q; r}}  /  Perv!xnil
+   Ax  p  /  Perv!xnil
+   Impl  implies{p; q}  /  Perv!xnil
+   Boxl  box[1:n]{implies{p; q}}  /  Perv!xnil
+   Impr  implies{p; r}  /  Perv!xnil
+   Boxr  box[1:n]{implies{p; r}}  /  Perv!xnil
+   Impr  implies{box[1:n]{implies{q; r}}; box[1:n]{implies{p; r}}}  /  Perv!xnil
+   Impr  implies{box[1:n]{implies{p; q}};
+         implies{box[1:n]{implies{q; r}}; box[1:n]{implies{p; r}}}}  /  Perv!xnil
+S4 proof of 22,  |- ([0]p => [1]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[0:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{p}  /  Perv!xnil
+   Impr  implies{box[0:n]{p}; box[1:n]{p}}  /  Perv!xnil
+S4 proof of 24,  |- ([0]p => [1][2]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[0:n]{p}  /  Perv!xnil
+   Boxr  box[2:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{box[2:n]{p}}  /  Perv!xnil
+   Impr  implies{box[0:n]{p}; box[1:n]{box[2:n]{p}}}  /  Perv!xnil
+S4 proof of 25,  |- ([0]p => [0][1]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[0:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{p}  /  Perv!xnil
+   Boxr  box[0:n]{box[1:n]{p}}  /  Perv!xnil
+   Impr  implies{box[0:n]{p}; box[0:n]{box[1:n]{p}}}  /  Perv!xnil
+S4 proof of 26,  |- ([0]p => p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[0:n]{p}  /  Perv!xnil
+   Impr  implies{box[0:n]{p}; p}  /  Perv!xnil
+S4 proof of 27,  |- ([0]p => [0][0]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[0:n]{p}  /  Perv!xnil
+   Boxr  box[0:n]{p}  /  Perv!xnil
+   Boxr  box[0:n]{box[0:n]{p}}  /  Perv!xnil
+   Impr  implies{box[0:n]{p}; box[0:n]{box[0:n]{p}}}  /  Perv!xnil
+S4 proof of 28,  |- ([1][0]p => [0]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[0:n]{p}  /  Perv!xnil
+   Boxr  box[0:n]{p}  /  Perv!xnil
+   Boxl  box[1:n]{box[0:n]{p}}  /  Perv!xnil
+   Impr  implies{box[1:n]{box[0:n]{p}}; box[0:n]{p}}  /  Perv!xnil
+S4 proof of 29,  |- ([0](p => q) => ([1]p => [1]q)):
+trying multiplicity 1
+matrix proof found
+   Ax  q  /  Perv!xnil
+   Ax  p  /  Perv!xnil
+   Impl  implies{p; q}  /  Perv!xnil
+   Boxl  box[0:n]{implies{p; q}}  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{q}  /  Perv!xnil
+   Impr  implies{box[1:n]{p}; box[1:n]{q}}  /  Perv!xnil
+   Impr  implies{box[0:n]{implies{p; q}}; implies{box[1:n]{p}; box[1:n]{q}}}  /  Perv!xnil
+S4 proof of 31, [0]p, [1](p => q) |- [1]q:
+trying multiplicity 1
+matrix proof found
+   Ax  q  /  Perv!xnil
+   Ax  p  /  Perv!xnil
+   Impl  implies{p; q}  /  Perv!xnil
+   Boxl  box[1:n]{implies{p; q}}  /  Perv!xnil
+   Boxl  box[0:n]{p}  /  Perv!xnil
+   Boxr  box[1:n]{q}  /  Perv!xnil
+S4 proof of 32,  |- ([0][1]p => [2][1]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[1:n]{p}  /  Perv!xnil
+   Boxl  box[0:n]{box[1:n]{p}}  /  Perv!xnil
+   Boxr  box[1:n]{p}  /  Perv!xnil
+   Boxr  box[2:n]{box[1:n]{p}}  /  Perv!xnil
+   Impr  implies{box[0:n]{box[1:n]{p}}; box[2:n]{box[1:n]{p}}}  /  Perv!xnil
+S4 proof of 33,  |- ([1][0]p => [2]p):
+trying multiplicity 1
+matrix proof found
+   Ax  p  /  Perv!xnil
+   Boxl  box[0:n]{p}  /  Perv!xnil
+   Boxr  box[2:n]{p}  /  Perv!xnil
+   Boxl  box[1:n]{box[0:n]{p}}  /  Perv!xnil
+   Impr  implies{box[1:n]{box[0:n]{p}}; box[2:n]{p}}  /  Perv!xnil

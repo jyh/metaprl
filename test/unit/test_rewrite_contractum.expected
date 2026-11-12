@@ -1,0 +1,35 @@
+== parameters rebuilt in the contractum
+h[@n:n] --> k[@n:n] on h[@m:n]                 Rbc!k[m:n]
+h[@n:n] --> k[@n:n] on h[7:n]                  Rbc!k[7:n]
+h[@s:s] --> k[@s:s] on h[@m:s]                 Rbc!k[m:s]
+h[@t:t] --> k[@t:t] on h[@m:t]                 Rbc!k[m:t]
+h[@x:v] --> k[@x:v] on h[y:v]                  Rbc!k[y:v]
+== contractum binders and capture
+g{'a; lam y.'b['y]} --> lam y. h{'a; 'b['y]}, a = c Rbc!lam{'z. Rbc!h{Rbc!c; 'z}}
+the same, a = y (free y would be captured)     Rbc!lam{'z. Rbc!h{'y; 'z}}
+two binders, a = c                             Rbc!lam{'p, 'q. Rbc!h{Rbc!c; Rbc!f{'p; 'q}}}
+two binders, a = f{x; y} (both would be captured) Rbc!lam{'p, 'q. Rbc!h{Rbc!f{'x; 'y}; Rbc!f{'p; 'q}}}
+g{'a} --> lam y. h{'a; y} (a new binder), a = c Rbc!lam{'y. Rbc!h{Rbc!c; 'y}}
+the same, a = y, Relaxed (y captured)          Rbc!lam{'y. Rbc!h{'y; 'y}}
+the same, a = y, Strict (binder renamed)       Rbc!lam{'y1. Rbc!h{'y; 'y1}}
+the same, a = c, Strict                        Rbc!lam{'y. Rbc!h{Rbc!c; 'y}}
+== a context filled through an address
+f{C[g{'x}]} --> f{C[m{'x; 'x}]}, hole at h.1.2 Rbc!f{Rbc!h{Rbc!k{Rbc!d; Rbc!m{Rbc!c; Rbc!c}}}}
+f{C[g{'x}]} --> m{'x}, hole at h.1.2           Rbc!m{Rbc!c}
+== a sequent context with its variable replaced
+thin x, replacing it by c                      Arg: Rbc!arg
+Hyps:
+      1.y :Rbc!T
+      2.z :Rbc!g{Rbc!c}
+Goal:Rbc!f{Rbc!c; 'z}
+thin x, replacing it by y                      REFUSED: compile_so_redex_term
+keep x (the identity)                          Arg: Rbc!arg
+Hyps:
+      1.y :Rbc!T
+      2.x :Rbc!T
+      3.z :Rbc!g{'x}
+Goal:Rbc!f{'x; 'z}
+J empty: thin x, replacing it by c             Arg: Rbc!arg
+Hyps:
+      1.y :Rbc!T
+Goal:Rbc!f{Rbc!c}

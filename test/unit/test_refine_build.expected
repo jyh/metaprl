@@ -1,0 +1,42 @@
+definition d{'a; x.'b['x]} --> f{'a; 'b[c]}                  accepted
+  under a sentinel, d{c; x.g{'x}}                            rewrites to f{c; g{c}}
+a redex subterm that is not a second-order variable          refused (Definitional rewrite: subterms must be SO variables: c)
+a second-order argument that is not a variable               refused (Definitional rewrite: subterm arguments must be bound variables: c)
+a second-order argument not bound there                      refused (Definitional rewrite: RewriteFreeSOVar y)
+a recursive contractum d5{'a} --> g{d5{'a}}                  refused (Definitional rewrite: not allowed to be recursive: d5{'a<||>})
+two definitions of e{_}: the first                           accepted
+  the second                                                 accepted
+  a sentinel of that refiner                                 refused (definitional rewrite: shape is already defined: e{'a<||>})
+check_sentinal: failed test_refine_build_rw!ung
+a rewrite created, not justified, under its sentinel         refused (check_sentinal: rule is not valid in this context: test_refine_build_rw!ung)
+  under a sentinel taken after prim_rewrite                  rewrites to c
+prim_rewrite of a name never created                         refused (never: rewrite was not created)
+prim_rewrite with another contractum                         refused (ung2: rewrite mismatch)
+check_sentinal: failed test_refine_build_rw!cung
+a conditional rewrite created, not justified                 refused (check_sentinal: rule is not valid in this context: test_refine_build_rw!cung)
+  after prim_cond_rewrite                                    rewrites to c
+prim_cond_rewrite of a name never created                    refused (cnever: conditional rewrite was not created)
+prim_cond_rewrite with other conditions                      refused (cung2: conditional rewrite mismatch)
+a sentinel of B (which joined A): A's rule                   accepted
+  B's rule                                                   accepted
+check_sentinal: failed test_refine_build_b!rb
+a sentinel of A: B's rule                                    refused
+a refiner that joined A twice: a sentinel                    accepted
+check_sentinal: failed test_refine_build_b!rb
+find_sentinal rb in B: rb                                    refused
+  ra                                                         accepted
+check_sentinal: failed test_refine_build_a!ra
+find_sentinal ra in B (through the join): ra                 refused
+find_sentinal of a name B does not have                      Not_found
+an ML rule under a sentinel of its refiner                   accepted
+an ML rewrite under a sentinel of its refiner                rewrites to c
+find_sentinal of an ML rule                                  refused (test_refine_build_ml!mlr: ML rules/rewrites can't be justified)
+sequent subgoal, argument 'e<|H|>['x] (passes the check)     refused (Rewrite_compile_contractum: RewriteFreeContextVar H e)
+  'e<|H|>[] (x not named)                                    refused (Refine.check_subgoal_arg: Extract term is not general enough (not all hypotheses and/or contexts mentioned: 'e<|H|>)
+  'e<||>['x] (H not named)                                   refused (Refine.check_subgoal_arg: Extract term is not general enough (not all hypotheses and/or contexts mentioned: 'e<||>['x])
+  'e<|H; K|>['x] (K not in scope)                            refused (Refine.check_subgoal_arg: Extract term is not general enough (not all hypotheses and/or contexts mentioned: 'e<|H; K|>['x])
+  'e<|H|>['x; 'x] (x named twice)                            refused (Refine.check_subgoal_arg: Extract term is not general enough (not all hypotheses and/or contexts mentioned: 'e<|H|>['x; 'x])
+  another sequent argument                                   refused (Refine.check_subgoal_arg: Extract does not match the subgoal (sequent arg mismatch): other)
+term subgoal g{c}, argument g{'e}                            accepted
+  f{'e; 'e}                                                  refused (Refine.check_subgoal_arg: Extract does not match the subgoal: f{'e<||>; 'e<||>})
+term subgoal lam{x.c}, argument lam{'e}                      refused (Refine.check_subgoal_arg: Extract does not match the subgoal (in number of bvars): 'e<||>)

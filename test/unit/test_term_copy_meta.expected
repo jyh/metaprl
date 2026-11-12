@@ -1,0 +1,24 @@
+f[level 1]                         f[1:l]
+   round trip alpha-equal true
+f[level 0 | i]                     f['i:l]
+   round trip alpha-equal true
+f[level 2 | i+1, j]                f[{2 | 'i' | 'j}:l]
+   round trip alpha-equal true
+f[level 1 | i+3]{g[level i]}       f[{'i 3}:l]{g['i:l]}
+   round trip alpha-equal true
+f[3; "s"; tok]                     f[3:n, "s":s, "tok":t]
+   round trip alpha-equal true
+lam x. f{x; c}                     lam{'x. f{'x; c}}
+   round trip alpha-equal true
+A                                  A
+   round trip equal true
+A --> B                            (A --> B[{1 | 'i}:l])
+   round trip equal true
+x: A -> B                          ('x: A -> B[{1 | 'i}:l])
+   round trip equal true
+x: A -> (y: B -> A)                ('x: A -> ('y: B[{1 | 'i}:l] -> A))
+   round trip equal true
+A <--> (A --> B)                   (A <--> (A --> B[{1 | 'i}:l]))
+   round trip equal true
+(x: A -> B) --> B                  (('x: A -> B[{1 | 'i}:l]) --> B[{1 | 'i}:l])
+   round trip equal true

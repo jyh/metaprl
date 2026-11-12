@@ -1,0 +1,214 @@
+ 0 both   ((P a => Q a) => ((Q a => S) => (P a => S)))
+   LJ proved · LJmc proved
+ 1 both   (all x. (P x => Q x) => (all x. (Q x => S) => (P a => S)))
+   LJ proved · LJmc proved
+ 2 both   (all x. (P x => Q x) => ((Q a => S) => (P a => S)))
+   LJ proved · LJmc proved
+ 3 both   ((all x. P x => S) => ((S => Q a) => (all x. P x => Q a)))
+   LJ proved · LJmc proved
+ 4 both   (((P a => S) & (Q a => S)) => ((P a | Q a) => S))
+   LJ proved · LJmc proved
+ 5 both   ((P a | Q a) => ((P a => S) => ((Q a => S) => S)))
+   LJ proved · LJmc proved
+ 6 both   (all x. (P x => (Q x | S)) => (all x. (Q x => S) => (P a => S)))
+   LJ proved · LJmc proved
+ 7 both   (((P a => S) => S) => ((P a => Q a) => ((Q a => S) => S)))
+   LJ proved · LJmc proved
+ 8 both   (((P a | Q a) & (P a | S)) => (P a | (Q a & S)))
+   LJ proved · LJmc proved
+ 9 both   ((P a | (Q a & S)) => ((P a | Q a) & (P a | S)))
+   LJ proved · LJmc proved
+10 both   ((P a => (Q a => S)) => ((P a => Q a) => (P a => S)))
+   LJ proved · LJmc proved
+11 both   (((P a | Q a) => S) => ((P a => S) & (Q a => S)))
+   LJ proved · LJmc proved
+12 both   ((~P a & (P a | S)) => S)
+   LJ proved · LJmc proved
+13 both   ((~P a & ~Q a) => ~(P a | Q a))
+   LJ proved · LJmc proved
+14 both   (~P a => ((P a | Q a) => Q a))
+   LJ proved · LJmc proved
+15 both   ((~P a => S) => ((P a => S) => ~~S))
+   LJ proved · LJmc proved
+LJ proof of 0, ((P a => Q a) => ((Q a => S) => (P a => S))):
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Impl  implies{Q{a}; S}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; Q{a}}  /  Perv!xnil
+   Impr  implies{P{a}; S}  /  Perv!xnil
+   Impr  implies{implies{Q{a}; S}; implies{P{a}; S}}  /  Perv!xnil
+   Impr  implies{implies{P{a}; Q{a}}; implies{implies{Q{a}; S}; implies{P{a}; S}}}  /  Perv!xnil
+LJ proof of 1, (all x. (P x => Q x) => (all x. (Q x => S) => (P a => S))):
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Impl  implies{Q{a}; S}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; Q{a}}  /  Perv!xnil
+   Impr  implies{P{a}; S}  /  Perv!xnil
+   Alll  all{D; 'x. implies{Q{'x}; S}}  /  a
+   Impr  implies{all{D; 'x. implies{Q{'x}; S}}; implies{P{a}; S}}  /  Perv!xnil
+   Alll  all{D; 'x. implies{P{'x}; Q{'x}}}  /  a
+   Impr  implies{all{D; 'x. implies{P{'x}; Q{'x}}};
+         implies{all{D; 'x. implies{Q{'x}; S}}; implies{P{a}; S}}}  /  Perv!xnil
+LJ proof of 2, (all x. (P x => Q x) => ((Q a => S) => (P a => S))):
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Impl  implies{Q{a}; S}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; Q{a}}  /  Perv!xnil
+   Impr  implies{P{a}; S}  /  Perv!xnil
+   Impr  implies{implies{Q{a}; S}; implies{P{a}; S}}  /  Perv!xnil
+   Alll  all{D; 'x. implies{P{'x}; Q{'x}}}  /  a
+   Impr  implies{all{D; 'x. implies{P{'x}; Q{'x}}};
+         implies{implies{Q{a}; S}; implies{P{a}; S}}}  /  Perv!xnil
+LJ proof of 3, ((all x. P x => S) => ((S => Q a) => (all x. P x => Q a))):
+   Ax  Q{a}  /  Perv!xnil
+   Ax  S  /  Perv!xnil
+   Impl  implies{S; Q{a}}  /  Perv!xnil
+   Ax  P{'c1}  /  Perv!xnil
+   Alll  all{D; 'x. P{'x}}  /  'c1
+   Allr  all{D; 'x. P{'x}}  /  'c1
+   Impl  implies{all{D; 'x. P{'x}}; S}  /  Perv!xnil
+   Impr  implies{all{D; 'x. P{'x}}; Q{a}}  /  Perv!xnil
+   Impr  implies{implies{S; Q{a}}; implies{all{D; 'x. P{'x}}; Q{a}}}  /  Perv!xnil
+   Impr  implies{implies{all{D; 'x. P{'x}}; S};
+         implies{implies{S; Q{a}}; implies{all{D; 'x. P{'x}}; Q{a}}}}  /  Perv!xnil
+LJ proof of 4, (((P a => S) & (Q a => S)) => ((P a | Q a) => S)):
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Impl  implies{Q{a}; S}  /  Perv!xnil
+   Ax  S  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; S}  /  Perv!xnil
+   Orl  or{P{a}; Q{a}}  /  Perv!xnil
+   Impr  implies{or{P{a}; Q{a}}; S}  /  Perv!xnil
+   Andl  and{implies{P{a}; S}; implies{Q{a}; S}}  /  Perv!xnil
+   Impr  implies{and{implies{P{a}; S}; implies{Q{a}; S}}; implies{or{P{a}; Q{a}}; S}}  /  Perv!xnil
+LJ proof of 5, ((P a | Q a) => ((P a => S) => ((Q a => S) => S))):
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Impl  implies{Q{a}; S}  /  Perv!xnil
+   Ax  S  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; S}  /  Perv!xnil
+   Orl  or{P{a}; Q{a}}  /  Perv!xnil
+   Impr  implies{implies{Q{a}; S}; S}  /  Perv!xnil
+   Impr  implies{implies{P{a}; S}; implies{implies{Q{a}; S}; S}}  /  Perv!xnil
+   Impr  implies{or{P{a}; Q{a}};
+         implies{implies{P{a}; S}; implies{implies{Q{a}; S}; S}}}  /  Perv!xnil
+LJ proof of 6, (all x. (P x => (Q x | S)) => (all x. (Q x => S) => (P a => S))):
+   Ax  S  /  Perv!xnil
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Impl  implies{Q{a}; S}  /  Perv!xnil
+   Orl  or{Q{a}; S}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; or{Q{a}; S}}  /  Perv!xnil
+   Impr  implies{P{a}; S}  /  Perv!xnil
+   Alll  all{D; 'x. implies{Q{'x}; S}}  /  a
+   Impr  implies{all{D; 'x. implies{Q{'x}; S}}; implies{P{a}; S}}  /  Perv!xnil
+   Alll  all{D; 'x. implies{P{'x}; or{Q{'x}; S}}}  /  a
+   Impr  implies{all{D; 'x. implies{P{'x}; or{Q{'x}; S}}};
+         implies{all{D; 'x. implies{Q{'x}; S}}; implies{P{a}; S}}}  /  Perv!xnil
+LJ proof of 7, (((P a => S) => S) => ((P a => Q a) => ((Q a => S) => S))):
+   Ax  S  /  Perv!xnil
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; Q{a}}  /  Perv!xnil
+   Impl  implies{Q{a}; S}  /  Perv!xnil
+   Impr  implies{P{a}; S}  /  Perv!xnil
+   Impl  implies{implies{P{a}; S}; S}  /  Perv!xnil
+   Impr  implies{implies{Q{a}; S}; S}  /  Perv!xnil
+   Impr  implies{implies{P{a}; Q{a}}; implies{implies{Q{a}; S}; S}}  /  Perv!xnil
+   Impr  implies{implies{implies{P{a}; S}; S};
+         implies{implies{P{a}; Q{a}}; implies{implies{Q{a}; S}; S}}}  /  Perv!xnil
+LJ proof of 8, (((P a | Q a) & (P a | S)) => (P a | (Q a & S))):
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Andr  and{Q{a}; S}  /  Perv!xnil
+   Orr2  or{P{a}; and{Q{a}; S}}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Orr1  or{P{a}; and{Q{a}; S}}  /  Perv!xnil
+   Orl  or{P{a}; Q{a}}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Orr1  or{P{a}; and{Q{a}; S}}  /  Perv!xnil
+   Orl  or{P{a}; S}  /  Perv!xnil
+   Andl  and{or{P{a}; Q{a}}; or{P{a}; S}}  /  Perv!xnil
+   Impr  implies{and{or{P{a}; Q{a}}; or{P{a}; S}}; or{P{a}; and{Q{a}; S}}}  /  Perv!xnil
+LJ proof of 9, ((P a | (Q a & S)) => ((P a | Q a) & (P a | S))):
+   Ax  S  /  Perv!xnil
+   Orr2  or{P{a}; S}  /  Perv!xnil
+   Andl  and{Q{a}; S}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Orr1  or{P{a}; S}  /  Perv!xnil
+   Orl  or{P{a}; and{Q{a}; S}}  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Orr2  or{P{a}; Q{a}}  /  Perv!xnil
+   Andl  and{Q{a}; S}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Orr1  or{P{a}; Q{a}}  /  Perv!xnil
+   Orl  or{P{a}; and{Q{a}; S}}  /  Perv!xnil
+   Andr  and{or{P{a}; Q{a}}; or{P{a}; S}}  /  Perv!xnil
+   Impr  implies{or{P{a}; and{Q{a}; S}}; and{or{P{a}; Q{a}}; or{P{a}; S}}}  /  Perv!xnil
+LJ proof of 10, ((P a => (Q a => S)) => ((P a => Q a) => (P a => S))):
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Impl  implies{Q{a}; S}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; Q{a}}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; implies{Q{a}; S}}  /  Perv!xnil
+   Impr  implies{P{a}; S}  /  Perv!xnil
+   Impr  implies{implies{P{a}; Q{a}}; implies{P{a}; S}}  /  Perv!xnil
+   Impr  implies{implies{P{a}; implies{Q{a}; S}};
+         implies{implies{P{a}; Q{a}}; implies{P{a}; S}}}  /  Perv!xnil
+LJ proof of 11, (((P a | Q a) => S) => ((P a => S) & (Q a => S))):
+   Ax  S  /  Perv!xnil
+   Ax  Q{a}  /  Perv!xnil
+   Orr2  or{P{a}; Q{a}}  /  Perv!xnil
+   Impl  implies{or{P{a}; Q{a}}; S}  /  Perv!xnil
+   Impr  implies{Q{a}; S}  /  Perv!xnil
+   Ax  S  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Orr1  or{P{a}; Q{a}}  /  Perv!xnil
+   Impl  implies{or{P{a}; Q{a}}; S}  /  Perv!xnil
+   Impr  implies{P{a}; S}  /  Perv!xnil
+   Andr  and{implies{P{a}; S}; implies{Q{a}; S}}  /  Perv!xnil
+   Impr  implies{implies{or{P{a}; Q{a}}; S}; and{implies{P{a}; S}; implies{Q{a}; S}}}  /  Perv!xnil
+LJ proof of 12, ((~P a & (P a | S)) => S):
+   Ax  S  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Negl  not{P{a}}  /  Perv!xnil
+   Orl  or{P{a}; S}  /  Perv!xnil
+   Andl  and{not{P{a}}; or{P{a}; S}}  /  Perv!xnil
+   Impr  implies{and{not{P{a}}; or{P{a}; S}}; S}  /  Perv!xnil
+LJ proof of 13, ((~P a & ~Q a) => ~(P a | Q a)):
+   Ax  Q{a}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Negl  not{P{a}}  /  Perv!xnil
+   Orl  or{P{a}; Q{a}}  /  Perv!xnil
+   Negl  not{Q{a}}  /  Perv!xnil
+   Negr  not{or{P{a}; Q{a}}}  /  Perv!xnil
+   Andl  and{not{P{a}}; not{Q{a}}}  /  Perv!xnil
+   Impr  implies{and{not{P{a}}; not{Q{a}}}; not{or{P{a}; Q{a}}}}  /  Perv!xnil
+LJ proof of 14, (~P a => ((P a | Q a) => Q a)):
+   Ax  Q{a}  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Negl  not{P{a}}  /  Perv!xnil
+   Orl  or{P{a}; Q{a}}  /  Perv!xnil
+   Impr  implies{or{P{a}; Q{a}}; Q{a}}  /  Perv!xnil
+   Impr  implies{not{P{a}}; implies{or{P{a}; Q{a}}; Q{a}}}  /  Perv!xnil
+LJ proof of 15, ((~P a => S) => ((P a => S) => ~~S)):
+   Ax  S  /  Perv!xnil
+   Negl  not{S}  /  Perv!xnil
+   Ax  S  /  Perv!xnil
+   Ax  P{a}  /  Perv!xnil
+   Impl  implies{P{a}; S}  /  Perv!xnil
+   Negl  not{S}  /  Perv!xnil
+   Negr  not{P{a}}  /  Perv!xnil
+   Impl  implies{not{P{a}}; S}  /  Perv!xnil
+   Negr  not{not{S}}  /  Perv!xnil
+   Impr  implies{implies{P{a}; S}; not{not{S}}}  /  Perv!xnil
+   Impr  implies{implies{not{P{a}}; S}; implies{implies{P{a}; S}; not{not{S}}}}  /  Perv!xnil

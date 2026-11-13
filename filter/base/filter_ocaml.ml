@@ -205,6 +205,7 @@ struct
    let patt_in_op	 = mk_ocaml_op "patt_in"
    let patt_fix_arg_op   = mk_ocaml_op "patt_fix_arg"
    let patt_fix_and_op   = mk_ocaml_op "patt_fix_and"
+   let patt_and_op       = mk_ocaml_op "patt_and"
    let patt_with_op      = mk_ocaml_op "patt_with"
    let patt_if_op        = mk_ocaml_op "patt_if"
    let patt_ifelse_op    = mk_ocaml_op "patt_ifelse"
@@ -608,6 +609,13 @@ struct
             [], one_subterm "dest_let" t
          else
             let p, t = dest_patt t in
+            (* mk_let_tail writes a patt_and between the bindings *)
+            let t =
+               if Opname.eq (opname_of_term t) patt_and_op then
+                  one_subterm "dest_let" t
+               else
+                  t
+            in
             let pl, e = dest t in
                p :: pl, e
       in
@@ -2876,8 +2884,7 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       mk_fix_tail vars loc pel (fun vars -> mk_expr vars e)
 
    and mk_let_tail =
-      let patt_and_op = mk_ocaml_op "patt_and"
-      and expr_let_op =
+      let expr_let_op =
          let dest_let_expr t =
             let _loc = dest_loc "dest_let_expr" t in
             let pel, e = dest_let t in

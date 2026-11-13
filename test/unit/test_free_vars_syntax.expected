@@ -1,0 +1,15 @@
+f x                                                            [f,x]        agree
+fun x -> x y                                                   [y]          agree
+{ r with a = x }                                               [r,x]        agree
+f ~y:x ()                                                      [f,x]        agree
+f ~y                                                           [f,y]        agree
+lazy (f x)                                                     [f,x]        agree
+assert x                                                       [x]          agree
+let open M in f x                                              [f,x]        agree
+x + 3l + 3L + 3n                                               [+,x]        agree
+function `A -> a | `B n -> n                                   [a]          agree
+function [| x; _ |] -> x | _ -> y                              [y]          agree
+function 3l -> a | _ -> b                                      [a,b]        agree
+object (self) val v = a method m = self#n b method n = v end   [a,b]        agree
+(object method m = x end :> t)                                 [x]          agree
+fun (module X : S) -> X.f y                                    [f,y]        DIFFER, OCaml gives [y]

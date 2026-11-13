@@ -76,6 +76,14 @@ let rec patt_bvars bvars = function
       List.fold_left patt_bvars bvars pl
  | <:patt< ( $p$ : $_$ ) >> ->
       patt_bvars bvars p
+   (* Variant tags, int32/int64/nativeint literals and first-class module
+    * patterns bind no value names; an array binds what its items bind. *)
+ | MLast.PaVrn _
+ | MLast.PaInt _
+ | MLast.PaUnp _ ->
+      bvars
+ | MLast.PaArr (_, Ploc.VaVal pl) ->
+      List.fold_left patt_bvars bvars pl
  | _ ->
       raise (Failure "patt_bvars: pattern not recognized")
 
@@ -157,8 +165,46 @@ let free_vars expr =
          List.fold_left (fun l (_, el) -> free bvars l el) l eel
     | <:expr< while $e$ do { $list:el$ } >> ->
          List.fold_left (free bvars) (free bvars l e) el
+    | MLast.ExRec (_, Ploc.VaVal eel, Some e) ->
+         (* { e with f = e1; ... } *)
+         List.fold_left (fun l (_, e) -> free bvars l e) (free bvars l e) eel
+    | MLast.ExLab (_, _, Ploc.VaVal (Some e)) ->
+         free bvars l e
+    | MLast.ExLab (_, MLast.PaLid (_, Ploc.VaVal v), Ploc.VaVal None) ->
+         (* ~v, a punned label, is the variable v *)
+         add bvars l v
+    | MLast.ExLaz (_, e)
+    | MLast.ExAsr (_, e)
+    | MLast.ExLSI (_, Ploc.VaVal (MLast.StOpn _), e) ->
+         free bvars l e
+    | MLast.ExInt _ ->
+         (* int32, int64 and nativeint literals *)
+         l
+    | MLast.ExObj (_, Ploc.VaVal po, Ploc.VaVal cfl) ->
+         free_obj bvars l po cfl
     | _ ->
          raise (Failure "free_vars: expression not recognized")
+   (*
+    * An object: its instance variables and its self pattern are bound in
+    * its methods and initializers, not in the instance variables' own
+    * initial values.  An inherit brings in names this cannot see.
+    *)
+   and free_obj bvars l po cfl =
+      let rec ivars vl = function
+         MLast.CrVal (_, _, _, Ploc.VaVal v, _, _) -> v :: vl
+       | MLast.CrDcl (_, Ploc.VaVal cfl) -> List.fold_left ivars vl cfl
+       | _ -> vl
+      in
+      let inner = List.fold_left ivars (match po with Some p -> patt_bvars bvars p | None -> bvars) cfl in
+      let rec item l = function
+         MLast.CrVal (_, _, _, _, e, _) -> free bvars l e
+       | MLast.CrMth (_, _, _, _, _, e, _)
+       | MLast.CrIni (_, e, _) -> free inner l e
+       | MLast.CrDcl (_, Ploc.VaVal cfl) -> List.fold_left item l cfl
+       | MLast.CrVav _ | MLast.CrVir _ | MLast.CrFlAtt _ | MLast.CrExten _ -> l
+       | _ -> raise (Failure "free_vars: object item not recognized")
+      in
+         List.fold_left item l cfl
    and free_pwel bvars l = function
       (patt, guard, e)::tl ->
           (* A case binds its pattern's variables in its guard and body. *)

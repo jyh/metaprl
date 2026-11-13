@@ -1,0 +1,47 @@
+first build:
+  before init: zzz true
+  spelled: "alpha" "Alpha" "ALPHA" "beta" "world" "a" "Q" "" "42" "007"
+  not:     "gamma" "delta" "zzz" "Zzz" "4x" "x4"
+  after add zzz: zzz true
+  after a second init: zzz true
+  files: .dat true, others 0
+  .dat magic ok: true
+up-to-date .dat:
+  before init: zzz true
+  spelled: "alpha" "Alpha" "ALPHA" "beta" "world" "a" "Q" "" "42" "007"
+  not:     "gamma" "delta" "zzz" "Zzz" "4x" "x4"
+  after add zzz: zzz true
+  after a second init: zzz true
+words.linux newer than the .dat:
+  before init: zzz true
+  spelled: "alpha" "Alpha" "ALPHA" "beta" "gamma" "world" "a" "Q" "" "42" "007"
+  not:     "delta" "zzz" "Zzz" "4x" "x4"
+  after add zzz: zzz true
+  after a second init: zzz true
+  files: .dat true, others 0
+  .dat magic ok: true
+wrong magic:
+  before init: zzz true
+  spelled: "alpha" "Alpha" "ALPHA" "beta" "gamma" "delta" "world" "a" "Q" "" "42" "007"
+  not:     "zzz" "Zzz" "4x" "x4"
+  after add zzz: zzz true
+  after a second init: zzz true
+  files: .dat true, others 0
+  .dat magic ok: true
+right magic, unreadable table:
+  before init: zzz true
+  spelled: "alpha" "Alpha" "ALPHA" "world" "a" "Q" "" "42" "007"
+  not:     "beta" "gamma" "delta" "zzz" "Zzz" "4x" "x4"
+  after add zzz: zzz true
+  after a second init: zzz true
+  files: .dat true, others 0
+  .dat magic ok: true
+no words files:
+  before init: zzz true
+  spelled: "a" "Q" "" "42" "007"
+  not:     "alpha" "Alpha" "ALPHA" "beta" "gamma" "delta" "world" "zzz" "Zzz" "4x" "x4"
+  after add zzz: zzz true
+  after a second init: zzz true
+  files: .dat true, others 0
+  .dat magic ok: true
+the tree's own .dat unchanged: true

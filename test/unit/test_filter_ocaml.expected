@@ -2,6 +2,10 @@ same      let x = 1 + 2
 same      let rec f n = if n = 0 then 1 else n * f (n - 1)
 same      let f (x, y) = match x with Some z when z > 0 -> z | Some _ | None -> y
 same      let f x = function [] -> x | h :: _ -> h
+same      let g ~y = y
+same      let g ~y:z = z
+same      let g ?(x = 1) ~y z = x + y + z
+same      let h = f ~y:1 ?x:None
 same      let s = "a" ^ String.make 2 'c'
 same      let a = [| 1; 2 |].(0) and b = "xy".[1]
 same      let r = {a = 1; b = "s"}.a

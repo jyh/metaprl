@@ -15,8 +15,7 @@
  * The expected file is the output of the code, so it records the items
  * whose way back fails today (RAISES).  filter_ocaml also prints a line to
  * stderr for each of those; stdout is flushed after every item so the two
- * keep their order.  Left out: optional and labelled arguments
- * (let g ?(x = 1) ~y z = ...), whose way back overflows the stack.
+ * keep their order.
  *)
 module F = Filter_ocaml.FilterOCaml (Refiner.Refiner)
 
@@ -57,6 +56,7 @@ let () =
       "let x = 1 + 2;;"; "let rec f n = if n = 0 then 1 else n * f (n - 1);;";
       "let f (x, y) = match x with Some z when z > 0 -> z | Some _ | None -> y;;";
       "let f = fun x -> function [] -> x | h :: _ -> h;;";
+      "let g ~y = y;;"; "let g ~y:z = z;;"; "let g ?(x = 1) ~y z = x + y + z;;"; "let h = f ~y:1 ?x:None;;";
       "let s = \"a\" ^ String.make 2 'c';;";
       "let a = [| 1; 2 |].(0) and b = \"xy\".[1];;"; "let r = { a = 1; b = \"s\" }.a;;";
       "let r' = { r with a = 2 };;"; "let u = (1 : int);;"; "let l = lazy 3;;";

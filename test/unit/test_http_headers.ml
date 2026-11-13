@@ -210,4 +210,14 @@ let () =
         with e -> "raises " ^ Printexc.to_string e
       in
       Printf.printf "  %-24s %s\n" name r) multipart;
-  exit 0
+  (* Leave without the at_exit teardown.  The server threads are still
+     blocked in accept when the main thread exits; on Windows (mingw, OCaml
+     4.14.4 and 5.4.1) the teardown let them accept again and log
+     "Http_simple: End_of_file: error during web service" 1 to 12 times AFTER
+     the last line of stdout, i.e. after exit had flushed it (master's Windows
+     runs at cabd9e49, b70008d9, 6a0b2fa6; Linux and macOS never printed it).
+     Every case above has been printed by then, so flushing and calling
+     _exit, which ends the process with no cleanup, loses nothing the test
+     checks. *)
+  flush_all ();
+  Unix._exit 0

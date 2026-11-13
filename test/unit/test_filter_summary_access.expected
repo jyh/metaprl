@@ -1,0 +1,122 @@
+item  0: Parent Itt.first
+item  1: Id 7
+item  2: Rewrite rw r
+item  3: CondRewrite crw
+item  4: Rule rule stmt
+item  5: MLRewrite mlr
+item  6: MLAxiom mla
+item  7: Module Sub
+item  8: DForm df d
+item  9: Prec prec
+item 10: InputForm if
+item 11: Resource res1 r1
+item 12: MLGramUpd Infix +++
+item 13: Parent Itt.second
+item 14: Resource res2 r2
+item 15: MLGramUpd Suffix !!
+item 16: Rewrite shared s1
+item 17: Rule shared s2
+item 18: DForm shared s3
+item 19: Id 8
+find_rewrite rw                    Some (Rewrite rw r)
+find_rewrite crw                   Some (CondRewrite crw)
+find_rewrite rule                  None
+find_rewrite mlr                   None
+find_rewrite mla                   None
+find_rewrite Sub                   None
+find_rewrite df                    None
+find_rewrite prec                  None
+find_rewrite if                    None
+find_rewrite shared                Some (Rewrite shared s1)
+find_rewrite absent                None
+find_mlrewrite rw                  None
+find_mlrewrite crw                 None
+find_mlrewrite rule                None
+find_mlrewrite mlr                 Some (MLRewrite mlr)
+find_mlrewrite mla                 None
+find_mlrewrite Sub                 None
+find_mlrewrite df                  None
+find_mlrewrite prec                None
+find_mlrewrite if                  None
+find_mlrewrite shared              None
+find_mlrewrite absent              None
+find_mlaxiom rw                    None
+find_mlaxiom crw                   None
+find_mlaxiom rule                  None
+find_mlaxiom mlr                   None
+find_mlaxiom mla                   Some (MLAxiom mla)
+find_mlaxiom Sub                   None
+find_mlaxiom df                    None
+find_mlaxiom prec                  None
+find_mlaxiom if                    None
+find_mlaxiom shared                None
+find_mlaxiom absent                None
+find_module rw                     None
+find_module crw                    None
+find_module rule                   None
+find_module mlr                    None
+find_module mla                    None
+find_module Sub                    Some (Module Sub)
+find_module df                     None
+find_module prec                   None
+find_module if                     None
+find_module shared                 None
+find_module absent                 None
+find_dform rw                      None
+find_dform crw                     None
+find_dform rule                    None
+find_dform mlr                     None
+find_dform mla                     None
+find_dform Sub                     None
+find_dform df                      Some (DForm df d)
+find_dform prec                    None
+find_dform if                      None
+find_dform shared                  Some (DForm shared s3)
+find_dform absent                  None
+find_prec rw                       None
+find_prec crw                      None
+find_prec rule                     None
+find_prec mlr                      None
+find_prec mla                      None
+find_prec Sub                      None
+find_prec df                       None
+find_prec prec                     Some (Prec prec)
+find_prec if                       None
+find_prec shared                   None
+find_prec absent                   None
+find rw                            Rewrite rw r
+find crw                           CondRewrite crw
+find rule                          Rule rule stmt
+find mlr                           MLRewrite mlr
+find mla                           MLAxiom mla
+find Sub                           raises Not_found
+find df                            DForm df d
+find prec                          Prec prec
+find if                            InputForm if
+find shared                        DForm shared s3
+find absent                        raises Not_found
+find_id                            8
+find_id (empty)                    raises Not_found
+parents                            Itt.second; Itt.first
+get_resources                      res2=r2; res1=r1
+get_infixes                        Infix +++; Suffix !!
+get_proofs                         shared=pf-shared; shared=pf-shared; rule=pf-rule; crw=pf-crw; rw=pf-rw
+find_sub_module []                 the module itself
+Filter_summary.find_sub_module: checking Sub = Sub
+find_sub_module [Sub]              Module Inner; Rewrite inner i
+Filter_summary.find_sub_module: checking Sub = Sub
+Filter_summary.find_sub_module: checking Inner = Inner
+find_sub_module [Sub; Inner]       Rewrite deep d
+Filter_summary.find_sub_module: checking Sub = Absent
+find_sub_module [Absent]           raises Failure("Filter_summary.find_sub_module: can't find Absent")
+Filter_summary.find_sub_module: checking Sub = Sub
+Filter_summary.find_sub_module: checking Inner = Absent
+find_sub_module [Sub; Absent]      raises Failure("Filter_summary.find_sub_module: can't find Sub/Absent")
+set_command Rewrite rw             2: Rewrite rw r -> Rewrite rw NEW
+set_command Rule shared            17: Rule shared s2 -> Rule shared NEW
+set_command Rewrite shared         17: Rule shared s2 -> Rewrite shared NEW
+set_command DForm shared           18: DForm shared s3 -> DForm shared NEW
+set_command Prec prec              no item changed
+set_command MLRewrite absent       raises Not_found
+set_command Id                     raises Not_found
+add_prefix_commands                Prec p1; Prec p2; Prec last

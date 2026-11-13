@@ -21,24 +21,12 @@ same      let w = while true do () done; for i = 1 to 3 do print_int i done
 same      let v = `A 3
 same      let q = M.x + M.N.y
 same      let o = object method m = 1 end
-FormatError: str_item_of_term.Filter_ocaml.dest_expr : unrecognized opname: Ocaml!patt_body
-RAISES    let pa = function `A -> 0 | _ -> 1
-       ->  FormatError Filter_ocaml.dest_expr : unrecognized opname: Ocaml!patt_body
-FormatError: str_item_of_term.Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_apply_arg
-RAISES    let pv = function `A -> 0 | `B n -> n
-       ->  FormatError Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_apply_arg
-FormatError: str_item_of_term.Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_apply_arg
-RAISES    let pw = function `C (x, y) -> x + y
-       ->  FormatError Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_apply_arg
-FormatError: str_item_of_term.Filter_ocaml.dest_type : bad arity
-RAISES    type t = < m : int; n : string >
-       ->  FormatError Filter_ocaml.dest_type : bad arity
-FormatError: str_item_of_term.Filter_ocaml.dest_type : not a list
-RAISES    type t = < m : int; .. >
-       ->  FormatError Filter_ocaml.dest_type : not a list
-FormatError: str_item_of_term.Filter_ocaml.dest_type : not a list
-RAISES    let coerce = (object method m = 1 end :> < m : int > )
-       ->  FormatError Filter_ocaml.dest_type : not a list
+same      let pa = function `A -> 0 | _ -> 1
+same      let pv = function `A -> 0 | `B n -> n
+same      let pw = function `C (x, y) -> x + y
+same      type t = < m : int; n : string >
+same      type t = < m : int; .. >
+same      let coerce = (object method m = 1 end :> < m : int > )
 same      let a = x.contents <- 2
 same      let s = let open List in length []
 same      let f () = let a = 1 and b = 2 in a + b

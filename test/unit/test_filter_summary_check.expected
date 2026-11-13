@@ -1,0 +1,79 @@
+Rewrite:
+  implemented                        ok, passed on []
+  missing                            mismatch: Rewrite r: not implemented
+  redex differs                      mismatch: Rewrite r: redex mismatch: / x2 / should be / x
+  contractum differs                 mismatch: Rewrite r: contractum mismatch: / y2 / should be / y
+  by a definition                    ok, passed on []
+  by an opaque definition            mismatch: Rewrite r: not implemented
+  by an iform definition             mismatch: Rewrite r: not implemented
+InputForm:
+  implemented                        ok, passed on []
+  missing (passed on)                ok, passed on [InputForm]
+  redex differs                      mismatch: InputForm if: redex mismatch: / ir2 / should be / ir
+  contractum differs                 mismatch: InputForm if: contractum mismatch: / ic2 / should be / ic
+  by an iform definition             ok, passed on []
+CondRewrite:
+  implemented                        ok, passed on []
+  missing                            mismatch: Cond_rewrite crw: not implemented
+  a parameter's kind differs         mismatch: Cond_rewrite crw: param list mismatch
+  a parameter's kind differs (2)     mismatch: Cond_rewrite crw: param list mismatch
+  one parameter more                 mismatch: Cond_rewrite crw: param list mismatch
+  one assumption more                mismatch: Cond_rewrite crw: arg lists mismatch
+  an assumption differs              mismatch: Cond_rewrite crw: arg lists mismatch
+  redex differs                      mismatch: Cond_rewrite crw: specification mismatch
+Rule:
+  implemented                        ok, passed on []
+  a premise, with its extract        ok, passed on []
+  missing                            mismatch: Rule rl: not implemented
+  no parameter                       mismatch: Rule rl: argument lists do not match
+  statement differs                  mismatch: Rule rl: specification mismatch: / goal2 / is not equal to / goal
+Declarations:
+  kind: missing (passed on)          ok, passed on [DeclareTypeClass]
+  kind: implemented                  ok, passed on []
+  kind: parent differs               mismatch: declare kind 'tc' mismatch
+  kind: type differs                 mismatch: declare kind 'tc' mismatch
+  type: missing (passed on)          ok, passed on [DeclareType]
+  type: implemented                  ok, passed on []
+  type: its kind differs             mismatch: declare type 'dt' mismatch
+  term: missing (passed on)          ok, passed on [DeclareTerm]
+  term: implemented                  ok, passed on []
+  term: by a definition              ok, passed on []
+  term: shape class differs          mismatch: declare 'dterm[]{}' type annotations mismatch
+  define: implemented                ok, passed on []
+  define: missing                    mismatch: Definition dd[]{}: not implemented
+  define: value differs              mismatch: define 'dd[]{}' definition mismatch
+  define: opaque in the implementation mismatch: Definition dd[]{}: not implemented
+  define: shape class differs        mismatch: define 'dd[]{}' mismatch
+  type rewrite: missing (passed on)  ok, passed on [DeclareTypeRewrite]
+  type rewrite: implemented          ok, passed on []
+  type rewrite: contractum differs   mismatch: declare type rewrite 'tr1' mismatch
+ML items:
+  MLRewrite implemented              ok, passed on []
+  MLRewrite missing                  mismatch: MLRewrite m: not implemented
+  MLRewrite term differs             mismatch: MLRewrite m: definition does not match
+  MLAxiom implemented                ok, passed on []
+  MLAxiom missing                    mismatch: MLAxiom a: not implemented
+  MLAxiom term differs               mismatch: MLAxiom a: definition does not match
+Other items:
+  Extends implemented                ok, passed on []
+  Extends missing                    mismatch: Extends Itt/X: not implemented
+  DForm implemented                  ok, passed on []
+  DForm missing                      mismatch: DForm d: not implemented
+  DForm options differ               mismatch: DForm d: tag mismatch
+  Prec implemented                   ok, passed on []
+  Prec missing                       mismatch: Prec p: not implemented
+  Resource implemented               ok, passed on []
+  Resource missing                   mismatch: Resource res: not implemented
+  Infix implemented                  ok, passed on []
+  Infix missing                      mismatch: Infix +++: not implemented
+  Suffix missing                     mismatch: Suffix !!: not implemented
+  Id missing (passed on)             ok, passed on [Id]
+  Id the same                        ok, passed on []
+  Id differs                         mismatch: Implementation is out of date (recompile)
+  Improve (refused)                  raised Invalid_argument("Filter_summary.check_implemented")
+  Comment                            ok, passed on []
+  Module implemented                 ok, passed on []
+  Module: an item inside differs     mismatch: Rewrite r: contractum mismatch: / z / should be / y
+  Module missing                     mismatch: Module M: not implemented
+Several items:
+  passed on, in order: [Id; InputForm; DeclareTerm]

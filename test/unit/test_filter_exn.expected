@@ -1,0 +1,52 @@
+format_exn, width 80:
+  FormatError           "FormatError: name a"
+  BadParamCast          "Bad param cast: 3:n to s"
+  ParseError            "Parse error: unexpected token"
+  PrecNotFound          "Precedence not found:\n   a[]{}\n   (have you forgotten to write a lex_prec with this precedence on the left hand side?)"
+  IterfImplemMismatch   "Mismatch between the interface and implementation:\n   rule foo is missing"
+  BadCommand            "Bad command: foo"
+  EmptyModulePath       "Empty module path: string_of_path"
+  Bad_magic             "! File f.prla has a wrong magic number.\n! This means that it is either not a MetaPRL file\n! or is not compatible with the version of the MetaPRL you are trying to use.\n! If you are sure this file does not contain any unsaved data, delete it.\n! If it does contain unsaved data, you might need to get a different version of MetaPRL\n! and possibly export the data to a different format."
+  Bad_version           "! File f.prla has an unsupported version.\n! MetaPRL currently supports version(s) 1.0.0, 1.2.3\n! but the file has version 2.0.0\n! If you are sure this file does not contain any unsaved data, delete it.\n! If it does contain unsaved data, you might need to get a different version of MetaPRL\n! and possibly export the data to a different format."
+  Ploc.Exc              "File \"f.ml\", line 3, characters 6-10: \n   Parse error: inner"
+  Lm_parser.ParseError  "Syntax error: File g.ml: line 2, characters 4-9 bad"
+  Not_found (Exn_boot)  "Not_found"
+format_exn, width 30:
+  PrecNotFound          "Precedence not found:\n   a[]{}\n   (have you forgotten to write a lex_prec with this precedence on the left hand side?)"
+  Ploc.Exc              "File \"f.ml\", line 3, characters 6-10: \n   Parse error: inner"
+print_exn:
+  backtrace false
+  print_exn None, a return: returned
+Not_found
+  print_exn None, Not_found: raised ToploopIgnoreExn (Not_found)
+ctx Bad command: x
+  print_exn (Some "ctx"), BadCommand: raised ToploopIgnoreExn (Filter_type.BadCommand("x"))
+Refine error:
+    rw: no match
+  print_exn, a RefineError: raised RefineError ("rw", ToploopIgnoreError)
+ctx Parse error: p
+  stderr_exn "ctx", ParseError: raised ToploopIgnoreExn (Filter_type.ParseError("p"))
+  (exited 0)
+print_exn, OCAMLRUNPARAM=b:
+  backtrace true
+  print_exn None, a return: returned
+  print_exn None, Not_found: raised Not_found
+  print_exn (Some "ctx"), BadCommand: raised Filter_type.BadCommand("x")
+  print_exn, a RefineError: raised RefineError ("rw", _)
+ctx Parse error: p
+  stderr_exn "ctx", ParseError: raised ToploopIgnoreExn (Filter_type.ParseError("p"))
+  (exited 0)
+handle_exn return:
+  backtrace false
+  handle_exn, a return: returned
+  (exited 0)
+handle_exn plain:
+  backtrace false
+ctx File "h.ml", line 1, characters 6-9: 
+       Parse error: plain
+  (exited 2)
+handle_exn located:
+  backtrace false
+File "k.ml", line 7, characters 2-4: 
+   Parse error: located
+  (exited 2)

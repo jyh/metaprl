@@ -252,7 +252,8 @@ against libmojave 1.1.1 or later:
   - variant patterns (`` `A ``, `` `B x ``) and object types (#287);
   - an unpacked module, `(val e : S)` and `(val e)` (#290);
   - a `#t` pattern, whose case body the encoder dropped (the one encoder
-    change: a `#t` pattern's term could not be read back before) (#293).
+    change: a `#t` pattern's term could not be read back before) (#293);
+  - a variant type's lower bound, `[< ... > `A ]` (#294).
 - `Free_vars.free_vars` and `patt_vars` raised on `{ e with ... }`,
   labelled arguments, `lazy`, `assert`, `let open`, int32 / int64 /
   nativeint literals, objects, variant patterns, first-class module
@@ -840,7 +841,7 @@ against libmojave 1.1.1 or later:
     `Filter_patt.build_term_patt` (#278).
   - `test_filter_ocaml`: OCaml syntax parsed by camlp5's `pa_o`, to terms
     and back, printed by `pr_o` (#279); 72 items after #280-#287, all
-    reading back the same; 166 after #290, #292 and #293, the 14 that
+    reading back the same; 183 after #290 and #292-#294, the 14 that
     do not read back each named in its PR.
   - `test_free_vars_syntax`: `Free_vars` on syntax parsed by `pa_o`
     (#288).

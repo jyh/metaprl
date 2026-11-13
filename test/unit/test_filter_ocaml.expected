@@ -55,6 +55,64 @@ same      class c = object val x = 1 method m = x end
 same      let o = object (self) method m = 1 method n = self#m end
 same      class c (x : int) = object method m = x end
 same      class type ct = object method m : int end
+same      let r : t = {a = 1}
+same      let s = a; b; c
+same      let c = (x :> t)
+same      let c = (x : t :> u)
+same      let a = assert (x > 0)
+same      let m = let module N = M in N.x
+same      let p = (module M : S)
+same      let f (module X : S) = X.x
+DIFFERS   let u = M.(x + y)
+       ->  let u = M.(x+y)
+RAISES    type t += A
+       ->  Refine_error.MakeRefineError(TermType)(ParamType).RefineError("mk_st", _)
+RAISES    type t += B of int
+       ->  Refine_error.MakeRefineError(TermType)(ParamType).RefineError("mk_st", _)
+same      exception E = F
+DIFFERS   let x = 1[@@inline]
+       ->  let x = 1
+RAISES    let y = f x[@attr]
+       ->  Refine_error.MakeRefineError(TermType)(ParamType).RefineError("mk_expr", _)
+same      module type T = (S with type t = int)
+same      module type F = (functor (X : S) -> T)
+same      module type U = sig module M : S end
+same      module M : S = struct  end
+FormatError: str_item_of_term.Filter_ocaml.dest_mt : unrecognized opname: Ocaml!some
+RAISES    module N = (val m : S)
+       ->  FormatError Filter_ocaml.dest_mt : unrecognized opname: Ocaml!some
+FormatError: str_item_of_term.Filter_ocaml.dest_mt : unrecognized opname: Ocaml!none
+RAISES    module N = (val m)
+       ->  FormatError Filter_ocaml.dest_mt : unrecognized opname: Ocaml!none
+DIFFERS   type t = private int
+       ->  type t = int
+DIFFERS   type t = { a : int }[@@deriving show]
+       ->  type t = { a : int }
+same      type 'a t = 'a constraint 'a = int
+RAISES    let f x = match x with A | B -> 1 | C _ -> 2 | exception E -> 3
+       ->  Refine_error.MakeRefineError(TermType)(ParamType).RefineError("mk_patt", _)
+same      let l = [1; 2; 3]
+same      let a = [| |]
+same      let s = "x".[0] <- c
+same      let f (type a) (x : a) = x
+RAISES    let g : type a . a -> a = fun x -> x
+       ->  Ploc.Exc(_, _)
+same      let h = function x :: (_ :: _ as t) -> t | _ -> []
+same      let q = f ?x ~y
+same      let o = x#m 1
+same      let r = x.contents
+same      let w = for i = 10 downto 1 do () done
+same      let e = {M.a = 1}
+same      let z = `A (1, 2)
+DIFFERS   let i = 0x1F + 0o7 + 0b1
+       ->  let i = 31 + 7 + 1
+same      let c = '\n'
+same      let f = 1.5e3
+same      include struct let x = 1 end
+DIFFERS   open! List
+       ->  open List
+same      module rec A : S = struct  end and B : T = struct  end
+same      let () = ()
 same      let o = new c
 same      let o = (new M.c) 1
 same      class c = object val x = 1 method m = {< x = 2 >} end

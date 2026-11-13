@@ -1,0 +1,6 @@
+normal         normal true  iform false  const false  num 0  prints "normal"
+iform          normal false  iform true  const false  num 1  prints "iform"
+const          normal true  iform false  const true  num 2  prints "const"
+iform+const    normal false  iform true  const true  num 3  prints "const iform"
+normal+normal  normal true  iform false  const false  num 0  prints "normal"
+from num 3     normal false  iform true  const true  num 3  prints "const iform"

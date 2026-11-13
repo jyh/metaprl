@@ -144,12 +144,8 @@ same      let s = ['x']
 same      let f = function 0 -> a | 1 -> b | _ -> c
 same      let f = function 1n -> a | 2L -> b | _ -> c
 same      let n = 3l + 3L + 3n
-FormatError: str_item_of_term.Filter_ocaml.dest_patt : bad arity
-RAISES    let f = function #t -> 1
-       ->  FormatError Filter_ocaml.dest_patt : bad arity
-FormatError: str_item_of_term.Filter_ocaml.dest_patt : bad arity
-RAISES    let f = function #M.t as x -> x
-       ->  FormatError Filter_ocaml.dest_patt : bad arity
+same      let f = function #t -> 1
+same      let f = function #M.t as x -> x
 same      type t = { f : 'a . 'a -> 'a }
 same      let f : 'a . 'a -> 'a = fun x -> x
 same      class ['a] c = object constraint 'a = int end

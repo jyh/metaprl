@@ -1,0 +1,55 @@
+Copy_proof: warning: rule inner2:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: rule rule-was-crw:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: rule rule-was-rw:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: cond_rewrite crw-was-rule:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: cond_rewrite crw-was-rw:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: rewrite rw-was-crw:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: rewrite rw-was-rule:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: rule rule-stmt:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: cond_rewrite crw-assum-count:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: cond_rewrite crw-assum:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: cond_rewrite crw-contractum:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: cond_rewrite crw-redex:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: rewrite rw-contractum:
+	was recently changed, potential mismatch with an existing proof.
+Copy_proof: warning: rewrite rw-redex:
+	was recently changed, potential mismatch with an existing proof.
+-- copied:
+Rewrite same: new-same<-old-same
+Rewrite rw-redex: new-rw-redex<-old-rw-redex
+Rewrite rw-contractum: new-rw-contractum<-old-rw-contractum
+CondRewrite crw-same: new-crw-same<-old-crw-same
+CondRewrite crw-redex: new-crw-redex<-old-crw-redex
+CondRewrite crw-contractum: new-crw-contractum<-old-crw-contractum
+CondRewrite crw-assum: new-crw-assum<-old-crw-assum
+CondRewrite crw-assum-count: new-crw-assum-count<-old-crw-assum-count
+Rule rule-same: new-rule-same<-old-rule-same
+Rule rule-stmt: new-rule-stmt<-old-rule-stmt
+Rewrite rw-was-rule: new-rw-was-rule<-old-rw-was-rule
+Rewrite rw-was-crw: new-rw-was-crw<-old-rw-was-crw
+CondRewrite crw-was-rw: new-crw-was-rw<-old-crw-was-rw
+CondRewrite crw-was-rule: new-crw-was-rule<-old-crw-was-rule
+Rule rule-was-rw: new-rule-was-rw<-old-rule-was-rw
+Rule rule-was-crw: new-rule-was-crw<-old-rule-was-crw
+Module M
+   Rewrite inner: new-inner<-old-inner
+   Rule inner2: new-inner2<-old-inner2
+   Rewrite inner3: new-inner3
+Module M2
+   Rewrite m2: new-m2
+Rewrite only-new: new-only-new
+Rewrite dup: new-dup<-old-dup-2
+Prec prec
+Id 3

@@ -249,7 +249,8 @@ against libmojave 1.1.1 or later:
   - `let rec ... and ...`, which came back with its bindings in reverse
     order: the encoder has written them reversed since 1998 and neither
     decoder reversed them back (#286);
-  - variant patterns (`` `A ``, `` `B x ``) and object types (#287).
+  - variant patterns (`` `A ``, `` `B x ``) and object types (#287);
+  - an unpacked module, `(val e : S)` and `(val e)` (#290).
 - `Free_vars.free_vars` and `patt_vars` raised on `{ e with ... }`,
   labelled arguments, `lazy`, `assert`, `let open`, int32 / int64 /
   nativeint literals, objects, variant patterns, first-class module
@@ -889,6 +890,16 @@ against libmojave 1.1.1 or later:
   (`(module struct ... end : S)`) and on an object with `inherit`; it
   counts the `f` of `M.f` as a variable, as the old `ExAcc` case did
   (#288; one corpus item of the parity pin).
+- `Filter_ocaml` has no term for some of the OCaml it reads, so the way
+  back loses them: a type abbreviation's `private`, `open!`'s flag,
+  attributes on an item (`[@@inline]`), and an int literal's base
+  (`0x1F` reads back as `31`). `M.(e)` is written as camlp5 7 parsed it,
+  an array subscript, and reads back as one (it prints the same). It
+  refuses, on the way in, `type t += ...`, an attribute on an
+  expression, an exception case in a `match`, and a locally abstract
+  type (`let g : type a. ...`, refused on purpose). Keeping any of these
+  needs a new term, which is a format change. Pinned by
+  `test_filter_ocaml` (#290).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

@@ -1,0 +1,132 @@
+SEQUENTS
+== no hypotheses
+sequent [Perv!xnil] { >- C }
+-- width 20
+sequent
+   [Perv!xnil]
+   { >- C }
+== one named hypothesis
+sequent [Perv!xnil] { A >- C }
+-- width 20
+sequent
+   [Perv!xnil]
+   { A >- C }
+== three hypotheses
+sequent [Perv!xnil] { x: A; y: B{'x}; D >- C{'x; 'y} }
+-- width 20
+sequent
+   [Perv!xnil]
+   {
+   x: A;
+   y: B{'x};
+   D >- C{'x; 'y} }
+== a hypothesis with no variable
+sequent [Perv!xnil] { A >- C }
+-- width 20
+sequent
+   [Perv!xnil]
+   { A >- C }
+== a context
+sequent [Perv!xnil] { <'H<|!!|>>; A >- C }
+-- width 20
+sequent
+   [Perv!xnil]
+   {
+   <'H<|!!|>>;
+   A >- C }
+== a context with contexts and arguments
+sequent [Perv!xnil] { <'J<|H|>['x<|!|>]> >- C }
+-- width 20
+sequent
+   [Perv!xnil]
+   {
+   <'J<|H|>['x<|!|>]> >-
+   C }
+== a df_context hypothesis
+sequent [Perv!xnil] { <'K<|!!|>> >- C }
+-- width 20
+sequent
+   [Perv!xnil]
+   {
+   <'K<|!!|>> >- C
+}
+== sequent arguments
+sequent [Perv!xcons{arg1; Perv!xcons{arg2; Perv!xnil}}] { A >- C }
+-- width 20
+sequent
+   [Perv!xcons
+  {arg1;
+   Perv!xcons
+ {arg2;
+  Perv!xnil}}]
+   { A >- C }
+== a sequent in a hypothesis
+sequent [Perv!xnil] { sequent [Perv!xnil] { B >- B } >- C }
+-- width 20
+sequent
+   [Perv!xnil]
+   {
+   sequent
+[Perv!xnil]
+{ B >- B } >- C }
+== a long sequent
+sequent
+   [Perv!xnil]
+   {
+   Hypothesis0;
+   Hypothesis1;
+   Hypothesis2; Hypothesis3; Hypothesis4; Hypothesis5 >- Conclusion }
+-- width 20
+sequent
+   [Perv!xnil]
+   {
+   Hypothesis0;
+   Hypothesis1;
+   Hypothesis2;
+   Hypothesis3;
+   Hypothesis4;
+   Hypothesis5 >-
+   Conclusion }
+VARIABLES
+== a variable
+'x<|!|>
+-- width 20
+'x<|!|>
+== a second-order variable
+'F<|!!|>['x<|!|>; a]
+-- width 20
+'F<|!!|>['x<|!|>;
+   a]
+== a second-order variable with contexts
+'G<|H; J|>['x<|!|>]
+-- width 20
+'G<|H; J|>['x<|!|>]
+== a context term
+'H<|J|>[[body]]['x<|!|>]
+-- width 20
+'H<|J|>[[body]]['x<|!|>]
+== a free variable
+wrap{y. 'y}
+-- width 20
+wrap{y. 'y}
+META-TERMS
+== MetaTheorem
+A
+== MetaImplies
+A --> B
+== MetaFunction
+f : A --> B
+== MetaIff
+A <--> B
+== MetaLabeled
+ ["lab"] A
+== (A --> B) --> C
+A --> B --> C
+== A --> (B --> C)
+A --> B --> C
+== (A <--> B) --> C
+A <--> B --> C
+== A <--> (B --> C)
+A <--> B --> C
+== nested
+ ["h"] sequent [Perv!xnil] { A >- B } --> 'g<|!|> : A --> B <--> C

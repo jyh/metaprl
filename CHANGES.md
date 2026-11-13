@@ -261,6 +261,20 @@ against libmojave 1.1.1 or later:
   gives (#288; pinned by `test_free_vars_syntax`). An object binds its
   self pattern and instance variables in its methods and initializers
   only.
+- `Filter_summary.find_sub_module` printed a "checking" line on stderr,
+  with no debug flag, for every module it compared (#297).
+- `labProgressT` was inverted: with one subgoal it applied `idT` when the
+  goal and the label were unchanged and failed when either changed. It now
+  fails on no progress, as `progressT` does, counting a new label as
+  progress (#301).
+- `onAllMClausesOfAssumT tac n` counted the hypotheses of assumption `n`
+  but took the hypotheses of assumption `n + 1` (`List.nth` counts from 0,
+  assumptions from 1), so it skipped hypotheses and raised `Failure "nth"`
+  on the last assumption (#302).
+- Meta-terms were displayed with no parentheses, so `(A --> B) --> C` and
+  `A --> (B --> C)` looked alike. A compound left operand of `-->` or
+  `<-->` (and a compound term under a label) is now parenthesised; the
+  theories' right-nested rule statements display as before (#304).
 
 ### Tests
 
@@ -675,7 +689,7 @@ against libmojave 1.1.1 or later:
   filter `cygpath -m` paths and join `MP_INCLUDE` with `;` under Cygwin
   (before, every case failed there); the goldens print byte-identically on
   Windows and Linux.
-- Tests added 2026-11-03 to 2026-11-12, one line per pull request; each
+- Tests added 2026-11-03 to 2026-11-13, one line per pull request; each
   description gives the cases, what is pinned, and the mutants run against
   the real source:
   - Options_boot's option table against a model (#146).
@@ -845,16 +859,41 @@ against libmojave 1.1.1 or later:
     do not read back each named in its PR.
   - `test_free_vars_syntax`: `Free_vars` on syntax parsed by `pa_o`
     (#288).
+  - `test_filter_summary_term`: declarations with a type parameter of
+    every kind and bound terms, read back against those written (#295).
+  - `test_filter_summary_access`: `Filter_summary`'s lookups, `find`,
+    `find_sub_module`, `parents`, `get_*`, `set_command` and
+    `add_prefix_commands` (#296).
+  - `test_filter_summary_copy`: `copy_proofs` from an old summary into a
+    new one, every copy and warning arm (#298).
+  - `test_http_headers`: every request header `Http_simple` parses, over
+    loopback, and multipart form bodies (#299).
+  - `test_tacticals_more`: the tacticals no test, build or replay ran
+    (#300).
+  - `test_dform_sequent`: the null base's display of sequents, variables,
+    contexts and meta-terms (#303).
+  - `test_ascii_io_save`: saving second-order variables and sequents over
+    an old `.prla`, including the <= 1.0.6 S/G sequent pair (#305).
 
 ### Known not to work
 
 - Nested modules: `Filter_summary_io.sub_info` looks a submodule up with
   the full path from the file's root (`path @ [name]`) but on the current
   module's own summary, so it searches for the file's own name first and
-  fails; `Filter_summary.find_sub_module` also prints a "checking" line
-  to stderr for every module it compares. Both are under
-  `filter_cache_fun`'s "BUG ... if we want nested modules", and no theory
-  has a nested module.
+  fails. It is under `filter_cache_fun`'s "BUG ... if we want nested
+  modules", and no theory has a nested module. (`find_sub_module`'s
+  "checking" line on stderr, listed here before, is fixed: #297.)
+- `Http_simple`'s request headers, read by nothing in the tree but the
+  cookies and the content type (pinned by `test_http_headers`, #299):
+  `Host: h:8080` has no port, because the value is split on white space;
+  `Cache-Control: max-age=60` is an extension, not `MaxAge`; a Referer
+  `http://h:8080/p` has an empty host. A multipart part with no
+  `Content-Disposition` raises `Not_found`, which
+  `Shell_browser.get_post_body` turns into an empty form, so every field of
+  that post is lost.
+- `onAnyHypT` reaches its `idT` base only when there are no hypotheses, so
+  when no hypothesis works it fails as `onSomeHypT` does (#300). Pinned,
+  not changed: which of the two it should be is not clear from the code.
 - `Term_order.compare_params` on every kind of parameter
   (`test/unit/test_term_order_params.ml`), levels and operator parameters
   included: on 400 generated parameters it is a total order (0 exactly when

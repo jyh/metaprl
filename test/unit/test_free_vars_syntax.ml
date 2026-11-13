@@ -40,6 +40,9 @@ let cases = [
    "function 3l -> a | _ -> b", ["a"; "b"];
    "object (self) val v = a method m = self#n b method n = v end", ["a"; "b"];
    "(object method m = x end :> t)", ["x"];
+   (* DIFFERS on purpose: Free_vars counts the f of X.f (ExFle) as a
+    * variable, as the old ExAcc case did; the corpus pin's fv fields
+    * depend on it.  The module pattern itself binds nothing. *)
    "fun (module X : S) -> X.f y", ["y"];
 ]
 

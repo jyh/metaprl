@@ -1,15 +1,15 @@
 f x                                                            [f,x]        agree
 fun x -> x y                                                   [y]          agree
-{ r with a = x }                                               ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [r,x]
-f ~y:x ()                                                      ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [f,x]
-f ~y                                                           ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [f,y]
-lazy (f x)                                                     ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [f,x]
-assert x                                                       ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [x]
-let open M in f x                                              ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [f,x]
-x + 3l + 3L + 3n                                               ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [+,x]
-function `A -> a | `B n -> n                                   ERROR Failure("patt_bvars: pattern not recognized") DIFFER, OCaml gives [a]
-function [| x; _ |] -> x | _ -> y                              ERROR Failure("patt_bvars: pattern not recognized") DIFFER, OCaml gives [y]
-function 3l -> a | _ -> b                                      ERROR Failure("patt_bvars: pattern not recognized") DIFFER, OCaml gives [a,b]
-object (self) val v = a method m = self#n b method n = v end   ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [a,b]
-(object method m = x end :> t)                                 ERROR Failure("free_vars: expression not recognized") DIFFER, OCaml gives [x]
-fun (module X : S) -> X.f y                                    ERROR Failure("patt_bvars: pattern not recognized") DIFFER, OCaml gives [y]
+{ r with a = x }                                               [r,x]        agree
+f ~y:x ()                                                      [f,x]        agree
+f ~y                                                           [f,y]        agree
+lazy (f x)                                                     [f,x]        agree
+assert x                                                       [x]          agree
+let open M in f x                                              [f,x]        agree
+x + 3l + 3L + 3n                                               [+,x]        agree
+function `A -> a | `B n -> n                                   [a]          agree
+function [| x; _ |] -> x | _ -> y                              [y]          agree
+function 3l -> a | _ -> b                                      [a,b]        agree
+object (self) val v = a method m = self#n b method n = v end   [a,b]        agree
+(object method m = x end :> t)                                 [x]          agree
+fun (module X : S) -> X.f y                                    [f,y]        DIFFER, OCaml gives [y]

@@ -780,7 +780,14 @@ let parse_post_part part =
       eprintf "Http_simple.parse_post_part: %s%t" (String.escaped part) eflush;
    let i, header = string_read_header part in
    let header = List.map parse_header_entry header in
-      match get_content_disposition header with
+   let disposition =
+      (* A Failure, as for the other malformed parts: Not_found escaped to
+       * Shell_browser.get_post_body, which reads it as "no form". *)
+      try get_content_disposition header with
+         Not_found ->
+            raise (Failure "parse_post_body: part has no Content-Disposition")
+   in
+      match disposition with
          { content_disposition_type = "form-data";
            content_disposition_params = params
          } ->

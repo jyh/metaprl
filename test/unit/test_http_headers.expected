@@ -53,7 +53,7 @@ multipart:
   name unquoted            [u=v]
   no name                  raises Failure("parse_post_body: form-data has no name")
   not form-data            raises Failure("parse_post_body: bad Content-Disposition: attachment")
-  no disposition           raises Not_found
+  no disposition           raises Failure("parse_post_body: part has no Content-Disposition")
   no boundary in the body  []
   no boundary parameter    raises Failure("parse_post_body: boundary is not defined")
   urlencoded               [x=1; y=a b&; z=]

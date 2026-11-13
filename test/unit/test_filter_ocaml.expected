@@ -12,9 +12,7 @@ same      let e = try raise Not_found with Not_found -> 0 | _ -> 1
 same      let w = while true do () done; for i = 1 to 3 do print_int i done
 same      let v = `A 3
 same      let q = M.x + M.N.y
-FormatError: str_item_of_term.Filter_ocaml.dest_patt : unrecognized opname: Ocaml!no_pattern
-RAISES    let o = object method m = 1 end
-       ->  FormatError Filter_ocaml.dest_patt : unrecognized opname: Ocaml!no_pattern
+same      let o = object method m = 1 end
 same      let a = x.contents <- 2
 same      let s = let open List in length []
 same      type t = int
@@ -37,9 +35,10 @@ same      module F (X : S) = struct  end
 same      module type S = sig val x : int end
 same      open List
 same      include M
-FormatError: str_item_of_term.Filter_ocaml.dest_str : not a list
-RAISES    class c = object val x = 1 method m = x end
-       ->  FormatError Filter_ocaml.dest_str : not a list
+same      class c = object val x = 1 method m = x end
+same      let o = object (self) method m = 1 method n = self#m end
+same      class c (x : int) = object method m = x end
+same      class type ct = object method m : int end
 same      val x : int
 same      type t
 same      type 'a t = A of 'a
@@ -48,3 +47,4 @@ same      module M : sig val x : int end
 same      module type S = sig type t end
 same      open M
 same      external f : int -> int = "c_f"
+same      class c : object method m : int end

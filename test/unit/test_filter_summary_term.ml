@@ -21,6 +21,12 @@
  * modes and options read back when they differ from those written.  The
  * expected file is the output of the code as written.
  *
+ * The last three items carry a type parameter of every kind (TyNumber to
+ * TyQuote, TyToken with its term) and two bound terms, one with bound
+ * variables: before them no test wrote a ty_param or ty_bterm term
+ * (bisect at c013b0579: dest_ty_param, mk_ty_param_term, dest_ty_bterm
+ * and mk_ty_bterm_term unreached).
+ *
  * Pinned as found: PrimitiveModes is written as no modes, so it comes
  * back as AllModes (keeping it needs a term of its own, a format change).
  * An empty PRLGrammar writes no term and comes back as no item.
@@ -58,6 +64,16 @@ let some_res = bnd_with [ anno; anno_priv ]
 let params = [ IntParam (Lm_symbol.add "i"); AddrParam (Lm_symbol.add "a"); TermParam (c "tp") ]
 
 let ty t = { Term_ty_sig.ty_term = t; ty_opname = op "tyop"; ty_params = []; ty_bterms = []; ty_type = c "ty" }
+
+(* A declaration with a parameter of every kind and bound terms with and
+ * without bound variables, so the ty_param and ty_bterm terms are written
+ * and read. *)
+let all_ty_params =
+   Term_ty_sig.[ TyNumber; TyString; TyShape; TyOperator; TyToken (c "tok"); TyLevel; TyVar; TyQuote ]
+let ty_full t =
+   { (ty t) with Term_ty_sig.ty_params = all_ty_params;
+                 ty_bterms = [ { Term_ty_sig.ty_bvars = []; ty_bterm = c "b0" };
+                               { Term_ty_sig.ty_bvars = [ c "bv1"; c "bv2" ]; ty_bterm = c "b2" } ] }
 
 let sub_info =
    S.add_command (S.new_module_info ()) (Rewrite { rw_name = "inner"; rw_redex = c "x"; rw_contractum = c "y"; rw_proof = c "pf"; rw_resources = no_res }, loc)
@@ -114,6 +130,10 @@ let items = [
    "DefineTerm", DefineTerm (Filter_shape.shape_normal, ty (c "deft2"),
                       { term_def_name = "def2"; term_def_value = c "val2"; term_def_resources = some_res; term_def_opaque = false });
    "DeclareTypeRewrite", DeclareTypeRewrite (c "tr1", c "tr2");
+   "DeclareType (ty params)", DeclareType (Filter_shape.shape_normal, ty_full (c "dtp"), op "tc");
+   "DeclareTerm (ty params)", DeclareTerm (Filter_shape.shape_normal, ty_full (c "dtermp"));
+   "DefineTerm (ty params)", DefineTerm (Filter_shape.shape_normal, ty_full (c "deftp"),
+                      { term_def_name = "defp"; term_def_value = c "valp"; term_def_resources = no_res; term_def_opaque = false });
 ]
 
 let kind = function
@@ -152,6 +172,21 @@ let dform_string = function
       Printf.sprintf " {%s; [%s]}" (modes_string m) (String.concat "; " (List.map option_string o))
  | _ -> ""
 
+(* The type parameters and bound terms of a declaration, as text, so a
+ * parameter read back as another kind shows even when it writes the same
+ * term again. *)
+let ty_param_string = function
+   Term_ty_sig.TyNumber -> "n" | TyString -> "s" | TyShape -> "sh" | TyOperator -> "op"
+ | TyToken t -> "t " ^ Simple_print.SimplePrint.string_of_term t | TyLevel -> "l" | TyVar -> "v" | TyQuote -> "@"
+let ty_bterm_string { Term_ty_sig.ty_bvars = bv; ty_bterm = t } =
+   "[" ^ String.concat ", " (List.map Simple_print.SimplePrint.string_of_term bv) ^ "]." ^ Simple_print.SimplePrint.string_of_term t
+let ty_string = function
+   DeclareType (_, ty, _) | DeclareTerm (_, ty) | DefineTerm (_, ty, _)
+      when ty.Term_ty_sig.ty_params <> [] || ty.ty_bterms <> [] ->
+      Printf.sprintf " {%s | %s}" (String.concat "; " (List.map ty_param_string ty.ty_params))
+         (String.concat "; " (List.map ty_bterm_string ty.ty_bterms))
+ | _ -> ""
+
 let one (name, item) =
    let info = S.add_command (S.new_module_info ()) (item, loc) in
    let result =
@@ -166,11 +201,16 @@ let one (name, item) =
                      Error e -> "second term_list raises " ^ e
                    | Ok terms2 ->
                         let same = List.length terms1 = List.length terms2 && List.for_all2 TermSubst.alpha_equal terms1 terms2 in
-                           Printf.sprintf "%d term(s); back as [%s]; %s%s" (List.length terms1)
+                           Printf.sprintf "%d term(s); back as [%s]; %s%s%s" (List.length terms1)
                               (String.concat "; " kinds') (if same then "same terms" else "TERMS DIFFER")
                               (match S.info_items info' with
                                   [ (it', _) ] when dform_string item <> dform_string it' ->
                                      Printf.sprintf "; wrote%s, read%s" (dform_string item) (dform_string it')
+                                | _ -> "")
+                              (match S.info_items info' with
+                                  [ (it', _) ] when ty_string item <> "" ->
+                                     if ty_string item = ty_string it' then "; params" ^ ty_string it'
+                                     else Printf.sprintf "; PARAMS wrote%s, read%s" (ty_string item) (ty_string it')
                                 | _ -> "")
    in
       Printf.printf "%-28s %s\n" name result

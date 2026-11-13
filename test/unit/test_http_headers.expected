@@ -1,0 +1,60 @@
+server bound to a port
+headers, as the handler receives them:
+  Extension x-custom: value
+  Warning 199 note
+  Via 1.1 proxy
+  UserAgent test/1.0
+  Upgrade [h2c; websocket]
+  TransferEncoding
+  Trailer Expires
+  TE trailers
+  Referer proto=http host=host port=8080 path=p
+  Referer proto=/local/path host= port=None path=
+  Referer proto=http host= port=None path=/host:8080/p/q
+  ProxyAuthorization Basic def
+  CacheControl NoCache
+  MaxForwards 0
+  MaxForwards 3
+  IfRange "e4"
+  IfNoneMatch "e3"
+  IfMatch [e1; e2]
+  IfMatch *
+  Host unknown-host None
+  Host localhost 8080
+  Host localhost:8080 None
+  Host localhost None
+  From someone@example.org
+  Expect
+  Cookies [a=1; b=x y; c=]
+  ContentDisposition form-data [name="f"; filename="a b.txt"]
+  ContentLength 0
+  ContentType text/html [charset=utf-8; q=1]
+  Connection close
+  CacheControl Extension0 a b c
+  CacheControl Extension2 community uci
+  CacheControl Extension1 private
+  CacheControl OnlyIfCached
+  CacheControl NoTransform
+  CacheControl MinFresh 7
+  CacheControl MaxStale 5
+  CacheControl MaxAge 60
+  CacheControl Extension1 max-age=60
+  CacheControl NoStore
+  CacheControl NoCache
+  Authorization Basic abc
+  AcceptLanguage en
+  AcceptEncoding gzip
+  AcceptCharset utf-8
+  Accept text/html
+reply: HTTP/1.0 200 OK
+multipart:
+  two fields               [a=one; b=two\r\nlines]
+  empty value              [e=]
+  name unquoted            [u=v]
+  no name                  raises Failure("parse_post_body: form-data has no name")
+  not form-data            raises Failure("parse_post_body: bad Content-Disposition: attachment")
+  no disposition           raises Not_found
+  no boundary in the body  []
+  no boundary parameter    raises Failure("parse_post_body: boundary is not defined")
+  urlencoded               [x=1; y=a b&; z=]
+  other type               raises Failure("parse_post_body: unknown content type: text/plain")

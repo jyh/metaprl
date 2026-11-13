@@ -1,0 +1,204 @@
+== the file written fresh
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   VF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt4\to b b3
+== save: the same term over its own file
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   VF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt4\to b b3
+   read back alpha-equal to the term saved: true
+== save: a changed argument of F
+   Nf\tf\tf NIL
+   O\to\tf
+   Nb\tb1\tb NIL
+   O\to4\tb1
+   T\tt5\to4
+   VF\tF5\tF\\\\ \\\\ t5
+   B\tb5\tF5
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt6\to b5 b3
+   read back alpha-equal to the term saved: true
+== save: the V entry relabelled v
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   vF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt4\to b b3
+   read back alpha-equal to the term saved: true
+== save: the S entry relabelled s
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   VF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   s\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt4\to b b3
+   read back alpha-equal to the term saved: true
+== save: <= 1.0.6: the sequent as an S/G pair
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   VF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt4\to b b3
+   read back alpha-equal to the term saved: true
+== save: <= 1.0.7: F under a T label
+   write_term raised Invalid_argument("ASCII IO: invalid entry encountered by add_term")
+== save: F duplicated as F2
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   VF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt4\to b b3
+   read back alpha-equal to the term saved: true
+== save: the sequent duplicated as s2
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   VF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts2\tt2\\\\ h\\\\ G
+   B\tb3\ts2
+   T\tt4\to b b3
+   read back alpha-equal to the term saved: true
+== save: F's entry names other arguments
+   write_term raised Invalid_argument("ASCII IO: invalid entry encountered by add_items")
+== save: the sequent's entry names another conclusion
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   VF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts1\tt2\\\\ h\\\\ G
+   B\tb1\ts1
+   T\tt1\to b b1
+   read back alpha-equal to the term saved: true

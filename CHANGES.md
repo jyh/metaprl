@@ -769,6 +769,11 @@ against libmojave 1.1.1 or later:
     quotation text and `dest_xparam` on `base_grammar`'s terms (#266);
     `run.sh` gives a test linked with the filter `-I filter/filter` and
     `MP_ROOT` / `MPLIB`.
+- `test_filter_spell`: `Filter_spell`'s dictionary, each case in a child
+    process with its own `MPLIB`: a first build, a load of an up-to-date
+    `.dat`, a rebuild when a words file is newer, when the magic is wrong
+    and when the table is unreadable, and no words files; `check`'s
+    capitalised, numeric and one-letter words, and `add`.
 
 ### Known not to work
 

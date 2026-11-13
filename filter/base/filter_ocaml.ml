@@ -568,10 +568,6 @@ struct
           * The name is an option (mk_sbb writes it with mk_opt; None is "_"). *)
          Ploc.VaVal (dest_opt dest_string s), Ploc.VaVal (if b1 then (if b2 then "+" else "-") else "")
 
-   let dest_string_opt_bool_opt t =
-      let s, b = two_subterms t in
-         dest_opt dest_string s, dest_opt dest_bool b
-
    let dest_tdl =
       let dest_tc t =
          let t1, t2 = two_subterms t in
@@ -645,14 +641,12 @@ struct
          (List.combine ps es), e
 
    let dest_class_type_infos t =
-      let loc = dest_loc "dest_class_type_infos" t in
-      let s, sl, b, t = four_subterms t in
-      let prm = List.map dest_string_opt_bool_opt (dest_olist sl) in
+      (* mk_class_type_infos: the name is a parameter; params (mk_sbb), virtual, type *)
+      let loc, s = dest_loc_string "dest_class_type_infos" t in
+      let sl, b, t = three_subterms t in
           { ciLoc = loc;
-            ciNam = Ploc.VaVal (dest_string s);
-            ciPrm = loc, Ploc.VaVal (List.map (fun (s, b) ->
-                       let v = match b with None -> "" | Some true -> "+" | Some false -> "-" in
-                          Ploc.VaVal s, Ploc.VaVal v) prm);
+            ciNam = Ploc.VaVal s;
+            ciPrm = loc, Ploc.VaVal (List.map dest_sbb (dest_olist sl));
             ciVir = Ploc.VaVal (dest_bool b);
             ciExp = dest_ct t;
             ciAttributes = Ploc.VaVal []
@@ -996,7 +990,8 @@ struct
       and expr_obj_op =
          let dest_obj_expr t =
             let loc = dest_loc "dest_obj_expr" t in
-            let po, t = dest_patt_opt t in
+            (* mk writes the self pattern (or no_pattern) as the one subterm *)
+            let po, t = dest_patt_opt (one_subterm "dest_obj_expr" t) in
             let cfl = List.map dest_cf (dest_olist t) in
                ExObj(loc, Ploc.VaVal po, Ploc.VaVal cfl)
          in add_expr "obj" dest_obj_expr
@@ -1897,7 +1892,7 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       let sig_class_sig_op =
          let dest_class_sig_sig t =
             let loc = dest_loc "dest_class_sig_sig" t in
-            let ctl = dest_olist (one_subterm "dest_class_sig_sig" t) in
+            let ctl = subterms_of_term t in (* each one a subterm, as mk writes them *)
          (*
                <:sig_item< class $list: List.map dest_class_type ctl$ >>
          *)
@@ -1906,7 +1901,7 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       and sig_class_type_op =
          let dest_class_sig_type t =
             let loc = dest_loc "dest_class_sig_type" t in
-            let ctl = dest_olist (one_subterm "dest_class_sig_type" t) in
+            let ctl = subterms_of_term t in (* each one a subterm, as mk writes them *)
          (*
                <:sig_item< class $list: List.map dest_class_type ctl$ >>
          *)
@@ -2041,10 +2036,11 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
    and mk_str_item =
       let str_class_str_op =
          let dest_class_expr_infos t =
-            let loc = dest_loc "dest_class_expr_infos" t in
-            let s, sl, b, t = four_subterms t in
+            (* mk_class_expr_infos: the name is a parameter; params, virtual, body *)
+            let loc, s = dest_loc_string "dest_class_expr_infos" t in
+            let sl, b, t = three_subterms t in
                 { ciLoc = loc;
-                  ciNam = Ploc.VaVal (dest_string s);
+                  ciNam = Ploc.VaVal s;
                   ciPrm = loc, Ploc.VaVal (List.map dest_sbb (dest_olist sl));
                   ciVir = Ploc.VaVal (dest_bool b);
                   ciExp = dest_ce t;
@@ -2052,7 +2048,8 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
                 }
          in let dest_class_str_str t =
             let loc = dest_loc "dest_class_str_str" t in
-            let cdl = dest_olist (one_subterm "dest_class_str_str" t) in
+            (* mk writes each class as a subterm of its own *)
+            let cdl = subterms_of_term t in
          (*
                <:str_item< class $list: List.map dest_class cdl$ >>
          *)
@@ -2061,7 +2058,7 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       and str_class_type_op =
          let dest_class_str_type t =
             let loc = dest_loc "dest_class_str_type" t in
-            let cdl = dest_olist (one_subterm "dest_class_str_type" t) in
+            let cdl = subterms_of_term t in (* each one a subterm, as mk writes them *)
          (*
                <:str_item< class $list: List.map dest_class cdl$ >>
          *)

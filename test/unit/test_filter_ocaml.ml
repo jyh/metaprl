@@ -70,10 +70,11 @@ let () =
       "exception E;;"; "exception F of int;;"; "external f : int -> int = \"c_f\";;";
       "module M = struct let x = 1 end;;"; "module M = F (G);;"; "module F (X : S) = struct end;;";
       "module type S = sig val x : int end;;"; "open List;;"; "include M;;";
-      "class c = object val x = 1 method m = x end;;";
+      "class c = object val x = 1 method m = x end;;"; "let o = object (self) method m = 1 method n = self#m end;;";
+      "class c (x : int) = object method m = x end;;"; "class type ct = object method m : int end;;";
    ];
    List.iter sg [
       "val x : int;;"; "type t;;"; "type 'a t = A of 'a;;"; "exception E of string;;";
       "module M : sig val x : int end;;"; "module type S = sig type t end;;"; "open M;;";
-      "external f : int -> int = \"c_f\";;";
+      "external f : int -> int = \"c_f\";;"; "class c : object method m : int end;;";
    ]

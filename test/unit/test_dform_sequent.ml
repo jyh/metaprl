@@ -11,9 +11,6 @@
    Each case prints the term at the default width and at width 20, so the
    breaks show.  The expected file is the output of the code as written.
    Pinned as found:
-   - meta-terms are printed with no parentheses, so (A --> B) --> C and
-     A --> (B --> C) print alike, as do (A <--> B) --> C and
-     A <--> (B --> C);
    - a labelled meta-term prints with a leading space;
    - a hypothesis prints its variable only when the variable is used
      later (the term form drops an unused binding), and one with no
@@ -22,7 +19,10 @@
      variable whose term is the display form's df_context wrapper, and
      prints as <...>; such a hypothesis built by hand prints the same;
    - a free variable prints with "<|!|>", a second-order variable or a
-     context with no contexts with "<|!!|>". *)
+     context with no contexts with "<|!!|>".
+   Fixed after this test was written: meta-terms printed with no
+   parentheses, so (A --> B) --> C and A --> (B --> C) printed alike; a
+   compound left operand (or labelled term) is now parenthesised. *)
 open Lm_symbol
 open Opname
 open Term_sig

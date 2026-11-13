@@ -164,6 +164,20 @@ let () =
       "class c = M.d;;";
       "let x = M.N.x;;";
       "let r = { M.N.a = 1 };;";
+      "let f = function lazy x -> x;;";
+      "type 'a t = < m : 'a > as 'a;;";
+      "type t = M.t = A | B;;";
+      "type t = [ u | `A ];;";
+      "module type T = F(X).S;;";
+      "module type T = module type of M;;";
+      "module M = N.P;;";
+      "class d = c 1;;";
+      "class c : M.N.ct = object end;;";
+      "type t = int M.t list;;";
+      "let f = function A x | B x -> x;;";
+      "let f = function x when x > 0 -> 1 | y when y < 0 -> 2 | _ -> 0;;";
+      "type t = [> `A | `B of int ];;";
+      "type t = [< `A | `B > `A ];;";
       "let o = new c;;"; "let o = new M.c 1;;"; "class c = object val x = 1 method m = {< x = 2 >} end;;"; "class c = object method m = {< >} end;;"; "class c = let y = 1 in object method m = y end;;"; "class c = let rec f x = x in object method m = f 1 end;;";
    ];
    List.iter sg [
@@ -175,4 +189,7 @@ let () =
       "module type S = sig class c : M.ct end;;";
       "val f : ?x:int -> y:int -> unit;;";
       "type t = private A | B;;";
+      "include T;;";
+      "module type S = sig include T with type t = int end;;";
+      "class type ct = object inherit d method m : int end;;";
    ]

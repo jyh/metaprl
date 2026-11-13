@@ -646,7 +646,8 @@ struct
             p :: ps, es, e
       in
          let ps, es, e = dest_patts (one_subterm "dest_fix" t) in
-         (List.combine ps es), e
+         (* mk_fix_aux writes the bindings in reverse order *)
+         List.rev (List.combine ps es), e
 
    let dest_class_type_infos t =
       (* mk_class_type_infos: the name is a parameter; params (mk_sbb), virtual, type *)
@@ -2942,7 +2943,9 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
                   p :: ps, es
             in
             let ps, es = dest_patts (one_subterm "dest_fix_str" t) in
-               <:str_item< value rec $list: List.map (fun (p, e) -> p, e, Ploc.VaVal []) (List.combine ps es)$ >>
+            (* mk_fix_aux writes the bindings in reverse order *)
+            let pel = List.rev (List.combine ps es) in
+               <:str_item< value rec $list: List.map (fun (p, e) -> p, e, Ploc.VaVal []) pel$ >>
          in add_str "str_fix" dest_fix_str
       and str_let_op =
          let dest_let_str t =

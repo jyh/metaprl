@@ -1586,25 +1586,28 @@ struct
       in let patt_lab_op =
          let dest_lab_patt t =
             let _loc = dest_loc "dest_lab_patt" t in
+            (* mk_patt_lab writes, per label, the label and its pattern (or
+             * no_pattern), whose tail is the next label or patt_lab_end. *)
             let rec dest_lab t =
                if Opname.eq (opname_of_term t) patt_lab_end_op then
                   [], one_subterm "dest_lab_patt" t
                else
                   let n, p = two_subterms t in
-                  let p, t = dest_patt p in
+                  let po, t = dest_patt_opt p in
                   let l, t = dest_lab t in
-                     (patt_of_expr_ident (dest_expr n), p) :: l, t
+                     (patt_of_expr_ident (dest_expr n), po) :: l, t
             in
-            let ppl, t = dest_lab (one_subterm "dest_lab_patt" t) in
-               <:patt< { $list: ppl$ } >>, t
+            match dest_lab (one_subterm "dest_lab_patt" t) with
+               [p, po], t' -> MLast.PaLab (_loc, p, Ploc.VaVal po), t'
+             | _ -> raise_format_error "dest_lab_patt: one label" t
          in add_patt "patt_lab" dest_lab_patt
       in fun vars loc ppol tailf ->
          let tailf vars = mk_simple_term patt_lab_end_op loc [tailf vars] in
          let rec make ppl vars =
-            match ppol with
-               (p, Ploc.VaVal po)::ppol ->
+            match ppl with
+               (p, Ploc.VaVal po)::ppl ->
                   mk_simple_term patt_lab_proj_op loc [mk_expr vars (expr_of_patt_ident p);
-                                                       mk_patt_opt_loc loc vars po (make ppol)]
+                                                       mk_patt_opt_loc loc vars po (make ppl)]
              | (_, Ploc.VaAnt _) :: _ ->
                   raise (RefineError ("mk_patt_lab", StringError "antiquotations are not supported"))
              | [] ->

@@ -2,7 +2,7 @@
   putc a, puts "bc"                  "abc"
   clear                              ""
   puts 32 bytes (exactly full)       "32"
-  then putc (past 32)                raised Invalid_argument
-  puts 40 bytes into an empty buffer raised Invalid_argument
-  putc 33 times                      raised Invalid_argument
-  puts 20 + 20 + 30                  raised Invalid_argument
+  then putc (past 32)                "33"
+  puts 40 bytes into an empty buffer "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+  putc 33 times                      "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFG"
+  puts 20 + 20 + 30                  "70"

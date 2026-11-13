@@ -6,10 +6,10 @@
  * Nothing in the tree uses this module, and no build or census reaches
  * past its first line.
  *
- * The expected file is the output of the code.  As written, putc and
- * puts grow the buffer and then write into the old one, so the first
- * write past 32 bytes raises Invalid_argument; the 2026-10-27 port to
- * Bytes (b8657296c) kept that and said so.
+ * The expected file is the output of the code.  Before the fix that
+ * followed this test, putc and puts grew the buffer and then wrote into
+ * the old one, so the first write past 32 bytes raised Invalid_argument
+ * (the 2026-10-27 port to Bytes, b8657296c, kept that and said so).
  *)
 let try_ name f =
    match f () with

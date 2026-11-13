@@ -1414,7 +1414,8 @@ struct
          in add_patt "patt_cast" dest_cast_patt
       and patt_vrn_op =
          let dest_vrn_patt t =
-            let loc, s = dest_loc_string "dest_vrn_patt" t in
+            (* mk_patt writes the tail as the one subterm *)
+            let loc, s, t = dest_loc_string_term "dest_vrn_patt" t in
                MLast.PaVrn (loc, Ploc.VaVal s), t
          in add_patt "patt_vrn" dest_vrn_patt
       and patt_olb_op =
@@ -1715,13 +1716,13 @@ struct
       and type_object_tt_op =
          let dest_object_tt_type t =
             let _loc = dest_loc "dest_object_tt_type" t in
-            let stl = dest_olist (one_subterm "dest_object_tt_type" t) in
+            let stl = subterms_of_term t in (* each one a subterm, as mk writes them *)
                MLast.TyObj (_loc, Ploc.VaVal (List.map (fun (s, t) -> Some s, t, Ploc.VaVal []) (List.map dest_st stl)), Ploc.VaVal true)
          in add_type "type_object_tt" dest_object_tt_type
       and type_object_ff_op =
          let dest_object_ff_type t =
             let _loc = dest_loc "dest_object_ff_type" t in
-            let stl = dest_olist (one_subterm "dest_object_ff_type" t) in
+            let stl = subterms_of_term t in (* each one a subterm, as mk writes them *)
                MLast.TyObj (_loc, Ploc.VaVal (List.map (fun (s, t) -> Some s, t, Ploc.VaVal []) (List.map dest_st stl)), Ploc.VaVal false)
          in add_type "type_object_ff" dest_object_ff_type
       and type_record_op (* XXX , type_pvt_record_op *) =

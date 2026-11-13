@@ -25,7 +25,7 @@
 23 8c57a23b45ba7db9bab651d4cede1a43 shape=7826a9945de8a80dc02e2e9799dd4f7a roundtrip=same fv=[+]
 24 362005ba7b0790f6dfb6585a704f78f1 shape=923ebcf6a8bba0e1a8df9752f63f2430 roundtrip=same fv=[ERROR Failure("free_vars: expression not recognized")]
 25 7e5d64f365b7b0414a31f07889be05c0 shape=b4f641b950edc2f57ea7323dbf9658a0 roundtrip=same fv=[]
-26 a1bb254324acd09525f3b57a2dae762d shape=0d225b2e8c45eeb0dec1881390b1c5c7 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_apply_arg", _) fv=[ERROR Failure("patt_bvars: pattern not recognized")]
+26 a1bb254324acd09525f3b57a2dae762d shape=0d225b2e8c45eeb0dec1881390b1c5c7 roundtrip=same fv=[ERROR Failure("patt_bvars: pattern not recognized")]
 27 8b5e57750400c58d88048de99a065a79 shape=91b61ed0e791637b7cd49e9523193f57 roundtrip=same fv=[-,>]
 28 5f0ab43ebe9bfc848c8aed32c4d77f0b shape=4a7fcdd85158bc217e1dd38421ba8e82 roundtrip=same fv=[fact]
 29 ab901f9949a533ee6dd5cb1031dd7e70 shape=ed619bb03be9538fa5cfaac064b1a89c roundtrip=same fv=[incr,val,<,ref,ignore]
@@ -35,7 +35,7 @@
 33 f6996f7e1d5045076134f1cabf107684 shape=fc3687d96ee88e55608a7bcc97f5b60e roundtrip=same fv=[ERROR Failure("free_vars: expression not recognized")]
 34 ab3091e4ed9a6ec702b10cec94dcb9d7 shape=a353397a4ccd51c32f422c13abbcdef5 roundtrip=same fv=[ERROR Failure("free_vars: expression not recognized")]
 35 b68bbdd889b51473a244d4c92fdffd67 shape=1203e34986c52d480f5ceff725118dd1 roundtrip=same fv=[]
-36 65eede8ac7631fb71bb790d85370633a shape=92f0d92fb1965551ec5af4a9e7397597 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_type : not a list", _) fv=[ERROR Failure("free_vars: expression not recognized")]
+36 65eede8ac7631fb71bb790d85370633a shape=92f0d92fb1965551ec5af4a9e7397597 roundtrip=same fv=[ERROR Failure("free_vars: expression not recognized")]
 37 95c608f45496eb3c80fd9f30859d9b31 shape=ead568ff8fd13cbeec6659db1774fe64 roundtrip=same
 38 03f1967dfda6bd4f0c5a480ec46f076f shape=93f3bd270627cb4c0c91dd42629252e9 roundtrip=same
 39 a166e76321ba6ea5dd19dd8315bfb69d shape=09a8c667c09fd73323a06ef49194a6aa roundtrip=same fv=[]

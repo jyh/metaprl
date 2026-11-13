@@ -3,11 +3,11 @@ locations:
   shift_pos glob 2          "f.ml" line 10 bol 200 [232, 252)
   mk_proper_loc 4 9         "" line 1 bol 0 [4, 9)
   adjust_pos, line 1       "" line 1 bol 0 [3, 5)
-                         -> "f.ml" line 10 bol 200 [233, 255)
+                         -> "f.ml" line 10 bol 200 [233, 235)
   adjust_pos, line 3       "" line 3 bol 12 [15, 18)
-                         -> "f.ml" line 12 bol 242 [245, 268)
+                         -> "f.ml" line 12 bol 242 [245, 248)
   adjust_pos, line 0       "" line 0 bol 0 [0, 0)
-                         -> "f.ml" line 10 bol 200 [230, 250)
+                         -> "f.ml" line 10 bol 200 [230, 230)
   ploc_of_lexing            "g.ml" line 4 bol 40 [44, 47)
 grammar_parse:
   first token "hello", line 1

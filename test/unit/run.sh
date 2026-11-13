@@ -58,7 +58,8 @@ fi
 # camlp5/pr_o.cmx *)", on one line, each path from this tree's root or, for
 # camlp5/..., from camlp5's directory.  That test is linked with ocamlopt and
 # the .cmxa archives, and is SKIPPED (not failed) in a build that has no
-# .cmxa archives.
+# .cmxa archives, or in which a named object is missing (the Windows
+# runners' camlp5 8.05.02 has no o_keywords.cmx); the SKIP line names it.
 # A test whose output is platform-specific (Setup's default editor is
 # notepad.exe on Win32) keeps a second file, test_*.expected.win32, used
 # when the compiler's os_type is Win32.
@@ -81,12 +82,17 @@ for src in "$here"/test_*.ml; do
             tclibs=$(printf '%s\n' "$clibs" | sed 's/-custom //') ;;
       esac
       extra="-I $root/library -I $root/filter/base -I $root/filter/filter $root/library/library.$ta $root/filter/prlc.$ta"
+      missing=""
       for o in $native; do
          case "$o" in
-            camlp5/*) extra="$extra $camlp5dir/${o#camlp5/}" ;;
-            *) extra="$extra $root/$o" ;;
+            camlp5/*) f="$camlp5dir/${o#camlp5/}" ;;
+            *) f="$root/$o" ;;
          esac
+         if [ -f "$f" ]; then extra="$extra $f"; else missing="$missing $o"; fi
       done
+      if [ -n "$missing" ]; then
+         echo "SKIP $name: not in this build:$missing"; continue
+      fi
       runenv="MP_ROOT=$root MPLIB=$root/lib"
    fi
    cp "$src" "$tmp/"

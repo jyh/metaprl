@@ -12,11 +12,6 @@
    expected file is the output of the code as written.
 
    Pinned as found:
-   - onAllMClausesOfAssumT tac n takes its hypothesis count from assumption
-     n (Sequent.assum_hyp_count, 1-based) but its hypothesis list from
-     List.nth (0-based), assumption n+1: on assumption 1 of two it visits
-     hypothesis 2 only, and on the last assumption it raises
-     Failure "nth".
    - onAnyHypT tries the hypotheses last first under orelseT, but its idT
      base is reached only with no hypotheses (or a context last), so when
      no hypothesis works it fails as onSomeHypT does.
@@ -26,7 +21,9 @@
      raise on a goal that is not a sequent.
    Fixed after this test was written: labProgressT was inverted (with one
    subgoal it applied idT when goal and label were unchanged and failed
-   when either changed). *)
+   when either changed); onAllMClausesOfAssumT tac n counted the
+   hypotheses of assumption n but listed those of assumption n+1, so it
+   skipped hypotheses and raised Failure "nth" on the last assumption. *)
 open Refiner.Refiner
 open Refiner.Refiner.TermType
 open Tactic_boot

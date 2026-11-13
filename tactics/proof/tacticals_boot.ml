@@ -693,7 +693,8 @@ struct
 
    let onAllMClausesOfAssumT tac assum =
       funT (fun p ->
-                        let assumption = List.nth (snd (dest_msequent (Sequent.msequent p))) assum in
+                        (* Assumptions are numbered from 1 (Sequent.assum_hyp_count). *)
+                        let assumption = List.nth (snd (dest_msequent (Sequent.msequent p))) (assum - 1) in
                         let hyps = Term.SeqHyp.to_list (TermMan.explode_sequent assumption).sequent_hyps in
          prefix_thenMT
             (onAllT idT prefix_thenMT (tac assum) (Sequent.assum_hyp_count p assum) (List.rev hyps))

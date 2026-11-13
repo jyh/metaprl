@@ -19,6 +19,8 @@ same      let q = M.x + M.N.y
 same      let o = object method m = 1 end
 same      let a = x.contents <- 2
 same      let s = let open List in length []
+same      let f () = let a = 1 and b = 2 in a + b
+same      let f () = let (a, b) = 1, 2 and c = 3 and d = 4 in a + b + c + d
 same      type t = int
 same      type t = A
 same      type t = A | B of int * string

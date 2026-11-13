@@ -103,7 +103,7 @@
 43 67edfd2f8316ff7526d5f54621b7019d shape=e3596cf5fc553c3dfc19e09a8fb607b5 roundtrip=same fv=[nil_opname,mk_opname]
 44 2bd04c13392a1ec4eaf5c085e72b3df0 shape=1f8dde6bce8dbce223f975f55018bd4f roundtrip=same fv=[dst_opname,fst]
 45 6328e5bb6c66da908784bbda68066652 shape=92f43be81f1d6dada15be3dfb1e5e23e roundtrip=same fv=[token,make_param,mk_nuprl5_op,tl,hd,error,dest_param,map,make_opname,mk_op,stringeq]
-46 ff25381a532eeeab74a9f6c0190f929c shape=e0c36e322b1f89d3821ac3aa5b964d4b roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_and", _) fv=[scan_numeral_parameter,scan_term,scan_operator,scan_parameter,scan_binding,scan_string|error,token,make_param,scan_string,val,myscanner,icolon,scan_byte,scan_next,add_num,mult_num,-,scan_bump,=,scan_cur_byte,num_of_int|scan_cur_byte,index_of_bytes,level_of_byte,levels_lookup,scan_bump,scan_item,levels_assign,scan_numeral_parameter,=,scan_next,type_of_byte,compression_add_byte_p|scan_string,stb,error,scan_compressed,compression_code_p,scan_cur_byte|stp,icolon,scan_byte,scan_string,error,print_string,scan_compressed,compression_code_p,scan_cur_byte|icomma,ircurly,scan_parameter,scan_delimited_list,ilcurly,scan_at_byte_p|scan_string,error,scan_parameters,make_operator,scan_compressed,compression_code_p,scan_cur_byte|stb,scan_string,scan_next,scan_term,idot,scan_binding,scan_delimited_list,flatten,icomma,error,ilparen,scan_parameters,make_operator,ilcurly,scan_at_byte_p,scan_bound_terms,mk_term,mk_bterm,scan_compressed,compression_code_p,scan_cur_byte|isemicolon,irparen,scan_bound_term,scan_delimited_list,ilparen,scan_at_byte_p|scan_operator,error,scan_bound_terms,mk_term,scan_parameters,make_operator,scan_compressed,compression_code_p,scan_cur_byte]
+46 ff25381a532eeeab74a9f6c0190f929c shape=e0c36e322b1f89d3821ac3aa5b964d4b roundtrip=DIFFERENT fv=[scan_numeral_parameter,scan_term,scan_operator,scan_parameter,scan_binding,scan_string|error,token,make_param,scan_string,val,myscanner,icolon,scan_byte,scan_next,add_num,mult_num,-,scan_bump,=,scan_cur_byte,num_of_int|scan_cur_byte,index_of_bytes,level_of_byte,levels_lookup,scan_bump,scan_item,levels_assign,scan_numeral_parameter,=,scan_next,type_of_byte,compression_add_byte_p|scan_string,stb,error,scan_compressed,compression_code_p,scan_cur_byte|stp,icolon,scan_byte,scan_string,error,print_string,scan_compressed,compression_code_p,scan_cur_byte|icomma,ircurly,scan_parameter,scan_delimited_list,ilcurly,scan_at_byte_p|scan_string,error,scan_parameters,make_operator,scan_compressed,compression_code_p,scan_cur_byte|stb,scan_string,scan_next,scan_term,idot,scan_binding,scan_delimited_list,flatten,icomma,error,ilparen,scan_parameters,make_operator,ilcurly,scan_at_byte_p,scan_bound_terms,mk_term,mk_bterm,scan_compressed,compression_code_p,scan_cur_byte|isemicolon,irparen,scan_bound_term,scan_delimited_list,ilparen,scan_at_byte_p|scan_operator,error,scan_bound_terms,mk_term,scan_parameters,make_operator,scan_compressed,compression_code_p,scan_cur_byte]
 47 97707429a232b0d681c640ce249fe9c5 shape=83aa723dadea9e3a32d249a98dd469ff roundtrip=same fv=[new_lscanner,scan_term]
 48 79a69eaddf0ce38a4802d4a72bc243dc shape=0958af12811c627da456e3e3b2dceaf4 roundtrip=same fv=[error,of_string,make_term_scanner,read_term_aux]
 49 83d4047cf1664f99a198ca0f76b2984b shape=05902782d2f7954a3932c6cb1eaf4968 roundtrip=same
@@ -123,7 +123,7 @@
 63 5473cdd83494429caa3b8d9320d00386 shape=b0d04265f1abe21bcaaeaa464cc597da roundtrip=same fv=[failwith,of_string,make_le_scanner,scan_level_expression,num_of_string,token,make_param,add]
 64 dcf620417643d2d0287972ebc87f1d1e shape=050b80d7ce4423c699c4516c17082867 roundtrip=same fv=[failwith,dst_token,=]
 65 0a1f56582e3ab07d7b626440b089e8b4 shape=6d363a9ed648a8d3fa0bd0ffb1a49653 roundtrip=same fv=[failwith,dst_token,=]
-66 2a0a616082243d9d5b39650375279e62 shape=caba5a24e632b1a33da8fa23f8ca7b95 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_and", _) fv=[failwith,-,ascii_special_header,stringeq,sub,ash_length,>,length]
+66 2a0a616082243d9d5b39650375279e62 shape=caba5a24e632b1a33da8fa23f8ca7b95 roundtrip=same fv=[failwith,-,ascii_special_header,stringeq,sub,ash_length,>,length]
 67 c3e284c1d65a23fa2c0033a5059fd927 shape=12f1a941ad2f3d56d92845f1dddf66df roundtrip=same fv=[error,mk_meta_param_from_strings,token,-,sub,string_to_parameter,mk_real_param_from_strings,make_param,get,chareq,not,<,or,length]
 68 c938aba15d7127dd19b017e1d29b8fe5 shape=606826142ef97311d7dfe77b65c17453 roundtrip=same fv=[string_to_parameter,string_to_bindings,make_term_scanner,new_lscanner]
 69 13c7d48c1be392ee36691a5c397f0c83 shape=13e8acdd6fe8d5af5e57376e9113f489 roundtrip=same fv=[error,string_of_symbol,extract_binding2,tl,extract_binding3,level_assign,stringeq,dst_token,hd,val,nullp,not,dest_params,ref]
@@ -208,7 +208,7 @@
 52 6a22df3432c7351027ffcba16bb26e25 shape=e4aed834eb4f0854ec39126ddf34b930 roundtrip=same fv=[token,make_param]
 53 c11a59cfef4478ab07b8a43084730d65 shape=fca41dd3aa46872ebbdc58826b5a6f28 roundtrip=same fv=[token,make_param]
 54 759a4da8ac5639812c62f4ebd77a58dc shape=8231dd1266d89da54fe71e638c1d72c0 roundtrip=same fv=[token,make_param]
-55 74743d8c8db1e2e8410194516ca94ce9 shape=c76145fcff76dfe200d5bd973d676824 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_and", _) fv=[error,undo,iundo_param,icommit_param,delete,dest_obid_param,idefinition_delete_param,insert,dest_int_param,oid_of_term_entry,hd,term_of_unbound_term,import_term,idefinition_insert_param,parmeq,nuprl5_opname_p,dest_op,dest_term,commit]
+55 74743d8c8db1e2e8410194516ca94ce9 shape=c76145fcff76dfe200d5bd973d676824 roundtrip=same fv=[error,undo,iundo_param,icommit_param,delete,dest_obid_param,idefinition_delete_param,insert,dest_int_param,oid_of_term_entry,hd,term_of_unbound_term,import_term,idefinition_insert_param,parmeq,nuprl5_opname_p,dest_op,dest_term,commit]
 56 f86e8500efa7b81245a174bb3719c38f shape=15bd7a52969c4a03e149df5d110277cf roundtrip=same fv=[lookup]
 57 558b0a119d0601a508a52549cc6cf12b shape=01415dbedc48e64ba0b4b30cf22a44eb roundtrip=same fv=[oidtable_unit_map]
 58 c85ea650badda1ff95f50236e88c0a33 shape=7b62c8666786c332e7faad882fd4c193 roundtrip=same fv=[oidtable_map]
@@ -220,7 +220,7 @@
 1 bc9f112e937dbe889550287ebe20366f shape=a2e1a21ced4096c849f005bf04d3d508 roundtrip=same
 2 93d15c64a4246250d1443678ea645527 shape=33be8ec913a080cf7a7871faedcde30d roundtrip=same
 3 908d1e7c0c1c1671b633f5e6070fc029 shape=ca2b6233606a01f8751a209c33153c79 roundtrip=same
-4 2c05da0ed317f28df5036e729c03e5f6 shape=c21d9b8eaaad4e0fb6daf83987f95cd4 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_and", _)
+4 2c05da0ed317f28df5036e729c03e5f6 shape=c21d9b8eaaad4e0fb6daf83987f95cd4 roundtrip=same
 5 c0940f8e5cd0673bd1c9a954c41c2235 shape=2f963cc71f0a1260a4e676b475642d26 roundtrip=same
 6 8a056d2b55faa4bf5c201fdeb69e5a7a shape=1c0825644f689207b285f44546322129 roundtrip=same
 == mllib_ctime.ml
@@ -327,7 +327,7 @@
 88 e3d8b8698d86350c16c009954b4b1ba4 shape=9245d794a4a91bc509d0963b67723c29 roundtrip=same fv=[fd,string_of_int,socket_name,putenv,getsockname]
 89 3965946adfba3c1ec3ad557de378ae4f shape=1b52fbbd65f0f3998fb32f4cb0fb6ed8 roundtrip=same fv=[close]
 90 4738ff2f562afe80c93f671d3c334dc1 shape=f01ec09d431439d722a25282f93cc6e5 roundtrip=same fv=[flush,read_body,input_header,lowercase,parse_args,input_line,out_channel_of_ssl,in_channel_of_ssl,eflush,eprintf,val,debug_http]
-91 976d46fcbbf2637e2b3dd5d8c3ec7f33 shape=5b8afc4efb53fc3e89a96cea0e98b752 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_and", _) fv=[raise,close,shutdown,error_message,handle,to_string,accept,catch_sigpipe,eflush,eprintf,val,debug_http]
+91 976d46fcbbf2637e2b3dd5d8c3ec7f33 shape=5b8afc4efb53fc3e89a96cea0e98b752 roundtrip=same fv=[raise,close,shutdown,error_message,handle,to_string,accept,catch_sigpipe,eflush,eprintf,val,debug_http]
 92 e5da9f4c56cc6bcfa3f9ddfac55d5cf4 shape=d098fcdebe00ee8d778a82983fed6996 roundtrip=same fv=[raise,close_http,create,ignore,http_threads,listen,bind,socket,serve,val,socket_fd,localhost_addr,inet_addr_any,enabled,dh_pem,server_pem]
 93 5b60195ed4b21684316c53d240de63a1 shape=89441ec917fdfc270cfba384fb3ecb8e roundtrip=same fv=[raise,localhost_addr,gethostname,inet_addr_any,=]
 94 bb660a34f1f08a5c044d45367fddf8c2 shape=271d1245cbdfd2f0a0317c7e14b6fa6c roundtrip=same fv=[string_of_inet_addr,getsockname]

@@ -539,9 +539,9 @@ struct
                   let t' = Sequent.goal p'' in
                   let lab' = Sequent.label p'' in
                      [(if alpha_equal t t' && lab = lab' then
-                          idT
+                          failWithT "labProgressT"
                        else
-                          failWithT "progressT")]
+                          idT)]
              | _ ->
                   List.map (fun _ -> idT) p'
          in
@@ -693,7 +693,8 @@ struct
 
    let onAllMClausesOfAssumT tac assum =
       funT (fun p ->
-                        let assumption = List.nth (snd (dest_msequent (Sequent.msequent p))) assum in
+                        (* Assumptions are numbered from 1 (Sequent.assum_hyp_count). *)
+                        let assumption = List.nth (snd (dest_msequent (Sequent.msequent p))) (assum - 1) in
                         let hyps = Term.SeqHyp.to_list (TermMan.explode_sequent assumption).sequent_hyps in
          prefix_thenMT
             (onAllT idT prefix_thenMT (tac assum) (Sequent.assum_hyp_count p assum) (List.rev hyps))
@@ -738,9 +739,14 @@ struct
       let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent_arg p).sequent_hyps in
          onAllT failT prefix_orelseT tac (Sequent.hyp_count p) (List.rev hyps))
 
+   (*
+    * Like onSomeHypT, but idT when no hypothesis works.  onAllT applies
+    * tac alone to the last hypothesis, so its base is reached only when
+    * there are no hypotheses: the tryT gives the idT.
+    *)
    let onAnyHypT tac = funT (fun p ->
       let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent_arg p).sequent_hyps in
-         onAllT idT prefix_orelseT tac (Sequent.hyp_count p) (List.rev hyps))
+         tryT (onAllT idT prefix_orelseT tac (Sequent.hyp_count p) (List.rev hyps)))
 
    (************************************************************************
     * ARGUMENTS                                                            *

@@ -12,23 +12,18 @@
    expected file is the output of the code as written.
 
    Pinned as found:
-   - labProgressT is inverted.  Its comment says it notes changes of label
-     as well as changes in the sequent, as progressT does for the sequent;
-     but with one subgoal it applies idT when goal and label are UNCHANGED
-     and fails when either changed: it accepts no progress and refuses
-     progress.
-   - onAllMClausesOfAssumT tac n takes its hypothesis count from assumption
-     n (Sequent.assum_hyp_count, 1-based) but its hypothesis list from
-     List.nth (0-based), assumption n+1: on assumption 1 of two it visits
-     hypothesis 2 only, and on the last assumption it raises
-     Failure "nth".
-   - onAnyHypT tries the hypotheses last first under orelseT, but its idT
-     base is reached only with no hypotheses (or a context last), so when
-     no hypothesis works it fails as onSomeHypT does.
    - progressT ignores labels, so whileT stops after one step of a tactic
      that only relabels.
    - the conclusion tacticals (seqOnSameConclT, prefix_then_OnSameConclT)
-     raise on a goal that is not a sequent. *)
+     raise on a goal that is not a sequent.
+   Fixed after this test was written: labProgressT was inverted (with one
+   subgoal it applied idT when goal and label were unchanged and failed
+   when either changed); onAllMClausesOfAssumT tac n counted the
+   hypotheses of assumption n but listed those of assumption n+1, so it
+   skipped hypotheses and raised Failure "nth" on the last assumption;
+   onAnyHypT, onSomeHypT's twin with an idT base (2006, for the forward
+   chainer), reached its base only with no hypotheses, so when no
+   hypothesis worked it failed as onSomeHypT does. *)
 open Refiner.Refiner
 open Refiner.Refiner.TermType
 open Tactic_boot

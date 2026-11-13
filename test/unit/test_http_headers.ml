@@ -14,8 +14,7 @@
    The expected file is the output of the code as written.  Pinned as
    found (only RequestCookies and RequestContentType have a reader outside
    this file, and RequestContentDisposition one inside the multipart path,
-   so none of the header misreadings below reaches a user; the last item
-   does):
+   so none of the header misreadings below reaches a user):
    - the handler receives the entries last first;
    - Host: parse_host splits on white space, so "localhost:8080" is a host
      with no port, only "localhost 8080" yields a port, and an empty value
@@ -30,9 +29,10 @@
    - Pragma with any value is no-cache; a non-numeric Max-Forwards is 0;
    - Content-Disposition keeps the quotes of its parameter values (the
      multipart path unescapes the name);
-   - multipart: a part with no Content-Disposition raises Not_found, the
-     other refusals Failure; Shell_browser.get_post_body turns Not_found
-     into an empty form, so such a post loses every field. *)
+   Fixed after this test was written: a multipart part with no
+   Content-Disposition raised Not_found where the other refusals raise
+   Failure, and Shell_browser.get_post_body turned Not_found into an empty
+   form, so such a post lost every field; it is now a Failure. *)
 open Http_server_type
 
 let port = ref 0

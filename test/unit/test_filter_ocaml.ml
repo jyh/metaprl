@@ -54,6 +54,7 @@ and sg1 s =
 let () =
    List.iter str [
       "let x = 1 + 2;;"; "let rec f n = if n = 0 then 1 else n * f (n - 1);;";
+      "let rec f x = g x and g x = f x;;"; "let rec a x = x and b x = x and c x = x;;"; "let h () = let rec f x = g x and g x = f x in f 1;;"; "class c = let rec f x = g x and g x = f x in object method m = f 1 end;;";
       "let f (x, y) = match x with Some z when z > 0 -> z | Some _ | None -> y;;";
       "let f = fun x -> function [] -> x | h :: _ -> h;;";
       "let g ~y = y;;"; "let g ~y:z = z;;"; "let g ?(x = 1) ~y z = x + y + z;;"; "let h = f ~y:1 ?x:None;;";

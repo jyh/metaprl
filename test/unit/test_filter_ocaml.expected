@@ -78,12 +78,8 @@ same      module type T = (S with type t = int)
 same      module type F = (functor (X : S) -> T)
 same      module type U = sig module M : S end
 same      module M : S = struct  end
-FormatError: str_item_of_term.Filter_ocaml.dest_mt : unrecognized opname: Ocaml!some
-RAISES    module N = (val m : S)
-       ->  FormatError Filter_ocaml.dest_mt : unrecognized opname: Ocaml!some
-FormatError: str_item_of_term.Filter_ocaml.dest_mt : unrecognized opname: Ocaml!none
-RAISES    module N = (val m)
-       ->  FormatError Filter_ocaml.dest_mt : unrecognized opname: Ocaml!none
+same      module N = (val m : S)
+same      module N = (val m)
 DIFFERS   type t = private int
        ->  type t = int
 DIFFERS   type t = { a : int }[@@deriving show]

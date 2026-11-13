@@ -2444,9 +2444,10 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          in add_me "me_cast" dest_cast_me
       and me_unp_op =
          let dest_unp_me t =
-            let _loc = dest_loc "dest_cast_me" t in
+            let _loc = dest_loc "dest_unp_me" t in
+            (* mk_module_expr writes the module type as an option *)
             let e, mt = two_subterms t in
-               <:module_expr< (value $dest_expr e$ : $dest_mt mt$) >>
+               MLast.MeUnp (_loc, dest_expr e, dest_opt dest_mt mt, None)
          in add_me "me_unp" dest_unp_me
       and me_xtr_op =
          let dest_xtr_me t =

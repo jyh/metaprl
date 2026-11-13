@@ -993,7 +993,9 @@ struct
       and expr_new_op =
          let dest_new_expr t =
             let _loc = dest_loc "dest_new_expr" t in
-               MLast.ExNew (_loc, Ploc.VaVal (longid_lident_of_strings _loc (List.map dest_string (dest_olist t))))
+            (* mk_expr writes the path as an olist, the one subterm *)
+            let sl = dest_olist (one_subterm "dest_new_expr" t) in
+               MLast.ExNew (_loc, Ploc.VaVal (longid_lident_of_strings _loc (List.map dest_string sl)))
          in add_expr "new" dest_new_expr
       and expr_obj_op =
          let dest_obj_expr t =
@@ -1009,7 +1011,8 @@ struct
                dest_string s, dest_expr e
          in let dest_stream_expr t =
             let _loc = dest_loc "dest_stream_expr" t in
-            let sel = dest_olist (one_subterm "dest_stream_expr" t) in
+            (* mk_expr writes each field as a subterm of its own *)
+            let sel = subterms_of_term t in
                <:expr< {< $list: List.map dest_se sel$ >} >>
          in add_expr "stream" dest_stream_expr
       and expr_record_op =
@@ -2539,10 +2542,14 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
                CeFun (loc, p, dest_ce ce)
          in add_ce "class_expr_fun" dest_fun_ce
       and ce_let_op =
+         (* mk_fix_tail's opname, Ocaml!fix (mk_ocaml_op refuses a second "fix") *)
+         let expr_fix_op = mk_opname "fix" (mk_opname "Ocaml" nil_opname) in
          let dest_let_ce t =
             let loc = dest_loc "dest_let_ce" t in
-            let b, t = two_subterms t in
-            let b = dest_bool b in
+            (* mk_ce writes one subterm, the let (mk_let_tail) or fix
+             * (mk_fix_tail) term; its opname is the rec flag *)
+            let t = one_subterm "dest_let_ce" t in
+            let b = Opname.eq (opname_of_term t) expr_fix_op in
             let pel, ce =
                if b then
                   dest_fix t

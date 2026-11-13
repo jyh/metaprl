@@ -203,6 +203,18 @@ against libmojave 1.1.1 or later:
   it disagreed with OCaml's scoping on 529, now on 0). Nothing in metaprl
   calls it except the camlp5 parity pin, whose `fv=` fields change on 70 of
   328 items (`filter/test/README.md`).
+- A module summary's term form (`FilterSummaryTerm.term_list` /
+  `of_term_list`, used by the term file system and the library) could not
+  read back a dform with the `DFormInheritPrec` option: it was written as a
+  `prec_df` with no parameter, which the reader refused. It is now written
+  as `inherit_df`, which the reader already accepted. `Modes` and
+  `ExceptModes` also came back in reverse order; they now keep it (#265;
+  pinned by #264).
+- The generic term syntax (`base_grammar`'s `xterm_param`) could not give
+  a level successor: `Term_grammar` defined `xparam_succ_opname` as
+  `"xparam_string"`, so the `xparam_succ{p}` term built for `p'` was
+  refused as "not a parameter". It now gives `i'` = `max(1, i+1)` and
+  so on (#267; pinned by #266). No theory writes `p'` in that syntax.
 
 ### Tests
 
@@ -750,6 +762,13 @@ against libmojave 1.1.1 or later:
   - The camlp5 parity pin of `Filter_ocaml` and `Free_vars` (`filter/test`,
     328 items over 8 files) runs in CI after the unit tests; it was run by
     hand only. Most of `filter_ocaml.ml` is reached by no theory build.
+  - `test_filter_summary_term`: a module summary's term form round trip,
+    one item of every summary item kind (#264). No theory build or
+    proof census reaches the term form.
+  - `test_term_grammar_params`: `Term_grammar`'s `[value:kind]` casts in
+    quotation text and `dest_xparam` on `base_grammar`'s terms (#266);
+    `run.sh` gives a test linked with the filter `-I filter/filter` and
+    `MP_ROOT` / `MPLIB`.
 
 ### Known not to work
 
@@ -785,6 +804,9 @@ against libmojave 1.1.1 or later:
 - `Filter_cache.AsciiIO.read_table` leaves its channel open when the table
   read raises (found by #250's census; `filter/base` is not linked by the
   unit harness, so it has no test yet).
+- A module summary's term form writes a dform's `PrimitiveModes` as no
+  modes, so it reads back as `AllModes`; keeping it needs a term of its
+  own (a format change). Pinned by `test_filter_summary_term` (#264).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

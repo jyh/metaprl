@@ -81,13 +81,14 @@ let adjust_pos globpos local_pos =
    let glob_pos_lnum = Ploc.line_nb globpos in
    let glob_pos_bol = Ploc.bol_pos globpos in
    let glob_pos_cnum = Ploc.first_pos globpos in
-   let glob_pos_enum = Ploc.last_pos globpos in
    let glob_comm = Ploc.comment globpos in
    let glob_name = Ploc.file_name globpos in
       Ploc.make_loc glob_name (**)
          (if local_pos_lnum > 0 then glob_pos_lnum + local_pos_lnum - 1 else glob_pos_lnum)
          (if local_pos_lnum <= 1 then glob_pos_bol else local_pos_bol + glob_pos_cnum)
-         (glob_pos_cnum + local_pos_cnum, glob_pos_enum + local_pos_enum)
+         (* Both ends are offsets into the quotation's text, so both are
+          * counted from its start (the end was counted from its end). *)
+         (glob_pos_cnum + local_pos_cnum, glob_pos_cnum + local_pos_enum)
          glob_comm
 
 let ploc_of_lexing (l1, l2) =

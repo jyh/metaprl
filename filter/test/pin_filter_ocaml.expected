@@ -6,12 +6,12 @@
 4 ec2903c118d336a0d8928957bd91eca4 shape=ad986cd19876b25b799b8a13798b21e4 roundtrip=same
 5 39dd17646508211dc058ffc99eb0ebcd shape=ca23620a081b8f5e103e7405d9a5b8bc roundtrip=same
 6 16ec3580816458a83f1a847e3f1d64aa shape=ddfa2ceb6db17e4acb29035f7fc6add7 roundtrip=same
-7 98f17f4a2b27aa7b9701fc0e27e68653 shape=17666a4a2ff277d85c3947e4cfb8d6e4 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : no string parameter", _)
+7 98f17f4a2b27aa7b9701fc0e27e68653 shape=17666a4a2ff277d85c3947e4cfb8d6e4 roundtrip=same
 8 ccb5a136cab34e56de90f3dbd399893a shape=a120dbe67d8b8321be1f31339d909105 roundtrip=same
 9 7a612056fb5da7a0d3be5bf0488bbbeb shape=49f55d8d971c5e35988555cfe162fa54 roundtrip=same
-10 d9de0baa2481bfce4af1894d99506f44 shape=7611c3caf6a0192a74aef938856a4139 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : no string parameter", _)
+10 d9de0baa2481bfce4af1894d99506f44 shape=7611c3caf6a0192a74aef938856a4139 roundtrip=same
 11 c03dd2b35d3288def6f247d7b124a294 shape=c5c029de135c43e99f28c5f8d357dd88 roundtrip=same
-12 f189f67a440654d53b26e2d0a15f7974 shape=8da3a51756779c3291a957c7ff077202 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : bad arity", _)
+12 f189f67a440654d53b26e2d0a15f7974 shape=8da3a51756779c3291a957c7ff077202 roundtrip=same
 13 def93310a267f50e5fc9b0e85addcd51 shape=a6d75617ce3626739a73aca8239ebad0 roundtrip=same fv=[length,+]
 14 154c1af0c1c10b9d706ed464e7ee7a3d shape=17b797930b188bfb9a58cdaa54c086e0 roundtrip=same fv=[add]
 15 26b725906767cbee7061aa22f752d595 shape=0a8b2c6b3ae88edd1b8a908b0bf0bd3e roundtrip=same fv=[-,fact,*,<=]
@@ -82,10 +82,10 @@
 22 aca465dc37679227b6aeecd083e8c996 shape=b75f9f54713aa8d0bab598a8447c9e9e roundtrip=same fv=[of_string,make_term_scanner,ref]
 23 237902457e6cfcf24373efccc6ad6aba shape=a90df737e1197b3c2adeaf98213bd077 roundtrip=same fv=[land,lsl,+]
 24 3ba2022c6351eca491e3be18c6500655 shape=8bd44978add3d263e377d1033ade9c88 roundtrip=same fv=[land,lsr]
-25 96b6e0a04e4e18c825a6cb7cce4e2f53 shape=651d80abc5455d80bbceb9d1a457ddee roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_type : bad arity", _)
+25 96b6e0a04e4e18c825a6cb7cce4e2f53 shape=651d80abc5455d80bbceb9d1a457ddee roundtrip=same
 26 42ef810be30fa551433c4c9cbf1d5073 shape=4f8f3c5005f5ada374db32d4c241178d roundtrip=same fv=[set,create]
 27 1070aa15e4a432452e1de18dabb72ff8 shape=b13d8ff095477dc8c94a40565a756e8e roundtrip=same fv=[land,catetypes,get]
-28 6cffc298be08c777b1a1aec277f84fcb shape=ffd2a33bb12ff0f2a16f073623fa5354 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_type : bad arity", _)
+28 6cffc298be08c777b1a1aec277f84fcb shape=ffd2a33bb12ff0f2a16f073623fa5354 roundtrip=same
 29 92a76fdc1f7d0c1649374a03714a93d3 shape=d383a1d5278a38de706ec56f2543184c roundtrip=same
 30 e723171b8cbb16a5ba892db4f6ecfd6a shape=7ecaccfeca6020963c3c4062cb092e51 roundtrip=same fv=[]
 31 10b2f7152edf0e73a9779f4fc74010e2 shape=621c0febd88a064a4773526e1349bb9e roundtrip=same fv=[]
@@ -173,7 +173,7 @@
 17 d32469a553524a75514eb35f03406263 shape=084d3ff5ae68f5096ccd9996cf67f81b roundtrip=same fv=[token,make_param]
 18 48966613546bc2f75136000440094a33 shape=5d91ea9443d973003f1547bb582f8648 roundtrip=same fv=[token,make_param]
 19 ee657f49a6e1826dcaf28eda80ea7a12 shape=31b5af8f6cdab0706e13b5042eb76394 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_expr : not a list", _) fv=[error,term_of_unbound_term,term_to_stamp,ftype,id,op_params,opname,op_name,inline,istamp,term_terms,op,term_op,t]
-20 6f3d13db94539f730190e57d048aabaf shape=2f2ee5b242a461f6e9b5b34c98a12929 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_type : bad arity", _)
+20 6f3d13db94539f730190e57d048aabaf shape=2f2ee5b242a461f6e9b5b34c98a12929 roundtrip=same
 21 2a145a2bc5ccbe1f068822f41e0736a4 shape=b8329a676e9b17c0630e778e3536ef42 roundtrip=same fv=[token,make_param,mk_nuprl5_op]
 22 e7ad2cfc5b48370bd8e59a81db0b43cc shape=1b9eded09bba1d211873ad075fd50c4c roundtrip=same fv=[error,term_of_unbound_term,isubstance_op,opeq,dest_term]
 23 bf1fe17dffe029fa9382dd9a7c9916b3 shape=c3b9aaa372f090e067e51f9915558212 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : not a list", _)
@@ -193,7 +193,7 @@
 37 77621569e3d0c785cd09e6dde087685a shape=71e46a789cda81f0f95cf4e4c6cda861 roundtrip=same fv=[error,dest_token_param,dest_op,dest_term]
 38 bcf453a5c6303f69e971bdaf209fefad shape=3c3f46511ada8c572ed07b9d7870a600 roundtrip=same
 39 f72f272193a71e757f1062bf661e64bb shape=bb71115f81944f589c563e0fcb851a20 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : not a list", _)
-40 1292f57b63625aec50c00d0e37c2c804 shape=3c00256b1f26e2f4eb6289e391dbba58 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_type : bad arity", _)
+40 1292f57b63625aec50c00d0e37c2c804 shape=3c00256b1f26e2f4eb6289e391dbba58 roundtrip=same
 41 732534cda23a023122951ee4070830d3 shape=5f99ab3134551812f062ce107440adfc roundtrip=same fv=[not,mem,&,purposes_of_idescription_term,ivoid_term_p]
 42 322d12c739efb1fee9d34a09acf98f50 shape=9f42862a6a461636e22da4dac735b690 roundtrip=same fv=[token,make_param,mk_nuprl5_op]
 43 7077c781e90fdade9d09fda4098e3c18 shape=6bb1e34095d80111ea4f4589301961b1 roundtrip=same fv=[token,make_param]
@@ -220,21 +220,21 @@
 1 bc9f112e937dbe889550287ebe20366f shape=a2e1a21ced4096c849f005bf04d3d508 roundtrip=same
 2 93d15c64a4246250d1443678ea645527 shape=33be8ec913a080cf7a7871faedcde30d roundtrip=same
 3 908d1e7c0c1c1671b633f5e6070fc029 shape=ca2b6233606a01f8751a209c33153c79 roundtrip=same
-4 2c05da0ed317f28df5036e729c03e5f6 shape=c21d9b8eaaad4e0fb6daf83987f95cd4 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : no string parameter", _)
-5 c0940f8e5cd0673bd1c9a954c41c2235 shape=2f963cc71f0a1260a4e676b475642d26 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_sig : no string parameter", _)
+4 2c05da0ed317f28df5036e729c03e5f6 shape=c21d9b8eaaad4e0fb6daf83987f95cd4 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_patt : unrecognized opname: Ocaml!patt_and", _)
+5 c0940f8e5cd0673bd1c9a954c41c2235 shape=2f963cc71f0a1260a4e676b475642d26 roundtrip=same
 6 8a056d2b55faa4bf5c201fdeb69e5a7a shape=1c0825644f689207b285f44546322129 roundtrip=same
 == mllib_ctime.ml
 0 e31ea2484a570692968288f6ac2b7b67 shape=7cd6fa053c927dc9ebe18b4b6138f8d6 roundtrip=same
-1 66d0c0c0df48cc4a94720457c2bc3a2d shape=4eb59fd6a4684a364473a33d35c4f81b roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : bad arity", _)
-2 402574cde2ea8b42e109e132852d1d7e shape=03739d5529e1f4cf53df1092257f1c00 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : bad arity", _)
+1 66d0c0c0df48cc4a94720457c2bc3a2d shape=4eb59fd6a4684a364473a33d35c4f81b roundtrip=same
+2 402574cde2ea8b42e109e132852d1d7e shape=03739d5529e1f4cf53df1092257f1c00 roundtrip=same
 3 f3dbeec8ffd6f34d2c5687198751af6e shape=bb906a4cba7a32fd39c403f12fed8855 roundtrip=same fv=[int_of_string]
 4 ae614fe3fde2a4ce40f369297ccd6968 shape=d586d05677a15ec9e6257debb56fe5ca roundtrip=same fv=[mktime,-,*,+,<,=,lowercase,parse_int]
 5 cc1fc20f97a08bb67651b4e08826bf0d shape=1607cb2f0bf7ce11c8915ae1d04b38b8 roundtrip=same fv=[parse_date_aux,parse_args]
 6 948cd61c95cd1b0d9690238621d33974 shape=d76e8cbcf7e30f6d3d8e457ecbe7d24e roundtrip=same fv=[]
-7 c0afd73f815b815b461051ba99a670aa shape=a9ae01effbb347c818981acb95584142 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : bad arity", _)
-8 481c5b1f9d24cdba6a509de237e34082 shape=0b1e22a52c0d47aba214db03281bbb91 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : bad arity", _)
+7 c0afd73f815b815b461051ba99a670aa shape=a9ae01effbb347c818981acb95584142 roundtrip=same
+8 481c5b1f9d24cdba6a509de237e34082 shape=0b1e22a52c0d47aba214db03281bbb91 roundtrip=same
 == mllib_hash_with_gc_sig.ml
-0 33db7e73af5b1c3a0216630c23e3180a shape=3cde2831812b137380a72bcded3b3731 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_sig : no string parameter", _)
+0 33db7e73af5b1c3a0216630c23e3180a shape=3cde2831812b137380a72bcded3b3731 roundtrip=same
 == mllib_http_simple.ml
 0 c21edba12c4ea52224938cf86de3288e shape=d93c721c6228d0544b86e7895e3a0649 roundtrip=same
 1 0771be91c1f9008951739b9c58673861 shape=15811b786f92fc6effb26f26f2e11ee5 roundtrip=same
@@ -251,8 +251,8 @@
 12 dbdf717a88e3e1be7db4e679ca6852b2 shape=3bc9124afe9a18e642a80488e62ab2c8 roundtrip=same
 13 edc3239835b1ffa3a61e61d6e37242cb shape=89098210916068f0b7d9cac36ab74a84 roundtrip=same
 14 87be4151a2e030466992fad890361358 shape=66e6a6f028d33b95f0d74e3d40626c4a roundtrip=same
-15 71ea2bcd2361c2f3d93f8e427f2b8cac shape=7aacebd64e998665626a9a848d66ab5f roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : no string parameter", _)
-16 905fce58915a90cd7db3dec4ec99f1e7 shape=8e83615d4b75ae6da24a8376f6d9cf7e roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : no string parameter", _)
+15 71ea2bcd2361c2f3d93f8e427f2b8cac shape=7aacebd64e998665626a9a848d66ab5f roundtrip=same
+16 905fce58915a90cd7db3dec4ec99f1e7 shape=8e83615d4b75ae6da24a8376f6d9cf7e roundtrip=same
 17 3478f54d59edddab152d10b16d40137c shape=b9557b4cbf9985f7371e8625993ae1bd roundtrip=same fv=[]
 18 bd1c835aa80d35a7e99eed44b7745f1f shape=42e60585cba704d656fd4adc744ba9c4 roundtrip=same fv=[]
 19 b0bbf53046dfdefd859ef6b649c817cc shape=291ee46f77d5fcc1481586305369d4b3 roundtrip=same fv=[]
@@ -299,7 +299,7 @@
 60 8d99d086680818d0969827f7998c6f75 shape=779107a717402f6b36aeda931db03c19 roundtrip=same fv=[]
 61 ed69b94cfb0e19bd693fb98c55edf2bb shape=4790c8d08527532a9cf945335a1232b6 roundtrip=same fv=[trim,-,succ,sub,lowercase,<,length,colon,index,input_line]
 62 029fa423d7b88ee17916ab9db16d4401 shape=9e9b7e50552799fc2f6629c0f1108dcd roundtrip=same fv=[read_header,eflush,eprintf,val,debug_http,header_line]
-63 65a21929695ea6c48a5c299401850710 shape=be97c44f17a51968b5c4e8687b7254ba roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_type : bad arity", _)
+63 65a21929695ea6c48a5c299401850710 shape=be97c44f17a51968b5c4e8687b7254ba roundtrip=same
 64 c3011f4f9f68c6ca19491af8a39005d0 shape=310c0f3ddbe212359781f4bf89922ebc roundtrip=same fv=[succ,find_colon,colon,raise,=]
 65 4bcccfaf5292e5f4b9955840776d9013 shape=8c0edb8d06a4f7619aa7cbdfbd09c73b roundtrip=same fv=[trim,succ,-,sub,lowercase,find_colon,index_from]
 66 e10d52fc82024e09e5d15181d92a1198 shape=ecfef2491557d5c99c860ef9accc0187 roundtrip=same fv=[eflush,eprintf,val,debug_http,string_header_line]
@@ -307,7 +307,7 @@
 68 162d4560b343c7eaf8b206da39247ba7 shape=56591e86642e366ccce1fbe7b1e8ad7e roundtrip=same fv=[parse_int,parse_args]
 69 2f82f8e628d04af2be3509b841bf193e shape=67293d5e738019a40c8335dd45dfd4cd roundtrip=same fv=[parse_args]
 70 4c0fb22beb6f56a002b98980e25a1f4e shape=f76769e84c60140362fa41cb6cd9f027 roundtrip=same fv=[parse_int,lowercase,parse_args]
-71 392c4a16e20c644b3fa80577c62d6870 shape=0dad9e9633a840f95dc31e3130f6ed03 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_type : bad arity", _)
+71 392c4a16e20c644b3fa80577c62d6870 shape=0dad9e9633a840f95dc31e3130f6ed03 roundtrip=same
 72 b353bfd69a4d93673e88e6e914afe7bb shape=779107a717402f6b36aeda931db03c19 roundtrip=same fv=[]
 73 b26c97da46e17eddaf0f5e77e4cee517 shape=682913dfecd031d9bc61fc19cb3e86c7 roundtrip=same fv=[parse_int,contents,add_char,colon,=,succ,<>,create,length]
 74 679d9d29f4599d80e05bd96301892384 shape=bc3ab42348fa1f10a5215653eeba7dd6 roundtrip=same fv=[eflush,escaped,eprintf,val,debug_http,-,succ,decode_hex,sub,<,length,index,trim]
@@ -333,4 +333,4 @@
 94 bb660a34f1f08a5c044d45367fddf8c2 shape=271d1245cbdfd2f0a0317c7e14b6fa6c roundtrip=same fv=[string_of_inet_addr,getsockname]
 == mllib_remote_lazy_queue.ml
 0 d1652591d6f3491f398812b5bd5b9894 shape=30806a6623a1d1ff1831d687aa9ce35d roundtrip=same
-1 e49c61d7af96213717bf5650959a72c8 shape=f09bc2c721380fcf1ddd4dfe4194991b roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_str : no string parameter", _)
+1 e49c61d7af96213717bf5650959a72c8 shape=f09bc2c721380fcf1ddd4dfe4194991b roundtrip=same

@@ -989,13 +989,18 @@ let string_of_bterm base term =
 (*
  * MetaTerms.
  *)
+(*
+ * --> and <--> associate to the right, so a compound left operand (and a
+ * compound labelled term) is parenthesised; without the parentheses
+ * (A --> B) --> C and A --> (B --> C) printed alike.
+ *)
 let rec format_mterm base buf = function
    MetaTheorem t ->
       format_term base buf t
  | MetaImplies (a, b) ->
       format_szone buf;
       format_pushm buf 0;
-      format_mterm base buf a;
+      format_mterm_operand base buf a;
       format_string buf " -->";
       format_hspace buf;
       format_mterm base buf b;
@@ -1006,7 +1011,7 @@ let rec format_mterm base buf = function
       format_pushm buf 0;
       format_term base buf v;
       format_string buf " : ";
-      format_mterm base buf a;
+      format_mterm_operand base buf a;
       format_string buf " -->";
       format_hspace buf;
       format_mterm base buf b;
@@ -1015,7 +1020,7 @@ let rec format_mterm base buf = function
  | MetaIff (a, b) ->
       format_szone buf;
       format_pushm buf 0;
-      format_mterm base buf a;
+      format_mterm_operand base buf a;
       format_string buf " <-->";
       format_hspace buf;
       format_mterm base buf b;
@@ -1026,9 +1031,17 @@ let rec format_mterm base buf = function
       format_pushm buf 0;
       format_string buf ( " [\"" ^ l ^ "\"]" );
       format_hspace buf;
-      format_mterm base buf t;
+      format_mterm_operand base buf t;
       format_popm buf;
       format_ezone buf
+
+and format_mterm_operand base buf = function
+   MetaImplies _ | MetaFunction _ | MetaIff _ as t ->
+      format_string buf "(";
+      format_mterm base buf t;
+      format_string buf ")"
+ | MetaTheorem _ | MetaLabeled _ as t ->
+      format_mterm base buf t
 
 let print_mterm_fp base out mterm =
    let buf = new_buffer () in

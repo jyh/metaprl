@@ -121,12 +121,12 @@ A <--> B
 == MetaLabeled
  ["lab"] A
 == (A --> B) --> C
-A --> B --> C
+(A --> B) --> C
 == A --> (B --> C)
 A --> B --> C
 == (A <--> B) --> C
-A <--> B --> C
+(A <--> B) --> C
 == A <--> (B --> C)
 A <--> B --> C
 == nested
- ["h"] sequent [Perv!xnil] { A >- B } --> 'g<|!|> : A --> B <--> C
+ ["h"] sequent [Perv!xnil] { A >- B } --> ('g<|!|> : A --> B) <--> C

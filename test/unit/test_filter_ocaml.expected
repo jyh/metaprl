@@ -157,6 +157,22 @@ same      class c : M.ct = object  end
 same      class c = M.d
 same      let x = M.N.x
 same      let r = {M.N.a = 1}
+same      let f = function lazy x -> x
+same      type 'a t = < m : 'a >  as 'a
+same      type t = M.t = A | B
+same      type t = [ | u | `A ]
+same      module type T = F(X).S
+same      module type T = (module type of M)
+same      module M = N.P
+same      class d = c 1
+same      class c : M.N.ct = object  end
+same      type t = int M.t list
+same      let f = function A x | B x -> x
+same      let f = function x when x > 0 -> 1 | y when y < 0 -> 2 | _ -> 0
+same      type t = [> `A | `B of int ]
+FormatError: str_item_of_term.Filter_ocaml.dest_type : bad arity
+RAISES    type t = [< `A | `B > `A ]
+       ->  FormatError Filter_ocaml.dest_type : bad arity
 same      let o = new c
 same      let o = (new M.c) 1
 same      class c = object val x = 1 method m = {< x = 2 >} end
@@ -178,3 +194,6 @@ same      module type S = sig class c : M.ct end
 same      val f : ?x:int -> y:int -> unit
 DIFFERS   type t = private A | B
        ->  type t = A | B
+same      include T
+same      module type S = sig include T with type t = int end
+same      class type ct = object inherit d method m : int end

@@ -66,7 +66,7 @@ let () =
       "let a = x.contents <- 2;;"; "let s = let open List in length [];;";
       "type t = int;;"; "type t = A;;"; "type t = A | B of int * string;;"; "type 'a t = 'a list;;";
       "type t = { a : int; mutable b : string };;"; "type t = [ `A | `B of int ];;"; "type t = int -> string;;";
-      "type t = (int * string) option;;"; "type ('a, 'b) t = 'a * 'b;;"; "type +'a t = 'a;;";
+      "type t = (int * string) option;;"; "type ('a, 'b) t = 'a * 'b;;"; "type +'a t = 'a;;"; "type _ t = A : int t | B : 'a -> 'a t;;";
       "exception E;;"; "exception F of int;;"; "external f : int -> int = \"c_f\";;";
       "module M = struct let x = 1 end;;"; "module M = F (G);;"; "module F (X : S) = struct end;;";
       "module type S = sig val x : int end;;"; "open List;;"; "include M;;";

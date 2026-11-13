@@ -564,8 +564,9 @@ struct
       let s, b1, b2 = three_subterms t in
       let b1 = dest_bool b1 in
       let b2 = dest_bool b2 in
-         (* camlp5 8 writes variance as "", "+" or "-"; camlp5 7 had an option bool *)
-         Ploc.VaVal (Some (dest_string s)), Ploc.VaVal (if b1 then (if b2 then "+" else "-") else "")
+         (* camlp5 8 writes variance as "", "+" or "-"; camlp5 7 had an option bool.
+          * The name is an option (mk_sbb writes it with mk_opt; None is "_"). *)
+         Ploc.VaVal (dest_opt dest_string s), Ploc.VaVal (if b1 then (if b2 then "+" else "-") else "")
 
    let dest_string_opt_bool_opt t =
       let s, b = two_subterms t in
@@ -1731,15 +1732,17 @@ struct
          in add_type "type_record" dest_record_type (* XXX , add_type "type_pvt_record" dest_pvt_record_type *)
       and type_list_op (* XXX , type_pvt_list_op *) =
          let dest_stl t =
-            let l, s, t = dest_loc_string_term "dest_stl" t in
-               l, s, List.map dest_type (dest_olist t)
+            (* mk_stl writes the arguments and the result type (an option) *)
+            let l, s = dest_loc_string "dest_stl" t in
+            let tl, ot = two_subterms t in
+               l, s, List.map dest_type (dest_olist tl), dest_opt dest_type ot
          in let dest_list_type t =
             let _loc = dest_loc "dest_list_type" t in
             let stll = dest_olist (one_subterm "dest_list_type" t) in
             let stll = List.map (fun t ->
-               let l, s, tl = dest_stl t in
+               let l, s, tl, ot = dest_stl t in
                (* camlp5 8: (loc, name, existentials, args, result, attributes) *)
-               l, Ploc.VaVal s, Ploc.VaVal [], Ploc.VaVal tl, Ploc.VaVal None, Ploc.VaVal []) stll
+               l, Ploc.VaVal s, Ploc.VaVal [], Ploc.VaVal tl, Ploc.VaVal ot, Ploc.VaVal []) stll
             in
                MLast.TySum (_loc, Ploc.VaVal stll)
 (* XXX

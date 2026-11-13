@@ -18,25 +18,16 @@ RAISES    let o = object method m = 1 end
 same      let a = x.contents <- 2
 same      let s = let open List in length []
 same      type t = int
-FormatError: str_item_of_term.Filter_ocaml.dest_type : bad arity
-RAISES    type t = A
-       ->  FormatError Filter_ocaml.dest_type : bad arity
-FormatError: str_item_of_term.Filter_ocaml.dest_type : bad arity
-RAISES    type t = A | B of int * string
-       ->  FormatError Filter_ocaml.dest_type : bad arity
-FormatError: str_item_of_term.Filter_ocaml.dest_str : no string parameter
-RAISES    type 'a t = 'a list
-       ->  FormatError Filter_ocaml.dest_str : no string parameter
+same      type t = A
+same      type t = A | B of int * string
+same      type 'a t = 'a list
 same      type t = { a : int; mutable b : string }
 same      type t = [ `A | `B of int ]
 same      type t = int -> string
 same      type t = (int * string) option
-FormatError: str_item_of_term.Filter_ocaml.dest_str : no string parameter
-RAISES    type ('a, 'b) t = 'a * 'b
-       ->  FormatError Filter_ocaml.dest_str : no string parameter
-FormatError: str_item_of_term.Filter_ocaml.dest_str : no string parameter
-RAISES    type +'a t = 'a
-       ->  FormatError Filter_ocaml.dest_str : no string parameter
+same      type ('a, 'b) t = 'a * 'b
+same      type +'a t = 'a
+same      type _ t = A : int t | B : 'a -> 'a t
 same      exception E
 same      exception F of int
 FormatError: str_item_of_term.Filter_ocaml.dest_str : bad arity
@@ -53,9 +44,7 @@ RAISES    class c = object val x = 1 method m = x end
        ->  FormatError Filter_ocaml.dest_str : not a list
 same      val x : int
 same      type t
-FormatError: sig_item_of_term.Filter_ocaml.dest_sig : no string parameter
-RAISES    type 'a t = A of 'a
-       ->  FormatError Filter_ocaml.dest_sig : no string parameter
+same      type 'a t = A of 'a
 same      exception E of string
 same      module M : sig val x : int end
 same      module type S = sig type t end

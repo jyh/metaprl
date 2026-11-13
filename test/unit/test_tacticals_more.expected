@@ -35,7 +35,7 @@ seqOnSameConclT [idT; idT; a]            left [main]  log [a@main:>-C]
 then_OnSameConclT cut a                  left [assertion main]  log [a@main:>-C]
 == hypotheses
 onAnyHypT (works on 2)                   left [main]  log [h3; h2]
-onAnyHypT (works on none)                left [refused (failWithT)]  log [h3; h2; h1]
+onAnyHypT (works on none)                left [main]  log [h3; h2; h1]
 onSomeHypT (works on none)               left [refused (failWithT)]  log [h3; h2; h1]
 onAnyHypT (no hypotheses)                left [main]  log []
 onAllMClausesOfAssumT 1                  left [main]  log [c1.2@:C; c1.1@:C; c1.0@:C]

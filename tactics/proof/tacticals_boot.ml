@@ -739,9 +739,14 @@ struct
       let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent_arg p).sequent_hyps in
          onAllT failT prefix_orelseT tac (Sequent.hyp_count p) (List.rev hyps))
 
+   (*
+    * Like onSomeHypT, but idT when no hypothesis works.  onAllT applies
+    * tac alone to the last hypothesis, so its base is reached only when
+    * there are no hypotheses: the tryT gives the idT.
+    *)
    let onAnyHypT tac = funT (fun p ->
       let hyps = Term.SeqHyp.to_list (Sequent.explode_sequent_arg p).sequent_hyps in
-         onAllT idT prefix_orelseT tac (Sequent.hyp_count p) (List.rev hyps))
+         tryT (onAllT idT prefix_orelseT tac (Sequent.hyp_count p) (List.rev hyps)))
 
    (************************************************************************
     * ARGUMENTS                                                            *

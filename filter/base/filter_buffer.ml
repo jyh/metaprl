@@ -63,26 +63,26 @@ let clear buf =
  * and increase the buffer size if necessary.
  *)
 let putc buf c =
-   let { buf_str = str; buf_index = i } = buf in
-      if i = Bytes.length str then
+   let i = buf.buf_index in
+      if i = Bytes.length buf.buf_str then
          (* Grow the buffer *)
-         buf.buf_str <- Bytes.cat str (Lm_string_util.create "Buffer.putc" i);
+         buf.buf_str <- Bytes.cat buf.buf_str (Lm_string_util.create "Buffer.putc" i);
 
-      (* Insert the char *)
-      Bytes.set str i c;
+      (* Insert the char, into the grown buffer if it grew *)
+      Bytes.set buf.buf_str i c;
       buf.buf_index <- i + 1
 
 (*
  * Place a string in the buffer.
  *)
 let puts buf s =
-   let { buf_str = str; buf_index = i } = buf in
+   let i = buf.buf_index in
    let len = String.length s in
-      if i + len > Bytes.length str then
-         buf.buf_str <- Bytes.cat str (Lm_string_util.create "Buffer.puts" (i + len));
+      if i + len > Bytes.length buf.buf_str then
+         buf.buf_str <- Bytes.cat buf.buf_str (Lm_string_util.create "Buffer.puts" (i + len));
 
-      (* Add the string *)
-      Bytes.blit_string s 0 str i len;
+      (* Add the string, into the grown buffer if it grew *)
+      Bytes.blit_string s 0 buf.buf_str i len;
       buf.buf_index <- i + len
 
 (*

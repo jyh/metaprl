@@ -146,3 +146,22 @@ let () =
    showx "i | j" (xparam (x_max (x_id "i") (x_id "j")));
    showx "i' | 2" (xparam (x_max (x_succ (x_id "i")) (x_int 2)));
    showx "i | 3" (xparam (x_max (x_id "i") (x_int 3)))
+
+(*
+ * Where a syntax error inside a quotation is reported.  The quotation
+ * <<text>> is at characters 230-250 of f.ml (line 10, which starts at
+ * 200), so its text starts at 232.  Before the fix to Filter_util's
+ * adjust_pos, an error's end was counted from the quotation's END (252
+ * plus the error's end in the text), past the quotation.
+ *)
+let () =
+   print_endline "a syntax error inside <<...>> at f.ml 230-250:";
+   Grammar.error_verbose := false;
+   let loc = Ploc.make_loc "f.ml" 10 200 (230, 250) "" in
+      List.iter (fun s ->
+            match TG.parse_quotation loc "test" "" s with
+               _ -> Printf.printf "  %-14S parsed\n" s
+             | exception Ploc.Exc (l, _) ->
+                  Printf.printf "  %-14S error at line %d [%d, %d)\n" s (Ploc.line_nb l) (Ploc.first_pos l) (Ploc.last_pos l)
+             | exception e -> Printf.printf "  %-14S %s\n" s (exn_string e))
+         [ "foo{a; }"; "foo{a}"; "foo[x:n] )"; "foo{\n  a; }" ]

@@ -114,6 +114,7 @@ let rec format_exn db buf exn =
          format_popm buf
     | BadCommand s ->
          format_string buf "Bad command:";
+         format_space buf;
          format_string buf s
     | EmptyModulePath s ->
          format_string buf "Empty module path:";
@@ -124,7 +125,7 @@ let rec format_exn db buf exn =
          format_string buf s;
          format_string buf " has a wrong magic number.";
          format_newline buf;
-         format_string buf "! This means that is is either not a MetaPRL file";
+         format_string buf "! This means that it is either not a MetaPRL file";
          format_newline buf;
          format_string buf "! or is not compatible with the version of the MetaPRL you are trying to use.";
          format_newline buf;
@@ -139,7 +140,7 @@ let rec format_exn db buf exn =
          format_string buf " has an unsupported version.";
          format_newline buf;
          format_string buf "! MetaPRL currently supports version(s) ";
-         List.iter (fun v -> format_version buf v; format_string buf ", ") versions;
+         List.iteri (fun i v -> if i > 0 then format_string buf ", "; format_version buf v) versions;
          format_newline buf;
          format_string buf "! but the file has version ";
          format_version buf version;

@@ -250,7 +250,6 @@ let find_sub_module summary path =
             [] ->
                raise (Failure ("Filter_summary.find_sub_module: can't find " ^ (string_of_path path)))
           | ((Module (n, s)), _)::t ->
-               eprintf "Filter_summary.find_sub_module: checking %s = %s%t" n name eflush;
                if n = name then
                   walk s rest
                else

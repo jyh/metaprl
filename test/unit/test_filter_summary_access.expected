@@ -102,15 +102,9 @@ get_resources                      res2=r2; res1=r1
 get_infixes                        Infix +++; Suffix !!
 get_proofs                         shared=pf-shared; shared=pf-shared; rule=pf-rule; crw=pf-crw; rw=pf-rw
 find_sub_module []                 the module itself
-Filter_summary.find_sub_module: checking Sub = Sub
 find_sub_module [Sub]              Module Inner; Rewrite inner i
-Filter_summary.find_sub_module: checking Sub = Sub
-Filter_summary.find_sub_module: checking Inner = Inner
 find_sub_module [Sub; Inner]       Rewrite deep d
-Filter_summary.find_sub_module: checking Sub = Absent
 find_sub_module [Absent]           raises Failure("Filter_summary.find_sub_module: can't find Absent")
-Filter_summary.find_sub_module: checking Sub = Sub
-Filter_summary.find_sub_module: checking Inner = Absent
 find_sub_module [Sub; Absent]      raises Failure("Filter_summary.find_sub_module: can't find Sub/Absent")
 set_command Rewrite rw             2: Rewrite rw r -> Rewrite rw NEW
 set_command Rule shared            17: Rule shared s2 -> Rule shared NEW

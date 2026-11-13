@@ -14,7 +14,10 @@
  * reach none of format_exn's named cases, print_exn's handler,
  * stderr_exn or handle_exn's handler.
  *
- * The expected file is the output of the code.
+ * The expected file is the output of the code.  Before the fix that
+ * followed this test, BadCommand printed "Bad command:foo" (no space),
+ * Bad_magic said "that is is either", and Bad_version put ", " after
+ * the last supported version.
  *)
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term

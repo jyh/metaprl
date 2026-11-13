@@ -45,6 +45,24 @@ same      class c = object val x = 1 method m = x end
 same      let o = object (self) method m = 1 method n = self#m end
 same      class c (x : int) = object method m = x end
 same      class type ct = object method m : int end
+FormatError: str_item_of_term.Filter_ocaml.dest_expr : not a list
+RAISES    let o = new c
+       ->  FormatError Filter_ocaml.dest_expr : not a list
+FormatError: str_item_of_term.Filter_ocaml.dest_expr : not a list
+RAISES    let o = (new M.c) 1
+       ->  FormatError Filter_ocaml.dest_expr : not a list
+FormatError: str_item_of_term.Filter_ocaml.dest_expr : not a list
+RAISES    class c = object val x = 1 method m = {< x = 2 >} end
+       ->  FormatError Filter_ocaml.dest_expr : not a list
+FormatError: str_item_of_term.Filter_ocaml.dest_expr : bad arity
+RAISES    class c = object method m = {< >} end
+       ->  FormatError Filter_ocaml.dest_expr : bad arity
+FormatError: str_item_of_term.Filter_ocaml.dest_ce : bad arity
+RAISES    class c = let y = 1 in object method m = y end
+       ->  FormatError Filter_ocaml.dest_ce : bad arity
+FormatError: str_item_of_term.Filter_ocaml.dest_ce : bad arity
+RAISES    class c = let rec f = fun x -> x in object method m = f 1 end
+       ->  FormatError Filter_ocaml.dest_ce : bad arity
 same      val x : int
 same      type t
 same      type 'a t = A of 'a

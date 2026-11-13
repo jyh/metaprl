@@ -21,9 +21,9 @@
  * get_resources and parents list the latest first; rules, rewrites and
  * conditional rewrites share one name space in set_command, so a Rewrite
  * replaces a Rule of its name; set_command raises Not_found when no item
- * has the new item's name, and always for a kind with no name (Id);
- * find_sub_module prints a debug line on stderr for every module it
- * passes.
+ * has the new item's name, and always for a kind with no name (Id).
+ * Fixed after this test was written: find_sub_module printed a debug
+ * line on stderr for every module it passed.
  *)
 
 open Filter_type

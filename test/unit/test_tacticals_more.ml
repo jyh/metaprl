@@ -12,11 +12,6 @@
    expected file is the output of the code as written.
 
    Pinned as found:
-   - labProgressT is inverted.  Its comment says it notes changes of label
-     as well as changes in the sequent, as progressT does for the sequent;
-     but with one subgoal it applies idT when goal and label are UNCHANGED
-     and fails when either changed: it accepts no progress and refuses
-     progress.
    - onAllMClausesOfAssumT tac n takes its hypothesis count from assumption
      n (Sequent.assum_hyp_count, 1-based) but its hypothesis list from
      List.nth (0-based), assumption n+1: on assumption 1 of two it visits
@@ -28,7 +23,10 @@
    - progressT ignores labels, so whileT stops after one step of a tactic
      that only relabels.
    - the conclusion tacticals (seqOnSameConclT, prefix_then_OnSameConclT)
-     raise on a goal that is not a sequent. *)
+     raise on a goal that is not a sequent.
+   Fixed after this test was written: labProgressT was inverted (with one
+   subgoal it applied idT when goal and label were unchanged and failed
+   when either changed). *)
 open Refiner.Refiner
 open Refiner.Refiner.TermType
 open Tactic_boot

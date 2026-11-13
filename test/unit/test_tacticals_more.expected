@@ -1,8 +1,8 @@
 == progress
 progressT idT                            left [refused (progressT)]  log []
-labProgressT idT                         left [main]  log []
+labProgressT idT                         left [refused (failWithT)]  log []
 progressT (relabel)                      left [refused (progressT)]  log []
-labProgressT (relabel)                   left [refused (failWithT)]  log []
+labProgressT (relabel)                   left [wf]  log []
 progressT (cut: two subgoals)            left [assertion main]  log []
 labProgressT (cut: two subgoals)         left [assertion main]  log []
 progressT (fail)                         left [refused (failWithT)]  log []

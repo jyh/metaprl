@@ -539,9 +539,9 @@ struct
                   let t' = Sequent.goal p'' in
                   let lab' = Sequent.label p'' in
                      [(if alpha_equal t t' && lab = lab' then
-                          idT
+                          failWithT "labProgressT"
                        else
-                          failWithT "progressT")]
+                          idT)]
              | _ ->
                   List.map (fun _ -> idT) p'
          in

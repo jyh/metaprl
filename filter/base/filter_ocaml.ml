@@ -1927,7 +1927,8 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       and sig_external_op =
          let dest_external_sig t =
             let _loc, s = dest_loc_string "dest_external_sig" t in
-               match dest_olist (one_subterm "dest_external_sig" t) with
+               (* mk writes the type and each primitive name as subterms of their own *)
+               match subterms_of_term t with
                   t :: sl ->
                      <:sig_item< external $s$ : $dest_type t$ = $list: List.map dest_string sl$ >>
                 | _ ->
@@ -2086,7 +2087,8 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       and str_external_op =
          let dest_external_str t =
             let _loc, s = dest_loc_string "dest_external_str" t in
-               match dest_olist (one_subterm "dest_external_str" t) with
+               (* mk writes the type and each primitive name as subterms of their own *)
+               match subterms_of_term t with
                   t :: sl ->
                      <:str_item< external $s$ : $dest_type t$ = $list: List.map dest_string sl$ >>
                 | _ ->

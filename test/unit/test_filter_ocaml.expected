@@ -30,9 +30,7 @@ same      type +'a t = 'a
 same      type _ t = A : int t | B : 'a -> 'a t
 same      exception E
 same      exception F of int
-FormatError: str_item_of_term.Filter_ocaml.dest_str : bad arity
-RAISES    external f : int -> int = "c_f"
-       ->  FormatError Filter_ocaml.dest_str : bad arity
+same      external f : int -> int = "c_f"
 same      module M = struct let x = 1 end
 same      module M = F (G)
 same      module F (X : S) = struct  end
@@ -49,6 +47,4 @@ same      exception E of string
 same      module M : sig val x : int end
 same      module type S = sig type t end
 same      open M
-FormatError: sig_item_of_term.Filter_ocaml.dest_sig : bad arity
-RAISES    external f : int -> int = "c_f"
-       ->  FormatError Filter_ocaml.dest_sig : bad arity
+same      external f : int -> int = "c_f"

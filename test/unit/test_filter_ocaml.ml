@@ -64,6 +64,7 @@ let () =
       "let e = try raise Not_found with Not_found -> 0 | _ -> 1;;";
       "let w = while true do () done; for i = 1 to 3 do print_int i done;;";
       "let v = `A 3;;"; "let q = M.x + M.N.y;;"; "let o = object method m = 1 end;;";
+      "let pa = function `A -> 0 | _ -> 1;;"; "let pv = function `A -> 0 | `B n -> n;;"; "let pw = function `C (x, y) -> x + y;;"; "type t = < m : int; n : string >;;"; "type t = < m : int; .. >;;"; "let coerce = ((object method m = 1 end) :> < m : int >);;";
       "let a = x.contents <- 2;;"; "let s = let open List in length [];;";
       "let f () = let a = 1 and b = 2 in a + b;;"; "let f () = let a, b = 1, 2 and c = 3 and d = 4 in a + b + c + d;;";
       "type t = int;;"; "type t = A;;"; "type t = A | B of int * string;;"; "type 'a t = 'a list;;";

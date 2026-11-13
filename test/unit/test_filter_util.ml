@@ -14,7 +14,10 @@
  * string_of_path or output_path, nor adjust_pos for a location past the
  * quotation's first line.
  *
- * The expected file is the output of the code.
+ * The expected file is the output of the code.  Before the fix that
+ * followed this test, adjust_pos counted the end from the quotation's
+ * END, so [3, 5) in a quotation at [230, 250) gave [233, 255), past the
+ * quotation; test_term_grammar_params shows the same on a syntax error.
  *)
 open Refiner.Refiner.TermType
 open Refiner.Refiner.Term

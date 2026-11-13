@@ -64,6 +64,7 @@ let () =
       "let w = while true do () done; for i = 1 to 3 do print_int i done;;";
       "let v = `A 3;;"; "let q = M.x + M.N.y;;"; "let o = object method m = 1 end;;";
       "let a = x.contents <- 2;;"; "let s = let open List in length [];;";
+      "let f () = let a = 1 and b = 2 in a + b;;"; "let f () = let a, b = 1, 2 and c = 3 and d = 4 in a + b + c + d;;";
       "type t = int;;"; "type t = A;;"; "type t = A | B of int * string;;"; "type 'a t = 'a list;;";
       "type t = { a : int; mutable b : string };;"; "type t = [ `A | `B of int ];;"; "type t = int -> string;;";
       "type t = (int * string) option;;"; "type ('a, 'b) t = 'a * 'b;;"; "type +'a t = 'a;;"; "type _ t = A : int t | B : 'a -> 'a t;;";

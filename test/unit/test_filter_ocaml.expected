@@ -45,6 +45,12 @@ same      class c = object val x = 1 method m = x end
 same      let o = object (self) method m = 1 method n = self#m end
 same      class c (x : int) = object method m = x end
 same      class type ct = object method m : int end
+same      let o = new c
+same      let o = (new M.c) 1
+same      class c = object val x = 1 method m = {< x = 2 >} end
+same      class c = object method m = {< >} end
+same      class c = let y = 1 in object method m = y end
+same      class c = let rec f = fun x -> x in object method m = f 1 end
 same      val x : int
 same      type t
 same      type 'a t = A of 'a

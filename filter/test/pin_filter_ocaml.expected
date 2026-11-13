@@ -38,7 +38,7 @@
 36 65eede8ac7631fb71bb790d85370633a shape=92f0d92fb1965551ec5af4a9e7397597 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_type : not a list", _) fv=[ERROR Failure("free_vars: expression not recognized")]
 37 95c608f45496eb3c80fd9f30859d9b31 shape=ead568ff8fd13cbeec6659db1774fe64 roundtrip=same
 38 03f1967dfda6bd4f0c5a480ec46f076f shape=93f3bd270627cb4c0c91dd42629252e9 roundtrip=same
-39 a166e76321ba6ea5dd19dd8315bfb69d shape=09a8c667c09fd73323a06ef49194a6aa roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_expr : not a list", _) fv=[]
+39 a166e76321ba6ea5dd19dd8315bfb69d shape=09a8c667c09fd73323a06ef49194a6aa roundtrip=same fv=[]
 40 486b7688ff9b810c6c937a5ee046b0ce shape=188a2fe0b71fdf8af40026cfc21d8337 roundtrip=same fv=[o]
 41 0cf44dedd26fcb94e2e7b724e2560e99 shape=34bd88feca5f67102a05b190e44b830f roundtrip=same fv=[ERROR Failure("free_vars: expression not recognized")]
 42 0d3af1965930ca8c52ef6ed76c0bb2b2 shape=32af7fcf661fb9d5613126ab30411299 roundtrip=same fv=[ERROR Failure("patt_bvars: pattern not recognized")]
@@ -172,18 +172,18 @@
 16 f027beb961368a767aed524673d70e2a shape=2a17a08f0920451e7291de45daf4e278 roundtrip=same
 17 d32469a553524a75514eb35f03406263 shape=084d3ff5ae68f5096ccd9996cf67f81b roundtrip=same fv=[token,make_param]
 18 48966613546bc2f75136000440094a33 shape=5d91ea9443d973003f1547bb582f8648 roundtrip=same fv=[token,make_param]
-19 ee657f49a6e1826dcaf28eda80ea7a12 shape=31b5af8f6cdab0706e13b5042eb76394 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_expr : not a list", _) fv=[error,term_of_unbound_term,term_to_stamp,ftype,id,op_params,opname,op_name,inline,istamp,term_terms,op,term_op,t]
+19 ee657f49a6e1826dcaf28eda80ea7a12 shape=31b5af8f6cdab0706e13b5042eb76394 roundtrip=same fv=[error,term_of_unbound_term,term_to_stamp,ftype,id,op_params,opname,op_name,inline,istamp,term_terms,op,term_op,t]
 20 6f3d13db94539f730190e57d048aabaf shape=2f2ee5b242a461f6e9b5b34c98a12929 roundtrip=same
 21 2a145a2bc5ccbe1f068822f41e0736a4 shape=b8329a676e9b17c0630e778e3536ef42 roundtrip=same fv=[token,make_param,mk_nuprl5_op]
 22 e7ad2cfc5b48370bd8e59a81db0b43cc shape=1b9eded09bba1d211873ad075fd50c4c roundtrip=same fv=[error,term_of_unbound_term,isubstance_op,opeq,dest_term]
 23 bf1fe17dffe029fa9382dd9a7c9916b3 shape=c3b9aaa372f090e067e51f9915558212 roundtrip=same
 24 d327dd66c2e6c8b137cf0e498a876231 shape=995c295a5233be633d939af3140e461a roundtrip=same
-25 b8fac20d6876c6e3064d8880605575ca shape=bfd9071af5b551c5de2137c7e2836498 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_expr : not a list", _) fv=[data,stype,def]
+25 b8fac20d6876c6e3064d8880605575ca shape=bfd9071af5b551c5de2137c7e2836498 roundtrip=same fv=[data,stype,def]
 26 62cfddea991bd5339e93fc4af92c5a46 shape=1bbd1f6ac63d84776f4bd1802efd8b8e roundtrip=same
 27 60a0ca20aca81eb1cacc05c172b05b1d shape=23b70daf2b8fffaed614085cd30442b3 roundtrip=same
 28 0f14b9c09961605fe30ee09f210e8700 shape=f1b4c009f0915ebf3a690858b05d4908 roundtrip=same
 29 a6a98251319db78545f51133df40bff2 shape=1393e7b2376a60d8ed8211ca4dfbc124 roundtrip=same
-30 5a3dd1d2328708af217d81aac0a8c5f1 shape=48b597ed9958816cb7fdea272d1a4b33 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_expr : not a list", _)
+30 5a3dd1d2328708af217d81aac0a8c5f1 shape=48b597ed9958816cb7fdea272d1a4b33 roundtrip=same
 31 a0e7b1cff8ccf925401cd90e5bee8ef8 shape=c62b05f9db108331cf5516d3278b660f roundtrip=same fv=[token,make_param]
 32 254910872c059bf81fb91a29344af60d shape=55922e3d9750a63da7f7b907e4122682 roundtrip=same fv=[token,make_param]
 33 4b1c1ab0ed25c714d330ab903622d202 shape=678f4c8efbb7e40c16c843a23ae5be62 roundtrip=same fv=[token,make_param,mk_nuprl5_op]
@@ -192,13 +192,13 @@
 36 0b9a9e324c1543d43736021fac7f7837 shape=2f08a6e359c89edad6d895667330d9ca roundtrip=same fv=[hd,dest_param,nullp,not,dest_op,dest_term]
 37 77621569e3d0c785cd09e6dde087685a shape=71e46a789cda81f0f95cf4e4c6cda861 roundtrip=same fv=[error,dest_token_param,dest_op,dest_term]
 38 bcf453a5c6303f69e971bdaf209fefad shape=3c3f46511ada8c572ed07b9d7870a600 roundtrip=same
-39 f72f272193a71e757f1062bf661e64bb shape=bb71115f81944f589c563e0fcb851a20 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_ce : bad arity", _)
+39 f72f272193a71e757f1062bf661e64bb shape=bb71115f81944f589c563e0fcb851a20 roundtrip=same
 40 1292f57b63625aec50c00d0e37c2c804 shape=3c00256b1f26e2f4eb6289e391dbba58 roundtrip=same
 41 732534cda23a023122951ee4070830d3 shape=5f99ab3134551812f062ce107440adfc roundtrip=same fv=[not,mem,&,purposes_of_idescription_term,ivoid_term_p]
 42 322d12c739efb1fee9d34a09acf98f50 shape=9f42862a6a461636e22da4dac735b690 roundtrip=same fv=[token,make_param,mk_nuprl5_op]
 43 7077c781e90fdade9d09fda4098e3c18 shape=6bb1e34095d80111ea4f4589301961b1 roundtrip=same fv=[token,make_param]
 44 bfcf05e013f716e49c863d11db9b8bf1 shape=42a531c0fb4bd7d58f0e181fb1e68a68 roundtrip=same fv=[error,dest_obid_param,term_of_unbound_term,term_to_stamp,nuprl5_opname_p,idependency_param,parmeq,&,dest_op,dest_term]
-45 d1486de62dfe49b4e7df1a8047208817 shape=0adb7174723c90d6dabb70f5b2162052 roundtrip=ERROR Filter_ocaml.FormatError("Filter_ocaml.dest_expr : not a list", _) fv=[error,idir,datterm,data,dep,idata,idep,term_terms,op,term_op,idesc,idef]
+45 d1486de62dfe49b4e7df1a8047208817 shape=0adb7174723c90d6dabb70f5b2162052 roundtrip=same fv=[error,idir,datterm,data,dep,idata,idep,term_terms,op,term_op,idesc,idef]
 46 a2516c859301c91b64650d011ab8476a shape=07701c9a942b32a9e194ac3edb9a9903 roundtrip=same
 47 328124be0ce600830bf0f7d96d412c2e shape=d62a7bef63d29c46bdffa932d585bdaa roundtrip=same
 48 d13bba62d80bd5acd48e230905deffe8 shape=4ea2ac2499ac36612f29576db70e8f4f roundtrip=same fv=[make_oidtable]

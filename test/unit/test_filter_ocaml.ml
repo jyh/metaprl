@@ -73,6 +73,7 @@ let () =
       "module type S = sig val x : int end;;"; "open List;;"; "include M;;";
       "class c = object val x = 1 method m = x end;;"; "let o = object (self) method m = 1 method n = self#m end;;";
       "class c (x : int) = object method m = x end;;"; "class type ct = object method m : int end;;";
+      "let o = new c;;"; "let o = new M.c 1;;"; "class c = object val x = 1 method m = {< x = 2 >} end;;"; "class c = object method m = {< >} end;;"; "class c = let y = 1 in object method m = y end;;"; "class c = let rec f x = x in object method m = f 1 end;;";
    ];
    List.iter sg [
       "val x : int;;"; "type t;;"; "type 'a t = A of 'a;;"; "exception E of string;;";

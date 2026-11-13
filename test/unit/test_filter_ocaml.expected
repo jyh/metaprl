@@ -109,6 +109,38 @@ DIFFERS   open! List
        ->  open List
 same      module rec A : S = struct  end and B : T = struct  end
 same      let () = ()
+same      let f (g : x:int -> int) = g ~x:1
+same      type t = ?x:int -> unit -> int
+same      let f {a = x; b = b} = x
+RAISES    let f {M.a = x; _} = x
+       ->  Ploc.Exc(_, _)
+same      let f = function [| x; y |] -> x
+same      class virtual c = object val virtual x : int method virtual m : int end
+same      class type ct = object method virtual m : int end
+same      class type ct = object val mutable x : int method private m : int end
+same      module type T = (S with module M = N)
+same      module type T = (S with type t := int)
+same      module type T = (S with type 'a t = 'a list)
+same      let b = a.{1}
+same      let b = a.{1, 2}
+same      type t = M.t
+same      type t = int M.t
+same      type t = (int, string) M.N.t
+same      class c = object inherit [int] d end
+same      class c : [int] ct = object  end
+RAISES    let x = [%ext 1]
+       ->  Refine_error.MakeRefineError(TermType)(ParamType).RefineError("mk_expr", _)
+same      module M = F (struct  end)
+same      module type T = (functor (X : S) -> S with type t = X.t)
+same      let (x : int) = 1
+same      let f = function 'a'..'z' -> 1 | _ -> 0
+same      let f (x, y as p) = p
+same      let f = function Some (A | B) -> 1 | _ -> 0
+same      let f = function M.A x -> x
+same      type t = { mutable a : int; b : float }
+same      let x = -1 + -y
+same      let x = not (a && b || c)
+same      let s = ['x']
 same      let o = new c
 same      let o = (new M.c) 1
 same      class c = object val x = 1 method m = {< x = 2 >} end

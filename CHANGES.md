@@ -215,6 +215,19 @@ against libmojave 1.1.1 or later:
   `"xparam_string"`, so the `xparam_succ{p}` term built for `p'` was
   refused as "not a parameter". It now gives `i'` = `max(1, i+1)` and
   so on (#267; pinned by #266). No theory writes `p'` in that syntax.
+- `Filter_util.adjust_pos`, which places a location found in a quotation's
+  text in the file, counted the location's end from the quotation's end
+  instead of its start, so every such span ran past the quotation: a
+  syntax error at the `}` of `<<foo{a; }>>` at characters 230-250 was
+  reported at 239-260 instead of 239-240. It came in with the 2017 port
+  from `Lexing.position` to `Ploc.t` (#271; pinned by #270).
+- Three `Filter_exn` messages: `Bad command:` had no space before the
+  command, `Bad_magic` said "that is is either", and `Bad_version` put a
+  `, ` after the last supported version (#273; pinned by #272).
+- `Filter_buffer.putc` and `puts` grew the buffer and then wrote into the
+  old bytes, so any write past the first 32 bytes raised
+  `Invalid_argument`. Nothing in the tree uses the module (#275; pinned
+  by #274).
 
 ### Tests
 
@@ -769,14 +782,34 @@ against libmojave 1.1.1 or later:
     quotation text and `dest_xparam` on `base_grammar`'s terms (#266);
     `run.sh` gives a test linked with the filter `-I filter/filter` and
     `MP_ROOT` / `MPLIB`.
-- `test_filter_spell`: `Filter_spell`'s dictionary, each case in a child
+  - `test_filter_spell`: `Filter_spell`'s dictionary, each case in a child
     process with its own `MPLIB`: a first build, a load of an up-to-date
     `.dat`, a rebuild when a words file is newer, when the magic is wrong
     and when the table is unreadable, and no words files; `check`'s
-    capitalised, numeric and one-letter words, and `add`.
+    capitalised, numeric and one-letter words, and `add` (#269).
+  - `test_filter_util`: `Filter_util`'s locations (`adjust_pos` on a first
+    and a later line), `grammar_parse`'s restore of Plexing's counters,
+    `unzip_rewrite`, and opname and module-path printing (#270); a syntax
+    error inside a quotation, in `test_term_grammar_params` (#271).
+  - `test_filter_exn`: `Filter_exn.format_exn` on every exception it
+    names, and `print_exn`, `stderr_exn` and `handle_exn` (which exits 2)
+    in child processes, with and without `OCAMLRUNPARAM=b` (#272).
+  - `test_filter_buffer` and `test_filter_shape`: `Filter_buffer` below and
+    past its first 32 bytes; the shape classes' predicates, num form and
+    printing (#274).
+  - `test_filter_summary_check`: `check_implementation` on every interface
+    item it checks, each implemented, missing and differing, and the items
+    an interface passes on (#276).
 
 ### Known not to work
 
+- Nested modules: `Filter_summary_io.sub_info` looks a submodule up with
+  the full path from the file's root (`path @ [name]`) but on the current
+  module's own summary, so it searches for the file's own name first and
+  fails; `Filter_summary.find_sub_module` also prints a "checking" line
+  to stderr for every module it compares. Both are under
+  `filter_cache_fun`'s "BUG ... if we want nested modules", and no theory
+  has a nested module.
 - `Term_order.compare_params` on every kind of parameter
   (`test/unit/test_term_order_params.ml`), levels and operator parameters
   included: on 400 generated parameters it is a total order (0 exactly when

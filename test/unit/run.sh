@@ -52,22 +52,47 @@ fi
 # (filter/prlc), which no other test needs; every other test's link is as
 # it was.  Such a test also runs with MP_ROOT and MPLIB set to this tree:
 # the filter's Setup reads both when it is loaded (Term_grammar links it).
+# Such a test may also name, on its second line, objects that are in no
+# archive, only native ones (the filter executable's modules, camlp5's
+# printer):  "(* unit-native: filter/filter/filter_patt.cmx
+# camlp5/pr_o.cmx *)", on one line, each path from this tree's root or, for
+# camlp5/..., from camlp5's directory.  That test is linked with ocamlopt and
+# the .cmxa archives, and is SKIPPED (not failed) in a build that has no
+# .cmxa archives.
 # A test whose output is platform-specific (Setup's default editor is
 # notepad.exe on Win32) keeps a second file, test_*.expected.win32, used
 # when the compiler's os_type is Win32.
 os_type=$(ocamlfind ocamlc -config-var os_type 2>/dev/null)
+camlp5dir=$(ocamlfind query camlp5 2>/dev/null)
 for src in "$here"/test_*.ml; do
    name=$(basename "$src" .ml)
    extra=""
    runenv=""
+   tcomp=$comp; ta=$a; tclibs=$clibs; native=""
    if [ "$(head -n 1 "$src" | tr -d '\r')" = "(* unit-link: filter *)" ]; then
-      extra="-I $root/library -I $root/filter/base -I $root/filter/filter $root/library/library.$a $root/filter/prlc.$a"
+      line2=$(sed -n 2p "$src" | tr -d '\r')
+      case "$line2" in
+         "(* unit-native: "*" *)")
+            native=${line2#"(* unit-native: "}; native=${native%" *)"}
+            if [ ! -f "$root/filter/prlc.cmxa" ]; then
+               echo "SKIP $name: it links native objects and this build has no .cmxa archives"; continue
+            fi
+            tcomp="ocamlfind ocamlopt"; ta=cmxa
+            tclibs=$(printf '%s\n' "$clibs" | sed 's/-custom //') ;;
+      esac
+      extra="-I $root/library -I $root/filter/base -I $root/filter/filter $root/library/library.$ta $root/filter/prlc.$ta"
+      for o in $native; do
+         case "$o" in
+            camlp5/*) extra="$extra $camlp5dir/${o#camlp5/}" ;;
+            *) extra="$extra $root/$o" ;;
+         esac
+      done
       runenv="MP_ROOT=$root MPLIB=$root/lib"
    fi
    cp "$src" "$tmp/"
-   if ! (cd "$tmp" && $comp -package unix,threads.posix,camlp5 -thread -linkpkg -rectypes \
-           $includes "$root/libmojave/lm.$a" "$root/mllib/util.$a" "$root/refiner/refiner.$a" \
-           "$root/tactics/null/trefiner.$a" "$root/tactics/proof/prooflib.$a" $extra $clibs \
+   if ! (cd "$tmp" && $tcomp -package unix,threads.posix,camlp5 -thread -linkpkg -rectypes \
+           $includes "$root/libmojave/lm.$ta" "$root/mllib/util.$ta" "$root/refiner/refiner.$ta" \
+           "$root/tactics/null/trefiner.$ta" "$root/tactics/proof/prooflib.$ta" $extra $tclibs \
            "$name.ml" -o "$name") > "$tmp/$name.build" 2>&1; then
       echo "FAIL $name: does not build"; cat "$tmp/$name.build"; status=1; continue
    fi

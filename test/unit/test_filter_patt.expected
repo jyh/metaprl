@@ -1,0 +1,91 @@
+a variable
+  term:    'x
+  pattern: x
+no parameters, no subterms
+  term:    foo
+  pattern: Refiner.Refiner.TermType.MatchTerm (["foo"], [], [])
+the number parameter 3
+  term:    foo[3:n]
+  pattern: Refiner.Refiner.TermType.MatchTerm
+  (["foo"], [Term_sig.MatchNumber (_, Some 3)], [])
+string parameter
+  term:    foo["s\"q":s]
+  pattern: Refiner.Refiner.TermType.MatchTerm
+  (["foo"], [Term_sig.MatchString "s\"q"], [])
+meta parameters n s t sh op
+  term:    foo[n:n, s:s, t:t, sh:sh, o:op]
+  pattern: Refiner.Refiner.TermType.MatchTerm
+  (["foo"],
+   [Term_sig.MatchNumber (n, _); Term_sig.MatchString s;
+    Term_sig.MatchToken (t, _); Term_sig.MatchShape (sh, _);
+    Term_sig.MatchOperator (o, _)],
+   [])
+wildcard names: _ and __x, but not _x
+  term:    foo[_:n, __x:s, _x:t]
+  pattern: Refiner.Refiner.TermType.MatchTerm
+  (["foo"],
+   [Term_sig.MatchNumber (_, _); Term_sig.MatchString _;
+    Term_sig.MatchToken (_x, _)],
+   [])
+variable parameter
+  term:    foo[v:v]
+  pattern: Refiner.Refiner.TermType.MatchTerm (["foo"], [Term_sig.MatchVar v], [])
+token parameter a!b
+  term:    foo["a!b":t]
+  pattern: Refiner.Refiner.TermType.MatchTerm
+  (["foo"], [Term_sig.MatchToken (_, ["b"; "a"])], [])
+level parameter l
+  term:    foo['l:l]
+  pattern: Refiner.Refiner.TermType.MatchTerm (["foo"], [Term_sig.MatchLevel l], [])
+level l+1 (refused)
+  term:    foo['l':l]
+  refused: "term_patt: complex level expressions not supported"
+level max(1, l) (refused)
+  term:    foo[{1 | 'l}:l]
+  refused: "term_patt: complex level expressions not supported"
+quote parameter (refused)
+  term:    foo[@]
+  refused: "term_patt: quotes not supported"
+parameter list (refused)
+  term:    foo[[1:n]]
+  refused: "term_patt: parameter lists not supported"
+subterms: a, x.b, an xconcl
+  term:    foo{'a<||>; 'x, '_. 'b<||>; Perv!xconcl}
+  pattern: Refiner.Refiner.TermType.MatchTerm
+  (["foo"], [],
+   [{Term_sig.bvars = []; Term_sig.bterm = a};
+    {Term_sig.bvars = [x; _]; Term_sig.bterm = b}; _])
+a subterm that is not a variable (refused)
+  term:    foo{bar}
+  refused: "term_patt: subterms must be variables\nfoo{bar}"
+sequent: x: A; H >- C
+  term:    Arg: sequent_arg
+Hyps:
+      1.x :'A<||>
+      2.<H<||>>
+Goal:'C<||>
+  pattern: Refiner.Refiner.TermType.MatchSequent
+  (["sequent_arg"],
+   Refiner.Refiner.TermType.MatchTerm (["sequent_arg"], [], []),
+   Term_sig.Hypothesis (x, A) :: H, C)
+sequent with no context: x: A >- xconcl
+  term:    Arg: sequent_arg
+Hyps:
+      1.x :'A<||>
+Goal:Perv!xconcl
+  pattern: Refiner.Refiner.TermType.MatchSequent
+  (["sequent_arg"],
+   Refiner.Refiner.TermType.MatchTerm (["sequent_arg"], [], []),
+   [Term_sig.Hypothesis (x, A)], _)
+sequent: H; x: A >- C (refused)
+  term:    Arg: sequent_arg
+Hyps:
+      1.<H<||>>
+      2.x :'A<||>
+Goal:'C<||>
+  refused: "Context var H should be the final hyp"
+sequent whose conclusion is not a variable (refused)
+  term:    Arg: sequent_arg
+Hyps:
+Goal:bar
+  refused: "term_patt: subterms must be variables\nbar"

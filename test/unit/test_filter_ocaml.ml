@@ -148,10 +148,31 @@ let () =
       "let x = - 1 + (- y);;";
       "let x = not (a && b || c);;";
       "let s = 'x' :: [];;";
+      "let f = function 0 -> a | 1 -> b | _ -> c;;";
+      "let f = function 1n -> a | 2L -> b | _ -> c;;";
+      "let n = 3l + 3L + 3n;;";
+      "let f = function #t -> 1;;";
+      "let f = function #M.t as x -> x;;";
+      "type t = { f : 'a. 'a -> 'a };;";
+      "let f : 'a. 'a -> 'a = fun x -> x;;";
+      "class ['a] c = object constraint 'a = int end;;";
+      "class type ['a] ct = object constraint 'a = int end;;";
+      "module type T = S with module M := N;;";
+      "module type T = M.S;;";
+      "module type T = M.N.S;;";
+      "class c : M.ct = object end;;";
+      "class c = M.d;;";
+      "let x = M.N.x;;";
+      "let r = { M.N.a = 1 };;";
       "let o = new c;;"; "let o = new M.c 1;;"; "class c = object val x = 1 method m = {< x = 2 >} end;;"; "class c = object method m = {< >} end;;"; "class c = let y = 1 in object method m = y end;;"; "class c = let rec f x = x in object method m = f 1 end;;";
    ];
    List.iter sg [
       "val x : int;;"; "type t;;"; "type 'a t = A of 'a;;"; "exception E of string;;";
       "module M : sig val x : int end;;"; "module type S = sig type t end;;"; "open M;;";
       "external f : int -> int = \"c_f\";;"; "class c : object method m : int end;;";
+      "module rec M : S and N : T;;";
+      "module M : M.S;;";
+      "module type S = sig class c : M.ct end;;";
+      "val f : ?x:int -> y:int -> unit;;";
+      "type t = private A | B;;";
    ]

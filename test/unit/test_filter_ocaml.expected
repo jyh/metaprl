@@ -141,6 +141,22 @@ same      type t = { mutable a : int; b : float }
 same      let x = -1 + -y
 same      let x = not (a && b || c)
 same      let s = ['x']
+same      let f = function 0 -> a | 1 -> b | _ -> c
+same      let f = function 1n -> a | 2L -> b | _ -> c
+same      let n = 3l + 3L + 3n
+same      let f = function #t -> 1
+same      let f = function #M.t as x -> x
+same      type t = { f : 'a . 'a -> 'a }
+same      let f : 'a . 'a -> 'a = fun x -> x
+same      class ['a] c = object constraint 'a = int end
+same      class type ['a] ct = object constraint 'a = int end
+same      module type T = (S with module M := N)
+same      module type T = M.S
+same      module type T = M.N.S
+same      class c : M.ct = object  end
+same      class c = M.d
+same      let x = M.N.x
+same      let r = {M.N.a = 1}
 same      let o = new c
 same      let o = (new M.c) 1
 same      class c = object val x = 1 method m = {< x = 2 >} end
@@ -156,3 +172,9 @@ same      module type S = sig type t end
 same      open M
 same      external f : int -> int = "c_f"
 same      class c : object method m : int end
+same      module rec M : S and N : T
+same      module M : M.S
+same      module type S = sig class c : M.ct end
+same      val f : ?x:int -> y:int -> unit
+DIFFERS   type t = private A | B
+       ->  type t = A | B

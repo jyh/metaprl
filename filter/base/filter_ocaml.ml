@@ -1455,7 +1455,8 @@ struct
          let dest_typ_patt t =
             let _loc = dest_loc "dest_typ_patt" t in
             let sl, t = two_subterms t in
-            let sl = dest_sl sl in
+            (* mk_string_list writes the olist itself; dest_sl reads one inside a term *)
+            let sl = List.map dest_string (dest_olist sl) in
                MLast.PaTyp (_loc, Ploc.VaVal (longid_lident_of_strings _loc sl)), t
          in add_patt "patt_typ" dest_typ_patt
        and patt_xtr_op =
@@ -1528,7 +1529,8 @@ struct
                   mk_simple_term patt_olb_op loc [mk_patt vars p tailf; mk_expr_opt vars oe]
              | MLast.PaTyp (_, Ploc.VaVal lil) ->
                   let sl = strings_of_longid_lident (MLast.loc_of_patt patt) lil in
-                     mk_simple_term patt_typ_op loc [mk_string_list sl]
+                     (* the tail follows the path, as dest_typ_patt reads it *)
+                     mk_simple_term patt_typ_op loc [mk_string_list sl; tailf vars]
              | (<:patt< lazy $p$ >>) ->
                   mk_simple_term patt_lazy_op loc [mk_patt vars p tailf]
              | PaUnp (_, Ploc.VaVal (Some (Ploc.VaVal s)), mto) ->

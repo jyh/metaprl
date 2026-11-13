@@ -170,9 +170,7 @@ same      type t = int M.t list
 same      let f = function A x | B x -> x
 same      let f = function x when x > 0 -> 1 | y when y < 0 -> 2 | _ -> 0
 same      type t = [> `A | `B of int ]
-FormatError: str_item_of_term.Filter_ocaml.dest_type : bad arity
-RAISES    type t = [< `A | `B > `A ]
-       ->  FormatError Filter_ocaml.dest_type : bad arity
+same      type t = [< `A | `B > `A ]
 same      let o = new c
 same      let o = (new M.c) 1
 same      class c = object val x = 1 method m = {< x = 2 >} end

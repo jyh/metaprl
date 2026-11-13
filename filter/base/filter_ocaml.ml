@@ -556,10 +556,9 @@ struct
       let s, me = two_subterms t in
          vala_name (dest_string s), dest_me me, Ploc.VaVal []
 
+   (* What mk_string_list writes: the olist itself, not a term around it. *)
    let dest_sl t =
-      let sl = one_subterm "dest_sl" t in
-      let sl = dest_olist sl in
-         List.map dest_string sl
+      List.map dest_string (dest_olist t)
 
    let dest_sbb t =
       let s, b1, b2 = three_subterms t in
@@ -1455,8 +1454,7 @@ struct
          let dest_typ_patt t =
             let _loc = dest_loc "dest_typ_patt" t in
             let sl, t = two_subterms t in
-            (* mk_string_list writes the olist itself; dest_sl reads one inside a term *)
-            let sl = List.map dest_string (dest_olist sl) in
+            let sl = dest_sl sl in
                MLast.PaTyp (_loc, Ploc.VaVal (longid_lident_of_strings _loc sl)), t
          in add_patt "patt_typ" dest_typ_patt
        and patt_xtr_op =

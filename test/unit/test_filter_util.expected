@@ -1,0 +1,36 @@
+locations:
+  glob                      "f.ml" line 10 bol 200 [230, 250)
+  shift_pos glob 2          "f.ml" line 10 bol 200 [232, 252)
+  mk_proper_loc 4 9         "" line 1 bol 0 [4, 9)
+  adjust_pos, line 1       "" line 1 bol 0 [3, 5)
+                         -> "f.ml" line 10 bol 200 [233, 255)
+  adjust_pos, line 3       "" line 3 bol 12 [15, 18)
+                         -> "f.ml" line 12 bol 242 [245, 268)
+  adjust_pos, line 0       "" line 0 bol 0 [0, 0)
+                         -> "f.ml" line 10 bol 200 [230, 250)
+  ploc_of_lexing            "g.ml" line 4 bol 40 [44, 47)
+grammar_parse:
+  first token "hello", line 1
+  after a parse: counters restored true, input_file "caller.ml"
+  raised Failure "a bang"
+  after an exception: counters restored true, input_file "caller.ml"
+source_file_or:
+  unset: "given.ml"
+  set:   "set.ml"
+unzip_rewrite:
+  args [] redex a contractum b
+  args [c; d] redex a contractum b
+  refused: rw: illegal specification: a
+  refused: rw: illegal specification: a
+opnames:
+  string_of_opname_list [] = ""
+  string_of_opname_list [x] = "x"
+  string_of_opname_list [a; b; c] = "a!b!c"
+  translate_opname (make_opname []) = ""
+  translate_opname (make_opname [x]) = "x"
+  translate_opname (make_opname [a; b; c]) = "a_b_c"
+module paths:
+  []: string_of_path EmptyModulePath string_of_path, output_path EmptyModulePath output_path
+  [itt]: string_of_path "Itt", output_path "Itt"
+  [itt_int; base]: string_of_path "Itt_int/Base", output_path "itt_int.Base"
+  [a; b; c]: string_of_path "A/B/C", output_path "a.b.C"

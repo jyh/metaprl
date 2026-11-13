@@ -56,6 +56,15 @@ the `fv=` field of 70 items and nothing else (69 gain variables; one, in
 14 items that raise still raise. The expected file carries the fixed
 values; the reference's are in its history.
 
+The `roundtrip=` fields are no longer the reference's either: #280-#287
+fixed `Filter_ocaml` decoders that did not read what their encoders
+write, and all 320 items now round-trip (278 in the reference). #288
+taught `Free_vars` more syntax: 13 of the 14 items that raised now give
+their free variables; `coverage.ml` item 43, a packed module expression,
+still raises. Each of those PRs changed only the fields its fix moves
+(the shape and location digests are the reference's) and names every
+item it moved.
+
 Not covered:
 - The old filter overflows the stack on `let f ?(x = 1) () = ...`, and the
   camlp5 7 parser rejects `type t = ..` and `match ... with exception`, so

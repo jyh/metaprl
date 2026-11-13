@@ -228,6 +228,35 @@ against libmojave 1.1.1 or later:
   old bytes, so any write past the first 32 bytes raised
   `Invalid_argument`. Nothing in the tree uses the module (#275; pinned
   by #274).
+- `Filter_ocaml`'s way back from terms to OCaml syntax
+  (`str_item_of_term`, `sig_item_of_term`) failed on much common syntax,
+  because decoders did not read what their encoders write. In every case
+  the decoder now reads the encoder's terms. No encoder changed, so a
+  term already written reads back the same. The camlp5 parity pin's 320
+  items went from 278 round trips to all 320. Each fix is pinned by
+  `test_filter_ocaml` items first:
+  - every variant type and every type parameter (#280; the 2017 OCaml
+    4.05 port, d34a0b0f2, changed the encoders only);
+  - every `external`, in a structure or a signature (#281);
+  - object expressions, class and class-type declarations, and class
+    infos (#282);
+  - a labelled parameter: turning one into a term recursed until the
+    stack overflowed (`mk_patt_lab`'s loop matched the outer list), and
+    its decoder built a record pattern (#283);
+  - `let ... and ... in`, which raised on the `patt_and` between bindings
+    (#284);
+  - `new`, `{< ... >}` and a class's `let` (#285);
+  - `let rec ... and ...`, which came back with its bindings in reverse
+    order: the encoder has written them reversed since 1998 and neither
+    decoder reversed them back (#286);
+  - variant patterns (`` `A ``, `` `B x ``) and object types (#287).
+- `Free_vars.free_vars` and `patt_vars` raised on `{ e with ... }`,
+  labelled arguments, `lazy`, `assert`, `let open`, int32 / int64 /
+  nativeint literals, objects, variant patterns, first-class module
+  patterns and array patterns; they now give the free variables OCaml
+  gives (#288; pinned by `test_free_vars_syntax`). An object binds its
+  self pattern and instance variables in its methods and initializers
+  only.
 
 ### Tests
 
@@ -800,6 +829,17 @@ against libmojave 1.1.1 or later:
   - `test_filter_summary_check`: `check_implementation` on every interface
     item it checks, each implemented, missing and differing, and the items
     an interface passes on (#276).
+  - `run.sh`: a filter-linked test whose second line is
+    `(* unit-native: <objects> *)` is linked natively with those objects
+    (camlp5's parser and printer exist only as native objects); it is
+    SKIPPED, with a line naming what is missing, in a build without them,
+    as on the Windows runners (#278). `test_filter_patt`:
+    `Filter_patt.build_term_patt` (#278).
+  - `test_filter_ocaml`: OCaml syntax parsed by camlp5's `pa_o`, to terms
+    and back, printed by `pr_o` (#279); 72 items after #280-#287, all
+    reading back the same.
+  - `test_free_vars_syntax`: `Free_vars` on syntax parsed by `pa_o`
+    (#288).
 
 ### Known not to work
 
@@ -845,6 +885,10 @@ against libmojave 1.1.1 or later:
 - A module summary's term form writes a dform's `PrimitiveModes` as no
   modes, so it reads back as `AllModes`; keeping it needs a term of its
   own (a format change). Pinned by `test_filter_summary_term` (#264).
+- `Free_vars.free_vars` raises on a packed module expression
+  (`(module struct ... end : S)`) and on an object with `inherit`; it
+  counts the `f` of `M.f` as a variable, as the old `ExAcc` case did
+  (#288; one corpus item of the parity pin).
 
 ## 1.0.0 (2026-10-29): the 2026 refresh
 

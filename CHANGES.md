@@ -838,7 +838,8 @@ against libmojave 1.1.1 or later:
     `Filter_patt.build_term_patt` (#278).
   - `test_filter_ocaml`: OCaml syntax parsed by camlp5's `pa_o`, to terms
     and back, printed by `pr_o` (#279); 72 items after #280-#287, all
-    reading back the same.
+    reading back the same; 145 after #290 and #292, the 13 that do not
+    read back each named in its PR.
   - `test_free_vars_syntax`: `Free_vars` on syntax parsed by `pa_o`
     (#288).
 
@@ -896,8 +897,9 @@ against libmojave 1.1.1 or later:
   (`0x1F` reads back as `31`). `M.(e)` is written as camlp5 7 parsed it,
   an array subscript, and reads back as one (it prints the same). It
   refuses, on the way in, `type t += ...`, an attribute on an
-  expression, an exception case in a `match`, and a locally abstract
-  type (`let g : type a. ...`, refused on purpose). Keeping any of these
+  expression, an extension node (`[%ext ...]`), an open record pattern
+  (`{ a = x; _ }`), an exception case in a `match`, and a locally
+  abstract type (`let g : type a. ...`, refused on purpose). Keeping any of these
   needs a new term, which is a format change. Pinned by
   `test_filter_ocaml` (#290).
 

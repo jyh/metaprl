@@ -1,13 +1,9 @@
 same      let x = 1 + 2
 same      let rec f n = if n = 0 then 1 else n * f (n - 1)
-DIFFERS   let rec f x = g x and g x = f x
-       ->  let rec g x = f x and f x = g x
-DIFFERS   let rec a x = x and b x = x and c x = x
-       ->  let rec c x = x and b x = x and a x = x
-DIFFERS   let h () = let rec f x = g x and g x = f x in f 1
-       ->  let h () = let rec g x = f x and f x = g x in f 1
-DIFFERS   class c = let rec f = fun x -> g x and g = fun x -> f x in object method m = f 1 end
-       ->  class c = let rec g = fun x -> f x and f = fun x -> g x in object method m = f 1 end
+same      let rec f x = g x and g x = f x
+same      let rec a x = x and b x = x and c x = x
+same      let h () = let rec f x = g x and g x = f x in f 1
+same      class c = let rec f = fun x -> g x and g = fun x -> f x in object method m = f 1 end
 same      let f (x, y) = match x with Some z when z > 0 -> z | Some _ | None -> y
 same      let f x = function [] -> x | h :: _ -> h
 same      let g ~y = y

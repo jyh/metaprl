@@ -38,4 +38,7 @@ DeclareTerm                  1 term(s); back as [DeclareTerm]; same terms
 DefineTerm (opaque)          1 term(s); back as [DefineTerm]; same terms
 DefineTerm                   1 term(s); back as [DefineTerm]; same terms
 DeclareTypeRewrite           1 term(s); back as [DeclareTypeRewrite]; same terms
-all 39 items in one module: 39 back, kinds in the same order
+DeclareType (ty params)      1 term(s); back as [DeclareType]; same terms; params {n; s; sh; op; t tok; l; v; @ | [].b0; [bv1, bv2].b2}
+DeclareTerm (ty params)      1 term(s); back as [DeclareTerm]; same terms; params {n; s; sh; op; t tok; l; v; @ | [].b0; [bv1, bv2].b2}
+DefineTerm (ty params)       1 term(s); back as [DefineTerm]; same terms; params {n; s; sh; op; t tok; l; v; @ | [].b0; [bv1, bv2].b2}
+all 42 items in one module: 42 back, kinds in the same order

@@ -1,0 +1,35 @@
+param_vars_info plain params         agree  {}
+param_vars_info meta params          agree  {mo,ms,msh,mt,n,pv}
+param_vars_info obid/list            agree  {lone,ltwo,oid}
+all_vars_info every kind             agree  {lone:param, ltwo:param, mo:param, ms:param, msh:param, mt:param, n:param, oid:param, pv:param}
+all_vars every kind                  agree  {lone,ltwo,mo,ms,msh,mt,n,oid,pv}
+explode plain params                 agree  p[num 3 int 3; string s; token tok; shape sh/2; operator o/1; unsupported]
+explode meta params                  agree  p[var pv; unsupported; unsupported; unsupported; unsupported; unsupported]
+explode obid/list                    agree  p[unsupported; unsupported]
+context term shown                   agree  f{C<H,K>[[g{p; 'a<>[x]; x}]][p;'b<>[]]}
+param_vars_info context term         agree  {arg,hole}
+context_vars_info context term       agree  {C:false/2/2}
+so_vars_info context term            agree  {a:0/1, b:0/0}
+all_vars_info context term           agree  {C:ctx2/2, a:so0/1, arg:param, b:so0/0, hole:param, x:fo}
+all_vars_terms [context term]        agree  {C,H,K,a,arg,b,hole,x}
+all_vars_terms [context; nested]     agree  {C,D,E,H,K,a,arg,b,hole,x,y,z}
+context_vars_info nested             agree  {D:false/1/2, E:false/0/0}
+all_vars_info nested                 agree  {D:ctx1/2, E:ctx0/0, y:fo, z:fo}
+context_vars nested (seq, normal)    agree  {} {D,E}
+all_contexts nested                  agree  {D,E,H}
+num_hyps                             agree  3
+nth_hyp 1                            agree  A
+nth_hyp 3                            agree  B{x}
+nth_hyp 0                            agree  both refused (std refused (nth_hyp: hyp number is not positive), ds refused (Term_man_ds.nth_hyp: negative address))
+nth_hyp -1                           agree  both refused (std refused (nth_hyp: hyp number is not positive), ds refused (Term_man_ds.nth_hyp: negative address))
+nth_hyp 2 (a context)                agree  both refused (std refused (nth_hyp: nth hyp is a context var), ds refused (Term_man_ds.nth_hyp: it's a context))
+nth_hyp 4 (past the end)             agree  both refused (std refused (nth_hyp: hyp is out of range), ds refused (Term_man_ds.nth_hyp: not enough hyps))
+nth_binding 3                        agree  y
+nth_binding 0                        agree  both refused (std refused (nth_hyp: hyp is out of range), ds refused (Term_man_ds.nth_hyp: negative address))
+nth_binding 2 (a context)            agree  both refused (std refused (nth_hyp: nth hyp is a context var), ds refused (Term_man_ds.nth_hyp: it's a context))
+nth_binding 4 (past the end)         agree  both refused (std refused (nth_hyp: hyp is out of range), ds refused (Term_man_ds.nth_hyp: not enough hyps))
+get_decl_number y                    agree  3
+get_decl_number J (a context)        agree  both refused (std refused (get_decl_number: declaration not found), ds refused (Term_man_ds.get_decl_number: declaration not found))
+get_decl_number w (undeclared)       agree  both refused (std refused (get_decl_number: declaration not found), ds refused (Term_man_ds.get_decl_number: declaration not found))
+get_hyp_number B{x}                  agree  3
+get_hyp_number D (no such hyp)       agree  both refused (std refused (get_hyp_number: declaration not found), ds refused (Term_man_ds.get_hyp_number: declaration not found))

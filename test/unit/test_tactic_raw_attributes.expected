@@ -1,20 +1,20 @@
 == every kind: 14 raw attributes
-loaded                       [x=term a; x=term b; l=terms [a; b]; ty=type T; n=int 3; flag=bool true; s=string v; ййallow=term Perv!select["pold":t]; ййexclude=term Perv!select["pe":t]; ййallow=term Perv!select["pa":t]]
+loaded                       [x=term a; x=term b; l=terms [a; b]; ty=type T; n=int 3; flag=bool true; s=string v; ййexclude=term Perv!select["pe":t]; ййallow=term Perv!select["pold":t]; ййallow=term Perv!select["pgone":t]]
 saved 10, saved then loaded:
-                             [x=term a; x=term b; l=terms [a; b]; ty=type T; n=int 3; flag=bool true; s=string v; ййallow=term Perv!select["pa":t]; ййexclude=term Perv!select["pe":t]; ййallow=term Perv!select["pold":t]]
-same attributes false, alpha equal with attributes false
+                             [x=term a; x=term b; l=terms [a; b]; ty=type T; n=int 3; flag=bool true; s=string v; ййexclude=term Perv!select["pe":t]; ййallow=term Perv!select["pold":t]; ййallow=term Perv!select["pgone":t]]
+same attributes true, alpha equal with attributes false
 == one option: 1 raw attributes
 loaded                       [ййexclude=term Perv!select["pe":t]]
 saved 1, saved then loaded:
                              [ййexclude=term Perv!select["pe":t]]
 same attributes true, alpha equal with attributes true
 == allow pa, then exclude pe: 2 raw attributes
-loaded                       [ййexclude=term Perv!select["pe":t]; ййallow=term Perv!select["pa":t]]
+loaded                       [ййallow=term Perv!select["pa":t]; ййexclude=term Perv!select["pe":t]]
 saved 2, saved then loaded:
                              [ййallow=term Perv!select["pa":t]; ййexclude=term Perv!select["pe":t]]
-same attributes false, alpha equal with attributes false
-rule labelled [pa; pe]: allowed true, after save and load false
-after a second save and load: allowed true, alpha equal to the first true
+same attributes true, alpha equal with attributes true
+rule labelled [pa; pe]: allowed false, after save and load false
+after a second save and load: allowed false, alpha equal to the first true
 update_attributes (no sentinel): saved 10, same attributes true
 squash_attributes: saved 10
 empty: saved 0, 0 attributes

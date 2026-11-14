@@ -6,24 +6,27 @@
    each case loads a list of raw attributes into a tactic argument, reads
    it with attributes and get_options, saves it with raw_attributes,
    loads the save again, and prints both sides.
-   Pinned as the code reads today (2026-11-14), including:
+   Pinned as the code reads (2026-11-14), including:
      - the kinds come back grouped, in the order raw_attributes lists them,
        each kind in its input order;
      - an address attribute is not loaded (attribute_info_of_raw_attributes
        has no RawAddr arm), so it is not saved again;
      - a term attribute named "allow" (the ASCII IO 1.0.25-26 spelling) is
-       an option and is saved as "ййallow"; options are folded from the
-       right, so of "allow a" then "ignore a" the allow is applied last;
-     - EACH SAVE AND LOAD REVERSES THE OPTIONS: the loader numbers a raw
-       list from its right end, so its FIRST option becomes the most recent
-       decision, while raw_attributes writes the options OLDEST first
-       (list_options).  With two options the most recent decision flips at
-       every round trip: a rule labelled pa and pe (rule_labels_are_allowed
-       takes the most recent decision on its labels) is allowed after the
-       load of [allow pa; exclude pe], refused after one save and load, and
-       allowed after two; the argument after one round trip is not
-       tactic_arg_alpha_equal_with_attributes to the one saved (one option
-       round-trips equal);
+       an option and is saved as "ййallow"; options are loaded in list
+       order, oldest first, so of "allow a" then "ignore a" the ignore is
+       applied last;
+     - SAVE AND LOAD KEEP THE ORDER OF THE OPTIONS: the loader reads a raw
+       list oldest first, the order raw_attributes writes it (list_options).
+       Until 2026-11-14 it read the list from its right end, so every round
+       trip flipped which decision was the most recent: a rule labelled pa
+       and pe (rule_labels_are_allowed takes the most recent decision on
+       its labels) was allowed after loading [allow pa; exclude pe] and
+       refused after one save and load.  It is now refused every time, and
+       the argument after a round trip is
+       tactic_arg_alpha_equal_with_attributes to the one saved;
+     - a list with an ignore is still not alpha equal after a round trip:
+       options_eq also compares the count of decisions, which an ignore
+       adds to and a save (which writes no ignore) does not;
      - the sentinel keys (attr_keys, RawSentinal) are made only from each
        other (raw_attributes reads the keys, the loader and
        update_attributes read RawSentinal), so no attribute list built

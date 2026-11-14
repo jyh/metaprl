@@ -445,8 +445,11 @@ sig
 
    (*
     * Print timing information.
+    * times_used start finish is the (user, system) time between two
+    * Unix.times readings, children included; timingT prints it.
     *)
    val timingT : tactic -> tactic
+   val times_used : Unix.process_times -> Unix.process_times -> float * float
    val finalT : (unit -> unit) -> tactic
 
    (*

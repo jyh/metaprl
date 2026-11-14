@@ -1,0 +1,5 @@
+cut c on g{c}: 2 subgoals: c | g{c} given c
+t_cut    |- g{c}   extract q{k}, model q{k}: agree
+t_id     |- c      extract k, model k: agree
+t_ml     |- d      extract w{k}, model w{k}: agree
+t_both   |- g{d}   extract q{w{k}}, model q{w{k}}: agree

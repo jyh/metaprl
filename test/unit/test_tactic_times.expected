@@ -1,5 +1,5 @@
 no children                              user 3 system 4 | model user 3 system 4 | same
-children before, none during             user -7 system 4 | model user 3 system 4 | DIFFERENT
-children during, none before             user 103 system 4 | model user 103 system 204 | DIFFERENT
-children before and during               user 93 system 4 | model user 103 system 204 | DIFFERENT
-same reading                             user -10 system 0 | model user 0 system 0 | DIFFERENT
+children before, none during             user 3 system 4 | model user 3 system 4 | same
+children during, none before             user 103 system 204 | model user 103 system 204 | same
+children before and during               user 103 system 204 | model user 103 system 204 | same
+same reading                             user 0 system 0 | model user 0 system 0 | same

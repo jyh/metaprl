@@ -1371,9 +1371,9 @@ struct
 
    let times_used start finish =
       (finish.Unix.tms_utime +. finish.Unix.tms_cutime)
-      -. (start.Unix.tms_utime +. start.Unix.tms_cstime),
+      -. (start.Unix.tms_utime +. start.Unix.tms_cutime),
       (finish.Unix.tms_stime +. finish.Unix.tms_cstime)
-      -. (start.Unix.tms_stime +. finish.Unix.tms_cstime)
+      -. (start.Unix.tms_stime +. start.Unix.tms_cstime)
 
    let timingT tac p =
       let start = Unix.times () in

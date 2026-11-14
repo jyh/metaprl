@@ -449,7 +449,9 @@ def _self_test_history_memory(failures: list) -> str:
     if cost >= size:
         failures.append(f"history memory arm: --history over one {size} B added file cost {cost} B of peak RSS "
                         f"beyond an idle import -- it holds the diff whole (the vir hang, row 159)")
-    return f"--history cost {cost // 1024} KiB over a {size // (1024 * 1024)} MiB diff (budget: under one copy)"
+    shown = f"{cost // 1024} KiB" if cost > 0 else "0 KiB (below the idle noise)"
+    return (f"--history cost {shown} over a {size // (1024 * 1024)} MiB diff (budget: under one copy; "
+            f"walk peak {peaks['walk'] // 1024} KiB, idle peak {peaks['idle'] // 1024} KiB)")
 
 
 class _FixtureError(Exception):

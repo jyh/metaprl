@@ -332,11 +332,12 @@ struct
         attr_strings    = Lm_list_util.some_map (function (name, RawString s)   -> Some (name, s) | _ -> None) attributes;
         attr_keys       = Lm_list_util.some_map (function (name, RawSentinal k) -> Some (name, k) | _ -> None) attributes;
         attr_options    =
-           List.fold_right (fun attr options ->
+           (* oldest first, the order raw_attributes writes them (list_options) *)
+           List.fold_left (fun options attr ->
                  match attr with
                     opt, RawOption op -> add_option options op (option_of_string opt)
                   | _ -> options) (**)
-              attributes options_empty
+              options_empty attributes
       }
 
    let squash_attributes attrs =

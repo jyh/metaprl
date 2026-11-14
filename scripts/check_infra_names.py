@@ -388,6 +388,7 @@ def self_test() -> int:
         if line_sha(base_line) in finding_line("d.md", 1) or nm in finding_line("d.md", 1):
             failures.append("the finding line must carry neither the digest nor the name")
     path_receipt = _self_test_paths(failures)
+    mem_receipt = _self_test_history_memory(failures)
     for f in failures:
         print(f"SELF-TEST FAIL: {f}")
     if failures:
@@ -396,8 +397,59 @@ def self_test() -> int:
           f"{len(FORBIDDEN) * 5} planted forms caught across {len(FORBIDDEN)} name(s), "
           f"the shrunk-set tripwire fires, an author byline passes, role words pass, self clean, "
           f"the finding line withholds the matched text and still names file:line; the tree ratchet: baselined passes, edited is new, missing baseline is fatal, vanished is paid, moved is new; "
-          f"{path_receipt})")
+          f"{path_receipt}; {mem_receipt})")
     return 0
+
+
+def _peak_rss_bytes(ru_maxrss: int) -> int:
+    """ru_maxrss is BYTES on macOS and KILOBYTES on Linux; a budget compared in the wrong unit passes everything."""
+    return ru_maxrss if sys.platform == "darwin" else ru_maxrss * 1024
+
+
+def _self_test_history_memory(failures: list) -> str:
+    """THE HISTORY WALK MUST NOT HOLD A DIFF IN MEMORY (STATUS-systems row 159, 2026-11-14). jyh/vir's Scrub
+    hung on this arm's --history: two merges there diff 1.92 GB against one parent, and the walk read each diff
+    WHOLE and listed every added row, peaking at 18 GB on a 16 GB runner; the forge kept no log. A scratch repo's
+    one commit adds a SIZE-byte text file; --history runs in a child; the child's peak RSS beyond an idle import
+    must stay under ONE copy of the diff, a budget derived from the fixture."""
+    import tempfile
+    size = 32 * 1024 * 1024
+    here = os.path.dirname(os.path.abspath(__file__))
+    probe = ("import resource, sys, io, contextlib; sys.path.insert(0, sys.argv[1]); import check_infra_names as c; "
+             "buf = io.StringIO()\n"
+             "with contextlib.redirect_stdout(buf):\n"
+             "    r = c.history_mode(False, cwd='.', baseline=sys.argv[3]) if sys.argv[2] == 'walk' else 0\n"
+             "print(r, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)")
+    with tempfile.TemporaryDirectory(prefix="infra-names-memarm-", ignore_cleanup_errors=True) as tmp:
+        repo = os.path.join(tmp, "repo")
+        base = os.path.join(tmp, "empty_hist.tsv")
+        open(base, "w").close()
+        g = ["git", "-C", repo, "-c", "user.name=memory arm", "-c", "user.email=arm@example.invalid"]
+        if subprocess.run(["git", "init", "-q", repo], capture_output=True).returncode != 0:
+            failures.append("history memory arm: git init failed (the arm could not run)")
+            return "history memory arm NOT RUN"
+        line = "an ordinary added line of prose, nothing to report\n"
+        with open(os.path.join(repo, "big.md"), "w", encoding="utf-8") as fh:
+            fh.write(line * (size // len(line)))
+        for a in (["add", "big.md"], ["commit", "-q", "-m", "one large added file"]):
+            if subprocess.run(g + a, capture_output=True).returncode != 0:
+                failures.append(f"history memory arm: git {a[0]} failed (the arm could not run)")
+                return "history memory arm NOT RUN"
+        peaks = {}
+        for mode in ("idle", "walk"):
+            r = subprocess.run([sys.executable, "-c", probe, here, mode, base], cwd=repo,
+                               capture_output=True, text=True)
+            parts = r.stdout.split()
+            if r.returncode != 0 or len(parts) != 2 or not parts[1].isdigit() or parts[0] != "0":
+                failures.append(f"history memory arm: the {mode} child exited {r.returncode} "
+                                f"(mode rc {parts[0] if parts else 'none'}) with no peak")
+                return "history memory arm NOT RUN"
+            peaks[mode] = _peak_rss_bytes(int(parts[1]))
+    cost = peaks["walk"] - peaks["idle"]
+    if cost >= size:
+        failures.append(f"history memory arm: --history over one {size} B added file cost {cost} B of peak RSS "
+                        f"beyond an idle import -- it holds the diff whole (the vir hang, row 159)")
+    return f"--history cost {cost // 1024} KiB over a {size // (1024 * 1024)} MiB diff (budget: under one copy)"
 
 
 class _FixtureError(Exception):

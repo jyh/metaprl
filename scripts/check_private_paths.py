@@ -1504,6 +1504,7 @@ def self_test() -> int:
     finally:
         os.path.relpath = _relpath13
 
+    mem_receipt = _history_memory_arm(failures)
     for f in failures:
         print(f"SELF-TEST FAIL: {f}")
     if failures:
@@ -1517,8 +1518,55 @@ def self_test() -> int:
           f"directions, local-only disclosure; every FAIL path NAMES findings; "
           f"{hist_arms} history-ratchet arms driven on a real scratch repo — "
           f"TWO of them DIFFERENTIAL against the two-dot form's measured "
-          f"blindness, merge double-charging refused, evil merge charged)")
+          f"blindness, merge double-charging refused, evil merge charged; {mem_receipt})")
     return 0
+
+
+def _peak_rss_bytes(ru_maxrss: int) -> int:
+    """ru_maxrss is BYTES on macOS and KILOBYTES on Linux; a budget compared in the wrong unit passes everything."""
+    return ru_maxrss if sys.platform == "darwin" else ru_maxrss * 1024
+
+
+def _history_memory_arm(failures: list) -> str:
+    """THE HISTORY WALK MUST NOT HOLD A DIFF IN MEMORY (STATUS-systems row 159, 2026-11-14).
+
+    jyh/vir's Scrub hung four times on its history steps: two merges there diff 1.92 GB against one parent,
+    and this walk read every diff WHOLE and listed every added row before scanning, peaking at 19 GB on a
+    16 GB runner. The forge kept no log of any hung job. The arm: a scratch repo whose one commit adds a
+    text file of SIZE bytes, the walk run in a child, and the child's peak RSS compared against a child that
+    only imports this module. The budget is derived from the fixture: the walk may cost less than ONE copy
+    of the diff it read. A walk that holds the diff whole costs several copies.
+    """
+    size = 32 * 1024 * 1024
+    here = os.path.dirname(os.path.abspath(__file__))
+    probe = ("import resource, sys; sys.path.insert(0, sys.argv[1]); import check_private_paths as c; "
+             "r = c.history_findings() if sys.argv[2] == 'walk' else None; "
+             "print(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)")
+    with tempfile.TemporaryDirectory() as repo:
+        g = ["git", "-C", repo, "-c", "user.name=memory arm", "-c", "user.email=arm@example.invalid"]
+        if subprocess.run(["git", "init", "-q", "-b", "trunk", repo], capture_output=True).returncode != 0:
+            failures.append("history memory arm: git init failed (the arm could not run)")
+            return "history memory arm NOT RUN"
+        line = "an ordinary added line of prose, nothing private\n"
+        with open(os.path.join(repo, "big.md"), "w", encoding="utf-8") as fh:
+            fh.write(line * (size // len(line)))
+        for a in (["add", "big.md"], ["commit", "-q", "-m", "one large added file"]):
+            if subprocess.run(g + a, capture_output=True).returncode != 0:
+                failures.append(f"history memory arm: git {a[0]} failed (the arm could not run)")
+                return "history memory arm NOT RUN"
+        peaks = {}
+        for mode in ("idle", "walk"):
+            r = subprocess.run([sys.executable, "-c", probe, here, mode], cwd=repo,
+                               capture_output=True, text=True)
+            if r.returncode != 0 or not r.stdout.strip().isdigit():
+                failures.append(f"history memory arm: the {mode} child exited {r.returncode} with no peak")
+                return "history memory arm NOT RUN"
+            peaks[mode] = _peak_rss_bytes(int(r.stdout.strip()))
+    cost = peaks["walk"] - peaks["idle"]
+    if cost >= size:
+        failures.append(f"history memory arm: the walk over one {size} B added file cost {cost} B of peak RSS "
+                        f"beyond an idle import -- it holds the diff whole (the vir hang, row 159)")
+    return f"history walk cost {cost // 1024} KiB over a {size // (1024 * 1024)} MiB diff (budget: under one copy)"
 
 
 # ---------------------------------------------------------------------------

@@ -1504,6 +1504,7 @@ def self_test() -> int:
     finally:
         os.path.relpath = _relpath13
 
+    mem_receipt = _history_memory_arm(failures)
     for f in failures:
         print(f"SELF-TEST FAIL: {f}")
     if failures:
@@ -1517,8 +1518,57 @@ def self_test() -> int:
           f"directions, local-only disclosure; every FAIL path NAMES findings; "
           f"{hist_arms} history-ratchet arms driven on a real scratch repo — "
           f"TWO of them DIFFERENTIAL against the two-dot form's measured "
-          f"blindness, merge double-charging refused, evil merge charged)")
+          f"blindness, merge double-charging refused, evil merge charged; {mem_receipt})")
     return 0
+
+
+def _peak_rss_bytes(ru_maxrss: int) -> int:
+    """ru_maxrss is BYTES on macOS and KILOBYTES on Linux; a budget compared in the wrong unit passes everything."""
+    return ru_maxrss if sys.platform == "darwin" else ru_maxrss * 1024
+
+
+def _history_memory_arm(failures: list) -> str:
+    """THE HISTORY WALK MUST NOT HOLD A DIFF IN MEMORY (STATUS-systems row 159, 2026-11-14).
+
+    jyh/vir's Scrub hung four times on its history steps: two merges there diff 1.92 GB against one parent,
+    and this walk read every diff WHOLE and listed every added row before scanning, peaking at 19 GB on a
+    16 GB runner. The forge kept no log of any hung job. The arm: a scratch repo whose one commit adds a
+    text file of SIZE bytes, the walk run in a child, and the child's peak RSS compared against a child that
+    only imports this module. The budget is derived from the fixture: the walk may cost less than ONE copy
+    of the diff it read. A walk that holds the diff whole costs several copies.
+    """
+    size = 32 * 1024 * 1024
+    here = os.path.dirname(os.path.abspath(__file__))
+    probe = ("import resource, sys; sys.path.insert(0, sys.argv[1]); import check_private_paths as c; "
+             "r = c.history_findings() if sys.argv[2] == 'walk' else None; "
+             "print(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)")
+    with tempfile.TemporaryDirectory() as repo:
+        g = ["git", "-C", repo, "-c", "user.name=memory arm", "-c", "user.email=arm@example.invalid"]
+        if subprocess.run(["git", "init", "-q", "-b", "trunk", repo], capture_output=True).returncode != 0:
+            failures.append("history memory arm: git init failed (the arm could not run)")
+            return "history memory arm NOT RUN"
+        line = "an ordinary added line of prose, nothing private\n"
+        with open(os.path.join(repo, "big.md"), "w", encoding="utf-8") as fh:
+            fh.write(line * (size // len(line)))
+        for a in (["add", "big.md"], ["commit", "-q", "-m", "one large added file"]):
+            if subprocess.run(g + a, capture_output=True).returncode != 0:
+                failures.append(f"history memory arm: git {a[0]} failed (the arm could not run)")
+                return "history memory arm NOT RUN"
+        peaks = {}
+        for mode in ("idle", "walk"):
+            r = subprocess.run([sys.executable, "-c", probe, here, mode], cwd=repo,
+                               capture_output=True, text=True)
+            if r.returncode != 0 or not r.stdout.strip().isdigit():
+                failures.append(f"history memory arm: the {mode} child exited {r.returncode} with no peak")
+                return "history memory arm NOT RUN"
+            peaks[mode] = _peak_rss_bytes(int(r.stdout.strip()))
+    cost = peaks["walk"] - peaks["idle"]
+    if cost >= size:
+        failures.append(f"history memory arm: the walk over one {size} B added file cost {cost} B of peak RSS "
+                        f"beyond an idle import -- it holds the diff whole (the vir hang, row 159)")
+    shown = f"{cost // 1024} KiB" if cost > 0 else "0 KiB (below the idle noise)"
+    return (f"history walk cost {shown} over a {size // (1024 * 1024)} MiB diff (budget: under one copy; "
+            f"walk peak {peaks['walk'] // 1024} KiB, idle peak {peaks['idle'] // 1024} KiB)")
 
 
 # ---------------------------------------------------------------------------
@@ -1877,14 +1927,52 @@ def _parse_added(diff_text: str) -> list[tuple[str, str]]:
     return rows
 
 
-def _added_rows_between(base: str, sha: str) -> list[tuple[str, str]]:
-    out = subprocess.run(["git", "diff", "--unified=0", "--no-color", base, sha],
+def _stream_added(argv: list[str]):
+    """Yield (path, added text) for every `+` line of the diff `argv` prints, AS IT ARRIVES.
+
+    ⛔ THE DIFF IS NEVER HELD WHOLE (STATUS-systems row 159). Reading it into one string, then a line list,
+    then a row list cost about nine copies of the diff: 19 GB on jyh/vir's two 1.92 GB merges, and the
+    runner hung. Lines are split exactly as `_parse_added` splits the whole text (str.splitlines on each
+    physical line, which newline='' leaves untranslated), and a nonzero git exit still raises
+    CalledProcessError, after the stream is drained so git can never block on a full pipe."""
+    with tempfile.TemporaryFile() as err:
+        p = subprocess.Popen(argv, stdout=subprocess.PIPE, stderr=err)
+        path = "?"
+        with io.TextIOWrapper(p.stdout, encoding="utf-8", errors="replace", newline="") as out:
+            for physical in out:
+                for line in physical.splitlines():
+                    if line.startswith("+++ b/"):
+                        path = line[6:]
+                    elif line.startswith("+") and not line.startswith("+++"):
+                        yield (path, line[1:])
+        rc = p.wait()
+    if rc != 0:
+        raise subprocess.CalledProcessError(rc, argv)
+
+
+def _added_rows_between(base: str, sha: str, keep=None) -> list[tuple[str, str]]:
+    """The added rows from base to sha; with `keep`, only the rows keep() accepts, so memory follows the
+    rows kept and not the size of the diff."""
+    rows = _stream_added(["git", "diff", "--unified=0", "--no-color", base, sha])
+    return [r for r in rows if keep is None or keep(r)]
+
+
+def _added_line_count(base: str, sha: str) -> int:
+    """Lines the diff base..sha adds, from --numstat (a binary file's `-` counts 0): the ORDER key for a
+    merge's parents, never a verdict."""
+    out = subprocess.run(["git", "diff", "--numstat", "--no-color", base, sha],
                          capture_output=True, text=True, encoding="utf-8", errors="replace",
                          check=True).stdout
-    return _parse_added(out)
+    return sum(int(f) for f in (l.split("\t", 1)[0] for l in out.splitlines()) if f.isdigit())
 
 
-def commit_introduced(sha: str, parents: list[str], empty: str) -> list[tuple[str, str]]:
+def _is_hit(row: tuple[str, str]) -> bool:
+    """scan() is a per-row predicate, so keeping only the rows it flags changes no verdict: the findings of
+    a merge's intersection are the intersection of each parent's flagged rows."""
+    return bool(scan([row]))
+
+
+def commit_introduced(sha: str, parents: list[str], empty: str, keep=None) -> list[tuple[str, str]]:
     """Rows this ONE commit introduces to the history.
 
     Root commit: its whole content -- the case the two-dot audit form drops.
@@ -1898,11 +1986,21 @@ def commit_introduced(sha: str, parents: list[str], empty: str) -> list[tuple[st
     'skip merges' so that the second case cannot be lost.
     """
     if not parents:
-        return _added_rows_between(empty, sha)
+        return _added_rows_between(empty, sha, keep)
     if len(parents) == 1:
-        return _added_rows_between(parents[0], sha)
-    sets = [set(_added_rows_between(p, sha)) for p in parents]
-    return sorted(set.intersection(*sets))
+        return _added_rows_between(parents[0], sha, keep)
+    # ⛔ SMALLEST PARENT FIRST, THEN MEMBERSHIP (row 159). The intersection is a subset of EVERY parent's
+    #   added set, so it is built from the parent whose diff adds the fewest lines and each other parent's
+    #   diff is STREAMED as a filter on it. Memory follows the smallest diff, never the largest: jyh/vir's
+    #   two merges add 1.92 GB against one parent and nothing against the other. `keep` (the scan) then
+    #   runs on the candidates only, as before.
+    order = sorted(parents, key=lambda p: _added_line_count(p, sha))
+    cand = set(_added_rows_between(order[0], sha, keep))
+    for p in order[1:]:
+        if not cand:
+            break
+        cand = {r for r in _stream_added(["git", "diff", "--unified=0", "--no-color", p, sha]) if r in cand}
+    return sorted(cand)
 
 
 def history_findings() -> list[tuple[str, str, str, str]]:
@@ -1917,7 +2015,7 @@ def history_findings() -> list[tuple[str, str, str, str]]:
         if not parts:
             continue
         sha, parents = parts[0], parts[1:]
-        for f, what, line in scan(commit_introduced(sha, parents, empty)):
+        for f, what, line in scan(commit_introduced(sha, parents, empty, _is_hit)):
             found.append((sha, f, what, line))
     return found
 

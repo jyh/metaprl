@@ -388,6 +388,7 @@ def self_test() -> int:
         if line_sha(base_line) in finding_line("d.md", 1) or nm in finding_line("d.md", 1):
             failures.append("the finding line must carry neither the digest nor the name")
     path_receipt = _self_test_paths(failures)
+    mem_receipt = _self_test_history_memory(failures)
     for f in failures:
         print(f"SELF-TEST FAIL: {f}")
     if failures:
@@ -396,8 +397,61 @@ def self_test() -> int:
           f"{len(FORBIDDEN) * 5} planted forms caught across {len(FORBIDDEN)} name(s), "
           f"the shrunk-set tripwire fires, an author byline passes, role words pass, self clean, "
           f"the finding line withholds the matched text and still names file:line; the tree ratchet: baselined passes, edited is new, missing baseline is fatal, vanished is paid, moved is new; "
-          f"{path_receipt})")
+          f"{path_receipt}; {mem_receipt})")
     return 0
+
+
+def _peak_rss_bytes(ru_maxrss: int) -> int:
+    """ru_maxrss is BYTES on macOS and KILOBYTES on Linux; a budget compared in the wrong unit passes everything."""
+    return ru_maxrss if sys.platform == "darwin" else ru_maxrss * 1024
+
+
+def _self_test_history_memory(failures: list) -> str:
+    """THE HISTORY WALK MUST NOT HOLD A DIFF IN MEMORY (STATUS-systems row 159, 2026-11-14). jyh/vir's Scrub
+    hung on this arm's --history: two merges there diff 1.92 GB against one parent, and the walk read each diff
+    WHOLE and listed every added row, peaking at 18 GB on a 16 GB runner; the forge kept no log. A scratch repo's
+    one commit adds a SIZE-byte text file; --history runs in a child; the child's peak RSS beyond an idle import
+    must stay under ONE copy of the diff, a budget derived from the fixture."""
+    import tempfile
+    size = 32 * 1024 * 1024
+    here = os.path.dirname(os.path.abspath(__file__))
+    probe = ("import resource, sys, io, contextlib; sys.path.insert(0, sys.argv[1]); import check_infra_names as c; "
+             "buf = io.StringIO()\n"
+             "with contextlib.redirect_stdout(buf):\n"
+             "    r = c.history_mode(False, cwd='.', baseline=sys.argv[3]) if sys.argv[2] == 'walk' else 0\n"
+             "print(r, resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)")
+    with tempfile.TemporaryDirectory(prefix="infra-names-memarm-", ignore_cleanup_errors=True) as tmp:
+        repo = os.path.join(tmp, "repo")
+        base = os.path.join(tmp, "empty_hist.tsv")
+        open(base, "w").close()
+        g = ["git", "-C", repo, "-c", "user.name=memory arm", "-c", "user.email=arm@example.invalid"]
+        if subprocess.run(["git", "init", "-q", repo], capture_output=True).returncode != 0:
+            failures.append("history memory arm: git init failed (the arm could not run)")
+            return "history memory arm NOT RUN"
+        line = "an ordinary added line of prose, nothing to report\n"
+        with open(os.path.join(repo, "big.md"), "w", encoding="utf-8") as fh:
+            fh.write(line * (size // len(line)))
+        for a in (["add", "big.md"], ["commit", "-q", "-m", "one large added file"]):
+            if subprocess.run(g + a, capture_output=True).returncode != 0:
+                failures.append(f"history memory arm: git {a[0]} failed (the arm could not run)")
+                return "history memory arm NOT RUN"
+        peaks = {}
+        for mode in ("idle", "walk"):
+            r = subprocess.run([sys.executable, "-c", probe, here, mode, base], cwd=repo,
+                               capture_output=True, text=True)
+            parts = r.stdout.split()
+            if r.returncode != 0 or len(parts) != 2 or not parts[1].isdigit() or parts[0] != "0":
+                failures.append(f"history memory arm: the {mode} child exited {r.returncode} "
+                                f"(mode rc {parts[0] if parts else 'none'}) with no peak")
+                return "history memory arm NOT RUN"
+            peaks[mode] = _peak_rss_bytes(int(parts[1]))
+    cost = peaks["walk"] - peaks["idle"]
+    if cost >= size:
+        failures.append(f"history memory arm: --history over one {size} B added file cost {cost} B of peak RSS "
+                        f"beyond an idle import -- it holds the diff whole (the vir hang, row 159)")
+    shown = f"{cost // 1024} KiB" if cost > 0 else "0 KiB (below the idle noise)"
+    return (f"--history cost {shown} over a {size // (1024 * 1024)} MiB diff (budget: under one copy; "
+            f"walk peak {peaks['walk'] // 1024} KiB, idle peak {peaks['idle'] // 1024} KiB)")
 
 
 class _FixtureError(Exception):
@@ -1158,16 +1212,39 @@ def hist_verdict(per, path_per, base_set) -> tuple:
             [k for k in sorted(path_per) if not _hist_path_accepted(base_set, k[0], k[1])])
 
 
-def added_rows(base: str, sha: str, cwd=None) -> list:
-    """(path, added text) for what this commit ADDS. A deletion is never a finding."""
-    out = _git(["diff", "--unified=0", "--no-color", base, sha, "--"], cwd)
+def added_rows(base: str, sha: str, cwd=None, keep=None) -> list:
+    """(path, added text) for what this commit ADDS. A deletion is never a finding. With `keep`, only the rows
+    keep() accepts are held.
+
+    ⛔ THE DIFF IS STREAMED, NEVER HELD WHOLE (STATUS-systems row 159). Read into one string, split, and
+    listed, it cost about nine copies of the diff: 18 GB on jyh/vir's two 1.92 GB merges, and the runner hung.
+    Lines split exactly as the whole text's splitlines() did (newline='' leaves each physical line
+    untranslated), and a nonzero git exit raises GitReadError as `_git` does, after the stream is drained."""
+    import io
+    import tempfile
+    argv = ["diff", "--unified=0", "--no-color", base, sha, "--"]
     rows, path = [], "?"
-    for line in out.splitlines():
-        if line.startswith("+++ b/"):
-            path = line[6:]
-        elif line.startswith("+") and not line.startswith("+++"):
-            rows.append((path, line[1:]))
+    with tempfile.TemporaryFile() as err:
+        p = subprocess.Popen(["git"] + argv, cwd=cwd, stdout=subprocess.PIPE, stderr=err)
+        with io.TextIOWrapper(p.stdout, encoding="utf-8", errors="replace", newline="") as out:
+            for physical in out:
+                for line in physical.splitlines():
+                    if line.startswith("+++ b/"):
+                        path = line[6:]
+                    elif line.startswith("+") and not line.startswith("+++"):
+                        row = (path, line[1:])
+                        if keep is None or keep(row):
+                            rows.append(row)
+        rc = p.wait()
+    if rc != 0:
+        raise GitReadError(f"`git {argv[0]}` exited {rc}")
     return rows
+
+
+def _is_hit(row) -> bool:
+    """scan() is a per-row predicate, and --history uses only what it flags, so keeping the flagged rows alone
+    changes no count."""
+    return bool(scan([row]))
 
 
 def added_paths(base: str, sha: str, cwd=None) -> list:
@@ -1233,7 +1310,7 @@ def history_mode(write: bool, cwd=None, baseline=None) -> int:
         n_paths += len(added)
         for p in path_hits(added):
             path_per.add((sha[:12], p))
-        rows = added_rows(base, sha, cwd)
+        rows = added_rows(base, sha, cwd, _is_hit)
         if not rows:
             continue
         for rel, _i, _line in scan(rows):

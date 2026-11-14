@@ -282,6 +282,16 @@ against libmojave 1.1.1 or later:
 - `onAnyHypT` is `idT` when no hypothesis works, as it was written to be
   (for the forward chainer, 2006). Its `idT` base was reached only when
   there were no hypotheses, so it failed as `onSomeHypT` does (#308).
+- A tactic argument's options keep their order across a proof's save and
+  load. The loader read the saved list from its right end while
+  `raw_attributes` writes it oldest first, so every round trip reversed
+  which decision was the most recent (the one `rule_labels_are_allowed`,
+  `dT`'s intro filter, takes), and a reloaded argument was never equal to
+  the saved one. The proof census reads the same with the fix (#316).
+- `timingT`'s user and system times count the children's time correctly:
+  the user time subtracted the start's system time of the children, and
+  the system time cancelled the children's out. The arithmetic is
+  `TacticInternal.times_used` (#317).
 
 ### Tests
 
@@ -887,9 +897,27 @@ against libmojave 1.1.1 or later:
   - `test_http_headers` leaves by `Unix._exit`, so the server threads still
     in `accept` cannot log after its output during the exit teardown (they
     did on 3 of master's last 4 Windows runs) (#310).
+  - `test_term_man_gen_rest`: term_std's `TermMan` on context terms
+    outside sequents, every parameter kind, and the sequent operations'
+    refusals, against term_ds (#313).
+  - `test_tactic_raw_attributes`: a tactic argument's attributes saved and
+    loaded, every kind (#314; the option order, fixed in #316).
+  - `test_tactic_boot_more`: `set_concl`, the term-list and bool printers,
+    `prefix_thenFLT`'s length check, `removeOptionT` and the final hooks
+    (#315).
+  - `test_tactic_times`: `times_used` on fixed readings (#317).
+  - `test_refine_extract_kinds`: extracts through a cut, an identity step
+    and an ML rule (#318).
+  - `test_rewrite_debug`: the rewriter's trace under the `rewrite` debug
+    flag (#319).
 
 ### Known not to work
 
+- A tactic argument whose options include an `ignore` is not
+  `tactic_arg_alpha_equal_with_attributes` to itself after a save and load:
+  `options_eq` also compares the count of decisions, which an ignore adds
+  to and a save (which writes no ignore) does not (pinned by
+  `test_tactic_raw_attributes`, #314, #316).
 - Nested modules: `Filter_summary_io.sub_info` looks a submodule up with
   the full path from the file's root (`path @ [name]`) but on the current
   module's own summary, so it searches for the file's own name first and

@@ -1,0 +1,33 @@
+== set_concl
+goal Arg: arg Hyps: 1.x :H Goal:C, after set_concl D: Arg: arg Hyps: 1.x :H Goal:D, assumptions kept 1
+== attribute printers (width 100)
+-- addTermListT e []
+Annotate: A with attrs < > A with attrs < term_lists = [ e->[] ]; >
+-- addTermListT o [T]
+Annotate: A with attrs < > A with attrs < term_lists = [ o->[ T ] ]; >
+-- addBoolT f false
+Annotate: A with attrs < > A with attrs < bools = [ f->ff ]; >
+== prefix_thenFLT
+idT, then [idT]                      1 subgoal(s)
+idT, then [idT; idT]                 refused (thenFLT: list length mismatch)
+idT, then []                         refused (thenFLT: list length mismatch)
+idT, then [cutT B]                   2 subgoal(s)
+cutT B, then one idT per subgoal     2 subgoal(s)
+cutT B, then [idT]                   refused (thenFLT: list length mismatch)
+== removeOptionT
+addOptionT pa allow; pe exclude      1 subgoal(s)
+options [Perv!select["pa":t]=ййallow; Perv!select["pe":t]=ййexclude]
+removeOptionT pa                     1 subgoal(s)
+options [Perv!select["pe":t]=ййexclude]
+removeOptionT pz (never set)         1 subgoal(s)
+options [Perv!select["pa":t]=ййallow; Perv!select["pe":t]=ййexclude]
+== finalT
+  hook h1 ran
+  hook h2 ran
+finalT h1 then finalT h2             1 subgoal(s)
+idT (the hooks do not run again)     1 subgoal(s)
+finalT h3, then a refusal            refused (thenFLT: list length mismatch)
+idT (after the refusal)              1 subgoal(s)
+== timingT
+timingT (cutT B)                     2 subgoal(s)
+stderr: User time N System time N Real time N

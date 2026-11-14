@@ -1210,16 +1210,39 @@ def hist_verdict(per, path_per, base_set) -> tuple:
             [k for k in sorted(path_per) if not _hist_path_accepted(base_set, k[0], k[1])])
 
 
-def added_rows(base: str, sha: str, cwd=None) -> list:
-    """(path, added text) for what this commit ADDS. A deletion is never a finding."""
-    out = _git(["diff", "--unified=0", "--no-color", base, sha, "--"], cwd)
+def added_rows(base: str, sha: str, cwd=None, keep=None) -> list:
+    """(path, added text) for what this commit ADDS. A deletion is never a finding. With `keep`, only the rows
+    keep() accepts are held.
+
+    ⛔ THE DIFF IS STREAMED, NEVER HELD WHOLE (STATUS-systems row 159). Read into one string, split, and
+    listed, it cost about nine copies of the diff: 18 GB on jyh/vir's two 1.92 GB merges, and the runner hung.
+    Lines split exactly as the whole text's splitlines() did (newline='' leaves each physical line
+    untranslated), and a nonzero git exit raises GitReadError as `_git` does, after the stream is drained."""
+    import io
+    import tempfile
+    argv = ["diff", "--unified=0", "--no-color", base, sha, "--"]
     rows, path = [], "?"
-    for line in out.splitlines():
-        if line.startswith("+++ b/"):
-            path = line[6:]
-        elif line.startswith("+") and not line.startswith("+++"):
-            rows.append((path, line[1:]))
+    with tempfile.TemporaryFile() as err:
+        p = subprocess.Popen(["git"] + argv, cwd=cwd, stdout=subprocess.PIPE, stderr=err)
+        with io.TextIOWrapper(p.stdout, encoding="utf-8", errors="replace", newline="") as out:
+            for physical in out:
+                for line in physical.splitlines():
+                    if line.startswith("+++ b/"):
+                        path = line[6:]
+                    elif line.startswith("+") and not line.startswith("+++"):
+                        row = (path, line[1:])
+                        if keep is None or keep(row):
+                            rows.append(row)
+        rc = p.wait()
+    if rc != 0:
+        raise GitReadError(f"`git {argv[0]}` exited {rc}")
     return rows
+
+
+def _is_hit(row) -> bool:
+    """scan() is a per-row predicate, and --history uses only what it flags, so keeping the flagged rows alone
+    changes no count."""
+    return bool(scan([row]))
 
 
 def added_paths(base: str, sha: str, cwd=None) -> list:
@@ -1285,7 +1308,7 @@ def history_mode(write: bool, cwd=None, baseline=None) -> int:
         n_paths += len(added)
         for p in path_hits(added):
             path_per.add((sha[:12], p))
-        rows = added_rows(base, sha, cwd)
+        rows = added_rows(base, sha, cwd, _is_hit)
         if not rows:
             continue
         for rel, _i, _line in scan(rows):

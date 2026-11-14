@@ -275,6 +275,13 @@ against libmojave 1.1.1 or later:
   `A --> (B --> C)` looked alike. A compound left operand of `-->` or
   `<-->` (and a compound term under a label) is now parenthesised; the
   theories' right-nested rule statements display as before (#304).
+- A multipart part with no `Content-Disposition` fails the request, as the
+  other malformed parts do. It raised `Not_found`, which
+  `Shell_browser.get_post_body` turned into an empty form, so every field of
+  that post was lost (#307).
+- `onAnyHypT` is `idT` when no hypothesis works, as it was written to be
+  (for the forward chainer, 2006). Its `idT` base was reached only when
+  there were no hypotheses, so it failed as `onSomeHypT` does (#308).
 
 ### Tests
 
@@ -874,6 +881,12 @@ against libmojave 1.1.1 or later:
     contexts and meta-terms (#303).
   - `test_ascii_io_save`: saving second-order variables and sequents over
     an old `.prla`, including the <= 1.0.6 S/G sequent pair (#305).
+  - `test_jordering_pos`: JProver's position names, every kind at sort 0
+    and at a nonzero sort, through each string and symbol conversion
+    (#309).
+  - `test_http_headers` leaves by `Unix._exit`, so the server threads still
+    in `accept` cannot log after its output during the exit teardown (they
+    did on 3 of master's last 4 Windows runs) (#310).
 
 ### Known not to work
 
@@ -887,13 +900,15 @@ against libmojave 1.1.1 or later:
   cookies and the content type (pinned by `test_http_headers`, #299):
   `Host: h:8080` has no port, because the value is split on white space;
   `Cache-Control: max-age=60` is an extension, not `MaxAge`; a Referer
-  `http://h:8080/p` has an empty host. A multipart part with no
-  `Content-Disposition` raises `Not_found`, which
-  `Shell_browser.get_post_body` turns into an empty form, so every field of
-  that post is lost.
-- `onAnyHypT` reaches its `idT` base only when there are no hypotheses, so
-  when no hypothesis works it fails as `onSomeHypT` does (#300). Pinned,
-  not changed: which of the two it should be is not clear from the code.
+  `http://h:8080/p` has an empty host. (A multipart part with no
+  `Content-Disposition`, listed here before, is fixed: #307.)
+- A JProver position of a nonzero sort (the modal positions `jall` makes
+  from `Nu_0 i` and `Pi_0 i`) does not read back from its symbol:
+  `string_to_kind` takes any name longer than one character for a
+  `GammaPos` and cuts eight characters from it, so `c3_` raises
+  `Invalid_argument`. The source says modal positions are not to be
+  converted, and the S4 runs never convert one (pinned by
+  `test_jordering_pos`, #309).
 - `Term_order.compare_params` on every kind of parameter
   (`test/unit/test_term_order_params.ml`), levels and operator parameters
   included: on 400 generated parameters it is a total order (0 exactly when

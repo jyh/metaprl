@@ -1372,7 +1372,8 @@ struct
                wrap_term _loc (mk_dep0_dep1_term (mk_dep0_dep1_opname _loc "let") x (make_term e1) (make_term e2))
             | e2 = SELF; "where"; x = var; "="; e1 = SELF ->
                wrap_term _loc (mk_dep0_dep1_term (mk_dep0_dep1_opname _loc "let") x (make_term e1) (make_term e2))
-            | "open";  e1 = SELF; "in"; e2 = SELF ->
+            | (* e1 is NEXT, as in let: SELF read "e1 in e2" as a membership *)
+              "open";  e1 = NEXT; "in"; e2 = SELF ->
                wrap_term _loc (mk_dep0_dep1_term (mk_dep0_dep1_opname _loc "let") (Lm_symbol.add "self") (make_term e1) (make_term e2))
             ]
           | "compare" NONA

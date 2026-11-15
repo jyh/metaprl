@@ -96,6 +96,8 @@ let kind p =
 let rec exn_string = function
    Ploc.Exc (_, e) -> exn_string e
  | Refiner.Refiner.RefineError.RefineError (s, _) -> "RefineError " ^ s
+   (* By name: OCaml 4.14 prints the stdlib's as Stdlib.Stream.Error, 5.x camlp-streams' as Stream.Error. *)
+ | Stream.Error s -> Printf.sprintf "Stream.Error(%S)" s
  | e -> Printexc.to_string e
 
 let show s =
@@ -116,6 +118,18 @@ let () =
       "foo[x:sh]"; "foo[\"s\":sh]";
       "foo[x:op]"; "foo[3:op]";
       "foo[x:cls]"; "foo[3:cls]";
+   ];
+   (* The other parameter constants: a negative number, the quote, a
+      successor and a maximum written in the text, and a term cast.  Read
+      from the output: the quote is refused right after "[" (foo[@],
+      foo[@, 1]; most likely the lexer takes "[@" as OCaml's attribute
+      bracket), and x' without a cast is the meta-string x' (the lexer
+      keeps x' as one identifier, so the successor needs ":l"). *)
+   Grammar.error_verbose := false;
+   print_endline "other parameters in quotation text:";
+   List.iter show [
+      "foo[-3]"; "foo[-3:n]"; "foo[@]"; "foo[ @ ]"; "foo[@, 1]"; "foo[1, @]"; "foo[x']"; "foo[x | y]"; "foo[x' | 2]"; "foo[x | y | z]";
+      "foo[3 | x]"; "foo[(bar):op]"; "foo[(bar{x}):op]"; "foo[(bar):n]";
    ]
 
 (* dest_xparam on the terms base_grammar's generic term parser builds. *)

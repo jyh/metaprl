@@ -24,8 +24,9 @@
        proof's extract; of a derived conditional rewrite, one argument per
        condition, which must be a second-order variable naming no context
        (a first-order variable, or one naming H, is "not general enough");
-       of a primitive, Invalid_argument.  Pinned as found: that message
-       has no space before "is not a derived rule/rewrite".
+       of a primitive, Invalid_argument.  Fixed after this test was
+       written: that message had no space before "is not a derived
+       rule/rewrite".
    Not covered: a condition with a variable that is bound where the
    rewrite applies (create_cond_rewrite's free-variable refusal). *)
 open Refiner.Refiner

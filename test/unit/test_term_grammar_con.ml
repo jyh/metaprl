@@ -79,6 +79,8 @@ module P = Simple_print.SimplePrint
 let rec exn_string = function
    Ploc.Exc (_, e) -> exn_string e
  | Refiner.Refiner.RefineError.RefineError (s, _) -> "RefineError " ^ s
+   (* By name: OCaml 4.14 prints the stdlib's as Stdlib.Stream.Error, 5.x camlp-streams' as Stream.Error. *)
+ | Stream.Error s -> Printf.sprintf "Stream.Error(%S)" s
  | e -> Printexc.to_string e
 
 let rec longid = function

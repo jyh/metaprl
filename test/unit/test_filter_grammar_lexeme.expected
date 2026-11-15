@@ -1,0 +1,17 @@
+\"plain\"    lexeme "\"plain\"", string "plain"
+\"\"         lexeme "\"\"", string ""
+\"a\\nb\"    lexeme "\"a\\nb\"", string "a\nb"
+\"\\r\\t\"   lexeme "\"\\r\\t\"", string "\r\t"
+\"\\065\\066\" lexeme "\"\\065\\066\"", string "AB"
+\"\\255\"    lexeme "\"\\255\"", string "\255"
+\"\\000x\"   lexeme "\"\\000x\"", string "\000x"
+\"\\q\"      lexeme "\"\\q\"", string "\\q"
+\"\\06x\"    lexeme "\"\\06x\"", string "\\06x"
+\"\\12\"     lexeme "\"\\12\"", string "\\12"
+\"x\\\\\"    lexeme "\"x\\\\\"", string "x\\\\"
+\"ab\\\"     lexeme "\"ab\\\"", string "ab\\"
+\"\\256\"    Invalid_argument Char.chr
+\"\\999\"    Invalid_argument Char.chr
+-- a token that takes its regex group, not the string argument
+\"a\\nb\"    lexeme "\"a\\nb\"", arg1 "a\\nb"
+\"\\999\"    Invalid_argument Char.chr

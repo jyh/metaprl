@@ -84,6 +84,8 @@ let () =
       "let p = (module M : S);;";
       "let f (module X : S) = X.x;;";
       "let u = M.(x + y);;";
+      (* a local open in a pattern (patt_proj's PaPfx arm), and a module path of two or more names (me_of_strings), 2026-11-15 *)
+      "let f = function M.(A) -> 0 | _ -> 1;;"; "let g M.(x, y) = x;;"; "open A.B;;"; "include A.B.C;;";
       "type t += A;;";
       "type t += B of int;;";
       "exception E = F;;";

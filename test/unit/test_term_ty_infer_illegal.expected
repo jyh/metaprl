@@ -1,0 +1,27 @@
+ptkt{pt}       Perv!Term
+tkt{vso}       REFUSED: type error: illegal type so-var
+tkso{zero}     REFUSED: type error: illegal type so-var
+ptkt{pvso}     REFUSED: type error: illegal type so-var
+ptkso{pt}      REFUSED: type error: illegal type so-var
+tkt{vctx}      REFUSED: type error: illegal type context
+tkctx{zero}    REFUSED: type error: illegal type context
+ptkt{pvctx}    REFUSED: type error: illegal type context
+ptkctx{pt}     REFUSED: type error: illegal type context
+tkt{vseq}      REFUSED: type error: illegal type sequent
+tkseq{zero}    REFUSED: type error: illegal type sequent
+ptkt{pvseq}    REFUSED: type error: illegal type sequent
+ptkseq{pt}     REFUSED: type error: illegal type sequent
+tkt{vbnd}      REFUSED: type error: illegal type binding
+tkbnd{zero}    REFUSED: type error: illegal type binding
+ptkt{pvbnd}    REFUSED: type error: illegal type binding
+ptkbnd{pt}     REFUSED: type error: illegal type binding
+std so   fso=false fo=true so=true ctx=false seq=false
+std so0  fso=true fo=true so=true ctx=false seq=false
+std ctx  fso=false fo=false so=false ctx=true seq=false
+std seq  fso=false fo=false so=false ctx=false seq=true
+std bnd  fso=false fo=false so=false ctx=false seq=false
+ds  so   fso=false fo=false so=true ctx=false seq=false
+ds  so0  fso=true fo=false so=true ctx=false seq=false
+ds  ctx  fso=false fo=false so=false ctx=true seq=false
+ds  seq  fso=false fo=false so=false ctx=false seq=true
+ds  bnd  fso=false fo=false so=false ctx=false seq=false

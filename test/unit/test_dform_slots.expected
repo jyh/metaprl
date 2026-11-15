@@ -1,0 +1,17 @@
+slot["le"]{f{x}}           Perv!f{'x<|!|>}
+slot["lt"]{f{x}}           Perv!f{'x<|!|>}
+slot["raw"]{f{x}}          Perv!f{'x<|!|>}
+slot["other"]{f{x}}        Perv!f{'x<|!|>}
+slot{f{x}}                 Perv!f{'x<|!|>}
+slot["s"]                  a b
+slot["raw"; "s"]           a	b
+slot["esc"; "s"]           a\tb\"
+slot["cesc"; "s"]          a\tb\042
+slot[token]                Perv!tok
+slot[shape]                Perv!f{'t<||>}
+slot[operator]             Perv!f{'t<||>}
+slot[level]                'l
+slot[number]               42
+slot[var]                  v
+slot[meta number]          n
+slot[meta token]           t

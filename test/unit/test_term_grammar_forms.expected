@@ -1,0 +1,63 @@
+relations and operations on self:
+  a ^= b                   apply{apply{field["=":t]{'self}; a}; b}
+  a ^< b                   apply{apply{field["<":t]{'self}; a}; b}
+  a ^> b                   apply{apply{field[">":t]{'self}; a}; b}
+  a ^<= b                  apply{apply{field["<=":t]{'self}; a}; b}
+  a ^>= b                  apply{apply{field[">=":t]{'self}; a}; b}
+  a ^<> b                  apply{apply{field["<>":t]{'self}; a}; b}
+  a ^+ b                   apply{apply{field["+":t]{'self}; a}; b}
+  a ^- b                   apply{apply{field["-":t]{'self}; a}; b}
+  a ^* b                   apply{apply{field["*":t]{'self}; a}; b}
+  a ^/ b                   apply{apply{field["/":t]{'self}; a}; b}
+  a ^^ b                   apply{apply{field["^":t]{'self}; a}; b}
+on a named structure g:
+  a =[g] b                 apply{apply{field["=":t]{g}; a}; b}
+  a <>[g] b                apply{apply{field["<>":t]{g}; a}; b}
+  a <[g] b                 apply{apply{field["<":t]{g}; a}; b}
+  a >=[g] b                apply{apply{field[">=":t]{g}; a}; b}
+  a +[g] b                 apply{apply{field["+":t]{g}; a}; b}
+  a -[g] b                 apply{apply{field["-":t]{g}; a}; b}
+  a *[g] b                 apply{apply{field["*":t]{g}; a}; b}
+  a /[g] b                 apply{apply{field["/":t]{g}; a}; b}
+  a ^[g] b                 apply{apply{field["^":t]{g}; a}; b}
+integer and other operators:
+  a ^@ b                   power{a; b}
+  a <- b                   fun{b; a}
+  a In b                   mem{a; b}
+  a +: f b                 union{a; b}
+  a *: f b                 prod{a; b}
+  a *. b                   prod{a; b}
+  a / b                    refused: Stream.Error("'[' expected after [sl_div] (in [noncommaterm])")
+  a =@ b                   beq_int{a; b}
+  a <>@ b                  bneq_int{a; b}
+  a %@ b                   rem{a; b}
+  a :: b                   cons{a; b}
+  a +: f [g] b             apply{apply{field["+:f":t]{g}; a}; b}
+  a *: f [g] b             apply{apply{field["*:f":t]{g}; a}; b}
+records:
+  r ^ lab                  field["lab":t]{r}
+  r ^ lab := t             rcrd["lab":t]{t; r}
+  ^ lab                    field["lab":t]{'self}
+  ^ lab := t               rcrd["lab":t]{t; 'self}
+  a := b                   refused: Stream.Error("end of input expected after [term] (in [term_eoi])")
+binders:
+  open e1 in e2            let{e1; 'self. e2}
+  open a in T in e2        equal{e2; let{a; 'self. T}; let{a; 'self. T}}
+  open (e1) in e2          let{e1; 'self. e2}
+  (open e1) in e2          refused: Stream.Error("'in' expected after [noncommaterm] (in [noncommaterm])")
+  e2 where x = e1          let{e1; 'x. e2}
+  let x = e1 in e2         let{e1; 'x. e2}
+  all x In A. B            dall{A; 'x. B}
+  exst x In A. B           dexists{A; 'x. B}
+  exists x In A. B         refused: Stream.Error("end of input expected after [term] (in [term_eoi])")
+  all x. B                 sall{'x. B}
+  forany A. B              all{A; 'self. B}
+  thereis A. B             exists{A; 'self. B}
+meta-terms:
+  A --> B                  Implies(Theorem(A), Theorem(B))
+  x: A --> B               Function('x, Theorem(A), Theorem(B))
+  B <-- A                  Implies(Theorem(A), Theorem(B))
+  B <-- x: A               Function('x, Theorem(A), Theorem(B))
+  A <--> B                 Iff(Theorem(A), Theorem(B))
+  [l] A --> B              Implies(Labeled(l, Theorem(A)), Theorem(B))
+  x: A --> y: B --> C      Function('x, Theorem(A), Function('y, Theorem(B), Theorem(C)))

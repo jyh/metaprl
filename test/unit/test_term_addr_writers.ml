@@ -9,8 +9,9 @@
        that address is w{ the old subterm });
      - apply_var_fun_at_addr: the bound variables it passes at that address;
      - apply_fun_higher and apply_var_fun_higher with a function that
-       succeeds on variables only: the result, and the values collected
-       (with the bound variables passed).
+       succeeds on variables only (and raises RefineError elsewhere, so the
+       walk goes under it): the result, and the values collected (with the
+       bound variables passed).
    It prints, per check, how many terms agree std = ds, how many hold the
    law in each (a term with no address, a leaf, is not counted), the first
    difference, and how much the terms exercise: addresses, addresses under
@@ -138,9 +139,15 @@ module Check (R : Refiner_sig.RefinerSig) = struct
   let syms s = String.concat " " (List.sort Stdlib.compare (List.map string_of_symbol (SymbolSet.elements s)))
   let c = mk_simple_term (op "c") []
   let wrap s = mk_simple_term (op "w") [ s ]
-  let higher_f s = if is_var_term s then wrap s, string_of_symbol (dest_var s) else raise (Failure "not a var")
+  (* apply_fun_higher descends past a subterm where the function raises
+     RefineError, and only then: a Failure would end the whole walk at the
+     root (before 2026-11-14 these raised Failure, so the two higher rows
+     compared "(raises)" with "(raises)" on every term that is not a
+     variable, and the walk itself was never run). *)
+  let not_var = R.RefineError.RefineError ("test_term_addr_writers", R.RefineError.StringError "not a var")
+  let higher_f s = if is_var_term s then wrap s, string_of_symbol (dest_var s) else raise not_var
   let higher_vf bvs s =
-    if is_var_term s then wrap s, string_of_symbol (dest_var s) ^ "<" ^ syms bvs ^ ">" else raise (Failure "not a var")
+    if is_var_term s then wrap s, string_of_symbol (dest_var s) ^ "<" ^ syms bvs ^ ">" else raise not_var
 
   (* (name, the result printed, whether the law holds; None = no law) *)
   let checks d =
@@ -207,3 +214,26 @@ let () =
     !rows;
   Printf.printf "coverage (std): %d addresses, %d with bound variables passed; apply_fun_higher collected %d variables\n"
     !addrs !nonempty_bvars !collected
+
+(* The two higher walks on single shapes, std and ds side by side: a
+   second-order variable or a context with contexts (H) is where std's walk
+   went into the term that encodes the contexts list (Term_addr_gen walked
+   every subterm of the encoding), and a sequent is where the two collect
+   in a different order. *)
+let () =
+  print_endline "the higher walks on single shapes:";
+  let cases = [
+    "var", Var "z";
+    "bind", Bind ("x", Var "x");
+    "sovar", SOVar ("A", [], [ Var "z" ]);
+    "sovar with H", SOVar ("A", [ "H" ], []);
+    "bind, sovar with H", Bind ("x", SOVar ("A", [ "H" ], [ Var "x" ]));
+    "seq, ctx", Seq ("sa", [ Ctx ("K", [], [ Var "z" ]) ], Var "z");
+    "seq, ctx with H", Seq ("sa", [ Ctx ("K", [ "H" ], [ Var "z" ]) ], Var "z");
+  ] in
+  List.iter (fun (name, d) ->
+      List.iter (fun k ->
+          let pick l = fst (List.assoc k l) in
+          Printf.printf "  %-20s %s\n    std %s\n    ds  %s\n" name k (pick (Std.checks d)) (pick (Ds.checks d)))
+        [ "apply_fun_higher on variables"; "apply_var_fun_higher on variables" ])
+    cases

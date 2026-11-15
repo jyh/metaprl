@@ -1,0 +1,30 @@
+first save: 5 lines, first "#PRL version 1.0.28 ASCII term"
+  "NPerv\tPerv\tPerv NIL"
+  "NPerv!xnil\txnil\txnil Perv"
+  "O\to\txnil"
+  "T\tt\to"
+the file as saved                  save returned
+                                     file: 5 lines, first "#PRL version 1.0.28 ASCII term"
+                                     descriptor left open: no
+                                     m.prla.new left behind: false
+no header line                     save raised File_type_base.Bad_magic("./m.prla")
+                                     file: 4 lines, first "NPerv\tPerv\tPerv NIL"
+                                     descriptor left open: no
+                                     m.prla.new left behind: false
+a newer version in the header      save raised File_type_base.Bad_version("./m.prla", _, 6488064)
+                                     file: 5 lines, first "#PRL version 99.0.0 ASCII term"
+                                     descriptor left open: no
+                                     m.prla.new left behind: false
+the last entry (the root) doubled  save returned
+                                     file: 5 lines, first "#PRL version 1.0.28 ASCII term"
+                                     descriptor left open: no
+                                     m.prla.new left behind: false
+the O entry doubled                save returned
+                                     file: 5 lines, first "#PRL version 1.0.28 ASCII term"
+                                     descriptor left open: no
+                                     m.prla.new left behind: false
+an entry naming an undefined term  save raised Invalid_argument("ASCII IO: invalid entry encountered by add_items")
+                                     file: 6 lines, first "#PRL version 1.0.28 ASCII term"
+                                     descriptor left open: yes
+                                     m.prla.new left behind: true
+                                     removing m.prla.new: done

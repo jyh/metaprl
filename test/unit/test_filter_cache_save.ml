@@ -31,7 +31,9 @@ let lines_of f = let ic = open_in_bin f in
 let write_lines f l = let oc = open_out_bin f in List.iter (fun s -> output_string oc s; output_char oc '\n') l; close_out oc
 
 (* The next descriptor the system hands out: a read that leaks one moves it
-   up by one.  On Windows a descriptor is a handle, not a small integer. *)
+   up by one.  On Windows a descriptor is a handle, not a small integer, so
+   this prints "not measured" there; the leak shows instead as a refusal to
+   remove m.prla.new (test_filter_cache_save.expected.win32). *)
 let next_fd () =
   let fd = Unix.openfile Filename.null [ Unix.O_RDONLY ] 0 in
   let n = if Sys.os_type = "Unix" then (Obj.magic fd : int) else 0 in
@@ -54,7 +56,10 @@ let case name damage =
   Printf.printf "%-34s   descriptor left open: %s\n" ""
     (if Sys.os_type <> "Unix" then "not measured on this system" else if after > before then "yes" else "no");
   Printf.printf "%-34s   m.prla.new left behind: %b\n" "" (Sys.file_exists (file ^ ".new"));
-  if Sys.file_exists (file ^ ".new") then Sys.remove (file ^ ".new")
+  (* An open handle keeps Windows from removing the file. *)
+  if Sys.file_exists (file ^ ".new") then
+    Printf.printf "%-34s   removing m.prla.new: %s\n" ""
+      (try Sys.remove (file ^ ".new"); "done" with Sys_error e -> "refused, " ^ e)
 
 let () =
   save ();

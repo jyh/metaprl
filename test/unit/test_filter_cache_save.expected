@@ -27,3 +27,4 @@ an entry naming an undefined term  save raised Invalid_argument("ASCII IO: inval
                                      file: 6 lines, first "#PRL version 1.0.28 ASCII term"
                                      descriptor left open: yes
                                      m.prla.new left behind: true
+                                     removing m.prla.new: done

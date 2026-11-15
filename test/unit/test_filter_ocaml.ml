@@ -205,4 +205,8 @@ let () =
       "class type ct = object inherit d method m : int end;;";
       "class type ct = [int] d;;"; "val f : #c -> unit;;";
       "#use \"f.mli\";;";
+      (* A class path through a functor application: dest_app_ct, which no
+         text reached before.  Pinned as found: F(M).ct comes back F.M.ct
+         (the decoder builds an access, as the camlp5 7 code did). *)
+      "class c : F(M).ct;;"; "module type S = sig class c : F(M).ct end;;";
    ]

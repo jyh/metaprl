@@ -218,6 +218,11 @@ let () =
      runs at cabd9e49, b70008d9, 6a0b2fa6; Linux and macOS never printed it).
      Every case above has been printed by then, so flushing and calling
      _exit, which ends the process with no cleanup, loses nothing the test
-     checks. *)
+     checks.  Under a bisect coverage run (BISECT_FILE set, as the
+     coverage runner sets it for each test) it leaves by exit instead,
+     because _exit also skips bisect's at_exit dump, and a run of this test
+     recorded no coverage at all (the 11-15 cov605 rank read http_simple's
+     header parsers as unreached).  The race is Windows-only and coverage
+     runs are not. *)
   flush_all ();
-  Unix._exit 0
+  if Sys.getenv_opt "BISECT_FILE" <> None then exit 0 else Unix._exit 0

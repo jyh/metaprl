@@ -11,8 +11,9 @@
  * (x: A --> B, B <-- x: A, A <--> B).
  *
  * Read from the output, pinned as written:
- * - no "open" text tried parses: its e1 is SELF, which reads "e1 in e2"
- *   as a membership and then wants another "in" (let's e1 is NEXT);
+ * - "open e1 in e2" is "let self = e1 in e2".  Before the fix that
+ *   followed this test no "open" text parsed: its e1 was SELF, which read
+ *   "e1 in e2" as a membership and then wanted another "in";
  * - a plain "a / b" is refused: "/" has only the "/[g]" form;
  * - "a +: f b" and "a *: f b" drop the operator name (union, prod): the
  *   name is used only by the [g] forms;

@@ -13,11 +13,13 @@
  * parameter of a parsed item's term to lowercase.  None of these arms was
  * reached by a unit test, the theory build or the proof census
  * (2026-11-15 rank).
- * Pinned as found: term_of_sig_item writes a signature group with one
- * subterm per item, and sig_item_of_term reads one list subterm, so the
- * group is refused ("bad arity"); it writes a class-type extension with
- * its name as a parameter and one subterm, and reads two subterms, so the
- * extension is refused too.  pr_o cannot print a class signature group.
+ * Before the fix that followed this test, a signature group and a
+ * class-type extension were refused on the way back ("bad arity"):
+ * term_of_sig_item writes a group with one subterm per item and an
+ * extension with its name as the term's string and one subterm, and
+ * sig_item_of_term read one list subterm and two subterms.  pr_o cannot
+ * print a class signature group or a class-type extension; their terms
+ * come back the same.
  * The expected file is the output of the code as written (2026-11-15),
  * never typed.
  *)

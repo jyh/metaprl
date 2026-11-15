@@ -1,12 +1,8 @@
-FormatError: sig_item_of_term.Filter_ocaml.dest_sig : bad arity
-declare val x; type t end  RAISES FormatError Filter_ocaml.dest_sig : bad arity
-FormatError: sig_item_of_term.Filter_ocaml.dest_sig : bad arity
-declare end                RAISES FormatError Filter_ocaml.dest_sig : bad arity
+declare val x; type t end  val x : int type t  (term same)
+declare end                (* *)  (term same)
 object declare m; n end end (pr_o: Ploc.Exc(_, _))  (term same)
-FormatError: sig_item_of_term.Filter_ocaml.dest_ct : bad arity
-an extension [%x]          RAISES FormatError Filter_ocaml.dest_ct : bad arity
-FormatError: sig_item_of_term.Filter_ocaml.dest_ct : bad arity
-an extension with a body   RAISES FormatError Filter_ocaml.dest_ct : bad arity
+an extension [%x]          (pr_o: Ploc.Exc(_, _))  (term same)
+an extension with a body   (pr_o: Ploc.Exc(_, _))  (term same)
 M.ct as written            class c : M.ct
 FormatError: sig_item_of_term.Filter_ocaml.dest_acc_ct: not a class type path
 m.ct, m lowercase          RAISES FormatError Filter_ocaml.dest_acc_ct: not a class type path

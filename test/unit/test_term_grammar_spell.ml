@@ -104,6 +104,8 @@ let child () =
    case "term" "doc" "@misspelled{betta}";
    case "term" "doc" "@tt{zork}";
    case "term" "doc" "@url{qqq}";
+   case "term" "doc" "@license{qqq}";
+   case "term" "doc" "@comment{qqq}";
    case "term" "doc" "@bf{wrold}";
    case "term" "doc" "@spelling{zork}";
    case "term" "doc" "zork";

@@ -26,6 +26,18 @@ The following words may be misspelled:
 
 
   raised: Failure spelling (qqq)
+doc in term: "@license{qqq}"
+The following words may be misspelled:
+	qqq: line 1, char 0
+
+
+  raised: Failure spelling (qqq)
+doc in term: "@comment{qqq}"
+The following words may be misspelled:
+	qqq: line 1, char 0
+
+
+  raised: Failure spelling (qqq)
 doc in term: "@bf{wrold}"
 The following words may be misspelled:
 	wrold: line 1, char 0

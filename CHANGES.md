@@ -292,6 +292,25 @@ against libmojave 1.1.1 or later:
   the user time subtracted the start's system time of the children, and
   the system time cancelled the children's out. The arithmetic is
   `TacticInternal.times_used` (#317).
+- The shell's `export` (a `.prla` save) no longer fails over a damaged
+  `.prla`. Writing the new file reuses the old one's names, and an old entry
+  naming an undefined term raised `Invalid_argument` after `m.prla.new` was
+  opened: the save failed, the channel was never closed, and `m.prla.new`
+  stayed (on Windows the open handle also kept it from being removed). Now
+  the save writes without the old names, as it did when the old file could
+  not be read, and closes and removes the partial file on any other failure
+  (#322).
+- `open e1 in e2` parses, as `let self = e1 in e2`. Its `e1` was read at the
+  level that includes membership, which took `e1 in e2` as one term, so no
+  `open` text parsed; it is now read as `let`'s `e1` is (#324).
+- term_std's `apply_fun_higher` and `apply_var_fun_higher` (a rewrite or
+  conversion applied at the outermost places it succeeds) leave a
+  second-order variable's or a context's contexts list alone. They went into
+  the term that encodes it, so a function that succeeds on a variable
+  rewrote the context names (`A<|H|>[]` became a term that is no longer a
+  second-order variable) or raised `dest_var` on a sequent with
+  `<K<|H|>[...]>`. term_ds was right. A `TERMS = both` proof census reads
+  the same with the fix (#326).
 
 ### Tests
 
@@ -910,9 +929,37 @@ against libmojave 1.1.1 or later:
     and an ML rule (#318).
   - `test_rewrite_debug`: the rewriter's trace under the `rewrite` debug
     flag (#319).
+  - `test_filter_cache_save`: the first test that builds a filter cache;
+    the ASCII save over a damaged `.prla`, six ways, with a Windows
+    expected file (#321; the defect fixed in #322).
+  - `test_term_grammar_forms`: the quotation forms no theory reaches (the
+    operators on `'self` and on a named structure, records, `where`, the
+    bounded and open quantifiers, the meta arrows with named premises)
+    (#323; `open`, fixed in #324).
+  - `test_term_addr_writers`: its two higher-walk rows now walk. Their test
+    functions raised `Failure`, which ends a walk at the root, so the rows
+    compared one exception with another on every term that is not a
+    variable; with `RefineError` std and ds agree on 513 and 494 of 1,000,
+    and the single shapes show where (#325; fixed in #326).
+  - `test_term_grammar_con`: the term-constructor quotation that the filter
+    compiles to OCaml (#327).
+  - `test_term_grammar_params`: the other parameter constants (a negative
+    number, the quote, `x | y`, `x' | 2`, a term cast) (#328).
 
 ### Known not to work
 
+- The term-constructor quotation's constant-term form `!term!` never
+  parses: inside the term, the closing `!` is read as an opname separator
+  (`foo!bar`) or as the start of the term form `!v`. No theory reaches it
+  (pinned by `test_term_grammar_con`, #327).
+- In the term quotation, a plain `a / b` is refused (`/` has only the
+  `/[g]` form), `a +: f b` and `a *: f b` drop the name `f` (it is used by
+  the `[g]` forms only), and the quote parameter right after `[` is refused
+  (`foo[@]`; `foo[ @ ]` works) (pinned by `test_term_grammar_forms`, #323,
+  and `test_term_grammar_params`, #328).
+- term_std and term_ds collect the values of a higher walk over a sequent
+  in a different order; the results are the same terms. No reader of a
+  rewrite's justification list depends on its order (#325, #326).
 - A tactic argument whose options include an `ignore` is not
   `tactic_arg_alpha_equal_with_attributes` to itself after a save and load:
   `options_eq` also compares the count of decisions, which an ignore adds

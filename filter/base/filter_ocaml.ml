@@ -2642,15 +2642,15 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          let dest_app_ct t =
             let loc = dest_loc "dest_app_ct" t in
             let ct1, ct2 = two_subterms t in
-               (* As in the camlp5 7 code, this builds an access, not an application. *)
+               (* The application of a functor in a class path, F(M) in
+                * F(M).c (mk_ct writes MLast.LiApp here).  The camlp5 7 code
+                * built an access, so F(M).c came back as F.M.c. *)
                (* camlp5 8: M.c is CtLongLid; a bare M is CtLongLid (M, "") until completed *)
                match dest_ct ct1, dest_ct ct2 with
-                  CtLongLid (_, li, Ploc.VaVal ""), CtLid (_, s) ->
-                     CtLongLid (loc, li, s)
-                | CtLongLid (_, li1, Ploc.VaVal ""), CtLongLid (_, li2, Ploc.VaVal "") ->
-                     CtLongLid (loc, longid_append loc li1 li2, Ploc.VaVal "")
+                  CtLongLid (_, li1, Ploc.VaVal ""), CtLongLid (_, li2, Ploc.VaVal "") ->
+                     CtLongLid (loc, MLast.LiApp (loc, li1, li2), Ploc.VaVal "")
                 | _ ->
-                     raise_format_error "Filter_ocaml.dest_acc_ct: not a class type path" t
+                     raise_format_error "Filter_ocaml.dest_app_ct: not a functor application in a class type path" t
          in add_ct "class_type_app" dest_app_ct
       and ct_ide_op =
          let dest_ide_ct t =

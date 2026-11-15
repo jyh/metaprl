@@ -210,7 +210,5 @@ same      class type ct = object inherit d method m : int end
 same      class type ct = [int] d
 same      val f : #c -> unit
 same      (* #use "f.mli" *)
-DIFFERS   class c : F(M).ct
-       ->  class c : F.M.ct
-DIFFERS   module type S = sig class c : F(M).ct end
-       ->  module type S = sig class c : F.M.ct end
+same      class c : F(M).ct
+same      module type S = sig class c : F(M).ct end

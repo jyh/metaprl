@@ -595,11 +595,29 @@ struct
 
       (* Now write the term *)
       let newname = filename ^ ".new" in
-      let outx = Stdlib.open_out_bin newname in
       let major, minor, rev = unpack_version (List.hd versions) in
-         Printf.fprintf outx "#PRL version %d.%d.%d ASCII term\n" major minor rev;
-         PreAsciiIO.write_term outx table term;
-         Stdlib.close_out outx;
+      let write_with table =
+         let outx = Stdlib.open_out_bin newname in
+            Fun.protect ~finally:(fun () -> Stdlib.close_out_noerr outx) (fun () ->
+                  Printf.fprintf outx "#PRL version %d.%d.%d ASCII term\n" major minor rev;
+                  PreAsciiIO.write_term outx table term;
+                  Stdlib.close_out outx)
+      in
+         (*
+          * Writing with the old table decodes its entries, so a damaged
+          * entry raises Invalid_argument here, not in read_table: write
+          * without reusing the old names then, as when the file cannot be
+          * read.  On any other failure, close the channel and remove the
+          * partial file.
+          *)
+         (try
+             try write_with table with
+                Invalid_argument _ ->
+                   write_with (PreAsciiIO.initialize ())
+          with
+             exn ->
+                (try Sys.remove newname with Sys_error _ -> ());
+                raise exn);
          Unix.rename newname filename
 end
 

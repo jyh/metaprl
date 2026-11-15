@@ -27,6 +27,11 @@
  * (bisect at c013b0579: dest_ty_param, mk_ty_param_term, dest_ty_bterm
  * and mk_ty_bterm_term unreached).
  *
+ * Last, the Rewrite item's resources in the form ASCII IO <= 1.0.24 wrote
+ * (a resource term with one subterm, no public/private flag), which the
+ * reader still takes (dest_loc_string, unreached before: bisect at
+ * a45cd0437): they read back with their names and arguments, all public.
+ *
  * Pinned as found: PrimitiveModes is written as no modes, so it comes
  * back as AllModes (keeping it needs a term of its own, a format change).
  * An empty PRLGrammar writes no term and comes back as no item.
@@ -227,4 +232,22 @@ let () =
             let k = List.map (fun (it, _) -> kind it) (S.info_items info) in
             let k' = List.map (fun (it, _) -> kind it) (S.info_items info') in
                Printf.printf "all %d items in one module: %d back, kinds %s\n" (List.length items) (List.length k')
-                  (if k = k' then "in the same order" else "DIFFER")
+                  (if k = k' then "in the same order" else "DIFFER");
+   (* ASCII IO <= 1.0.24 wrote a resource term with one subterm (no
+    * public/private flag); the reader still takes that form. *)
+   let rec old_res t =
+      if is_var_term t then t else
+      let { term_op = o; term_terms = bts } = dest_term t in
+      let bts = List.map (fun bt -> let { bvars = bv; bterm = b } = dest_bterm bt in mk_bterm bv (old_res b)) bts in
+         if fst (Opname.dst_opname (dest_op o).op_name) = "resource_defs" && List.length bts = 2 then mk_term o [ List.nth bts 1 ]
+         else mk_term o bts
+   in
+   let rw = List.assoc "Rewrite" items in
+   let info = S.add_command (S.new_module_info ()) (rw, loc) in
+   let show_res r =
+      Printf.sprintf "%s %s %d arg(s)" r.res_name (match r.res_flag with Public -> "public" | Private -> "private") (List.length r.res_args) in
+   let res_of info = match S.info_items info with [ Rewrite { rw_resources = rs; _ }, _ ] -> List.map show_res rs.item_item | _ -> [ "not one rewrite" ] in
+      Printf.printf "Rewrite's resources as written: %s\n" (String.concat ", " (res_of info));
+      match attempt (fun () -> T.of_term_list of_terms (List.map old_res (T.term_list to_terms info))) with
+         Error e -> Printf.printf "in the <= 1.0.24 form: raises %s\n" e
+       | Ok info' -> Printf.printf "in the <= 1.0.24 form, read back: %s\n" (String.concat ", " (res_of info'))

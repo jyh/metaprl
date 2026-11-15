@@ -6,12 +6,12 @@
    explode_term's for a context, unreached.  explode_term is printed as
    its constructor, the operator's name, and the numbers of parameters and
    subterms (of hypotheses for a sequent).
-   Pinned as found: the two disagree on a second-order variable with an
-   argument, 'A['b]: term_std's is_fo_term says true (it holds the
-   variable as a var operator whose subterms bind nothing) and term_ds's
-   says false.  Today's callers (term_ty_infer) also test is_so_var_term
-   in the same condition, so their decisions agree; refiner_debug's
-   TERMS=both merge would flag a call on such a variable.  The expected
+   Fixed after this test was written: the two disagreed on a second-order
+   variable with an argument, 'A['b]: term_std's is_fo_term said true (it
+   holds the variable as a var operator whose subterms bind nothing) and
+   term_ds's false; term_std now says false too.  Its callers
+   (term_ty_infer) also test is_so_var_term in the same condition, so no
+   decision of theirs changes.  The expected
    file is the output of the code. *)
 open Term_sig
 let v = Lm_symbol.add

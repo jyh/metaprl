@@ -22,6 +22,21 @@ casts in quotation text:
   foo[3:op]            refused: Filter_type.BadParamCast(_, "op")
   foo[x:cls]           [MToken x]
   foo[3:cls]           [Token 3]
+other parameters in quotation text:
+  foo[-3]              [Number -3]
+  foo[-3:n]            [Number -3]
+  foo[@]               refused: Stream.Error("end of input expected after [term] (in [term_eoi])")
+  foo[ @ ]             [Quote]
+  foo[@, 1]            refused: Stream.Error("end of input expected after [term] (in [term_eoi])")
+  foo[1, @]            [Number 1; Quote]
+  foo[x']              [MString x']
+  foo[x | y]           [MLevel max(0, x, y)]
+  foo[x' | 2]          [MLevel max(2, x+1)]
+  foo[x | y | z]       [MLevel max(0, x, y, z)]
+  foo[3 | x]           [MLevel max(3, x)]
+  foo[(bar):op]        [Operator]
+  foo[(bar{x}):op]     [Operator]
+  foo[(bar):n]         refused: Filter_type.BadParamCast(_, "n")
 dest_xparam on base_grammar's terms:
   3              Number 3
   -3             Number -3

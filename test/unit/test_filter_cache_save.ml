@@ -45,6 +45,8 @@ let save () =
   S.set_mode info InteractiveSummary;
   S.save info () (OnlySuffixes [ "prla" ])
 
+let first = ref []
+
 let case name damage =
   write_lines file damage;
   let before = next_fd () in
@@ -52,7 +54,7 @@ let case name damage =
   let after = next_fd () in
   let l = lines_of file in
   Printf.printf "%-34s save %s\n" name result;
-  Printf.printf "%-34s   file: %d lines, first %S\n" "" (List.length l) (List.hd l);
+  Printf.printf "%-34s   file: %d lines, first %S, the first save's: %b\n" "" (List.length l) (List.hd l) (l = !first);
   Printf.printf "%-34s   descriptor left open: %s\n" ""
     (if Sys.os_type <> "Unix" then "not measured on this system" else if after > before then "yes" else "no");
   Printf.printf "%-34s   m.prla.new left behind: %b\n" "" (Sys.file_exists (file ^ ".new"));
@@ -64,6 +66,7 @@ let case name damage =
 let () =
   save ();
   let lines = lines_of file in
+  first := lines;
   Printf.printf "first save: %d lines, first %S\n" (List.length lines) (List.hd lines);
   List.iter (fun l -> Printf.printf "  %S\n" l) (List.tl lines);
   let body = List.tl lines in

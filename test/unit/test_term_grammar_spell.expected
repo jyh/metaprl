@@ -3,6 +3,7 @@ doc in term: "alpha beta world"
 doc in term: "alpha wrold betta wrold"
 The following words may be misspelled:
 	betta: line 1, char 0
+	wrold: line 1, char 0; line 1, char 0
 
 
   raised: Failure spelling (wrold)
@@ -21,23 +22,11 @@ doc in term: "@misspelled{betta}"
 doc in term: "@tt{zork}"
   no spelling error
 doc in term: "@url{qqq}"
-The following words may be misspelled:
-	qqq: line 1, char 0
-
-
-  raised: Failure spelling (qqq)
+  no spelling error
 doc in term: "@license{qqq}"
-The following words may be misspelled:
-	qqq: line 1, char 0
-
-
-  raised: Failure spelling (qqq)
+  no spelling error
 doc in term: "@comment{qqq}"
-The following words may be misspelled:
-	qqq: line 1, char 0
-
-
-  raised: Failure spelling (qqq)
+  no spelling error
 doc in term: "@bf{wrold}"
 The following words may be misspelled:
 	wrold: line 1, char 0
@@ -45,26 +34,15 @@ The following words may be misspelled:
 
   raised: Failure spelling (wrold)
 doc in term: "@spelling{zork}"
-The following words may be misspelled:
-	zork: line 1, char 0
-
-
-  raised: Failure spelling (zork)
+  no spelling error
 doc in term: "zork"
-The following words may be misspelled:
-	zork: line 1, char 0
-
-
-  raised: Failure spelling (zork)
+  no spelling error
 doc in term: "@spelling{zork} zork"
-The following words may be misspelled:
-	zork: line 1, char 0
-
-
-  raised: Failure spelling (zork)
+  no spelling error
 doc in term: "don't and do'nt"
 The following words may be misspelled:
 	do: line 1, char 0
+	nt: line 1, char 0
 
 
   raised: Failure spelling (do)

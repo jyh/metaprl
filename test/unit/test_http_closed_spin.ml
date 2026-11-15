@@ -9,8 +9,10 @@
    every accept is on a closed socket, on every platform.
    The test runs itself again as a child that serves that way, reads the
    child's stderr for up to 3 s, counts the "accept failed" lines, and kills
-   the child.  Pinned as found: the loop spins (at least 5 such lines, the
-   child still running).  The expected file is the output of the code as
+   the child.  Before the fix that follows this pin the loop spun (at
+   least 5 such lines, the child still running); now accept's EBADF or
+   ENOTSOCK ends the service: one "accept failed" per serving thread at
+   most, "service closed", and the child exits.  The expected file is the output of the code as
    written, never typed. *)
 
 let child () =
@@ -53,6 +55,10 @@ let parent () =
   Thread.join th;
   Unix.close r;
   Printf.printf "accept failed logged at least 5 times: %b\n" (c >= 5);
-  Printf.printf "the child still running after them: %b\n" (not exited)
+  Printf.printf "the child still running after them: %b\n" (not exited);
+  Mutex.lock m;
+  let closed = List.exists (has "service closed") (String.split_on_char '\n' (Buffer.contents buf)) in
+  Mutex.unlock m;
+  Printf.printf "the child logged \"service closed\": %b\n" closed
 
 let () = if Array.length Sys.argv > 1 && Sys.argv.(1) = "child" then child () else parent ()

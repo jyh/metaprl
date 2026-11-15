@@ -357,3 +357,64 @@ matrix proof found
    Boxr  box[2:n]{p}  /  Perv!xnil
    Boxl  box[1:n]{box[0:n]{p}}  /  Perv!xnil
    Impr  implies{box[1:n]{box[0:n]{p}}; box[2:n]{p}}  /  Perv!xnil
+with s4prover on, [1]p => p:
+w: a602.a603.v1_604.a605.
+a602: a603.v1_604.a605.
+a603: v1_604.
+v1_604: 
+a605: 
+trying multiplicity 1
+do_stringunify:
+Equations:
+Atom names: 
+v1_604. = 
+
+
+
+ 
+MaxVar = 0
+ 
+Substitution:
+v1_604 = 
+
+ 
+empty ordering map
+build_orderingJ_list in path_checker:
+w: a602.a603.v1_604.a605.
+a602: a603.v1_604.a605.
+a603: v1_604.
+v1_604: 
+a605: 
+matrix proof found
+before purity:
+a605: 
+v1_604: 
+a603: v1_604.
+a602: a603.v1_604.a605.
+before total:
+a605: 
+v1_604: 
+a603: v1_604.
+a602: a603.v1_604.a605.
+total:
+Blocking check a602
+.
+po:a602..
+slist:a602.a603.v1_604.a605..
+unclosed:a602 not blocked
+Blocking check a603
+.
+po:a603.a605..
+slist:a603.v1_604.a605..
+unclosed:v1_604.a603 not blocked
+Blocking check v1_604
+.
+po:v1_604.a605..
+slist:v1_604.a605..
+unclosed:v1_604.v1_604 not blocked
+Blocking check a605
+.
+po:a605..
+slist:a605..
+unclosed:a605 not blocked
+   proved

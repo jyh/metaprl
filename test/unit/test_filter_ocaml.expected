@@ -177,6 +177,18 @@ same      class c = object val x = 1 method m = {< x = 2 >} end
 same      class c = object method m = {< >} end
 same      class c = let y = 1 in object method m = y end
 same      class c = let rec f = fun x -> x in object method m = f 1 end
+same      let f = function [| x |] -> x | _ -> 0
+same      let f = function 1.0 -> 0 | _ -> 1
+same      let f = function "a" -> 0 | _ -> 1
+same      let f = function 1l -> 0 | _ -> 1
+same      let f = function 1L -> 0 | 1n -> 1 | _ -> 2
+same      let f ?x () = x
+same      class c = object initializer print_newline () end
+same      class c : int -> object  end = fun x -> object  end
+same      class c = [int] d
+same      let f (x : #c) = x
+same      let _ = 1 + 2
+same      (* #use "f.ml" *)
 same      val x : int
 same      type t
 same      type 'a t = A of 'a
@@ -195,3 +207,6 @@ DIFFERS   type t = private A | B
 same      include T
 same      module type S = sig include T with type t = int end
 same      class type ct = object inherit d method m : int end
+same      class type ct = [int] d
+same      val f : #c -> unit
+same      (* #use "f.mli" *)

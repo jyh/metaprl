@@ -221,6 +221,13 @@ against libmojave 1.1.1 or later:
   syntax error at the `}` of `<<foo{a; }>>` at characters 230-250 was
   reported at 239-260 instead of 239-240. It came in with the 2017 port
   from `Lexing.position` to `Ploc.t` (#271; pinned by #270).
+- `Filter_grammar.parse` raised `Invalid_argument "Char.chr"` on a quoted
+  lexeme with a decimal escape over 255 (`"\999"`): `string_of_lexeme` read
+  any three digits after a backslash as a character code, and it runs for
+  every token (`mk_lexer_term`), so a token that never reads the string
+  raised too. Such a backslash is now kept as written, as `"\q"` is. No
+  theory source has a decimal escape over 255 (#339 pins the old behaviour,
+  #340).
 - Three `Filter_exn` messages: `Bad command:` had no space before the
   command, `Bad_magic` said "that is is either", and `Bad_version` put a
   `, ` after the last supported version (#273; pinned by #272).

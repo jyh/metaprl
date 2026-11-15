@@ -1,0 +1,18 @@
+f{'a; 'a} (agree)                            Strict  compiled
+f{'a; 'a} (agree)                            Relaxed compiled
+f{lam x. 'a['x]; lam y. 'a['y]} (agree)      Strict  compiled
+f{lam x. 'a['x]; lam y. 'a['y]} (agree)      Relaxed compiled
+f{'a; lam x. 'a['x]} (arity 0, then 1)       Strict  refused Rewrite_util.check_arity: RewriteSOVarArity a
+f{'a; lam x. 'a['x]} (arity 0, then 1)       Relaxed refused Rewrite_util.check_arity: RewriteSOVarArity a
+f{lam x. 'a['x]; 'a} (arity 1, then 0)       Strict  refused Rewrite_util.check_arity: RewriteSOVarArity a
+f{lam x. 'a['x]; 'a} (arity 1, then 0)       Relaxed refused Rewrite_util.check_arity: RewriteSOVarArity a
+f{'a; 'a[c]} (an instance at arity 1)        Strict  refused Rewrite_util.check_arity: RewriteSOVarArity a
+f{'a; 'a[c]} (an instance at arity 1)        Relaxed refused Rewrite_util.check_arity: RewriteSOVarArity a
+f{'a<|H|>; 'a} (bound contexts differ)       Strict  refused Rewrite_compile_redex: another error
+f{'a<|H|>; 'a} (bound contexts differ)       Relaxed refused Rewrite_util.check_arity: StringVarError (bound contexts mismatch, a)
+f{x; lam y. 'x['y]} (a free variable, then SO) Strict  compiled
+f{x; lam y. 'x['y]} (a free variable, then SO) Relaxed compiled
+f{x; lam y. 'x['y]; lam z. 'x['z]} (a third) Strict  refused Rewrite_util.check_arity: RewriteSOVarArity x
+f{x; lam y. 'x['y]; lam z. 'x['z]} (a third) Relaxed refused Rewrite_util.check_arity: RewriteSOVarArity x
+f{C['a]; lam y. 'C['y]} (a context, then SO) Strict  refused compile_so_redex_term: another error
+f{C['a]; lam y. 'C['y]} (a context, then SO) Relaxed refused compile_so_redex_term: another error

@@ -41,9 +41,9 @@ records:
   ^ lab := t               rcrd["lab":t]{t; 'self}
   a := b                   refused: Stream.Error("end of input expected after [term] (in [term_eoi])")
 binders:
-  open e1 in e2            refused: Stream.Error("'in' expected after [noncommaterm] (in [noncommaterm])")
-  open a in T in e2        refused: Stream.Error("'in' expected after [noncommaterm] (in [noncommaterm])")
-  open (e1) in e2          refused: Stream.Error("'in' expected after [noncommaterm] (in [noncommaterm])")
+  open e1 in e2            let{e1; 'self. e2}
+  open a in T in e2        equal{e2; let{a; 'self. T}; let{a; 'self. T}}
+  open (e1) in e2          let{e1; 'self. e2}
   (open e1) in e2          refused: Stream.Error("'in' expected after [noncommaterm] (in [noncommaterm])")
   e2 where x = e1          let{e1; 'x. e2}
   let x = e1 in e2         let{e1; 'x. e2}

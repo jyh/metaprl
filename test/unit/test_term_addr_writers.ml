@@ -180,9 +180,19 @@ end
 module Std = Check (Refiner_std.Refiner)
 module Ds = Check (Refiner_ds.Refiner)
 
+(* A higher row's text with the values collected sorted: the walks may
+   visit a sequent's parts in another order. *)
+let unordered s =
+  let k = String.length s in
+  let rec last i = if i < 0 then None else if i + 3 <= k && String.sub s i 3 = " / " then Some i else last (i - 1) in
+  match last (k - 3) with
+  | None -> s
+  | Some i -> String.sub s 0 i ^ " / " ^ String.concat "," (List.sort Stdlib.compare (String.split_on_char ',' (String.sub s (i + 3) (k - i - 3))))
+
 let () =
   let n = 1000 in
   let rows = ref [] in
+  let aside = ref [] in
   let get name = try List.assoc name !rows with Not_found -> let r = ref (0, 0, 0, None) in rows := !rows @ [ name, r ]; r in
   for i = 1 to n do
     let d = gen 4 [] 0 in
@@ -190,7 +200,11 @@ let () =
         let r = get name in
         let a, b, c, f = !r in
         let law = function Some true -> 1 | _ -> 0 in
-        r := (a + (if s = t then 1 else 0)), b + law ls, c + law lt, (if f = None && s <> t then Some (i, s, t) else f))
+        r := (a + (if s = t then 1 else 0)), b + law ls, c + law lt, (if f = None && s <> t then Some (i, s, t) else f);
+        if String.length name > 6 && String.sub name 0 6 = "apply_" && String.ends_with ~suffix:"higher on variables" name then begin
+          let c = try List.assoc name !aside with Not_found -> let c = ref 0 in aside := !aside @ [ name, c ]; c in
+          if unordered s = unordered t then incr c
+        end)
       (Std.checks d) (Ds.checks d)
   done;
   let nonempty_bvars = ref 0 and addrs = ref 0 and collected = ref 0 in
@@ -212,6 +226,7 @@ let () =
       Printf.printf "%-36s %6d %8s %8s\n" name a (if lawful then string_of_int b else "-") (if lawful then string_of_int c else "-");
       match f with None -> () | Some (i, s, t) -> Printf.printf "  first difference, term %d:\n    std %s\n    ds  %s\n" i s t)
     !rows;
+  List.iter (fun (name, c) -> Printf.printf "%s, the values collected compared as a set: std = ds %d\n" name !c) !aside;
   Printf.printf "coverage (std): %d addresses, %d with bound variables passed; apply_fun_higher collected %d variables\n"
     !addrs !nonempty_bvars !collected
 

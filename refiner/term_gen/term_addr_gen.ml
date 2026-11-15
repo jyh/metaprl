@@ -373,6 +373,20 @@ struct
       apply_fun_at_addr (replace_subterm_aux subterm) addr term
 
    (*
+    * The subterms a higher walk goes into: all of them, except the last of
+    * a second-order variable or a context, which encodes its contexts list
+    * (see addr_length above); Term_addr_ds walks the arguments and a
+    * context's body only.
+    *)
+   let walked_bterms term bterms =
+      if is_so_var_term term || is_context_term term then
+         match List.rev bterms with
+            conts :: rev_walked -> List.rev rev_walked, [conts]
+          | [] -> [], []
+      else
+         bterms, []
+
+   (*
     * Apply the function to the outermost terms where it does not fail.
     *)
    let rec apply_fun_higher_term f coll term =
@@ -380,10 +394,11 @@ struct
              t, (arg::coll)
       with RefineError _ ->
             let dt = dest_term term in
-            let (btrms, args) = apply_fun_higher_bterms f coll dt.term_terms in
+            let walked, kept = walked_bterms term dt.term_terms in
+            let (btrms, args) = apply_fun_higher_bterms f coll walked in
                if args == coll
                then (term,coll)
-               else (mk_term dt.term_op btrms, args)
+               else (mk_term dt.term_op (btrms @ kept), args)
 
    and apply_fun_higher_bterms f coll = function
       [] ->
@@ -414,11 +429,12 @@ struct
       with
          RefineError _ ->
             let dt = dest_term term in
-            let bterms, args = apply_var_fun_higher_bterms f bvars coll dt.term_terms in
+            let walked, kept = walked_bterms term dt.term_terms in
+            let bterms, args = apply_var_fun_higher_bterms f bvars coll walked in
                if args == coll then
                   term, coll
                else
-                  mk_term dt.term_op bterms, args
+                  mk_term dt.term_op (bterms @ kept), args
 
    and apply_var_fun_higher_bterms f bvars coll = function
       [] ->

@@ -53,3 +53,25 @@ a syntax error inside <<...>> at f.ml 230-250:
   "foo{a}"       parsed
   "foo[x:n] )"   error at line 10 [241, 242)
   "foo{\n  a; }" error at line 11 [242, 243)
+quotations:
+  term     term     "x"                refused: Failure("term quotation inside a term quotation")
+  doc      term     "x"                x
+  term              "foo{x}"           foo{x}
+  term     doc      "two words"        Perv!xcons{Comment!comment_string["two":s];
+            Perv!xcons{Comment!comment_white;
+                        Perv!xcons{Comment!comment_string["words":s];
+          Perv!xnil}}}
+  doc      doc      "nested"           refused: Failure("doc quotation inside a doc quotation")
+  term     topdoc   "a @bf{b} c"       Perv!xcons{Comment!comment_string["a":s];
+            Perv!xcons{Comment!comment_white;
+                        Perv!xcons{bf{Perv!xcons{Comment!comment_string["b":s];
+                        Perv!xnil}};
+          Perv!xcons{Comment!comment_white;
+                      Perv!xcons{Comment!comment_string["c":s]; Perv!xnil}}}}}
+  term     dform    "a @bf{b} c"       Perv!xcons{Comment!comment_string["a":s];
+            Perv!xcons{bf{Perv!xcons{Comment!comment_string["b":s]; Perv!xnil}};
+                        Perv!xcons{Comment!comment_string["c":s]; Perv!xnil}}}
+  term     doc      "see @code{x}"     Perv!xcons{Comment!comment_string["see":s];
+            Perv!xcons{Comment!comment_white;
+                        Perv!xcons{code["x":s]; Perv!xnil}}}
+  term     zz       "anything"         refused: Failure("term_of_string")

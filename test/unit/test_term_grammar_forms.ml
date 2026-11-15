@@ -97,6 +97,11 @@ let rec mstr = function
  | MetaIff (a, b) -> "Iff(" ^ mstr a ^ ", " ^ mstr b ^ ")"
  | MetaLabeled (l, a) -> "Labeled(" ^ l ^ ", " ^ mstr a ^ ")"
 
+let show_e e s =
+   match Grammar.Entry.parse e (Stream.of_string s) with
+      t -> Printf.printf "  %-24s %s\n" s (mstr t)
+    | exception e -> Printf.printf "  %-24s refused: %s\n" s (exn_string e)
+
 let show_m s =
    match Grammar.Entry.parse Before.mterm (Stream.of_string s) with
       t -> Printf.printf "  %-24s %s\n" s (mstr t)
@@ -120,4 +125,11 @@ let () =
    List.iter show [ "open e1 in e2"; "open a in T in e2"; "open (e1) in e2"; "(open e1) in e2"; "e2 where x = e1"; "let x = e1 in e2";
                     "all x In A. B"; "exst x In A. B"; "exists x In A. B"; "all x. B"; "forany A. B"; "thereis A. B" ];
    print_endline "meta-terms:";
-   List.iter show_m [ "A --> B"; "x: A --> B"; "B <-- A"; "B <-- x: A"; "A <--> B"; "[l] A --> B"; "x: A --> y: B --> C" ]
+   List.iter show_m [ "A --> B"; "x: A --> B"; "B <-- A"; "B <-- x: A"; "A <--> B"; "[l] A --> B"; "x: A --> y: B --> C" ];
+   (* bmterm (a rule's statement: interactive, thm, derived): a premise is
+      a bound term, so a named one is written ('x : A); "x: A --> B" is
+      read as x alone (bmterm has no end-of-input check). *)
+   print_endline "meta-terms as a rule's statement (bmterm):";
+   List.iter (show_e Before.bmterm) [ "A --> B"; "('x : A) --> B"; "B <-- A"; "B <-- ('x : A)"; "A <--> B";
+                                       "[l] A --> B"; "[l] ('x : A) --> B"; "('x : A) --> ('y : B) --> C";
+                                       "x: A --> B" ]

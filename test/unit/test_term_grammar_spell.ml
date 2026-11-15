@@ -140,7 +140,9 @@ let parent () =
    let pid = Unix.create_process_env Sys.executable_name [| Sys.executable_name |] env Unix.stdin w w in
    Unix.close w;
    let ic = Unix.in_channel_of_descr r in
-   let rec lines () = match input_line ic with l -> print_endline l; lines () | exception End_of_file -> () in
+   (* On Win32 the child's stdout is in text mode: drop the \r it writes *)
+   let strip l = let n = String.length l in if n > 0 && l.[n - 1] = '\r' then String.sub l 0 (n - 1) else l in
+   let rec lines () = match input_line ic with l -> print_endline (strip l); lines () | exception End_of_file -> () in
    lines ();
    close_in ic;
    (match snd (Unix.waitpid [] pid) with

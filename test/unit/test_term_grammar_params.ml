@@ -179,3 +179,28 @@ let () =
                   Printf.printf "  %-14S error at line %d [%d, %d)\n" s (Ploc.line_nb l) (Ploc.first_pos l) (Ploc.last_pos l)
              | exception e -> Printf.printf "  %-14S %s\n" s (exn_string e))
          [ "foo{a; }"; "foo{a}"; "foo[x:n] )"; "foo{\n  a; }" ]
+
+(* TermGrammar.parse_quotation, the <:name< ... >> quotations: a quotation
+   inside one of its own kind is refused; "doc", "topdoc" and "dform" are
+   comments (parsed by Comment_parse, spelling on, on, off); any other name
+   asks the parsing state's term_of_string, which this harness's state
+   refuses.  Each line prints the term (Simple_print) or the exception. *)
+let () =
+   print_endline "quotations:";
+   let module SP = Simple_print.SimplePrint in
+   List.iter (fun (curr, nm, s) ->
+         let r =
+            match TG.parse_quotation Ploc.dummy curr nm s with
+               t -> SP.string_of_term (TG.raw_term_of_parsed_term t)
+             | exception e -> "refused: " ^ exn_string e
+         in
+            Printf.printf "  %-8s %-8s %-18S %s\n" curr nm s r)
+      [ "term", "term", "x";
+        "doc", "term", "x";
+        "term", "", "foo{x}";
+        "term", "doc", "two words";
+        "doc", "doc", "nested";
+        "term", "topdoc", "a @bf{b} c";
+        "term", "dform", "a @bf{b} c";
+        "term", "doc", "see @code{x}";
+        "term", "zz", "anything" ]

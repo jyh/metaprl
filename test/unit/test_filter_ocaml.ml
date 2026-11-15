@@ -179,6 +179,17 @@ let () =
       "type t = [> `A | `B of int ];;";
       "type t = [< `A | `B > `A ];;";
       "let o = new c;;"; "let o = new M.c 1;;"; "class c = object val x = 1 method m = {< x = 2 >} end;;"; "class c = object method m = {< >} end;;"; "class c = let y = 1 in object method m = y end;;"; "class c = let rec f x = x in object method m = f 1 end;;";
+      (* The decoders no unit test, theory or census reached (cov605): the
+         constant patterns, ?x without a default, an initializer, the
+         functional and applied class types, #c, a top-level expression and
+         a directive.  Measured by mutants: "?x ()" and "[int] d" do not
+         reach dest_olb_none_patt and dest_app_ct, which stay unreached. *)
+      "let f = function [| x |] -> x | _ -> 0;;"; "let f = function 1.0 -> 0 | _ -> 1;;";
+      "let f = function \"a\" -> 0 | _ -> 1;;"; "let f = function 1l -> 0 | _ -> 1;;";
+      "let f = function 1L -> 0 | 1n -> 1 | _ -> 2;;"; "let f ?x () = x;;";
+      "class c = object initializer print_newline () end;;";
+      "class c : int -> object end = fun x -> object end;;"; "class c = [int] d;;";
+      "let f (x : #c) = x;;"; "1 + 2;;"; "#use \"f.ml\";;";
    ];
    List.iter sg [
       "val x : int;;"; "type t;;"; "type 'a t = A of 'a;;"; "exception E of string;;";
@@ -192,4 +203,6 @@ let () =
       "include T;;";
       "module type S = sig include T with type t = int end;;";
       "class type ct = object inherit d method m : int end;;";
+      "class type ct = [int] d;;"; "val f : #c -> unit;;";
+      "#use \"f.mli\";;";
    ]

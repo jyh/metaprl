@@ -21,12 +21,13 @@
  *
  * The last two cases use a token of the base grammar's form, whose
  * contractum takes its regex group and not the string argument: the
- * string is computed anyway, so "\999" raises there too.
+ * string is computed anyway, so "\999" raised there too, before the fix.
  *
  * Pinned as found: a backslash before the closing quote is kept; \\ is
  * not an escape (both backslashes are kept); an escape with fewer than
- * three digits keeps its backslash; and a decimal escape over 255 raises
- * Invalid_argument "Char.chr" out of parse.
+ * three digits keeps its backslash.  Fixed after this test was written:
+ * a decimal escape over 255 raised Invalid_argument "Char.chr" out of
+ * parse; it now keeps its backslash, like any other non-escape.
  *)
 
 open Opname

@@ -32,6 +32,10 @@
  * reader still takes (dest_loc_string, unreached before: bisect at
  * a45cd0437): they read back with their names and arguments, all public.
  *
+ * Then eprint_info, the summary's debug printer, on the module of all the
+ * items (its stderr captured): every item kind's line, newest first, a
+ * nested module's items indented.  No test had called it.
+ *
  * Pinned as found: PrimitiveModes is written as no modes, so it comes
  * back as AllModes (keeping it needs a term of its own, a format change).
  * An empty PRLGrammar writes no term and comes back as no item.
@@ -250,4 +254,24 @@ let () =
       Printf.printf "Rewrite's resources as written: %s\n" (String.concat ", " (res_of info));
       match attempt (fun () -> T.of_term_list of_terms (List.map old_res (T.term_list to_terms info))) with
          Error e -> Printf.printf "in the <= 1.0.24 form: raises %s\n" e
-       | Ok info' -> Printf.printf "in the <= 1.0.24 form, read back: %s\n" (String.concat ", " (res_of info'))
+       | Ok info' -> Printf.printf "in the <= 1.0.24 form, read back: %s\n" (String.concat ", " (res_of info'));
+   (* eprint_info, the summary's debug printer (to stderr), on the module
+    * of all the items: captured and printed line by line, a Win32 \r
+    * dropped. *)
+   let file = Filename.temp_file "tfs" ".err" in
+   flush stderr;
+   let saved = Unix.dup Unix.stderr in
+   let fd = Unix.openfile file [ Unix.O_WRONLY; Unix.O_TRUNC ] 0o600 in
+   Unix.dup2 fd Unix.stderr; Unix.close fd;
+   let all = List.fold_left (fun info (_, item) -> S.add_command info (item, loc)) (S.new_module_info ()) items in
+   (try S.eprint_info all with e -> Printf.eprintf "raised %s\n" (Printexc.to_string e));
+   flush stderr; Lm_printf.eflush Lm_printf.stderr;
+   Unix.dup2 saved Unix.stderr; Unix.close saved;
+   let ic = open_in_bin file in
+   let text = really_input_string ic (in_channel_length ic) in
+   close_in ic; Sys.remove file;
+   print_endline "eprint_info of the module of all the items:";
+   List.iter (fun l ->
+         let n = String.length l in
+         let l = if n > 0 && l.[n - 1] = '\r' then String.sub l 0 (n - 1) else l in
+            if l <> "" then Printf.printf "  | %s\n" l) (String.split_on_char '\n' text)

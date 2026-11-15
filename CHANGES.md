@@ -314,6 +314,10 @@ against libmojave 1.1.1 or later:
 - A class path through a functor application keeps it: `F(M).ct` came back
   from a term as `F.M.ct` (the decoder built an access, as the camlp5 7
   code did). No stored archive has a class type (#335, #336).
+- The Nuprl-5 link's MathBus decoder (`MathBus.number_value`) read the first
+  two base-10^9 digits of a number, where `mb_number` writes them all, so a
+  number of 19 digits or more lost its low digits on the way back (10^18 came
+  back as 10^9).
 
 ### Tests
 

@@ -9,10 +9,11 @@
    registry under a number of its own, which is all the encoding needs
    (distinct labels).  Each line prints what comes back, marked
    "(DIFFERS)" when it is not alpha_equal to what went in.
+   Before the fix that followed this test, a Number of 19 digits or
+   more came back cut to its first 18 (10^18 as 10^9): MathBus.mb_number
+   writes base-10^9 digits, as many as the number has, and number_value
+   read the first two.
    Pinned as found:
-   - a Number of 19 digits or more comes back cut to its first 18:
-     MathBus.mb_number writes base-10^9 digits, as many as the number
-     has, and number_value reads the first two;
    - a Token comes back as one flat name (Test!tk, one component), so
      it is not the token that went in;
    - a level expression comes back with its variables in the reverse

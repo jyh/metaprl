@@ -311,6 +311,9 @@ against libmojave 1.1.1 or later:
   second-order variable) or raised `dest_var` on a sequent with
   `<K<|H|>[...]>`. term_ds was right. A `TERMS = both` proof census reads
   the same with the fix (#326).
+- A class path through a functor application keeps it: `F(M).ct` came back
+  from a term as `F.M.ct` (the decoder built an access, as the camlp5 7
+  code did). No stored archive has a class type (#335, #336).
 
 ### Tests
 
@@ -945,6 +948,18 @@ against libmojave 1.1.1 or later:
     compiles to OCaml (#327).
   - `test_term_grammar_params`: the other parameter constants (a negative
     number, the quote, `x | y`, `x' | 2`, a term cast) (#328).
+  - `test_term_grammar_forms`: meta-terms as a rule's statement (`bmterm`),
+    named premises written `('x : A)` (#330).
+  - `test_filter_ocaml`: the decoders no test reached (constant patterns,
+    an initializer, the functional class type, `#c`, a top-level expression,
+    a directive) (#331), and a class path through a functor application
+    (#335; fixed in #336).
+  - `test_http_headers` leaves by `exit` under a bisect coverage run
+    (`BISECT_FILE` set): `Unix._exit` also skipped bisect's dump, so the
+    coverage of this test was never recorded (#332).
+  - `test_term_grammar_params`: the `<:name< >>` quotations, each kind
+    (#333).
+  - `test_dform_slots`: Dform's built-in slot, every form (#334).
 
 ### Known not to work
 
@@ -960,6 +975,9 @@ against libmojave 1.1.1 or later:
 - term_std and term_ds collect the values of a higher walk over a sequent
   in a different order; the results are the same terms. No reader of a
   rewrite's justification list depends on its order (#325, #326).
+- In a `dform` comment quotation the white space between words is dropped
+  (its space flag is off; `doc` and `topdoc` keep it) (pinned by
+  `test_term_grammar_params`, #333).
 - A tactic argument whose options include an `ignore` is not
   `tactic_arg_alpha_equal_with_attributes` to itself after a save and load:
   `options_eq` also compares the count of decisions, which an ignore adds

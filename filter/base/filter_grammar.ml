@@ -475,10 +475,12 @@ let union gram1 gram2 =
  *)
 let zero = Char.code '0'
 
+(* Three decimal digits naming a character (at most 255); any other
+ * backslash is kept as written. *)
 let is_decimal_escape s i =
    match s.[i], s.[i + 1], s.[i + 2] with
-      '0'..'9', '0'..'9', '0'..'9' ->
-         true
+      ('0'..'9' as c1), ('0'..'9' as c2), ('0'..'9' as c3) ->
+         (Char.code c1 - zero) * 100 + (Char.code c2 - zero) * 10 + (Char.code c3 - zero) <= 255
     | _ ->
          false
 

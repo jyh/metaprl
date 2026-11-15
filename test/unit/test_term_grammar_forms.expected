@@ -61,3 +61,13 @@ meta-terms:
   A <--> B                 Iff(Theorem(A), Theorem(B))
   [l] A --> B              Implies(Labeled(l, Theorem(A)), Theorem(B))
   x: A --> y: B --> C      Function('x, Theorem(A), Function('y, Theorem(B), Theorem(C)))
+meta-terms as a rule's statement (bmterm):
+  A --> B                  Implies(Theorem(A), Theorem(B))
+  ('x : A) --> B           Function('x, Theorem(A), Theorem(B))
+  B <-- A                  Implies(Theorem(A), Theorem(B))
+  B <-- ('x : A)           Function('x, Theorem(A), Theorem(B))
+  A <--> B                 Iff(Theorem(A), Theorem(B))
+  [l] A --> B              Implies(Labeled(l, Theorem(A)), Theorem(B))
+  [l] ('x : A) --> B       Function('x, Labeled(l, Theorem(A)), Theorem(B))
+  ('x : A) --> ('y : B) --> C Function('x, Theorem(A), Function('y, Theorem(B), Theorem(C)))
+  x: A --> B               Theorem(x)

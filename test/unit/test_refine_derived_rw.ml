@@ -20,6 +20,12 @@
        conditions, each under mk_rewrite_hack;
      - find_sentinal of a rewrite and of a conditional rewrite is the
        refiner as they found it.
+     - extract_term of a derived rewrite takes no argument and gives the
+       proof's extract; of a derived conditional rewrite, one argument per
+       condition, which must be a second-order variable naming no context
+       (a first-order variable, or one naming H, is "not general enough");
+       of a primitive, Invalid_argument.  Pinned as found: that message
+       has no space before "is not a derived rule/rewrite".
    Not covered: a condition with a variable that is bound where the
    rewrite applies (create_cond_rewrite's free-variable refusal). *)
 open Refiner.Refiner
@@ -94,4 +100,17 @@ let () =
   attempt "find_sentinal kc: ax_kc (before kc)" (fun () -> applies (find_sentinal (refiner_of_build build) (opname "kc")) ax (hack k c));
   attempt "find_sentinal kc: ax_late (after kc)" (fun () -> applies (find_sentinal (refiner_of_build build) (opname "kc")) ax3 (hack d c));
   attempt "find_sentinal ckc: ax_kd (before ckc)" (fun () -> applies (find_sentinal (refiner_of_build build) (opname "ckc")) ax2 (hack k d));
-  attempt "find_sentinal ckc: ax_late (after ckc)" (fun () -> applies (find_sentinal (refiner_of_build build) (opname "ckc")) ax3 (hack d c))
+  attempt "find_sentinal ckc: ax_late (after ckc)" (fun () -> applies (find_sentinal (refiner_of_build build) (opname "ckc")) ax3 (hack d c));
+  (* extract_term of a derived rewrite, of a derived conditional rewrite
+     (one argument per condition), and of a primitive *)
+  let ext n args =
+    try sp (extract_term (refiner_of_build build) (opname n) args) with
+    | RefineError.RefineError (m, (RefineError.StringErrorError (r, _) | RefineError.OpnameErrorError (_, RefineError.StringErrorError (r, _)))) ->
+        "refused (" ^ m ^ ": " ^ r ^ ")" in
+  attempt "extract_term kc (derived rewrite), no argument" (fun () -> ext "kc" []);
+  attempt "extract_term kc, one argument" (fun () -> ext "kc" [ mk_var_term (Lm_symbol.add "x") ]);
+  attempt "extract_term ckc (derived cond rewrite), one argument" (fun () -> ext "ckc" [ mk_var_term (Lm_symbol.add "x") ]);
+  attempt "extract_term ckc, one argument 'x<|H|>" (fun () -> ext "ckc" [ mk_so_var_term (Lm_symbol.add "x") [ Lm_symbol.add "H" ] [] ]);
+  attempt "extract_term ckc, one argument 'x (second-order)" (fun () -> ext "ckc" [ sov "x" ]);
+  attempt "extract_term ckc, no argument" (fun () -> ext "ckc" []);
+  attempt "extract_term ax_kc (a primitive rule)" (fun () -> ext "ax_kc" [])

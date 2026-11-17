@@ -16,3 +16,10 @@ find_sentinal kc: ax_late (after kc)                     refused
 find_sentinal ckc: ax_kd (before ckc)                    accepted
 check_sentinal: failed test_refine_derived_rw!ax_late
 find_sentinal ckc: ax_late (after ckc)                   refused
+extract_term kc (derived rewrite), no argument           c
+extract_term kc, one argument                            refused (Refine.extract_term: supplied assumption extracts list length mismatch)
+extract_term ckc (derived cond rewrite), one argument    refused (Refine.extract_term: supplied assumption extracts mismatch)
+extract_term ckc, one argument 'x<|H|>                   refused (Refine.extract_term: supplied assumption extracts mismatch)
+extract_term ckc, one argument 'x (second-order)         c
+extract_term ckc, no argument                            refused (Refine.extract_term: supplied assumption extracts list length mismatch)
+extract_term ax_kc (a primitive rule)                    Invalid_argument Refine.extract_term - test_refine_derived_rw!ax_kcis not a derived rule/rewrite

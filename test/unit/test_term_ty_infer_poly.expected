@@ -76,6 +76,26 @@ same{nil; none}                                      Perv!Term
 same{none; cons{zero; nil}}                          Perv!Term
 cons{none; cons{cons{zero; nil}; nil}}               Test!List{Test!Opt{Perv!Term}}
 cons{none; cons{zero; nil}} (Opt is no Term)         REFUSED: type error
+  with the typereduce rewrite only:
+    none                                             Test!Opt{'v1}
+    cons{none; cons{nil; nil}}                       Test!List{Test!Opt{'v1}}
+    cons{nil; cons{none; nil}}                       Test!List{Test!List{'v1}}
+    unpack{nil}                                      'v1
+    unpack{none}                                     'v1
+    same{nil; none}                                  Perv!Term
+    same{none; cons{zero; nil}}                      Perv!Term
+    cons{none; cons{cons{zero; nil}; nil}}           Test!List{Test!Opt{Perv!Term}}
+    cons{none; cons{zero; nil}} (Opt is no Term)     REFUSED: type error
+  with the typereductions pair only:
+    none                                             Test!Opt{'v1}
+    cons{none; cons{nil; nil}}                       Test!List{Test!Opt{'v1}}
+    cons{nil; cons{none; nil}}                       Test!List{Test!List{'v1}}
+    unpack{nil}                                      'v1
+    unpack{none}                                     'v1
+    same{nil; none}                                  Perv!Term
+    same{none; cons{zero; nil}}                      Perv!Term
+    cons{none; cons{cons{zero; nil}; nil}}           Test!List{Test!Opt{Perv!Term}}
+    cons{none; cons{zero; nil}} (Opt is no Term)     REFUSED: type error
 pair{same{x; y}; pair{'x[zero]; 'y[zero]}}           Test!Pair{Perv!Term; Test!Pair{'v1; 'v1}}
 pair{same{x; y}; pair{'x[zero]; 'y[tt]}}             Test!Pair{Perv!Term; Test!Pair{'v1; 'v1}}
 pair{same{x; y}; pair{'x[zero]; 'y[zero; zero]}}     REFUSED: type error

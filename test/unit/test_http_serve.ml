@@ -13,7 +13,10 @@
    instead, and the next request is still answered by another thread). The log
    line for that request precedes "bad escape" by construction: it is written
    before the server closes the connection, and the client prints only after
-   end of file. A client read times out after 10 s, so a server that stops
+   end of file. Then three more requests that fail, each logged and the loop
+   going on: a client that sends nothing (it shuts down its side, so the
+   server's request line reads End_of_file), and paths whose handler raises
+   Unix_error and Sys_error. A client read times out after 10 s, so a server that stops
    serving reads as "(no reply)" instead of hanging the suite. *)
 open Http_server_type
 
@@ -29,6 +32,8 @@ let start t info =
 let connect _t info out _inx args header body =
   let buf = Buffer.create 64 in
   (match args with
+   | _ :: "/unix" :: _ -> raise (Unix.Unix_error (Unix.ENOENT, "open", "x"))
+   | _ :: "/sys" :: _ -> raise (Sys_error "sys")
    | meth :: uri :: _ ->
        Buffer.add_string buf (meth ^ " " ^ String.concat "|" (Http_simple.decode_uri uri));
        if meth = "post" then begin
@@ -49,6 +54,9 @@ let request text =
   Unix.setsockopt_float s Unix.SO_RCVTIMEO 10.0;
   Unix.connect s (Unix.ADDR_INET (Unix.inet_addr_loopback, !port));
   ignore (Unix.write_substring s text 0 (String.length text));
+  (* Nothing to send: end the request at once, so the server reads end of
+     file now rather than when the read times out. *)
+  if text = "" then Unix.shutdown s Unix.SHUTDOWN_SEND;
   let b = Buffer.create 256 and chunk = Bytes.create 256 in
   let rec loop () =
     let n = try Unix.read s chunk 0 256 with Unix.Unix_error _ -> 0 in
@@ -74,5 +82,9 @@ let () =
     [ ("GET", "GET /a%20b/c/../d HTTP/1.0\r\n\r\n");
       ("POST", "POST /form HTTP/1.0\r\nContent-Type: application/x-www-form-urlencoded\r\nContent-Length: 12\r\n\r\nx=1&y=a+b%26");
       ("bad escape", "GET /%zz HTTP/1.0\r\n\r\n");
-      ("after it", "GET /still/up HTTP/1.0\r\n\r\n") ];
+      ("after it", "GET /still/up HTTP/1.0\r\n\r\n");
+      ("nothing sent", "");
+      ("handler raises Unix_error", "GET /unix HTTP/1.0\r\n\r\n");
+      ("handler raises Sys_error", "GET /sys HTTP/1.0\r\n\r\n");
+      ("after them", "GET /up HTTP/1.0\r\n\r\n") ];
   exit 0

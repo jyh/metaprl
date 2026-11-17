@@ -10,7 +10,13 @@
    print_param 9 points each): shape, operator and quote parameters and
    their meta forms, and a sequent with contexts (H the rule's int
    argument), whose trace prints Shape, Operator and SeqContext stack
-   items.  Not reached here: the Void, ITerm, Context and ContextRestrict
+   items.  Then four rewrites for the compiled programs the trace prints
+   (print_prog): a bound variable checked (RWCheckVar), a free first-order
+   variable (RWMatchFreeFOVar), a binder the variable avoids
+   (RWSOFreeVarsVar), and a context in both sequents of a pair
+   (RWSeqContextInstance, RWSOInstance).  The redex-stack names
+   (rstack_item_str) are printed only by print_rstack, which no trace
+   calls.  Not reached here: the Void, ITerm, Context and ContextRestrict
    stack items (the "RWSoVar: Void" lines are match_redex's own message,
    not a printed stack item) and the ObId and ParamList parameters.  The expected file
    is the output of the code as written (2026-11-14, 2026-11-15). *)
@@ -80,5 +86,17 @@ let () =
        (mk_so_var_term (v "B") [ v "H"; v "J" ] [ mk_var_term (v "x") ]))
     (seq [ Context (v "H", [], []); Context (v "J", [ v "H" ], [ c0 "d" ]) ] (mk_so_var_term (v "B") [ v "H"; v "J" ] [ c0 "d" ]))
     (seq [ Hypothesis (v "y", c0 "e"); Hypothesis (v "x", c0 "d"); Hypothesis (v "w", c0 "g") ] (c0 "b"));
+  case "a bound variable checked" (app "h" [] [ lam "x" (mk_var_term (v "x")) ]) (c0 "c")
+    (app "h" [] [ lam "y" (mk_var_term (v "y")) ]);
+  case "a free first-order variable" (app "h" [] [ mk_var_term (v "u") ]) (mk_var_term (v "u"))
+    (app "h" [] [ mk_var_term (v "u") ]);
+  case "a binder the variable avoids" (lam "x" (sov "b" [])) (sov "b" []) (lam "y" (c0 "c"));
+  let hyp_seq concl = seq [ Context (v "H", [], []); Hypothesis (v "x", mk_so_var_term (v "A") [ v "H" ] []) ] concl in
+  (* H is the last context here, so it is not an argument *)
+  case "a context in both sequents of a pair"
+    (app "pair" [] [ hyp_seq (mk_so_var_term (v "C") [ v "H" ] []); hyp_seq (mk_so_var_term (v "D") [ v "H" ] []) ])
+    (app "pair" [] [ hyp_seq (mk_so_var_term (v "D") [ v "H" ] []); hyp_seq (mk_so_var_term (v "C") [ v "H" ] []) ])
+    (app "pair" [] [ seq [ Hypothesis (v "w", c0 "e"); Hypothesis (v "x", c0 "a") ] (c0 "p");
+                     seq [ Hypothesis (v "w", c0 "e"); Hypothesis (v "x", c0 "a") ] (c0 "q") ]);
   Lm_debug.set_debug "rewrite" false;
   case "flag off" (app "h" [] [ sov "a" [] ]) (sov "a" []) (app "h" [] [ c0 "c" ])

@@ -1,0 +1,11 @@
+== saved and loaded as prlb
+before save: precedence p1 found: false
+before save: precedence p2 (add_prec) found: true
+saved
+interface saved
+loaded      r    Incomplete           (no rewrite)
+loaded      i    Incomplete           Fcp!ri --> Fcp!ci
+loaded      d    Derived              Fcp!rd --> Fcp!cd
+loaded      p    Primitive Fcp!axiom  Fcp!rp --> Fcp!cp
+loaded rule r: Fcp!ra --> Fcp!rg
+after load: precedence p1 found: false, p2 found: false

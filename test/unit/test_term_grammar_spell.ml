@@ -14,16 +14,16 @@
  * holding two small words files; nothing is written into the tree's lib.
  * The child's stdout and stderr are read through one pipe, in order.
  *
- * Pinned as found:
- * - raise_spelling_error names only the first word of its sorted list
- *   when the location has a line number: "alpha wrold betta wrold" reports
- *   betta alone (its print stops after the first word), and raises
- *   Failure "spelling (wrold)", the first word met;
+ * raise_spelling_error raises Failure "spelling (<w>)" for w the first
+ * misspelled word met.  Fixed after this test was written:
+ * - raise_spelling_error named only the first word of its sorted list
+ *   when the location had a line number ("alpha wrold betta wrold"
+ *   reported betta alone: its print stopped after the first word);
  * - a doc comment is parsed in math mode, where Comment_parse names a term
- *   math_<name>, and the spelling switch knows only math_misspelled,
+ *   math_<name>, and the spelling switch knew only math_misspelled,
  *   math_tt, math_rulebox and math_defrule: in a doc comment the words of
- *   @url, @license and @comment are checked, and @spelling adds nothing.
- *   A topdoc comment is not in math mode, and there they work.
+ *   @url, @license and @comment were checked, and @spelling added nothing
+ *   (in a topdoc comment, not in math mode, they worked).
  * (@code's text is a parameter, never a word, so it is never checked.)
  *
  * The grammar is instantiated with its own entries and the permissive

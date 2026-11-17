@@ -1,0 +1,84 @@
+doc in term: "alpha beta world"
+  no spelling error
+doc in term: "alpha wrold betta wrold"
+The following words may be misspelled:
+	betta: line 1, char 0
+
+
+  raised: Failure spelling (wrold)
+topdoc in term: "a betta here"
+The following words may be misspelled:
+	betta: line 1, char 0
+
+
+  raised: Failure spelling (betta)
+dform in term: "wrold betta"
+  no spelling error
+doc in term: "@code{wrold}"
+  no spelling error
+doc in term: "@misspelled{betta}"
+  no spelling error
+doc in term: "@tt{zork}"
+  no spelling error
+doc in term: "@url{qqq}"
+The following words may be misspelled:
+	qqq: line 1, char 0
+
+
+  raised: Failure spelling (qqq)
+doc in term: "@license{qqq}"
+The following words may be misspelled:
+	qqq: line 1, char 0
+
+
+  raised: Failure spelling (qqq)
+doc in term: "@comment{qqq}"
+The following words may be misspelled:
+	qqq: line 1, char 0
+
+
+  raised: Failure spelling (qqq)
+doc in term: "@bf{wrold}"
+The following words may be misspelled:
+	wrold: line 1, char 0
+
+
+  raised: Failure spelling (wrold)
+doc in term: "@spelling{zork}"
+The following words may be misspelled:
+	zork: line 1, char 0
+
+
+  raised: Failure spelling (zork)
+doc in term: "zork"
+The following words may be misspelled:
+	zork: line 1, char 0
+
+
+  raised: Failure spelling (zork)
+doc in term: "@spelling{zork} zork"
+The following words may be misspelled:
+	zork: line 1, char 0
+
+
+  raised: Failure spelling (zork)
+doc in term: "don't and do'nt"
+The following words may be misspelled:
+	do: line 1, char 0
+
+
+  raised: Failure spelling (do)
+doc in term: "'tis and 'twas"
+The following words may be misspelled:
+	twas: line 1, char 0
+
+
+  raised: Failure spelling (twas)
+topdoc in term: "@url{qqq}"
+  no spelling error
+topdoc in term: "@license{qqq}"
+  no spelling error
+topdoc in term: "@spelling{zork}"
+  no spelling error
+doc in term: "zork"
+  no spelling error

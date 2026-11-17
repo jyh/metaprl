@@ -6,6 +6,9 @@ MP_ROOT with lib/ and doc/htmlman/ (exit 0)
     root: <T>/root
     lib: <T>/root/lib
     doc_dir: Some /doc/htmlman/
+doc_dir is kept after doc/htmlman/ is removed (exit 0)
+    doc_dir: Some /doc/htmlman/
+    after removing doc/htmlman: doc_dir: Some /doc/htmlman/
 MP_ROOT with no lib/, no doc/ (exit 0)
     root: <T>/root
     lib: Invalid_argument Setup: MPLIB environment variable must be defined
@@ -39,6 +42,14 @@ hostname from MP_BROWSER_HOSTNAME (exit 0)
     gethostname: test.example
     after sethostname: gethostname: other.example
     after sethostname: MP_BROWSER_HOSTNAME: other.example
+hostname from the system (MP_BROWSER_HOSTNAME unset) (exit 0)
+    MP_BROWSER_HOSTNAME before: unset
+    gethostname is Unix.gethostname (): true
+    MP_BROWSER_HOSTNAME after is Unix.gethostname (): true
+HOME's parent is missing (exit 0)
+    home (first call): Invalid_argument Setup: Please make sure that <T>/missing/h/.metaprl is a directory for which MetaPRL has read and write access
+    home (second call): Invalid_argument Setup: Please make sure that <T>/missing/h/.metaprl is a directory for which MetaPRL has read and write access
+    .metaprl is a directory: false
 HOME/.metaprl is a plain file (exit 0)
     home (first call): Invalid_argument Setup: Please make sure that <T>/h/.metaprl is a directory for which MetaPRL has read and write access
     home (second call): Invalid_argument Setup: Please make sure that <T>/h/.metaprl is a directory for which MetaPRL has read and write access

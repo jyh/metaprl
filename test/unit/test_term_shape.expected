@@ -6,3 +6,11 @@ std: shape_compare 0 iff eq, antisymmetric           250000 of 250000
 ds: canonical term has the shape                      500 of 500
 ds: opparam round trip                                500 of 500
 ds: shape_compare 0 iff eq, antisymmetric            250000 of 250000
+short_string_of_shape (std; ds the same?):
+  a constant                     f[]{}                                f                    same
+  a parameter of each kind       f[NSTVNSL]{}                         f[NSTVNSL]           same
+  subterms with 0 and 2 binders  f[]{0;2}                             f{0;2}               same
+  parameters and subterms        g[N]{1}                              g[N]{1}              same
+  a variable                     var[V]{}                             var[V]               same
+  a sequent                      Perv!sequent[]{0;1}                  sequent{0;1}         same
+  a two-part opname              outer!inner[]{}                      inner                same

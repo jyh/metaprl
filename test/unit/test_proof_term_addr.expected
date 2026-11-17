@@ -1,0 +1,10 @@
+subterm 2                    ext_rule status_incomplete ext_wrapped arg_address addr_subterm ext_identity ext_goal
+  after the term trip:         ext_rule status_incomplete ext_unjustified ext_goal
+the argument                 ext_rule status_incomplete ext_wrapped arg_address addr_arg ext_identity ext_goal
+  after the term trip:         ext_rule status_incomplete ext_unjustified ext_goal
+clause 1                     ext_rule status_incomplete ext_wrapped arg_address addr_clause ext_identity ext_goal
+  after the term trip:         ext_rule status_incomplete ext_unjustified ext_goal
+clause 1, subterm 1, arg     ext_rule status_incomplete ext_wrapped arg_address addr_clause addr_subterm addr_arg ext_identity ext_goal
+  after the term trip:         ext_rule status_incomplete ext_unjustified ext_goal
+the empty address            ext_rule status_incomplete ext_wrapped arg_address ext_identity ext_goal
+  after the term trip:         ext_rule status_incomplete ext_unjustified ext_goal

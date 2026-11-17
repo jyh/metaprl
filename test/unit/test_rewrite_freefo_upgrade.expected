@@ -1,0 +1,32 @@
+== Relaxed
+-- the instance first: tri{'a['x]; x; lam{w.'a['w]}} (upgraded)
+  on tri{f{y}; y; lam{w.f{w}}}               MATCH [unsupported; term 'y; meta-string w]
+  on tri{f{z}; y; lam{w.f{w}}}               REFUSED: match_redex_term
+  on tri{k; y; lam{w.f{w}}}                  REFUSED: check_match
+  on tri{f{y}; k; lam{w.f{w}}}               REFUSED: dest_var
+-- an entry after x's: quad{'a['x]; 'b; x; lam{w.'a['w]}} (upgraded, 'b kept)
+  on quad{f{y}; k; y; lam{w.f{w}}}           MATCH [unsupported; term 'y; term Rfu!k; meta-string w]
+  on quad{f{y}; k; z; lam{w.f{w}}}           REFUSED: match_redex_term
+-- the pattern first: tri{x; 'a['x]; lam{w.'a['w]}}
+  on tri{y; f{y}; lam{w.f{w}}}               MATCH [term 'y; unsupported; meta-string w]
+  on tri{y; f{z}; lam{w.f{w}}}               REFUSED: match_redex_term
+  on tri{y; k; lam{w.f{w}}}                  REFUSED: check_match
+-- only in the argument: pair{'a['x]; lam{w.'a['w]}}
+  on pair{f{y}; lam{w.f{w}}}                 REFUSED: check_stack
+  on pair{k; lam{w.f{w}}}                    REFUSED: check_stack
+== Strict
+-- the instance first: tri{'a['x]; x; lam{w.'a['w]}} (upgraded)
+  on tri{f{y}; y; lam{w.f{w}}}               MATCH [unsupported; term 'y; meta-string w]
+  on tri{f{z}; y; lam{w.f{w}}}               REFUSED: match_redex_term
+  on tri{k; y; lam{w.f{w}}}                  REFUSED: check_match
+  on tri{f{y}; k; lam{w.f{w}}}               REFUSED: dest_var
+-- an entry after x's: quad{'a['x]; 'b; x; lam{w.'a['w]}} (upgraded, 'b kept)
+  on quad{f{y}; k; y; lam{w.f{w}}}           MATCH [unsupported; term 'y; term Rfu!k; meta-string w]
+  on quad{f{y}; k; z; lam{w.f{w}}}           REFUSED: match_redex_term
+-- the pattern first: tri{x; 'a['x]; lam{w.'a['w]}}
+  on tri{y; f{y}; lam{w.f{w}}}               MATCH [term 'y; unsupported; meta-string w]
+  on tri{y; f{z}; lam{w.f{w}}}               REFUSED: match_redex_term
+  on tri{y; k; lam{w.f{w}}}                  REFUSED: check_match
+-- only in the argument: pair{'a['x]; lam{w.'a['w]}}
+  on pair{f{y}; lam{w.f{w}}}                 REFUSED: check_stack
+  on pair{k; lam{w.f{w}}}                    REFUSED: check_stack

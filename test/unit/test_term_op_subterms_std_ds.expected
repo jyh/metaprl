@@ -1,0 +1,40 @@
+f{a1} (1 subterm):
+  is_three_subterm f     std false
+  is_five_subterm f      std false
+  one_subterm_opname f   std a1
+  two_subterms_opname f  std refused (two_subterms: bad arity)
+f{a1; a2}:
+  is_three_subterm f     std false
+  is_five_subterm f      std false
+  one_subterm_opname f   std refused (one_subterm: not a single subterm)  | ds refused (one_subterm: bad arity)
+  two_subterms_opname f  std a1, a2
+f{a1; a2; a3}:
+  is_three_subterm f     std true
+  is_five_subterm f      std false
+  one_subterm_opname f   std refused (one_subterm: not a single subterm)  | ds refused (one_subterm: bad arity)
+  two_subterms_opname f  std refused (two_subterms: bad arity)
+f with 5:
+  is_three_subterm f     std false
+  is_five_subterm f      std true
+  one_subterm_opname f   std refused (one_subterm: not a single subterm)  | ds refused (one_subterm: bad arity)
+  two_subterms_opname f  std refused (two_subterms: bad arity)
+g{a1; a2; a3}:
+  is_three_subterm f     std false
+  is_five_subterm f      std false
+  one_subterm_opname f   std refused (one_subterm: not a single subterm)  | ds refused (one_subterm: bad arity)
+  two_subterms_opname f  std refused (two_subterms: bad arity)
+f{x. a; a; a} (a binder):
+  is_three_subterm f     std false
+  is_five_subterm f      std false
+  one_subterm_opname f   std refused (one_subterm: not a single subterm)  | ds refused (one_subterm: bad arity)
+  two_subterms_opname f  std refused (two_subterms: bad arity)
+f{x. a; a}:
+  is_three_subterm f     std false
+  is_five_subterm f      std false
+  one_subterm_opname f   std refused (one_subterm: not a single subterm)  | ds refused (one_subterm: bad arity)
+  two_subterms_opname f  std refused (two_subterms: bad arity)  | ds refused (dest_simple_bterm)
+f{x. a}:
+  is_three_subterm f     std false
+  is_five_subterm f      std false
+  one_subterm_opname f   std refused (one_subterm: not a single subterm)  | ds refused (dest_simple_bterm)
+  two_subterms_opname f  std refused (two_subterms: bad arity)

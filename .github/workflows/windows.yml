@@ -100,7 +100,12 @@ jobs:
         continue-on-error: true
         run: |
           set -o pipefail
-          opam install -y conf-perl 2>&1 | tail -3 | tee "$RUNNER_TEMP/perl.log"
+          # No pipe from opam here: since 11-15 19:42Z this step died in ~10 s with
+          # exit 3840 and no opam output, leaving opam holding the switch lock.
+          # opam writes to a file, and the step prints its rc and the log's tail.
+          rc=0; opam install -y conf-perl > "$RUNNER_TEMP/perl-opam.log" 2>&1 || rc=$?
+          echo "opam install conf-perl: rc=$rc" | tee "$RUNNER_TEMP/perl.log"
+          tail -40 "$RUNNER_TEMP/perl-opam.log" | tee -a "$RUNNER_TEMP/perl.log"
           site=$(/usr/bin/perl -MConfig -e 'print $Config{installsitelib}')
           echo "site_perl: $site" | tee -a "$RUNNER_TEMP/perl.log"
           mkdir -p "$site/IPC/System" "$site/String"

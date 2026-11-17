@@ -1112,9 +1112,10 @@ struct
          in add_expr "spw" dest_spw_expr
        and expr_xtr_op =
          let dest_xtr_expr t =
-            let loc = dest_loc "dest_xtr_expr" t in
-            let s, eo = two_subterms t in
-               ExXtr (loc, dest_string s, dest_opt (fun e -> Ploc.VaVal (dest_expr e)) eo)
+            (* the encoder writes the name as the term's string and the body as its one subterm *)
+            let loc, s = dest_loc_string "dest_xtr_expr" t in
+            let eo = one_subterm "dest_xtr_expr" t in
+               ExXtr (loc, s, dest_opt (fun e -> Ploc.VaVal (dest_expr e)) eo)
          in add_expr "expr_xtr" dest_xtr_expr
       (*
        * Compute a hash value from the struct.
@@ -1459,11 +1460,12 @@ struct
          in add_patt "patt_typ" dest_typ_patt
        and patt_xtr_op =
          let dest_xtr_patt t =
-            let loc = dest_loc "dest_xtr_patt" t in
-            let s, po = two_subterms t in
+            (* the encoder writes the name as the term's string and the body as its one subterm *)
+            let loc, s = dest_loc_string "dest_xtr_patt" t in
+            let po = one_subterm "dest_xtr_patt" t in
             let po, t = dest_patt_opt po in
             let po = match po with Some p -> Some (Ploc.VaVal p) | None -> None in
-               PaXtr (loc, dest_string s, po), t
+               PaXtr (loc, s, po), t
          in add_patt "patt_xtr" dest_xtr_patt
       in fun vars patt tailf ->
          let loc = loc_of_patt patt in
@@ -2003,9 +2005,10 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          in add_sig "sig_use" dest_use_sig
        and sig_xtr_op =
          let dest_xtr_sig t =
-            let loc = dest_loc "dest_xtr_sig" t in
-            let s, sgo = two_subterms t in
-               SgXtr (loc, dest_string s, dest_opt (fun sg -> Ploc.VaVal (dest_sig sg)) sgo)
+            (* the encoder writes the name as the term's string and the body as its one subterm *)
+            let loc, s = dest_loc_string "dest_xtr_sig" t in
+            let sgo = one_subterm "dest_xtr_sig" t in
+               SgXtr (loc, s, dest_opt (fun sg -> Ploc.VaVal (dest_sig sg)) sgo)
          in add_sig "sig_xtr" dest_xtr_sig
    in fun si ->
          let loc = loc_of_sig_item si in
@@ -2174,9 +2177,10 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          in add_str "str_use" dest_use_str
        and str_xtr_op =
          let dest_xtr_st t =
-            let loc = dest_loc "dest_xtr_st" t in
-            let s, sto = two_subterms t in
-               StXtr (loc, dest_string s, dest_opt (fun st -> Ploc.VaVal (dest_str st)) sto)
+            (* the encoder writes the name as the term's string and the body as its one subterm *)
+            let loc, s = dest_loc_string "dest_xtr_st" t in
+            let sto = one_subterm "dest_xtr_st" t in
+               StXtr (loc, s, dest_opt (fun st -> Ploc.VaVal (dest_str st)) sto)
          in add_str "st_xtr" dest_xtr_st
       and _str_def_op =
          let dest_def_str t =
@@ -2294,9 +2298,10 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          in add_mt "mt_tyo" dest_tyo_mt
        and mt_xtr_op =
          let dest_xtr_mt t =
-            let loc = dest_loc "dest_xtr_mt" t in
-            let s, mto = two_subterms t in
-               MtXtr (loc, dest_string s, dest_opt (fun mt -> Ploc.VaVal (dest_mt mt)) mto)
+            (* the encoder writes the name as the term's string and the body as its one subterm *)
+            let loc, s = dest_loc_string "dest_xtr_mt" t in
+            let mto = one_subterm "dest_xtr_mt" t in
+               MtXtr (loc, s, dest_opt (fun mt -> Ploc.VaVal (dest_mt mt)) mto)
          in add_mt "mt_xtr" dest_xtr_mt
      in
      (* Module type paths, as the camlp5 7 MtUid / MtAcc / MtApp chain encoded them. *)
@@ -2451,9 +2456,10 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          in add_me "me_unp" dest_unp_me
       and me_xtr_op =
          let dest_xtr_me t =
-            let loc = dest_loc "dest_xtr_me" t in
-            let s, meo = two_subterms t in
-               MeXtr (loc, dest_string s, dest_opt (fun me -> Ploc.VaVal (dest_me me)) meo)
+            (* the encoder writes the name as the term's string and the body as its one subterm *)
+            let loc, s = dest_loc_string "dest_xtr_me" t in
+            let meo = one_subterm "dest_xtr_me" t in
+               MeXtr (loc, s, dest_opt (fun me -> Ploc.VaVal (dest_me me)) meo)
          in add_me "me_xtr" dest_xtr_me
       in fun vars me ->
          let loc = loc_of_module_expr me in
@@ -2575,9 +2581,10 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          in add_ce "class_expr_tyc" dest_tyc_ce
       and ce_xtr_op =
          let dest_xtr_ce t =
-            let loc = dest_loc "dest_xtr_ce" t in
-            let s, ceo = two_subterms t in
-               CeXtr (loc, dest_string s, dest_opt (fun ce -> Ploc.VaVal (dest_ce ce)) ceo)
+            (* the encoder writes the name as the term's string and the body as its one subterm *)
+            let loc, s = dest_loc_string "dest_xtr_ce" t in
+            let ceo = one_subterm "dest_xtr_ce" t in
+               CeXtr (loc, s, dest_opt (fun ce -> Ploc.VaVal (dest_ce ce)) ceo)
          in add_ce "class_expr_xtr" dest_xtr_ce
       in fun vars -> function
          MLast.CeApp (loc, ce, e) ->

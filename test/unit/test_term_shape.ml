@@ -10,6 +10,10 @@
      - shape_compare is 0 exactly when eq holds, and antisymmetric, on all
        pairs;
      - the two implementations print every shape the same.
+   Then, for a few fixed terms, string_of_shape beside short_string_of_shape
+   (the operator's first name only, and no [] or {} when there are no
+   parameters or no subterms), which no unit test reached (bisect at
+   a45cd0437: 15 points), in term_std, and whether term_ds prints both the same.
    The generator is a fixed linear congruential sequence, not Random. *)
 open Term_sig
 
@@ -65,6 +69,18 @@ module S (R : Refiner_sig.RefinerSig) = struct
            with _ -> false)
       | _ -> true in
     safe (fun () -> Sh.string_of_shape s), canon, opp, s
+  let fixed () =
+    [ "a constant", build (Op ("f", [], []));
+      "a parameter of each kind", build (Op ("f", [ PN 1; PS "x"; PT "ta"; PV "v"; PMN "n"; PMS "s"; PL (1, [ "k", 1 ]) ], []));
+      "subterms with 0 and 2 binders", build (Op ("f", [], [ [], Var "a"; [ "x0"; "x1" ], Var "b" ]));
+      "parameters and subterms", build (Op ("g", [ PN 2 ], [ [ "x0" ], Var "a" ]));
+      "a variable", build (Var "a");
+      "a sequent", build (Seq ([ Var "a" ], Var "b"));
+      "a two-part opname", mk_term (mk_op (Opname.make_opname [ "inner"; "outer" ]) []) [] ]
+  let shorts () =
+    List.map (fun (l, t) ->
+        let s = Sh.shape_of_term t in
+        l, safe (fun () -> Sh.string_of_shape s), safe (fun () -> Sh.short_string_of_shape s)) (fixed ())
 end
 
 module Std = S (Refiner_std.Refiner)
@@ -90,4 +106,8 @@ let () =
     Printf.printf "%-52s %6d of %d\n" (name ^ ": shape_compare 0 iff eq, antisymmetric") !ok !pairs
   in
   pr "std" res_s Std.Sh.shape_compare Std.Sh.eq;
-  pr "ds" res_d Ds.Sh.shape_compare Ds.Sh.eq
+  pr "ds" res_d Ds.Sh.shape_compare Ds.Sh.eq;
+  print_endline "short_string_of_shape (std; ds the same?):";
+  List.iter2 (fun (l, a, b) d ->
+      Printf.printf "  %-30s %-36s %-20s %s\n" l a b (if (l, a, b) = d then "same" else "DIFFERS"))
+    (Std.shorts ()) (Ds.shorts ())

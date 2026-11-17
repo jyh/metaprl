@@ -147,4 +147,9 @@ let () =
   let s = string_of_term sb (plus a (times b c)) in
   Printf.printf "%-34s %s\n" "printed with slot tags" s;
   Lm_string_set.StringTable.iter (fun k t -> Printf.printf "  tag %-28s %s\n" k (string_of_term (base "prl") t))
-    (get_slot_terms sb)
+    (get_slot_terms sb);
+  (* A term with no display form and several parameters: the default
+     printer's parameter list (format_paramlist's arm for two or more) *)
+  print_endline "== no display form, three parameters";
+  show "prl" "nodf[1; \"s\"; tok]"
+    (mk_term (mk_op (Opname.make_opname [ "nodf" ]) [ make_param (Number (Lm_num.num_of_int 1)); make_param (String "s"); make_param (Token (Opname.make_opname [ "tok" ])) ]) [])

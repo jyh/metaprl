@@ -54,5 +54,83 @@ Rewrite.apply_rewrite: done, result: [f{c}]
 -> f{c}
 == no match
 -> refused (Rewrite.apply_rewrite)
+== shape, operator and quote parameters
+Rewrite.apply_rewrite: match_redex on r["t[]{}":sh, (u{}):op, "s[]{}":sh, (o{}):op, @]
+Rewrite.match_redex: 0
+ RWComposite r@0:sh; @1:op; s[]{}:sh; o[]{}:op; q
+Rewrite.match_redex.RWComposite: r[5](0)/r["t[]{}":sh, (u{}):op, "s[]{}":sh, (o{}):op, @][5](0)
+Rewrite.match_redex_params.RWMShape: stack(0)/2 <- t[]{}
+Rewrite.match_redex_params.RWMOperator: stack(1)/2 <- u[]{}
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWComposite q@0:sh; @1:op
+Stack: 2
+	Shape t[]{}
+	Operator u[]{}
+
+Rewrite.apply_rewrite: done, result: [q["t[]{}":sh, (u{}):op]]
+-> q["t[]{}":sh, (u{}):op]
+== a sequent with contexts
+Rewrite.apply_rewrite: match_redex on Arg: sa
+Hyps:
+      1.y :e
+      2.x :d
+      3.w :g
+Goal:b
+Rewrite.match_redex: 0
+ RWSequent:
+ Arg:
+    RWComposite sa
+ Hyps:
+    RWSeqContext (0, 0, [])
+    RWSeqHyp: stack:2 (default x)
+       RWSOVar (1, )
+    RWSeqContext (-1, 3, [2])
+ Goals:
+    RWSOVar (4, 2)
+Rewrite.match_redex.RWComposite: sa[0](0)/sa[0](0)
+Rewrite.match_redex.RWComposite done
+RWSeqContext/RWSeqFreeVarsContext (1, 0, [])
+RWSeqHyp (1 out of 3)
+Rewrite.set_bvars: stack(2)/5 with x
+Rewrite.match_redex.RWSOVar: stack(1)/5 with d
+	RWSoVar: Void
+RWSeqContext/RWSeqFreeVarsContext (1, 3, [2])
+Rewrite.match_redex.RWSOVar: stack(4)/5 with b
+	RWSoVar: Void
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWSequent:
+ Arg:
+    RWCompositeSimple sa
+ Hyps:
+    RWSeqContextInstance (0)
+    RWSeqContextInstance (3)
+       RWCompositeSimple d
+ Goals:
+    RWSOInstance (4)
+       RWCompositeSimple d
+Stack: 5
+	SeqContext (/(0,1))
+	BTerm d[]
+	Var x
+	SeqContext (x/(2,1))
+	BTerm b[x]
+
+-RWSeqContextInstance (0)
++RWSeqContextInstance (0)
+-RWSeqContextInstance (3)
++RWSeqContextInstance (3, d)
+Rewrite.apply_rewrite: done, result: [Arg: sa
+Hyps:
+      1.y :e
+      2.w :g
+Goal:b]
+-> Arg: sa
+Hyps:
+      1.y :e
+      2.w :g
+Goal:b
 == flag off
 -> c

@@ -1,14 +1,19 @@
 (* Setup (mllib): where MetaPRL finds its tree and keeps its state —
    MP_ROOT, MPLIB (or $MP_ROOT/lib), doc_dir, $HOME/.metaprl, the editor (and that reading its file closes it),
-   the browser hostname (and, through home, the unexported ensure_dir). Every value is computed
+   the browser hostname (from MP_BROWSER_HOSTNAME, or from the system, which then sets the variable),
+   doc_dir's answer kept after its directory goes, and (through home, the unexported ensure_dir) a HOME whose
+   parent is missing. Every value is computed
    once per process from the environment, so each case is a child process
    (this executable again) whose HOME and MP_ROOT point into a temporary
    directory; nothing outside it is read or written. On Win32 the default
    editor is notepad.exe whatever EDITOR says (test_setup.expected.win32). Paths print with that
    directory as <T> and "/" as the separator. Not covered: HOME unset (it
    falls back to /tmp/metaprl-<uid>, outside the temporary directory), and
-   the certificate files (with SSL enabled they run openssl; whether a build
-   enables SSL differs between machines, so their output would too). *)
+   the certificate files: with SSL enabled they run openssl (whether a build
+   enables SSL differs between machines, so their output would too), and
+   every build this repository makes sets SSL_ENABLED = false, where the
+   files are never made (certs_dir, create_cert and execute_openssl run only
+   when SSL is enabled). *)
 
 let t = Filename.concat (Filename.get_temp_dir_name ()) (Printf.sprintf "test_setup_%d" (Unix.getpid ()))
 
@@ -32,11 +37,17 @@ let child case =
       attempt "root" Setup.root;
       attempt "lib" Setup.lib;
       attempt "doc_dir" (fun () -> match Setup.doc_dir () with Some d -> "Some " ^ d | None -> "None")
+  | "doc_dir-kept" ->
+      attempt "doc_dir" (fun () -> match Setup.doc_dir () with Some d -> "Some " ^ d | None -> "None");
+      Unix.rmdir (Filename.concat (Sys.getenv "MP_ROOT") "doc/htmlman");
+      attempt "after removing doc/htmlman: doc_dir" (fun () ->
+          match Setup.doc_dir () with Some d -> "Some " ^ d | None -> "None")
   | "home" ->
       attempt "home (first call)" Setup.home;
       attempt "home (second call)" Setup.home;
       attempt ".metaprl is a directory" (fun () ->
-          string_of_bool (Sys.is_directory (Filename.concat (Sys.getenv "HOME") ".metaprl")))
+          let d = Filename.concat (Sys.getenv "HOME") ".metaprl" in
+          string_of_bool (Sys.file_exists d && Sys.is_directory d))
   | "editor" -> attempt "editor" Setup.editor
   | "editor-closed" ->
       (* Whether reading .metaprl/editor leaves that file open: on Win32 an open handle keeps the file from
@@ -57,6 +68,11 @@ let child case =
       Setup.sethostname "other.example";
       attempt "after sethostname: gethostname" Setup.gethostname;
       attempt "after sethostname: MP_BROWSER_HOSTNAME" (fun () -> Sys.getenv "MP_BROWSER_HOSTNAME")
+  | "hostname-system" ->
+      attempt "MP_BROWSER_HOSTNAME before" (fun () -> try Sys.getenv "MP_BROWSER_HOSTNAME" with Not_found -> "unset");
+      attempt "gethostname is Unix.gethostname ()" (fun () -> string_of_bool (Setup.gethostname () = Unix.gethostname ()));
+      attempt "MP_BROWSER_HOSTNAME after is Unix.gethostname ()" (fun () ->
+          string_of_bool (Sys.getenv "MP_BROWSER_HOSTNAME" = Unix.gethostname ()))
   | c -> Printf.printf "unknown case %s\n" c
 
 let rec rm_rf p =
@@ -91,6 +107,8 @@ let () =
     run "MP_ROOT unset" "paths" [] (fun () -> ());
     run "MP_ROOT with lib/ and doc/htmlman/" "paths" [ "MP_ROOT=" ^ at "root" ] (fun () ->
         mkdirs [ "root"; "root/lib"; "root/doc"; "root/doc/htmlman" ]);
+    run "doc_dir is kept after doc/htmlman/ is removed" "doc_dir-kept" [ "MP_ROOT=" ^ at "root" ] (fun () ->
+        mkdirs [ "root"; "root/doc"; "root/doc/htmlman" ]);
     run "MP_ROOT with no lib/, no doc/" "paths" [ "MP_ROOT=" ^ at "root" ] (fun () -> mkdirs [ "root" ]);
     run "MPLIB set (wins over MP_ROOT/lib)" "paths" [ "MP_ROOT=" ^ at "root"; "MPLIB=" ^ at "mylib" ] (fun () ->
         mkdirs [ "root"; "root/lib" ]);
@@ -109,6 +127,9 @@ let () =
       (fun () -> mkdirs [ "h"; "h/.metaprl" ]; close_out (open_out (at "h/.metaprl/editor")));
     run "hostname from MP_BROWSER_HOSTNAME" "hostname" [ "HOME=" ^ at "h"; "MP_BROWSER_HOSTNAME=test.example" ]
       (fun () -> mkdirs [ "h" ]);
+    run "hostname from the system (MP_BROWSER_HOSTNAME unset)" "hostname-system" [ "HOME=" ^ at "h" ]
+      (fun () -> mkdirs [ "h" ]);
+    run "HOME's parent is missing" "home" [ "HOME=" ^ at "missing/h" ] (fun () -> ());
     run "HOME/.metaprl is a plain file" "home" [ "HOME=" ^ at "h" ] (fun () ->
         mkdirs [ "h" ]; close_out (open_out (at "h/.metaprl")));
     rm_rf t

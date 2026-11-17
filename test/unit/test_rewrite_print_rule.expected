@@ -1,0 +1,64 @@
+== Strict
+  RewriteRule {
+     Redex:
+         RWComposite f
+      Bterm 0()
+         RWSOVar (0, )
+      Bterm 0()
+         RWSOVar (1, )
+     Size = 2
+     Contractum:
+                    RWCompositeSimple f
+      Bterm 0()
+         RWSOInstance (1)
+      Bterm 0()
+         RWSOInstance (0)
+     Mode = Strict
+  }
+== Relaxed
+  RewriteRule {
+     Redex:
+         RWComposite f
+      Bterm 0()
+         RWSOVar (0, )
+      Bterm 0()
+         RWSOVar (1, )
+     Size = 2
+     Contractum:
+                    RWCompositeSimple f
+      Bterm 0()
+         RWSOInstance (1)
+      Bterm 0()
+         RWSOInstance (0)
+     Mode = Relaxed
+  }
+== Strict, two contracta (a condition)
+  RewriteRule {
+     Redex:
+         RWComposite f
+      Bterm 0()
+         RWSOVar (0, )
+      Bterm 0()
+         RWSOVar (1, )
+     Size = 2
+     Contractum:
+                    RWCompositeSimple f
+      Bterm 0()
+         RWSOInstance (1)
+      Bterm 0()
+         RWSOInstance (0)
+                    RWSOInstance (0)
+     Mode = Strict
+  }
+== Relaxed, an ML contractum (fun_rewrite)
+  RewriteRule {
+     Redex:
+         RWComposite f
+      Bterm 0()
+         RWSOVar (0, )
+      Bterm 0()
+         RWSOVar (1, )
+     Size = 2
+     Contractum:<function>
+     Mode = Relaxed
+  }

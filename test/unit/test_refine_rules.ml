@@ -18,6 +18,12 @@
        prim_rule after the sentinel was taken is still refused by it,
        and accepted by a sentinel taken afterwards (check_sentinal also
        prints one line on stderr when it refuses).
+   Last, check_rule and check_prim_rule (what the filter runs on a rule it
+   only checks; no test reached either, bisect at a45cd0437): a good rule,
+   a used and an unused first-order parameter, a subgoal variable not in
+   the goal, and a primitive rule's extract arguments.  Pinned as found:
+   check_prim_rule given the wrong number of extract arguments raises
+   Invalid_argument "List.iter2", not a RefineError.
    Not covered: the patterns have no binders, so the Strict mode create_rule
    compiles with is not told apart from Relaxed (they differ only on bound
    variables); rules with parameters, addresses or second-order variables
@@ -133,4 +139,23 @@ let () =
   prim_rule build ("r" ^ string_of_int !count) Rewrite.empty_args_spec [] (mterm [] C) [] (mk_simple_term (op "ext") []);
   Printf.printf "%-52s %s\n%!" "after prim_rule, the sentinel taken before" (show_result (apply before axiom C []));
   let after = sentinal_of_refiner (refiner_of_build build) in
-  Printf.printf "%-52s %s\n%!" "after prim_rule, a sentinel taken after" (show_result (apply after axiom C []))
+  Printf.printf "%-52s %s\n%!" "after prim_rule, a sentinel taken after" (show_result (apply after axiom C []));
+  (* check_rule and check_prim_rule: what the filter runs on a rule it
+     only checks.  The parameter x is a first-order variable of the goal. *)
+  let x = mk_var_term (Lm_symbol.add "x") and y = mk_var_term (Lm_symbol.add "y") in
+  let gx = Term_sig.MetaTheorem (mk_simple_term (op "g") [ x ]) in
+  let reason f = try f (); "ok" with
+    | RefineError.RefineError (n, RefineError.StringVarError (s, v)) -> Printf.sprintf "refused (%s: %s %s)" n s (Lm_symbol.string_of_symbol v)
+    | RefineError.RefineError (n, _) -> "refused (" ^ n ^ ")"
+    | Invalid_argument s -> "Invalid_argument " ^ s in
+  List.iter (fun (name, f) -> Printf.printf "%-52s %s\n%!" name (reason f))
+    [ "check_rule  'a |- f{'a; c}", (fun () -> check_rule "k1" Rewrite.empty_args_spec [] (mterm [ G (V "a") ] (F (V "a", C))));
+      "check_rule  g{x}, parameter x (used)", (fun () -> check_rule "k2" Rewrite.empty_args_spec [ x ] gx);
+      "check_rule  g{x}, parameter y (unused)", (fun () -> check_rule "k3" Rewrite.empty_args_spec [ y ] gx);
+      "check_rule  'b |- c ('b not in the goal)", (fun () -> check_rule "k4" Rewrite.empty_args_spec [] (mterm [ V "b" ] C));
+      "check_prim_rule  g{'a} |- g{'a}, one argument", (fun () ->
+          check_prim_rule "k5" Rewrite.empty_args_spec [] (mterm [ G (V "a") ] (G (V "a"))) [ mk_so_var_term (Lm_symbol.add "e") [] [] ] (mk_so_var_term (Lm_symbol.add "e") [] []));
+      "check_prim_rule  same, no argument", (fun () ->
+          check_prim_rule "k6" Rewrite.empty_args_spec [] (mterm [ G (V "a") ] (G (V "a"))) [] (mk_simple_term (op "ext") []));
+      "check_prim_rule  same, a first-order argument", (fun () ->
+          check_prim_rule "k7" Rewrite.empty_args_spec [] (mterm [ G (V "a") ] (G (V "a"))) [ x ] x) ]

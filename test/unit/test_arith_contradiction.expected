@@ -1,4 +1,22 @@
+
 3000 systems, 1547 unsatisfiable
 raises iff the system is satisfiable    3000 of  3000
 returns a sub-multiset of the input     1547 of  1547
 what it returns is unsatisfiable        1547 of  1547
+with the debug flags on, a >= b + 1, b >= a + 0:
+  trace: hyps:
+  trace: 'a>='b+1
+  trace: 'b>='a+0
+  trace: 0-> 'a
+  trace: 1-> 'b
+  trace: 0-> Disconnected
+  trace: 1-> Int 1|0:
+  trace: 2-> Int 0|1:
+  trace: 3-> Disconnected
+  trace: Int 1|1:0:
+  trace: Disconnected
+  trace: Int 1|0:
+  trace: Int 0|1:
+  trace: Int 1|1:0:
+  trace: Cycle size 2, list size 2
+  returns 2 of the 2 inequalities

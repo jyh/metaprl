@@ -129,4 +129,17 @@ let () =
             List.iter (Printf.printf "   %s\n%!")
               (List.rev (Pr.gen_prover (Some 3) S4 (List.map build hyps) (List.map build concls)))
         | `Invalid, _, _ -> ())
-      (List.init (List.length cases) (fun k -> k))
+      (List.init (List.length cases) (fun k -> k));
+  (* The prover's own trace under the "s4prover" debug flag, which prints
+     the position ordering (Jordering.print_ordering_map) and the
+     unifier's substitution (Jtunify.print_tunify) to stdout, on the
+     smallest theorem: [1]p => p.  Its position names (a602, ...) come
+     from a global counter, so they hold only while this run is the
+     last: a case added before it renumbers them. *)
+  if only = None then begin
+    print_endline "with s4prover on, [1]p => p:";
+    Lm_debug.set_debug "s4prover" true;
+    print_endline ("   " ^ prove [] [ Imp (b1 p, p) ]);
+    Lm_debug.set_debug "s4prover" false;
+    Format.print_flush ()
+  end

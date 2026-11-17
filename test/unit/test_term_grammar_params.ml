@@ -14,6 +14,13 @@
  * reach none of the casts from a number or a string, and no xparam
  * succ or max.
  *
+ * Then dest_xparam's typed forms, which no test reached (bisect at
+ * a45cd0437): a parameter cast to a kind (xparam{p; kinds}, the kinds the
+ * hypotheses of an xlist_sequent), an operator (xparam_term), and terms
+ * that are no parameter.  Pinned as found: a kind that is not a string is
+ * refused as "not a paramater" (so spelled), and dest_xparam's own
+ * refusal is named dest_xparam_exp.
+ *
  * The expected file is the output of the code.  Before the fix that
  * followed this test, Term_grammar named xparam_succ_opname
  * "xparam_string", so the term xparam_succ{p} that base_grammar builds
@@ -159,7 +166,25 @@ let () =
    showx "2'" (xparam (x_succ (x_int 2)));
    showx "i | j" (xparam (x_max (x_id "i") (x_id "j")));
    showx "i' | 2" (xparam (x_max (x_succ (x_id "i")) (x_int 2)));
-   showx "i | 3" (xparam (x_max (x_id "i") (x_int 3)))
+   showx "i | 3" (xparam (x_max (x_id "i") (x_int 3)));
+   (* xparam{p; kinds}: a parameter cast to a kind, the kind list being the
+    * hypotheses of an xlist_sequent (base_grammar's xterm_param_kind);
+    * xparam_term{t; kinds}: an operator; and a term that is no parameter *)
+   let kinds ks =
+      mk_sequent_term { sequent_args = mk_simple_term (xop "xlist_sequent") [];
+                        sequent_hyps = SeqHyp.of_list (List.mapi (fun i k -> Term_sig.Hypothesis (Lm_symbol.add (Printf.sprintf "k%d" i), k)) ks);
+                        sequent_concl = mk_simple_term (xop "xconcl") [] } in
+   let typed p ks = mk_dep0_dep0_term (xop "xparam") p (kinds ks) in
+   showx "3:n" (typed (x_int 3) [ x_id "n" ]);
+   showx "3:s" (typed (x_int 3) [ x_id "s" ]);
+   showx "\"s\":t" (typed (x_str "s") [ x_id "t" ]);
+   showx "i:l" (typed (x_id "i") [ x_id "l" ]);
+   showx "x:\"cls\"" (typed (x_id "x") [ x_str "cls" ]);
+   showx "x:a!b" (typed (x_id "x") [ x_id "a"; x_id "b" ]);
+   showx "3:<int>" (typed (x_int 3) [ x_int 1 ]);
+   showx "f:op" (mk_dep0_dep0_term (xop "xparam_term") (mk_simple_term (Opname.make_opname [ "f" ]) []) (kinds [ x_id "op" ]));
+   showx "not a param" (mk_simple_term (xop "xnothing") []);
+   showx "xparam{zz}" (xparam (mk_simple_term (xop "zz") []))
 
 (*
  * Where a syntax error inside a quotation is reported.  The quotation

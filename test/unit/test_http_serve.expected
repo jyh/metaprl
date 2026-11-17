@@ -4,3 +4,10 @@ POST: HTTP/1.0 200 OK :: post form x=1 y=a b&
 Http_simple: Failure("unhexify"): error during web service
 bad escape: (no reply)
 after it: HTTP/1.0 200 OK :: get still|up
+Http_simple: End_of_file: error during web service
+nothing sent: (no reply)
+Http_simple: Unix error: No such file or directory: open(x)
+handler raises Unix_error: (no reply)
+Http_simple: Sys_error("sys"): error during web service
+handler raises Sys_error: (no reply)
+after them: HTTP/1.0 200 OK :: get up

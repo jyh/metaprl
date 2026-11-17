@@ -1,0 +1,18 @@
+both flags off
+  f{c; g{c}}: rewrote to f{g{c}; c}
+  g{c}: refused at "Rewrite.apply_rewrite": RewriteStringError "opnames do not match"
+"refine" on
+Refiner.create_rewrite: swap
+  f{c; g{c}}: rewrote to f{g{c}; c}
+  g{c}: refused at "Rewrite.apply_rewrite": PairError ("Refiner: Rewrite swap failed on term\n\t", TermError g{c}, "reason", RewriteStringError "opnames do not match")
+"rewrites" on
+Refiner: applying simple rewrite swap to f{c; g{c}}
+  f{c; g{c}}: rewrote to f{g{c}; c}
+Refiner: applying simple rewrite swap to g{c}
+  g{c}: refused at "Rewrite.apply_rewrite": RewriteStringError "opnames do not match"
+both on
+Refiner.create_rewrite: swap
+Refiner: applying simple rewrite swap to f{c; g{c}}
+  f{c; g{c}}: rewrote to f{g{c}; c}
+Refiner: applying simple rewrite swap to g{c}
+  g{c}: refused at "Rewrite.apply_rewrite": PairError ("Refiner: Rewrite swap failed on term\n\t", TermError g{c}, "reason", RewriteStringError "opnames do not match")

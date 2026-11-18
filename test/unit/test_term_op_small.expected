@@ -1,0 +1,15 @@
+is_quoted_term c[q]                    std true | ds true
+is_quoted_term c[q; 1:n]               std true | ds true
+is_quoted_term c[1:n; q]               std false | ds false
+is_quoted_term c                       std false | ds false
+is_two_subterm f f{c; d}               std true | ds true
+is_two_subterm f f{c}                  std false | ds false
+is_two_subterm f f{c; d; c}            std false | ds false
+is_two_subterm f g{c; d}               std false | ds false
+is_two_subterm f f{x. c; c}            std false | ds false
+five_subterms f{c; d; c; d; c}         std c d c d c | ds c d c d c
+five_subterms f{c; c; c; c}            std refused five_subterms | ds refused five_subterms
+five_subterms f{c; c; x. c; c; c}      std refused five_subterms | ds refused dest_simple_bterm  DIFFER
+six_subterms f{c; d; c; d; c; d}       std c d c d c d | ds c d c d c d
+six_subterms f{c; c; c; c; c}          std refused six_subterms | ds refused six_subterms
+six_subterms f{c; c; c; c; c; x. c}    std refused six_subterms | ds refused dest_simple_bterm  DIFFER

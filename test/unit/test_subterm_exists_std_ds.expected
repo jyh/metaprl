@@ -1,0 +1,11 @@
+[1]                    std true   ds the same
+[2]                    std true   ds the same
+[3]                    std true   ds the same
+[4]                    std false  ds the same
+[-1]                   std true   ds the same
+[-3]                   std true   ds the same
+[-4]                   std false  ds the same
+[3; 1]                 std true   ds the same
+[3; 2]                 std false  ds the same
+[1; 1]                 std false  ds the same
+[0]                    std Invalid_argument Term_addr_gen.subterm_exists: got Subterm 0 ds Invalid_argument Term_addr_ds.make_index_opt: got Subterm 0

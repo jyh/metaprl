@@ -253,7 +253,11 @@ against libmojave 1.1.1 or later:
   - an unpacked module, `(val e : S)` and `(val e)` (#290);
   - a `#t` pattern, whose case body the encoder dropped (the one encoder
     change: a `#t` pattern's term could not be read back before) (#293);
-  - a variant type's lower bound, `[< ... > `A ]` (#294).
+  - a variant type's lower bound, `[< ... > `A ]` (#294);
+  - camlp5's own signature group (`declare ... end`) and class-type
+    extension, which OCaml's syntax cannot write: the decoders read one list
+    subterm and two subterms where the encoders write one subterm per item
+    and a name with one subterm (pinned by `test_filter_ocaml_camlp5`).
 - `Free_vars.free_vars` and `patt_vars` raised on `{ e with ... }`,
   labelled arguments, `lazy`, `assert`, `let open`, int32 / int64 /
   nativeint literals, objects, variant patterns, first-class module
@@ -263,6 +267,13 @@ against libmojave 1.1.1 or later:
   only.
 - `Filter_summary.find_sub_module` printed a "checking" line on stderr,
   with no debug flag, for every module it compared (#297).
+- `Filter_ocaml` could not read back camlp5's extension nodes: `ExXtr`,
+  `PaXtr`, `SgXtr`, `StXtr`, `MtXtr`, `MeXtr` and `CeXtr` were each
+  refused ("bad arity"). Every encoder writes the extension's name as the
+  term's string and its body as one subterm, and every decoder read two
+  subterms. The decoders now read what the encoders write. No encoder
+  changed, so a term already written reads back the same (pinned by
+  `test_filter_ocaml_xtr`).
 - `labProgressT` was inverted: with one subgoal it applied `idT` when the
   goal and the label were unchanged and failed when either changed. It now
   fails on no progress, as `progressT` does, counting a new label as
@@ -314,6 +325,10 @@ against libmojave 1.1.1 or later:
 - A class path through a functor application keeps it: `F(M).ct` came back
   from a term as `F.M.ct` (the decoder built an access, as the camlp5 7
   code did). No stored archive has a class type (#335, #336).
+- The Nuprl-5 link's MathBus decoder (`MathBus.number_value`) read the first
+  two base-10^9 digits of a number, where `mb_number` writes them all, so a
+  number of 19 digits or more lost its low digits on the way back (10^18 came
+  back as 10^9).
 
 ### Tests
 

@@ -1,0 +1,18 @@
+EmptyVar               is_const false is_var false
+GammaPos (EmptyVar)    is_const false is_var false
+Atom                   is_const false is_var false
+GammaPos (Atom)        is_const false is_var false
+Const 1                is_const true  is_var false
+GammaPos (Const 1)     is_const true  is_var false
+Dummy                  is_const false is_var false
+GammaPos (Dummy)       is_const false is_var false
+EigenVar               is_const true  is_var false
+GammaPos (EigenVar)    is_const true  is_var false
+Var 1                  is_const false is_var true
+GammaPos (Var 1)       is_const false is_var true
+NewVar 1               is_const false is_var true
+GammaPos (NewVar 1)    is_const false is_var true
+NewVarQ 1              is_const false is_var true
+GammaPos (NewVarQ 1)   is_const false is_var true
+Root                   is_const false is_var false
+GammaPos (Root)        is_const false is_var false

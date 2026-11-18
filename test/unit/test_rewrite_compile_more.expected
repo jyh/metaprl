@@ -1,0 +1,13 @@
+== a free variable x and a second-order variable 'x[]
+  pair{x; 'x} on pair{y; k}                  MATCH [term 'y; term Rcr!k]
+  pair{'x; x} on pair{k; y}                  REFUSED: compile_so_redex_term (Free FO variable clashes with another variable : x)
+== x twice inside instances: quad{'a['x]; 'a['x]; x; lam{w.'a['w]}}
+  on quad{f{y}; f{y}; y; lam{w.f{w}}}        MATCH [unsupported; term 'y; meta-string w]
+== an instance inside an instance: tri{'a['b]; 'b; lam{w.'a['w]}}
+  on tri{f{k}; k; lam{w.f{w}}}               MATCH [unsupported; term Rcr!k; meta-string w]
+== a non-sequent context met twice: pair{<H> c; <H> c}
+  on pair{<J> c; <J> c}                      REFUSED: compile_so_redex_term
+== Term_op_ds.mk_var_param_term (term_ds)
+  an ordinary opname                         built
+  Opname.var_opname                          INVALID_ARGUMENT: Term_op_ds.mk_var_param_term: special opnames not allowed
+  Opname.context_opname                      INVALID_ARGUMENT: Term_op_ds.mk_var_param_term: special opnames not allowed

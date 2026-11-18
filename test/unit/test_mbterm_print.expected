@@ -1,0 +1,13 @@
+constant: print_termcTest{}()
+one subterm: print_termfTest{}(
+    print_termcTest{}())
+two subterms: print_termgTest{}(
+    print_termcTest{}()
+    print_termfTest{}(
+    print_termcTest{}()))
+a binding: print_termlamTest{}(
+    bindings:xprint_termvar{x:v }())
+two bindings: print_termkTest{}(
+    bindings:xyprint_termcTest{}())
+parameters: print_termpTest{3:n s:s t:t x:v n:mn m:ms q:mt {1 [(i, 2)]}[1:n ]:pl }()
+a quote: print_termqTest{raised Invalid_argument("Mbterm.print_param: quote and shape parameters not supported")

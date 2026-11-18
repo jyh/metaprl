@@ -8,7 +8,10 @@
        server must accept (RFC 7231 7.1.1.1: RFC 1123, RFC 850, asctime),
        and of the one form parse_time took, "06 Nov 1994 08 49 37 GMT".
    and the same with TZ = PST8PDT (daylight saving), where parse_time must
-   give the same answers.  Until they were fixed:
+   give the same answers.  Then one instant in every zone parse_time names,
+   the GMT spellings, a zone it does not name (read as GMT), a field that
+   is not a number (read as 0), the two-digit years 49 (2049) and 50
+   (1950), and name_of_month from 0 to 13.  Until they were fixed:
      - parse_time returned 0 for all three HTTP forms (2000 of 2000 each):
        it split on whitespace only, so "08:49:37" was one field;
      - in the one form it took, every date was a month early: it numbered
@@ -70,4 +73,14 @@ let () =
   [ "UTC0"; "PST8PDT" ];
   (* A named zone: 03:49:37 EST is 08:49:37 GMT, 784111777 (Unix). *)
   List.iter (fun s -> Printf.printf "parse_time %S = %d\n" s (Ctime.parse_time s))
-    [ "Sun, 06 Nov 1994 08:49:37 GMT"; "Sun, 06 Nov 1994 03:49:37 EST"; "Sun, 06 Nov 1994 00:49:37 PST"; "not a date" ]
+    [ "Sun, 06 Nov 1994 08:49:37 GMT"; "Sun, 06 Nov 1994 03:49:37 EST"; "Sun, 06 Nov 1994 00:49:37 PST"; "not a date" ];
+  (* The same instant in every zone parse_time names (each must be 784111777),
+     a zone it does not name (read as GMT), a field that is not a number
+     (read as 0), and the two-digit years either side of 50. *)
+  List.iter (fun s -> let p = Ctime.parse_time s in Printf.printf "parse_time %-32S = %d%s\n" s p (if p = 784111777 then " (the instant)" else ""))
+    [ "Sun, 06 Nov 1994 04:49:37 EDT"; "Sun, 06 Nov 1994 02:49:37 CST"; "Sun, 06 Nov 1994 03:49:37 CDT";
+      "Sun, 06 Nov 1994 01:49:37 MST"; "Sun, 06 Nov 1994 02:49:37 MDT"; "Sun, 06 Nov 1994 01:49:37 PDT";
+      "Sun, 06 Nov 1994 08:49:37 gmt"; "Sun, 06 Nov 1994 08:49:37 UT"; "Sun, 06 Nov 1994 08:49:37 utc";
+      "Sun, 06 Nov 1994 09:49:37 CET"; "Sun, 06 Nov 1994 xx:49:37 GMT";
+      "06 Dec 49 08 49 37 GMT"; "06 Dec 50 08 49 37 GMT" ];
+  print_endline ("name_of_month 0-13: " ^ String.concat " " (List.init 14 Ctime.name_of_month))

@@ -1,0 +1,47 @@
+fresh find_subgoal [1] 0: [0]
+fresh find_subgoal [1] 1: []
+1 at []: goal A[], 4 subgoals, node_count 2/12
+  find_subgoal 0: []
+  find_subgoal 1: [0]
+  find_subgoal 2: [0]
+  find_subgoal 3: [0]
+  find_subgoal 4: [0]
+  find_subgoal 5: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: C[]
+  subgoal 2: B[C]
+  subgoal 3: C[B]
+  subgoal 4: A[B,C]
+1 at [1]: goal C[], 2 subgoals, node_count 2/12
+  find_subgoal 0: [0]
+  find_subgoal 1: []
+  find_subgoal 2: []
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: X[]
+  subgoal 2: C[X]
+2 fresh find_subgoal [6] 0: [0.2]
+2 again find_subgoal [6] 0: [0.2]
+2 at []: goal A[], 6 subgoals, node_count 2/20
+  find_subgoal 0: []
+  find_subgoal 1: [0.1]
+  find_subgoal 2: [0.1]
+  find_subgoal 3: [0.2]
+  find_subgoal 4: [0.2]
+  find_subgoal 5: [0.2]
+  find_subgoal 6: [0.2]
+  find_subgoal 7: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: D[]
+  subgoal 2: B[D]
+  subgoal 3: D[B]
+  subgoal 4: C[B,D]
+  subgoal 5: D[B,C]
+  subgoal 6: A[B,C,D]
+3 fresh find_subgoal [1] 0: []
+3 again find_subgoal [1] 0: []
+3 at []: goal A[], 2 subgoals, node_count 2/7
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: []
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: X[]
+  subgoal 2: A[X]
+  find_subgoal -1: Invalid_argument List.nth

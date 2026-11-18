@@ -1928,7 +1928,8 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
       and sig_subsig_op =
          let dest_subsig_sig t =
             let _loc = dest_loc "dest_subsig_sig" t in
-            let sl = dest_olist (one_subterm "dest_subsig_sig" t) in
+            (* mk_sig_item writes one subterm per item *)
+            let sl = subterms_of_term t in
                <:sig_item< declare $list: List.map dest_sig sl$ end >>
          in add_sig "sig_subsig" dest_subsig_sig
       and sig_exception_op =
@@ -2681,9 +2682,10 @@ MetaPRL does not support this yet in order to remain compatible with OCaml 3.08"
          in add_ct "class_type_sig" dest_sig_ct
       and ct_xtr_op =
          let dest_xtr_ct t =
-            let loc = dest_loc "dest_xtr_ct" t in
-            let s, cto = two_subterms t in
-               CtXtr (loc, dest_string s, dest_opt (fun ct -> Ploc.VaVal (dest_ct ct)) cto)
+            (* mk_ct writes the name as the term's string and the body as its one subterm *)
+            let loc, s = dest_loc_string "dest_xtr_ct" t in
+            let cto = one_subterm "dest_xtr_ct" t in
+               CtXtr (loc, s, dest_opt (fun ct -> Ploc.VaVal (dest_ct ct)) cto)
          in add_ct "class_type_xtr" dest_xtr_ct
       in function
          CtCon (loc, ct, Ploc.VaVal tl) ->

@@ -1,0 +1,20 @@
+Theorem p1:
+  context_vars: bound {}, all {}
+  context_vars_info: 
+  so_vars_info: a(1,1)
+Labeled (l, Theorem p2):
+  context_vars: bound {H}, all {}
+  context_vars_info: H(true,0,0)
+  so_vars_info: b(1,0) c(1,1)
+Implies (p1, p2):
+  context_vars: bound {H}, all {}
+  context_vars_info: H(true,0,0)
+  so_vars_info: a(1,1) b(1,0) c(1,1)
+Iff (p2, p3):
+  context_vars: bound {H}, all {}
+  context_vars_info: H(true,0,0)
+  so_vars_info: b(1,0) c(1,1) d(0,0)
+Function (arg, p1, p3):
+  context_vars: bound {}, all {}
+  context_vars_info: 
+  so_vars_info: a(1,1) d(0,0) e(0,0)

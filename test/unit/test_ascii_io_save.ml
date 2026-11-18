@@ -20,7 +20,20 @@
    changed is written fresh under a new name (F5, s1).  Two cases raise:
    a variable entry under a T label (a guess at the <= 1.0.7 form, which
    out_term relabels "V"; read_table's add_term refuses it first), and a
-   variable entry naming an argument that does not exist. *)
+   variable entry naming an argument that does not exist.
+   (2026-11-15) An argument entry duplicated (t and t9): the table maps
+   the structure to the FIRST copy, and F is written naming that copy,
+   through the unchanged-entry arm: read_table resolves the names in F's
+   stored entry, so out_term's "changed" arm for a V entry is not reached
+   by any edit of the file.  The sequent's "changed" arm is not reached
+   for the same reason.  init_data passes each V and S record's names
+   through its duplicate-rename map, so an entry found by structure
+   always carries the names the writer computes now.  The two readers of
+   an old table (Filter_cache's save, filter_merge_prla) both build it
+   with read_table (Filter_cache otherwise starts from an empty table),
+   so no caller reaches either arm.  Note: both arms
+   would write the OLD record (io_data), where check_old writes the new
+   one; this is not pinned, because no input reaches it. *)
 open Term_sig
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermMan
@@ -82,4 +95,6 @@ let () =
   save "F duplicated as F2" (edit fresh vf [ vf; "VF\tF2\tF\\\\ \\\\ t" ]) t1;
   save "the sequent duplicated as s2" (edit fresh sl [ sl; "S\ts2\tt2\\\\ h\\\\ G" ]) t1;
   save "F's entry names other arguments" (edit fresh vf [ "VF\tF\tF\\\\ \\\\ t1" ]) t1;
+  save "F's argument t duplicated as t9" (edit fresh "T\tt\to1" [ "T\tt\to1"; "T\tt9\to1" ]) t1;
+  save "F's argument t duplicated as t9, t9 first" (edit fresh "T\tt\to1" [ "T\tt9\to1"; "T\tt\to1" ]) t1;
   save "the sequent's entry names another conclusion" (edit fresh sl [ "S\ts\tt2\\\\ h\\\\ t" ]) t1

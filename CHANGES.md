@@ -253,7 +253,11 @@ against libmojave 1.1.1 or later:
   - an unpacked module, `(val e : S)` and `(val e)` (#290);
   - a `#t` pattern, whose case body the encoder dropped (the one encoder
     change: a `#t` pattern's term could not be read back before) (#293);
-  - a variant type's lower bound, `[< ... > `A ]` (#294).
+  - a variant type's lower bound, `[< ... > `A ]` (#294);
+  - camlp5's own signature group (`declare ... end`) and class-type
+    extension, which OCaml's syntax cannot write: the decoders read one list
+    subterm and two subterms where the encoders write one subterm per item
+    and a name with one subterm (pinned by `test_filter_ocaml_camlp5`).
 - `Free_vars.free_vars` and `patt_vars` raised on `{ e with ... }`,
   labelled arguments, `lazy`, `assert`, `let open`, int32 / int64 /
   nativeint literals, objects, variant patterns, first-class module
@@ -321,6 +325,10 @@ against libmojave 1.1.1 or later:
 - A class path through a functor application keeps it: `F(M).ct` came back
   from a term as `F.M.ct` (the decoder built an access, as the camlp5 7
   code did). No stored archive has a class type (#335, #336).
+- The Nuprl-5 link's MathBus decoder (`MathBus.number_value`) read the first
+  two base-10^9 digits of a number, where `mb_number` writes them all, so a
+  number of 19 digits or more lost its low digits on the way back (10^18 came
+  back as 10^9).
 
 ### Tests
 

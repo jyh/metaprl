@@ -1647,7 +1647,7 @@ struct
           | CondRewriteRefiner { crw_refiner = refiner; crw_proof = PDerived dp; crw_info = { pre_crw_assums = assums; _ }; _ } ->
                assums, refiner, get_derivation dp
           | _ ->
-               raise (Invalid_argument("Refine.extract_term - " ^ (string_of_opname opname) ^ "is not a derived rule/rewrite"))
+               raise (Invalid_argument("Refine.extract_term - " ^ (string_of_opname opname) ^ " is not a derived rule/rewrite"))
       in
          if List.length assums = List.length args then begin
             begin try

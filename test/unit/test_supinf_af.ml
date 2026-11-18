@@ -7,7 +7,8 @@
    variable to a reduced rational):
      - coef of every variable equals the model's (by BField.compare);
      - isNumber holds exactly when every variable's coefficient is zero;
-     - value_of of a number is the model's constant;
+     - value_of of a number is the model's constant, and value_of of a
+       non-number raises Invalid_argument (2026-11-15);
      - split returns the largest variable with a nonzero coefficient (else
        the constant), its coefficient, and the form without it.
    It prints each count with how many checks were made, and the first
@@ -77,8 +78,9 @@ let rec gen d : AF.af * m * string =
       AF.remove f v, Array.mapi (fun i c -> if i = v then (0, 1) else c) m, Printf.sprintf "remove(%s, v%d)" s v
 
 let names = [| "coef = the model's, every variable"; "isNumber iff no variable's coefficient is nonzero";
-               "value_of a number = the model's constant"; "split = largest nonzero variable, its coef, the rest" |]
-let tried = Array.make 4 0 and ok = Array.make 4 0 and first = Array.make 4 None
+               "value_of a number = the model's constant"; "split = largest nonzero variable, its coef, the rest";
+               "value_of a non-number raises Invalid_argument" |]
+let tried = Array.make 5 0 and ok = Array.make 5 0 and first = Array.make 5 None
 let note k b what = tried.(k) <- tried.(k) + 1; if b then ok.(k) <- ok.(k) + 1 else if first.(k) = None then first.(k) <- Some what
 let safe f = try Some (f ()) with _ -> None
 
@@ -92,7 +94,8 @@ let () =
     let is_num = Array.for_all (fun c -> c = (0, 1)) (Array.sub m 1 3) in
     if is_num then incr numbers;
     note 1 (AF.isNumber f = is_num) (Printf.sprintf "%s: model %s" s (if is_num then "a number" else "not a number"));
-    if is_num then note 2 (safe (fun () -> of_f (AF.value_of f)) = Some m.(0)) s;
+    if is_num then note 2 (safe (fun () -> of_f (AF.value_of f)) = Some m.(0)) s
+    else note 4 (match AF.value_of f with _ -> false | exception Invalid_argument _ -> true) s;
     let rec top v = if v = 0 then 0 else if m.(v) <> (0, 1) then v else top (v - 1) in
     let v = top 3 in
     (match safe (fun () -> AF.split f) with

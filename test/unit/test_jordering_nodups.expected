@@ -1,0 +1,4 @@
+nodups k 3 3                         3
+nodups k 3 4                         Invalid_argument no dupes allowed in map
+nodups k "a" "a"                     a
+nodups (any key) [1; 2] [1; 2]       1;2

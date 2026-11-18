@@ -117,6 +117,9 @@ let () =
     Ignore, Leaf 1;
     Leaf 1, Ignore;
     Left (Leaf 1), Leaf 2;
+    Leaf 1, Pair (Leaf 2, Ignore);
+    Leaf 1, Pair (Ignore, Leaf 3);
+    Leaf 1, Pair (Leaf 2, Leaf 3);
   ] in
   let merge f a b = try let t = f (fun a b -> 100 * a + b) a b in string_of_tree t ^ " " ^ leaves t with Invalid_argument s -> "Invalid_argument: " ^ String.trim s in
   List.iter (fun (a, b) ->

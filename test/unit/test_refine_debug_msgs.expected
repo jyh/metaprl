@@ -1,0 +1,28 @@
+== both flags off
+  create_rewrite (for delayed_rewrite to justify)
+  delayed_rewrite
+  create_ml_rewrite
+  create_cond_rewrite
+  delayed_cond_rewrite
+  create_ml_cond_rewrite
+  crwtactic (k --> c if q) at the conclusion of >- k
+  2 subgoals
+== "refine" and "rewrites" on
+  create_rewrite (for delayed_rewrite to justify)
+Refiner.create_rewrite: kc
+  delayed_rewrite
+Refiner.delayed_rewrite: kc
+  create_ml_rewrite
+Refiner.create_ml_rewrite: mlkc
+  create_cond_rewrite
+Refiner.create_cond_rewrite: ckc
+  delayed_cond_rewrite
+Refiner.add_delayed_cond_rewrite: ckc
+  create_ml_cond_rewrite
+Refiner.add_ml_cond_rewrite: mlckc
+  crwtactic (k --> c if q) at the conclusion of >- k
+crwtactic applied to Arg: Perv!xnil
+Hyps:
+Goal:k
+Refiner: applying conditional rewrite ckc to k with bvars = [] 
+  2 subgoals

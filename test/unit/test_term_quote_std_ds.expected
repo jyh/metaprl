@@ -1,0 +1,21 @@
+quote_term, an operator:
+  std: f[@]{0} (quoted true), unquoted f[]{0}
+  ds:  f[@]{0} (quoted true), unquoted f[]{0}
+quote_term, parameters and a subterm:
+  std: g[@,3,"s"]{1} (quoted true), unquoted g[3,"s"]{1}
+  ds:  g[@,3,"s"]{1} (quoted true), unquoted g[3,"s"]{1}
+quote_term, a variable:
+  std: var[@,v:x]{0} (quoted true), unquoted 'x
+  ds:  Invalid_argument Term_op_ds.quote_term: support for variables, sequents and contexts not implemented
+quote_term, a sequent:
+  std: Perv!sequent[@]{2} (quoted true), unquoted a sequent term
+  ds:  Invalid_argument Term_op_ds.quote_term: support for variables, sequents and contexts not implemented
+unquote_term of f (not quoted):
+  std: RefineError (unquote_term: not a quoted term)
+  ds:  RefineError (unquote_term: not a quote term)
+unquote_term of a variable:
+  std: RefineError (unquote_term: not a quoted term)
+  ds:  RefineError (unquote_term: not a quote term)
+unquote_term of var[@,v:x] (a quoted variable as term_std quotes it):
+  std: 'x
+  ds:  Invalid_argument Term.base_ds.make_term with var_opname, but the term does not look like a variable

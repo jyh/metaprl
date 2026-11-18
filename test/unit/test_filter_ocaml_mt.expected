@@ -1,0 +1,15 @@
+same      module type T = s
+same      module type T = M.s
+same      module type T = M.N.s
+same      module type T = F(X).s
+PARSE Ploc.Exc(_, _): "module type T = 'a;;"
+same      module M : s
+same      module type T = (functor (X : s) -> M.s)
+same      include M.s
+s as a quotation       module type T
+FormatError: sig_item_of_term.Filter_ocaml.dest_proj_mt: not a module type path
+M.s, M lowercase       RAISES FormatError Filter_ocaml.dest_proj_mt: not a module type path
+FormatError: sig_item_of_term.Filter_ocaml.dest_apply_mt: not a module type path
+F(X).s, F lowercase    RAISES FormatError Filter_ocaml.dest_apply_mt: not a module type path
+FormatError: sig_item_of_term.Filter_ocaml.dest_apply_mt: not a module type path
+F(X), F lowercase      RAISES FormatError Filter_ocaml.dest_apply_mt: not a module type path

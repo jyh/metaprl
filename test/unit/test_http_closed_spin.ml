@@ -13,7 +13,13 @@
    least 5 such lines, the child still running); now accept's EBADF or
    ENOTSOCK ends the service: one "accept failed" per serving thread at
    most, "service closed", and the child exits.  The expected file is the output of the code as
-   written, never typed. *)
+   written, never typed.
+   On Windows (mingw, OCaml 4.14.4 and 5.4.1) this shape does not reach the
+   arm: an accept on the closed socket neither fails nor returns, so the
+   child logs nothing and is still running at 3 s, before the fix and after
+   it.  test_http_closed_spin.expected.win32 is that output, taken from the
+   Windows runs' bytes (44197245436 before the fix, 44202077971 after), and
+   it is a declared hole: neither the spin nor its fix is checked there. *)
 
 let child () =
   let start t info = Http_simple.close_http t; info in

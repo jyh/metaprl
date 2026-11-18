@@ -1,0 +1,3 @@
+accept failed logged at least 5 times: false
+the child still running after them: true
+the child logged "service closed": false

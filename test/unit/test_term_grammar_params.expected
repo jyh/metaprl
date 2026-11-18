@@ -48,6 +48,16 @@ dest_xparam on base_grammar's terms:
   i | j          MLevel max(0, i, j)
   i' | 2         MLevel max(2, i+1)
   i | 3          MLevel max(3, i)
+  3:n            Number 3
+  3:s            String 3
+  "s":t          Token s
+  i:l            MLevel max(0, i)
+  x:"cls"        MToken x
+  x:a!b          MToken x
+  3:<int>        refused: Invalid_argument("not a paramater")
+  f:op           Operator
+  not a param    refused: RefineError dest_xparam_exp
+  xparam{zz}     refused: RefineError dest_xparam_exp
 a syntax error inside <<...>> at f.ml 230-250:
   "foo{a; }"     error at line 10 [239, 240)
   "foo{a}"       parsed

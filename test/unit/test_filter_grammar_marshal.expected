@@ -1,0 +1,18 @@
+
+
+is_empty empty                               true
+is_empty (one token, one production)         false
+is_empty (a production only)                 false
+is_modified empty                            false
+is_modified the new grammar                  true
+unmarshal of the grammar before it is named:
+    stderr: ! A grammar that was loaded from a file does not have a name.
+    stderr: ! It used to be named '.empty'.
+    stderr: ! This is an internal error and should be reported.
+    stderr: ! Reseting to the empty grammar and continuing.
+    the result is empty                      true
+after prepare_to_marshal: is_modified        false
+prepared again: is_modified                  false
+unmarshal of the named grammar:
+    the result is modified                   false
+    it still parses "x"                      true

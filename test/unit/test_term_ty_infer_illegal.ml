@@ -19,13 +19,15 @@
    and the debug_infer printers.  Equivalent here: the is_so_var_term,
    is_context_term and is_sequent_term disjuncts, since in the ds terms
    (TERMS = ds, the default) not (is_fo_term t) is already true of all
-   three.  In the std terms it is false of a so-variable, so there the
-   so-variable disjunct is the one that refuses it.
-   Pinned as found (the last block): is_fo_term on a so-variable is
-   true in std and false in ds, also for 'a with no arguments, which
-   both call an FO variable (is_fso_var_term); term_man_sig.ml says "a
-   term is FO if it does not have bvars".  The guards above are its only
-   callers, so no outcome depends on it today. *)
+   three, and in the std terms too since #362.
+   The last block prints is_fo_term and its neighbours on each kind in
+   both term modules: on a so-variable is_fo_term is false in std and
+   in ds, also for 'a with no arguments, which both call an FO variable
+   (is_fso_var_term).  When this test was written std said true; #362
+   (term_std: is_fo_term is false for a second-order variable, as in
+   term_ds) made the two agree, and this expected file is master's
+   output since then (the CI Build run 44256070163, both legs).  The
+   guards above are its only callers. *)
 open Lm_symbol
 open Opname
 open Term_sig

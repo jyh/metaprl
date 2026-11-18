@@ -15,8 +15,8 @@ tkt{vbnd}      REFUSED: type error: illegal type binding
 tkbnd{zero}    REFUSED: type error: illegal type binding
 ptkt{pvbnd}    REFUSED: type error: illegal type binding
 ptkbnd{pt}     REFUSED: type error: illegal type binding
-std so   fso=false fo=true so=true ctx=false seq=false
-std so0  fso=true fo=true so=true ctx=false seq=false
+std so   fso=false fo=false so=true ctx=false seq=false
+std so0  fso=true fo=false so=true ctx=false seq=false
 std ctx  fso=false fo=false so=false ctx=true seq=false
 std seq  fso=false fo=false so=false ctx=false seq=true
 std bnd  fso=false fo=false so=false ctx=false seq=false

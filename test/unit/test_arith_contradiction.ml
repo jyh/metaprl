@@ -11,7 +11,8 @@
      - what it returns is itself unsatisfiable (a certificate).
    It prints each count with how many systems it was tried on, and the
    first difference.  The generator is a fixed linear congruential
-   sequence, not Random. *)
+   sequence, not Random.  Last, one system's trace under the solver's
+   three debug flags, which no test had turned on (bisect at a45cd0437). *)
 open Refiner.Refiner.Term
 
 let state = ref 59
@@ -65,3 +66,34 @@ let () =
   Array.iteri (fun k name ->
       Printf.printf "%-38s %5d of %5d\n" name ok.(k) tried.(k);
       match first.(k) with None -> () | Some w -> Printf.printf "  first difference: %s\n" w) names
+
+(* The solver's trace under its three debug flags (graph_arith1: the
+   input; graph_arith2: the distances and the cycle; graph_arith3: the
+   variables), on  a >= b + 1, b >= a + 0  (a cycle of weight 1).  The
+   trace is written to stderr, captured, and printed line by line. *)
+(* Simple_print installs the term printer the trace uses *)
+let () = ignore (Simple_print.SimplePrint.string_of_term (term_of.(0)))
+let capture_stderr f =
+  let file = Filename.temp_file "tac" ".err" in
+  flush stderr; Lm_printf.eflush Lm_printf.stderr;
+  let saved = Unix.dup Unix.stderr in
+  let fd = Unix.openfile file [ Unix.O_WRONLY; Unix.O_TRUNC ] 0o600 in
+  Unix.dup2 fd Unix.stderr; Unix.close fd;
+  let restore () = flush stderr; Lm_printf.eflush Lm_printf.stderr; Unix.dup2 saved Unix.stderr; Unix.close saved in
+  let r = (try f () with e -> restore (); raise e) in
+  restore ();
+  let ic = open_in_bin file in
+  let s = really_input_string ic (in_channel_length ic) in
+  close_in ic; Sys.remove file; s, r
+
+let () =
+  List.iter (fun f -> Lm_debug.set_debug f true) [ "graph_arith1"; "graph_arith2"; "graph_arith3" ];
+  let input = [ term_of.(0), term_of.(1), Lm_num.num_of_int 1, 0; term_of.(1), term_of.(0), Lm_num.num_of_int 0, 1 ] in
+  let trace, got = capture_stderr (fun () -> Arith.find_contradiction input) in
+  List.iter (fun f -> Lm_debug.set_debug f false) [ "graph_arith1"; "graph_arith2"; "graph_arith3" ];
+  print_endline "with the debug flags on, a >= b + 1, b >= a + 0:";
+  List.iter (fun l ->
+      let n = String.length l in
+      let l = if n > 0 && l.[n - 1] = '\r' then String.sub l 0 (n - 1) else l in
+      if l <> "" then Printf.printf "  trace: %s\n" l) (String.split_on_char '\n' trace);
+  Printf.printf "  returns %d of the 2 inequalities\n" (List.length got)

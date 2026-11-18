@@ -1,41 +1,28 @@
-FormatError: expr_of_term.Filter_ocaml.dest_expr : bad arity
 ExXtr e                Ocaml!expr_xtr[0:n, 0:n, "e":s]{Ocaml!none}
-      back: FormatError Filter_ocaml.dest_expr : bad arity
-FormatError: expr_of_term.Filter_ocaml.dest_expr : bad arity
+      back: ExXtr e
 ExXtr e (x)            Ocaml!expr_xtr[0:n, 0:n, "e":s]{Ocaml!some{Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}}}
-      back: FormatError Filter_ocaml.dest_expr : bad arity
-FormatError: patt_of_term.Filter_ocaml.dest_patt : bad arity
+      back: ExXtr e (x)
 PaXtr p                Ocaml!patt_xtr[0:n, 0:n, "p":s]{Ocaml!no_pattern[0:n, 0:n]{Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}}}
-      back: FormatError Filter_ocaml.dest_patt : bad arity
-FormatError: patt_of_term.Filter_ocaml.dest_patt : bad arity
+      back: PaXtr p / tail Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}
 PaXtr p (y)            Ocaml!patt_xtr[0:n, 0:n, "p":s]{Ocaml!pattern[0:n, 0:n]{Ocaml!patt_var[0:n, 0:n]{'y. Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}}}}
-      back: FormatError Filter_ocaml.dest_patt : bad arity
-FormatError: sig_item_of_term.Filter_ocaml.dest_sig : bad arity
+      back: PaXtr p (y) / tail Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}
 SgXtr s                Ocaml!sig_xtr[0:n, 0:n, "s":s]{Ocaml!none}
-      back: FormatError Filter_ocaml.dest_sig : bad arity
-FormatError: sig_item_of_term.Filter_ocaml.dest_sig : bad arity
+      back: SgXtr s
 SgXtr s (val y)        Ocaml!sig_xtr[0:n, 0:n, "s":s]{Ocaml!some{Ocaml!sig_value[0:n, 0:n, "y":s]{Ocaml!type_lid[0:n, 0:n]{Ocaml!type_lid["int":s]}}}}
-      back: FormatError Filter_ocaml.dest_sig : bad arity
-FormatError: str_item_of_term.Filter_ocaml.dest_str : bad arity
+      back: SgXtr s (val y)
 StXtr t                Ocaml!st_xtr[0:n, 0:n, "t":s]{Ocaml!none}
-      back: FormatError Filter_ocaml.dest_str : bad arity
-FormatError: str_item_of_term.Filter_ocaml.dest_str : bad arity
+      back: StXtr t
 StXtr t (x)            Ocaml!st_xtr[0:n, 0:n, "t":s]{Ocaml!some{Ocaml!str_expr[0:n, 0:n]{Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}}}}
-      back: FormatError Filter_ocaml.dest_str : bad arity
-FormatError: module_type_of_term.Filter_ocaml.dest_mt : bad arity
+      back: StXtr t (x)
 MtXtr m                Ocaml!mt_xtr[0:n, 0:n, "m":s]{Ocaml!none}
-      back: FormatError Filter_ocaml.dest_mt : bad arity
-FormatError: module_type_of_term.Filter_ocaml.dest_mt : bad arity
+      back: MtXtr m
 MtXtr m (s)            Ocaml!mt_xtr[0:n, 0:n, "m":s]{Ocaml!some{Ocaml!mt_lid[0:n, 0:n]{Ocaml!mt_lid["s":s]}}}
-      back: FormatError Filter_ocaml.dest_mt : bad arity
-FormatError: module_expr_of_term.Filter_ocaml.dest_me : bad arity
+      back: MtXtr m (s)
 MeXtr n                Ocaml!me_xtr[0:n, 0:n, "n":s]{Ocaml!none}
-      back: FormatError Filter_ocaml.dest_me : bad arity
-FormatError: module_expr_of_term.Filter_ocaml.dest_me : bad arity
+      back: MeXtr n
 MeXtr n (M)            Ocaml!me_xtr[0:n, 0:n, "n":s]{Ocaml!some{Ocaml!me_uid[0:n, 0:n]{Ocaml!me_uid["M":s]}}}
-      back: FormatError Filter_ocaml.dest_me : bad arity
-FormatError: str_item_of_term.Filter_ocaml.dest_ce : bad arity
+      back: MeXtr n (M)
 class c = CeXtr k      Ocaml!str_class_str[0:n, 0:n]{Ocaml!class_type_infos[0:n, 0:n, "c":s]{Ocaml!onil; Ocaml!false; Ocaml!class_expr_xtr[0:n, 0:n, "k":s]{Ocaml!none}}}
-      back: FormatError Filter_ocaml.dest_ce : bad arity
+      back: class c = CeXtr k
 MeXtr n $a$            refused (MeXtr: antiquotations are not supported)
 (val x :> s)           refused (mk_module_expr: antiquotations are not supported)

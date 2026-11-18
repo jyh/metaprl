@@ -8,11 +8,10 @@
    term_of_module_expr; CeXtr inside a class declaration) and back; each
    line prints the term and what comes back.  (CtXtr is
    test_filter_ocaml_camlp5's.)
-   Pinned as found (2026-11-16): every one of the seven is REFUSED on the
-   way back ("bad arity"): each encoder writes the extension's name as the
-   term's string and its optional body as ONE subterm, and each decoder
-   reads two subterms.  The decoders' FormatError messages are printed by
-   the *_of_term functions themselves, before the line.
+   Each encoder writes the extension's name as the term's string and its
+   optional body as ONE subterm; until 2026-11-16 each decoder read two
+   subterms, so all seven were refused on the way back ("bad arity").
+   Now each comes back with its name and body (a pattern with its tail).
    Also read from the output: an antiquoted body, and camlp5 8's coercion
    in (val x :> s), are both refused as "antiquotations are not supported".
    The expected file is the output of the code as written, never typed. *)

@@ -267,6 +267,13 @@ against libmojave 1.1.1 or later:
   only.
 - `Filter_summary.find_sub_module` printed a "checking" line on stderr,
   with no debug flag, for every module it compared (#297).
+- `Filter_ocaml` could not read back camlp5's extension nodes: `ExXtr`,
+  `PaXtr`, `SgXtr`, `StXtr`, `MtXtr`, `MeXtr` and `CeXtr` were each
+  refused ("bad arity"). Every encoder writes the extension's name as the
+  term's string and its body as one subterm, and every decoder read two
+  subterms. The decoders now read what the encoders write. No encoder
+  changed, so a term already written reads back the same (pinned by
+  `test_filter_ocaml_xtr`).
 - `labProgressT` was inverted: with one subgoal it applied `idT` when the
   goal and the label were unchanged and failed when either changed. It now
   fails on no progress, as `progressT` does, counting a new label as

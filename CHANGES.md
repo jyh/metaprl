@@ -253,7 +253,11 @@ against libmojave 1.1.1 or later:
   - an unpacked module, `(val e : S)` and `(val e)` (#290);
   - a `#t` pattern, whose case body the encoder dropped (the one encoder
     change: a `#t` pattern's term could not be read back before) (#293);
-  - a variant type's lower bound, `[< ... > `A ]` (#294).
+  - a variant type's lower bound, `[< ... > `A ]` (#294);
+  - camlp5's own signature group (`declare ... end`) and class-type
+    extension, which OCaml's syntax cannot write: the decoders read one list
+    subterm and two subterms where the encoders write one subterm per item
+    and a name with one subterm (pinned by `test_filter_ocaml_camlp5`).
 - `Free_vars.free_vars` and `patt_vars` raised on `{ e with ... }`,
   labelled arguments, `lazy`, `assert`, `let open`, int32 / int64 /
   nativeint literals, objects, variant patterns, first-class module

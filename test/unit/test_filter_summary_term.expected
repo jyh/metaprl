@@ -42,3 +42,49 @@ DeclareType (ty params)      1 term(s); back as [DeclareType]; same terms; param
 DeclareTerm (ty params)      1 term(s); back as [DeclareTerm]; same terms; params {n; s; sh; op; t tok; l; v; @ | [].b0; [bv1, bv2].b2}
 DefineTerm (ty params)       1 term(s); back as [DefineTerm]; same terms; params {n; s; sh; op; t tok; l; v; @ | [].b0; [bv1, bv2].b2}
 all 42 items in one module: 42 back, kinds in the same order
+Rewrite's resources as written: res public 1 arg(s), resp private 0 arg(s)
+in the <= 1.0.24 form, read back: res public 1 arg(s), resp public 0 arg(s)
+eprint_info of the module of all the items:
+  |   DefineTerm: tyop[<N>; <S>; <Sh>; <Op>; <T>; <L>; <V>; @]{<0>; <2>}
+  |   DeclareTerm: tyop[<N>; <S>; <Sh>; <Op>; <T>; <L>; <V>; @]{<0>; <2>}
+  |   DeclareType: tyop[<N>; <S>; <Sh>; <Op>; <T>; <L>; <V>; @]{<0>; <2>}
+  |   DeclareTypeRewrite
+  |   DefineTerm: tyop[]{}
+  |   DefineTerm: tyop[]{}
+  |   DeclareTerm: tyop[]{}
+  |   DeclareType: tyop[]{}
+  |   DeclareTypeClass: tc3
+  |   DeclareTypeClass: tc2
+  |   DeclareTypeClass: tc
+  |   IForm: if
+  |   Comment
+  |   Magic: magic
+  |   ToploopItem
+  |   SummaryItem
+  |   Infix/Suffix: !!
+  |   Infix/Suffix: +++
+  |   Improve imp2 with ...
+  |   Improve imp with ...
+  |   Resource: resname
+  |   Id: 0x00003039
+  |   Precedence: p <norelation> q
+  |   Precedence: p > q
+  |   Precedence: p = q
+  |   Precedence: p < q
+  |   Precedence: p
+  |   Dform: df4
+  |   Dform: df3
+  |   Dform: df2
+  |   Dform: df1i
+  |   Dform: df1e
+  |   Dform: df1
+  |   Module: Sub
+  |      Rewrite: inner
+  |   Parent: Itt/Itt_x
+  |   MLAxiom: mla
+  |   MLRewrite: mlr2
+  |   MLRewrite: mlr
+  |   Rule: rlf
+  |   Rule: rl
+  |   CondRewrite: crw
+  |   Rewrite: rw

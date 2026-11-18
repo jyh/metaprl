@@ -72,4 +72,7 @@ let () =
       "MetaImplies", MetaImplies (MetaTheorem t1, MetaTheorem t2);
       "MetaFunction", MetaFunction (mk_var_term x, MetaTheorem t1, MetaTheorem t2);
       "MetaIff", MetaIff (MetaTheorem t1, MetaTheorem t2);
-      "MetaLabeled", MetaLabeled ("lbl", MetaTheorem t1) ]
+      "MetaLabeled", MetaLabeled ("lbl", MetaTheorem t1) ];
+  List.iter (fun (name, bt) -> show name (P.string_of_bterm bt))
+    [ "string_of_bterm, no binder", mk_bterm [] t1;
+      "string_of_bterm, two binders", mk_bterm [ Lm_symbol.add "u"; Lm_symbol.add "w" ] (f [ mk_var_term (Lm_symbol.add "u"); t2 ]) ]

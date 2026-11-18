@@ -44,6 +44,15 @@ leaf[1], ignore[]
 left(leaf)[1], leaf[2]
    left  Invalid_argument: Incompatible trees left(leaf) leaf in treeMergeLeft
    right leaf [102]
+leaf[1], pair(leaf,ignore)[2]
+   left  Invalid_argument: Incompatible trees leaf pair(leaf,ignore) in treeMergeLeft
+   right leaf [102]
+leaf[1], pair(ignore,leaf)[3]
+   left  Invalid_argument: Incompatible trees leaf pair(ignore,leaf) in treeMergeLeft
+   right leaf [103]
+leaf[1], pair(leaf,leaf)[2 3]
+   left  Invalid_argument: Incompatible trees leaf pair(leaf,leaf) in treeMergeLeft
+   right pair(leaf,leaf) [102 103]
 == AF infinities
 mk_number +oo: isPlusInfinity true · mk_number -oo: isMinusInfinity true
 +oo + +oo  = (++oo1)

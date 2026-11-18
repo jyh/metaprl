@@ -1,0 +1,44 @@
+== well formed
+  explode_sequent    2 hyps
+  num_hyps           2
+  nth_hyp 1          a term
+  nth_binding 1      x
+  hyps               2 terms
+  concl              a term
+  declared_vars      y,x
+  get_decl_number y  2
+  get_hyp_number B   2
+  replace_concl      a term
+== hyp{A; rest} (no binder)
+  explode_sequent    refused explode_sequent
+  num_hyps           refused num_hyps
+  nth_hyp 1          refused nth_hyp
+  nth_binding 1      refused nth_hyp
+  hyps               refused Term_man_gen.hyps
+  concl              refused concl
+  declared_vars      refused Term_man_gen.declared_vars
+  get_decl_number y  refused get_decl_number
+  get_hyp_number B   refused get_hyp_number
+  replace_concl      refused replace_concl
+== hyp{A} (one subterm)
+  explode_sequent    refused explode_sequent
+  num_hyps           refused num_hyps
+  nth_hyp 1          refused nth_hyp
+  nth_binding 1      refused nth_hyp
+  hyps               refused Term_man_gen.hyps
+  concl              refused concl
+  declared_vars      refused Term_man_gen.declared_vars
+  get_decl_number y  refused get_decl_number
+  get_hyp_number B   refused get_hyp_number
+  replace_concl      refused replace_concl
+== hyp{z. A; x. rest}
+  explode_sequent    refused explode_sequent
+  num_hyps           refused num_hyps
+  nth_hyp 1          refused nth_hyp
+  nth_binding 1      refused nth_hyp
+  hyps               refused Term_man_gen.hyps
+  concl              refused concl
+  declared_vars      refused Term_man_gen.declared_vars
+  get_decl_number y  refused get_decl_number
+  get_hyp_number B   refused get_hyp_number
+  replace_concl      refused replace_concl

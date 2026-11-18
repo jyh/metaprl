@@ -1,0 +1,8 @@
+'a['x]<|H|>            std a<H>[1] | ds a<H>[1]
+'a                     std a<>[0] | ds a<>[0]
+'x (first-order)       std refused Term_man_gen.dest_so_var (not a so_var) | ds refused Term_man_ds.dest_so_var (not a so_var)
+c                      std refused Term_man_gen.dest_so_var (not a so_var) | ds refused Term_man_ds.dest_so_var (not a so_var)
+C[c]                   std refused Term_man_gen.dest_so_var (not a so_var) | ds refused Term_man_ds.dest_so_var (not a so_var)
+sequent                std refused Term_man_gen.dest_so_var (not a so_var) | ds refused Term_man_ds.dest_so_var (not a so_var)
+std var[1:n]{c; conts}           refused Term_man_gen.dest_so_var (non-var param)
+std var[x:v]{} (no subterms)     refused Term_man_gen.dest_so_var (not a so_var)

@@ -16,7 +16,12 @@
    the local registry here, as test_mbterm_round_trip does: the link reads
    them from lib/registry.txt, which no build installs.
    The expected file is the output of the code as written (2026-11-15),
-   never typed. *)
+   never typed.
+   On Windows (mingw, OCaml 4.14.4 and 5.4.1) the file is written in text
+   mode, so each newline in the base64 is CRLF: the sizes are larger by
+   the number of lines and one trailer shows "\r\n"; every term still
+   reads back the same.  test_mathbus_file.expected.win32 is that output,
+   taken from the Windows run's bytes (44306232071, both legs identical). *)
 open Refiner.Refiner.Term
 open Refiner.Refiner.TermType
 open Refiner.Refiner.TermMan

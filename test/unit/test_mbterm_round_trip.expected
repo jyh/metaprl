@@ -4,9 +4,9 @@ negative       Number -42                                 -> Number -42
 10^9           Number 1000000000                          -> Number 1000000000
 10^18 - 1      Number 999999999999999999                  -> Number 999999999999999999
 -(10^18 - 1)   Number -999999999999999999                 -> Number -999999999999999999
-10^18          Number 1000000000000000000                 -> Number 1000000000  (DIFFERS)
-30 digits      Number 123456789012345678901234567890      -> Number 123456789012  (DIFFERS)
--30 digits     Number -123456789012345678901234567890     -> Number -123456789012  (DIFFERS)
+10^18          Number 1000000000000000000                 -> Number 1000000000000000000
+30 digits      Number 123456789012345678901234567890      -> Number 123456789012345678901234567890
+-30 digits     Number -123456789012345678901234567890     -> Number -123456789012345678901234567890
 string         String "s"                                 -> String "s"
 token          Token Test!tk                              -> Token Test!tk  (DIFFERS)
 var            Var x                                      -> Var x

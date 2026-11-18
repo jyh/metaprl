@@ -1,0 +1,211 @@
+ 0 [v1_1] =? [c1_2]
+   {v1_1 := [c1_2]}
+   same in 4 variants
+ 1 [v1_1] =? []
+   {v1_1 := []}
+   same in 4 variants
+ 2 [v1_1 v1_3] =? [c1_2]
+   {v1_1 := [], v1_3 := [c1_2]}
+   same in 4 variants
+ 3 [v1] =? [c1_2 c2_3]
+   {v1 := [c1_2 c2_3]}
+   same in 4 variants
+ 4 [v1_1] =? [c2_2]
+   no unifier
+   same in 4 variants
+ 5 [c1_9 v1_1] =? [c1_9 c1_4 v2_5]
+   {v1_1 := [c1_4], v2_5 := []}
+   same in 4 variants
+ 6 [v1_1 v1_3] =? [c1_2 c1_4]
+   {v1_1 := [], v1_3 := [c1_2 c1_4]}
+   same in 4 variants
+ 7 [v1_1] =? [v1_2]
+   {v1_1 := [v1_2]}
+   same in 4 variants
+ 8 [v1_1 c1_2] =? [c1_3]
+   no unifier
+   same in 4 variants
+ 9 [v1] =? [v1_2]
+   {v1 := [v1_2]}
+   same in 4 variants
+10 [v1_1] =? [v2]
+   {v2 := [], v1_1 := []}
+   same in 4 variants
+11 [v2_1 v1_3] =? [c1_4]
+   {v1_3 := [c1_4], v2_1 := []}
+   same in 4 variants
+12 [c1_2] =? [c1_3]
+   no unifier
+   same in 4 variants
+13 [v1_1] =? [v2 c1_3]
+   {v2 := [], v1_1 := [c1_3]}
+   same in 4 variants
+14 [v1_1] =? [v2_2 c1_3]
+   {v1_1 := [c1_3], v2_2 := []}
+   same in 4 variants
+15 [v1_1 v1_5] =? [v2 c1_3]
+   {v2 := [v1_1 n1_1], v1_5 := [n1_1 c1_3]}
+   same in 4 variants
+16 [v1_1] =? [v2_2 c2_3]
+   no unifier
+   same in 4 variants
+17 [v1_1 c1_2] =? [v2_3 v1_4]
+   {v1_4 := [v1_1 c1_2], v2_3 := []}
+   same in 4 variants
+18 [v1_1 c1_2] =? [c2_3 v1_4]
+   no unifier
+   same in 4 variants
+19 [v1 c1_2] =? [c2_3 v1_4]
+   {v1 := [c2_3 n1_1], v1_4 := [n1_1 c1_2]}
+   same in 4 variants
+20 [c1_9 c2_8 v2_1] =? [c1_9 v1_2 c2_3]
+   no unifier
+   same in 4 variants
+21 [v1_1 c1_2] =? [v1_3 c1_4]
+   no unifier
+   same in 4 variants
+22 [v1_1 c1_2] =? [v1_3 v1_4]
+   {v1_3 := [v1_1 c1_2], v1_4 := []}
+   same in 4 variants
+23 [v1_1 v1_2] =? [v1_3 v1_4]
+   {v1_2 := [n1_1 v1_4], v1_3 := [v1_1 n1_1]}
+   same in 4 variants
+24 [v1_1 c1_2 v1_5] =? [v1_3 c1_4 v1_6]
+   {v1_3 := [v1_1 c1_2 n1_1], v1_5 := [n1_1 c1_4 v1_6]}
+   same in 4 variants
+25 [v1_1 c1_2] =? [c1_3 v1_4 c1_5]
+   no unifier
+   same in 4 variants
+26 [v1_1 c1_2 v1_7] =? [c1_3 v1_4 c1_5]
+   {v1_1 := [c1_3 n1_1], v1_4 := [n1_1 c1_2 n1_2], v1_7 := [n1_2 c1_5]}
+   same in 4 variants
+27 [v2_1 v1_2 c1_3] =? [v1_4 c1_5 v1_6]
+   {v1_2 := [c1_5 n1_1], v1_4 := [], v1_6 := [n1_1 c1_3], v2_1 := []}
+   same in 4 variants
+28 [v1 c2_2 v1_3] =? [v1_4 c1_5]
+   no unifier
+   same in 4 variants
+29 [v1_1 c2_2] =? [v1_3 c1_4]
+   no unifier
+   same in 4 variants
+30 [v1_1 v2_2 c1_3] =? [v2_4 v1_5]
+   {v1_5 := [v1_1 c1_3], v2_2 := [], v2_4 := []}
+   same in 4 variants
+system 0: no unifier
+   same in 4 variants
+system 1: no unifier
+   same in 4 variants
+system 2: no unifier
+   same in 4 variants
+system 3: no unifier
+   same in 4 variants
+system 4: no unifier
+   same in 4 variants
+system 5: no unifier
+   same in 4 variants
+system 6: no unifier
+   same in 4 variants
+system 7: {v1_1 := [c1_3], v2_2 := [], v2_5 := []}
+   same in 4 variants
+system 8: no unifier
+   same in 4 variants
+system 9: {v1_1 := [c1_3], v1_5 := [], v2_2 := []}
+   same in 4 variants
+system 10: {v1_3 := [v1_1 c1_2], v1_4 := [], v1_5 := []}
+   same in 4 variants
+system 11: {v2 := [c1_3], v1_1 := [c1_3]}
+   same in 4 variants
+system 12: {v1_1 := [c1_4 c1_3], v1_2 := [c1_4]}
+   same in 4 variants
+system 13: no unifier
+   same in 4 variants
+trace [v1_1 v1_3] =? [c1_2 c1_4]
+v1_1.v1_3. =  | c1_2.c1_4.
+r6
+v1_3. =  | c1_2.c1_4.
+r6
+ =  | c1_2.c1_4.
+r2
+failure
+failure
+v1_3. =  | c1_2.c1_4.
+r7
+ =  | c1_4.
+r2
+failure
+failure
+v1_3. =  | c1_2.c1_4.
+r10
+v1_3. = c1_2. | c1_4.
+r10
+v1_3. = c1_2.c1_4. | 
+r5
+ =  | 
+r1
+   {v1_1 := [], v1_3 := [c1_2 c1_4]}
+trace [v1_1] =? [v2_2 c2_3]
+v1_1. =  | v2_2.c2_3.
+r13
+v1_1. =  | c2_3.
+r6
+ =  | c2_3.
+r2
+failure
+failure
+failure
+v1_1. =  | v2_2.c2_3.
+r11
+ =  | v2_2.c2_3.
+r2
+v2_2.c2_3. =  | 
+r5
+failure
+failure
+failure
+failure
+failed
+   no unifier
+trace [c1_9 c2_8 v2_1] =? [c1_9 v1_2 c2_3]
+c2_8.v2_1. =  | v1_2.c2_3.
+r4
+v1_2.c2_3. =  | c2_8.v2_1.
+r6
+failure
+failure
+failure
+failed
+   no unifier
+trace [v1_1 v1_2] =? [v1_3 v1_4]
+v1_1.v1_2. =  | v1_3.v1_4.
+r8
+v1_3.v1_4. = v1_1. | v1_2.
+r9
+v1_2. = n1_1. | v1_4.
+r10
+v1_2. = n1_1.v1_4. | 
+r5
+ =  | 
+r1
+   {v1_2 := [n1_1 v1_4], v1_3 := [v1_1 n1_1]}
+trace [v1_1 c1_2] =? [v1_3 v1_4]
+v1_1.c1_2. =  | v1_3.v1_4.
+r8
+v1_3.v1_4. = v1_1. | c1_2.
+r10
+v1_3.v1_4. = v1_1.c1_2. | 
+r5
+v1_4. =  | 
+r5
+ =  | 
+r1
+   {v1_3 := [v1_1 c1_2], v1_4 := []}
+trace [v1_1] =? [v2 v3]
+v1_1. =  | v2.v3.
+r13
+v1_1. =  | v3.
+r13
+v1_1. =  | 
+r5
+ =  | 
+r1
+   {v2 := [], v3 := [], v1_1 := []}

@@ -1,0 +1,43 @@
+anyv                               Perv!ty_exists{Perv!Ty; 'a. 'a}
+tka{anyv}                          Perv!Term
+tka{zero}                          Perv!Term
+tka{pair{zero; tt}}                Perv!Term
+tkt{anyv}                          REFUSED: type error
+hv                                 Perv!ty_exists{Perv!Ty; 'a. Perv!ty_hyp{'a; Perv!Term}}
+tkh{hv}                            Perv!Term
+tkh{zero}                          REFUSED: type error
+tkh{pair{zero; tt}}                REFUSED: type error
+tkt{hv}                            REFUSED: type error
+cv                                 Perv!ty_exists{Perv!Ty;
+                'a. Perv!ty_hyp_cases{Perv!xcons{Perv!ty_hyp_case{'a;
+               Perv!Term};
+                        Perv!xcons{Perv!ty_hyp_case{Perv!Term; 'a}; Perv!xnil}}}}
+tkc{cv}                            Perv!Term
+tkc{zero}                          REFUSED: type error
+tkc{pair{zero; tt}}                REFUSED: type error
+tkt{cv}                            REFUSED: type error
+sv                                 Perv!ty_exists{Perv!Ty;
+                'a. Perv!ty_sequent{Perv!ty_hyp{'a; Perv!Term};
+           'a; Perv!Judgment}}
+tkq{sv}                            Perv!Term
+tkq{zero}                          REFUSED: type error
+tkq{pair{zero; tt}}                REFUSED: type error
+tkt{sv}                            REFUSED: type error
+tka{hv}                            REFUSED: Term_ty_infer.tenv_find_type: unknown term
+tkh{anyv}                          REFUSED: type error
+tkh{sv}                            REFUSED: type error
+tkq{hv}                            REFUSED: type error
+tkh{hv2}                           Perv!Term
+tkc{cv2}                           Perv!Term
+tkq3{sv2}                          Perv!Term
+tkq{sv2}                           Perv!Term
+tkh{hvp}                           Perv!Term
+tkc{cvp}                           Perv!Term
+tkq3{svp}                          Perv!Term
+tkhp{hv2}                          REFUSED: type error
+tkcp{cv2}                          REFUSED: type error
+tkqp{sv2}                          REFUSED: type error
+tkhp{hvp}                          Perv!Term
+tkcp{cvp}                          Perv!Term
+tkqp{svp}                          Perv!Term
+tkcp3{cv3}                         REFUSED: type error

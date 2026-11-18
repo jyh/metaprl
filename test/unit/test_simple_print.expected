@@ -41,3 +41,5 @@ MetaImplies                        A --> B
 MetaFunction                       'x : A --> B
 MetaIff                            A <--> B
 MetaLabeled                         ["lbl"]A
+string_of_bterm, no binder         A
+string_of_bterm, two binders       'u, 'w. f{'u; B}

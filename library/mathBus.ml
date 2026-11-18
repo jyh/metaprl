@@ -351,15 +351,22 @@ let integer_valueb node=
   | Mnode n -> failwith "integer_value"
 *)
 
+(* mb_number writes base-10^9 digits, most significant first, as many as
+   the number has, with the sign on the first: read them all. *)
 let number_value node=
   let nsubterms = mbnode_nSubterms node in
-  match (mbnode_subtermq node 1) with
-    Mbint b -> let base = num_of_int (dest_bint b) in if nsubterms = 1 then base
-    else (match (mbnode_subtermq node 2) with
-      Mbint c -> let int = Lm_num.add_num (Lm_num.mult_num (abs_num base) (num_of_int 1000000000)) (num_of_int (dest_bint c)) in
-      if Lm_num.ge_num base (num_of_int 0) then int else (Lm_num.sub_num (num_of_int 0) int)
-    | Mnode n -> failwith "integer_value")
-  | Mnode n -> failwith "integer_value"
+  let digit i =
+    match (mbnode_subtermq node i) with
+      Mbint b -> num_of_int (dest_bint b)
+    | Mnode n -> failwith "integer_value"
+  in
+  let base = digit 1 in
+  let rec loop i int =
+    if i > nsubterms then int
+    else loop (i + 1) (Lm_num.add_num (Lm_num.mult_num int (num_of_int 1000000000)) (digit i))
+  in
+  let int = loop 2 (abs_num base) in
+    if Lm_num.ge_num base (num_of_int 0) then int else (Lm_num.sub_num (num_of_int 0) int)
 
 let integer_value node=
   let nsubterms = (mbnode_nSubterms node) in

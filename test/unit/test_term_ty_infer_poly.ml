@@ -48,7 +48,10 @@
        and v4 is a List{Vec[3]}, though v3 and v4 alone are refused;
      - the reduction is found by either mechanism alone: removing the
        typereduce rewrite, or the typereductions pair, leaves every line
-       unchanged; only removing both changes them. *)
+       unchanged; only removing both changes them.  The reduction cases are
+       run again with each mechanism alone (2026-11-15), which is the only
+       way the rewrite is applied to the FIRST type of a pair: with the
+       pair present it is always found first. *)
 open Lm_symbol
 open Opname
 open Term_sig
@@ -286,15 +289,24 @@ let () =
   infer "cons{some; cons{some; nil}}" (cons (c0 "some") (cons (c0 "some") nil));
   infer "cons{some; cons{nil; nil}}" (cons (c0 "some") (cons nil nil));
   (* a type reduction Opt{'a} <--> List{'a} *)
-  infer "none" (c0 "none");
-  infer "cons{none; cons{nil; nil}}" (cons (c0 "none") (cons nil nil));
-  infer "cons{nil; cons{none; nil}}" (cons nil (cons (c0 "none") nil));
-  infer "unpack{nil}" (unpack nil);
-  infer "unpack{none}" (unpack (c0 "none"));
-  infer "same{nil; none}" (same nil (c0 "none"));
-  infer "same{none; cons{zero; nil}}" (same (c0 "none") (cons zero nil));
-  infer "cons{none; cons{cons{zero; nil}; nil}}" (cons (c0 "none") (cons (cons zero nil) nil));
-  infer "cons{none; cons{zero; nil}} (Opt is no Term)" (cons (c0 "none") (cons zero nil));
+  let red_cases = [
+    "none", (c0 "none");
+    "cons{none; cons{nil; nil}}", (cons (c0 "none") (cons nil nil));
+    "cons{nil; cons{none; nil}}", (cons nil (cons (c0 "none") nil));
+    "unpack{nil}", (unpack nil);
+    "unpack{none}", (unpack (c0 "none"));
+    "same{nil; none}", (same nil (c0 "none"));
+    "same{none; cons{zero; nil}}", (same (c0 "none") (cons zero nil));
+    "cons{none; cons{cons{zero; nil}; nil}}", (cons (c0 "none") (cons (cons zero nil) nil));
+    "cons{none; cons{zero; nil}} (Opt is no Term)", (cons (c0 "none") (cons zero nil));
+  ] in
+  List.iter (fun (n, t) -> infer n t) red_cases;
+  (* the same cases with ONE mechanism each: the header's "either alone" claim, checked *)
+  List.iter (fun (title, env) ->
+      print_endline ("  with " ^ title ^ ":");
+      List.iter (fun (n, t) -> run ("    " ^ n) (fun () -> show_ty (Term_ty_infer.infer_term env t))) red_cases)
+    [ "the typereduce rewrite only", { tenv with Term_ty_infer.tenv_typereductions = Term_ty_infer.Shape2Table.empty };
+      "the typereductions pair only", { tenv with Term_ty_infer.tenv_typereduce = Term_match_table.empty_table } ];
   (* a name used both as a variable and as a second-order variable *)
   infer "pair{same{x; y}; pair{'x[zero]; 'y[zero]}}" (pair (same (var "x") (var "y")) (pair (so "x" [ zero ]) (so "y" [ zero ])));
   infer "pair{same{x; y}; pair{'x[zero]; 'y[tt]}}" (pair (same (var "x") (var "y")) (pair (so "x" [ zero ]) (so "y" [ tt ])));

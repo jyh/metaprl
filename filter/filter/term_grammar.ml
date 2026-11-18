@@ -107,13 +107,11 @@ let raise_spelling_error () =
             else
                eprintf "\n\t%s: " (Lm_ctype.quote h);
             let pos_lnum = Ploc.line_nb loc in
-            if pos_lnum >= 0 then
-               let pos_bol = Ploc.bol_pos loc in
-                  eprintf "line %i, char %i" pos_lnum pos_bol
-            else
-               let pos_cnum = Ploc.first_pos loc in
-                  eprintf "char %i" pos_cnum;
-            print h t
+               if pos_lnum >= 0 then
+                  eprintf "line %i, char %i" pos_lnum (Ploc.bol_pos loc)
+               else
+                  eprintf "char %i" (Ploc.first_pos loc);
+               print h t
        | [] ->
             ()
       in
@@ -829,18 +827,22 @@ struct
             let spelling =
                if !debug_spell then
                   match opname with
-                     ["spelling"] ->
+                     ["spelling"]
+                   | ["math_spelling"] ->
                         SpellAdd
                    | ["misspelled"]
                    | ["math_misspelled"]
                    | ["license"]
+                   | ["math_license"]
                    | ["url"]
+                   | ["math_url"]
                    | ["tt"]
                    | ["math_tt"]
                    | ["code"]
                    | ["math_rulebox"]
                    | ["math_defrule"]
-                   | ["comment"] ->
+                   | ["comment"]
+                   | ["math_comment"] ->
                         SpellOff
                    | _ ->
                         spelling

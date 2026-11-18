@@ -1,0 +1,33 @@
+== c
+  string_of_shape        Tsp!c[]{}
+  print_shape            Tsp!c[]{}
+  pp_print_shape         Tsp!c[]{}
+  short_string_of_shape  c
+  string_of_opparam      Tsp!c[]{}
+== f{c; c}
+  string_of_shape        Tsp!f[]{0;0}
+  print_shape            Tsp!f[]{0;0}
+  pp_print_shape         Tsp!f[]{0;0}
+  short_string_of_shape  f{0;0}
+  string_of_opparam      Tsp!f[]{0;0}
+== lam{x. c}
+  string_of_shape        Tsp!lam[]{1}
+  print_shape            Tsp!lam[]{1}
+  pp_print_shape         Tsp!lam[]{1}
+  short_string_of_shape  lam{1}
+  string_of_opparam      Tsp!lam[]{1}
+== p[1:n; s:s; t:t]{c}
+  string_of_shape        Tsp!p[NST]{0}
+  print_shape            Tsp!p[NST]{0}
+  pp_print_shape         Tsp!p[NST]{0}
+  short_string_of_shape  p[NST]{0}
+  string_of_opparam      Tsp!p[NST]{0}
+== q[@n:n; @l:l]
+  string_of_shape        Tsp!q[NL]{}
+  print_shape            Tsp!q[NL]{}
+  pp_print_shape         Tsp!q[NL]{}
+  short_string_of_shape  q[NL]
+  string_of_opparam      Tsp!q[NL]{}
+opparam_of_term 'x           Invalid_argument Term_shape_gen.opparam_of_term: variables and sequents are not allowed
+opparam_of_term 'a['x]       Invalid_argument Term_shape_gen.opparam_of_term: variables and sequents are not allowed
+opparam_of_term sequent      Invalid_argument Term_shape_gen.opparam_of_term: variables and sequents are not allowed

@@ -1,0 +1,13 @@
+ObId [3; a] vs ObId [3; a]           std: ops_eq true  alpha_equal true   ds: ops_eq true  alpha_equal true 
+ObId [3] vs ObId [4]                 std: ops_eq false alpha_equal false  ds: ops_eq false alpha_equal false
+ObId [3] vs ObId [3; 3]              std: ops_eq false alpha_equal false  ds: ops_eq false alpha_equal false
+ObId [120000] vs ObId [40000*3]      std: ops_eq true  alpha_equal true   ds: ops_eq true  alpha_equal true 
+120000 vs 40000*3 (not in an ObId)   std: ops_eq true  alpha_equal true   ds: ops_eq true  alpha_equal true 
+MString a vs MString a               std: ops_eq true  alpha_equal true   ds: ops_eq true  alpha_equal true 
+MString a vs MString b               std: ops_eq false alpha_equal false  ds: ops_eq false alpha_equal false
+MToken a vs MToken a                 std: ops_eq true  alpha_equal true   ds: ops_eq true  alpha_equal true 
+MToken a vs MToken b                 std: ops_eq false alpha_equal false  ds: ops_eq false alpha_equal false
+MOperator a vs MOperator a           std: ops_eq true  alpha_equal true   ds: ops_eq true  alpha_equal true 
+MOperator a vs MOperator b           std: ops_eq false alpha_equal false  ds: ops_eq false alpha_equal false
+MString a vs MToken a                std: ops_eq false alpha_equal false  ds: ops_eq false alpha_equal false
+MToken a vs MOperator a              std: ops_eq false alpha_equal false  ds: ops_eq false alpha_equal false

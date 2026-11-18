@@ -1,0 +1,36 @@
+"12"         n     Number 12
+"1700000000" time  [Token time; Number 1700000000]
+"tok"        t     Token tok
+"str"        s     String "str"
+"q1"         q     [Token quote; Token q1]
+"true"       b     [Token bool; Number 1]
+"T"          b     [Token bool; Number 1]
+"false"      b     [Token bool; Number 0]
+"F"          b     [Token bool; Number 0]
+real_parameter_from_string maybe
+"maybe"      b     Basic.Nuprl5_Exception(_)
+"x"          v     Var x
+"i"          l     [Token nuprl5_level_expression; MLevel; String "i"]
+"j 1"        l     [Token nuprl5_level_expression; MLevel; String "j 1"]
+"z"          zz    Failure unknown special op-param  zz  z
+"%%7"        n     Invalid_argument("Lm_big_int.big_int_of_string")
+"%%A"        s     String "%A"
+"%"          s     String "%"
+"%Aname"     t     [Token extended; Token abstraction; Token t; Token name]
+"%Dname"     t     [Token extended; Token display; Token t; Token name]
+"%Sname"     t     [Token extended; Token slot; Token t]
+"%dm"        n     [Token display; MNumber m]
+"%dm"        t     [Token display; MToken m]
+"%dm"        s     [Token display; MString m]
+"%dm"        q     [Token display; [Token quote; Token m]]
+"%dm"        v     [Token display; Var m]
+"%am"        n     MNumber m
+"%am"        t     MToken m
+"%am"        s     MString m
+"%am"        q     [Token quote; Token m]
+"%a1"        b     [Token bool; Number 1]
+"%am"        v     Var m
+"%ai"        l     [Token nuprl5_level_expression; MLevel; String "i"]
+"%am"        zz    Failure unknown special meta op-param
+string_to_parameter %Xm n
+"%Xm"        n     Basic.Nuprl5_Exception(_)

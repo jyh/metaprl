@@ -1,0 +1,5 @@
+completeMT idT                     left [refused (failWithT)]  log []
+completeMT fan (main C left)       left [refused (failWithT)]  log []
+completeMT (fan thenMT nthAssumT 1), C assumed left [wf equality assertion]  log []
+completeMT (nthAssumT 1), C assumed left []  log []
+completeMT (addHiddenLabelT wf)    left [wf]  log []

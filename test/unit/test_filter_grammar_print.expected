@@ -1,0 +1,25 @@
+"grammar" flag before printing: false
+== the empty grammar
+  Grammar:
+"grammar" flag after printing: true
+== one token, one production, one start
+  Lexer lex
+     Lexer:
+        Id: 2
+        Clause: id = 1 action = t_eof regex = (symbol \eof)
+        Clause: id = 0 action = t_x regex = (symbol x)
+     NFA:
+        NFA state 0: action (stop [1])
+        NFA state 1: action (symbols [\eof] goto 0)
+        NFA state 2: action (stop [0])
+        NFA state 3: action (symbols [x] goto 2)
+        NFA state 4: action (epsilon goto 3 1)
+        NFA state 5: action (. goto 4)
+        NFA state 6: action (arg-search goto 4)
+        NFA state 7: action (. goto 8)
+        NFA state 8: action (epsilon goto 7 6)
+        NFA state 9: action (. goto 8)
+  Grammar:
+     start res
+     res ::= tok_x tok_eof [p_res, none, 0]
+"grammar" flag after printing again: true

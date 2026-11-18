@@ -1,0 +1,15 @@
+f{a; b}
+  std: 2 subterms
+  ds:  2 subterms
+f
+  std: 0 subterms
+  ds:  0 subterms
+g{a} (another opname)
+  std: refused: dest_simple_term_opname (opname mismatch)
+  ds:  refused: dest_simple_term_opname (opname mismatch)
+f[1]{a} (a parameter)
+  std: refused: dest_simple_term_opname (params exist)
+  ds:  refused: dest_simple_term_opname (params exist)
+f{x. a} (a bound subterm)
+  std: refused: dest_simple_term_opname (binding vars exist)
+  ds:  refused: dest_simple_bterm

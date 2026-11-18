@@ -1,0 +1,26 @@
+parameters, there and back:
+number         Number 42                                  -> Number 42
+negative       Number -42                                 -> Number -42
+10^9           Number 1000000000                          -> Number 1000000000
+10^18 - 1      Number 999999999999999999                  -> Number 999999999999999999
+-(10^18 - 1)   Number -999999999999999999                 -> Number -999999999999999999
+10^18          Number 1000000000000000000                 -> Number 1000000000000000000
+30 digits      Number 123456789012345678901234567890      -> Number 123456789012345678901234567890
+-30 digits     Number -123456789012345678901234567890     -> Number -123456789012345678901234567890
+string         String "s"                                 -> String "s"
+token          Token Test!tk                              -> Token Test!tk  (DIFFERS)
+var            Var x                                      -> Var x
+mnumber        MNumber n                                  -> MNumber n
+mstring        MString m                                  -> MString m
+mtoken         MToken t                                   -> MToken t
+mlevel         MLevel {2 | 'i' | 'j}                      -> MLevel {2 | 'j | 'i'}  (DIFFERS)
+list           [Number 1; String "a"]                     -> [Number 1; String "a"]
+quote          Quote                                      -> Invalid_argument Mbterm.mbparameter_of_param: quote and shape parameters not supported
+terms, there and back:
+constant           Test!c
+one subterm        Test!f{Test!c}
+three subterms     Test!g{Test!c; Test!c; Test!c}
+binding last       Test!lam{'x. 'x}
+binding first      Test!h{'x, 'y. 'y; Test!c}
+params             Test!p[3:n, "s":s]{Test!c}
+two bindings       Test!k{'x. 'x; 'y. Test!c; Test!c}

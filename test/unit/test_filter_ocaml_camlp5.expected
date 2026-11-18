@@ -1,0 +1,15 @@
+FormatError: sig_item_of_term.Filter_ocaml.dest_sig : bad arity
+declare val x; type t end  RAISES FormatError Filter_ocaml.dest_sig : bad arity
+FormatError: sig_item_of_term.Filter_ocaml.dest_sig : bad arity
+declare end                RAISES FormatError Filter_ocaml.dest_sig : bad arity
+object declare m; n end end (pr_o: Ploc.Exc(_, _))  (term same)
+FormatError: sig_item_of_term.Filter_ocaml.dest_ct : bad arity
+an extension [%x]          RAISES FormatError Filter_ocaml.dest_ct : bad arity
+FormatError: sig_item_of_term.Filter_ocaml.dest_ct : bad arity
+an extension with a body   RAISES FormatError Filter_ocaml.dest_ct : bad arity
+M.ct as written            class c : M.ct
+FormatError: sig_item_of_term.Filter_ocaml.dest_acc_ct: not a class type path
+m.ct, m lowercase          RAISES FormatError Filter_ocaml.dest_acc_ct: not a class type path
+F(M).ct as written         class c : F(M).ct
+FormatError: sig_item_of_term.Filter_ocaml.dest_app_ct: not a functor application in a class type path
+f(M).ct, f lowercase       RAISES FormatError Filter_ocaml.dest_app_ct: not a functor application in a class type path

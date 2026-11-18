@@ -1,0 +1,24 @@
+well formed:
+  num_hyps: 2
+  nth_hyp 2: a hypothesis
+  explode_sequent: <H>; x: _
+a context with no variable parameter:
+  num_hyps: refused (num_hyps: malformed context)
+  nth_hyp 2: refused (nth_hyp: malformed context)
+  explode_sequent: refused (dest_context: not a context)
+a context with one subterm:
+  num_hyps: refused (num_hyps: malformed context)
+  nth_hyp 2: refused (nth_hyp: malformed context)
+  explode_sequent: refused (dest_context: not a context)
+a context whose body binds no variable:
+  num_hyps: refused (num_hyps: malformed context)
+  nth_hyp 2: refused (nth_hyp: malformed context)
+  explode_sequent: refused (dest_context: wrong bvars)
+a body that ends in no concl:
+  num_hyps: refused (num_hyps: malformed sequent)
+  nth_hyp 2: a hypothesis
+  explode_sequent: refused (explode_sequent: malformed sequent)
+a concl with two subterms:
+  num_hyps: 2
+  nth_hyp 2: a hypothesis
+  explode_sequent: refused (explode_sequent: malformed sequent)

@@ -1,0 +1,8 @@
+== resource_sig
+int -> bool                              input int, output bool
+'a list -> (string * int) option         input 'a list, output (string * int) option
+a term of one subterm                    raised RefineError (two_subterms)
+== resource_str
+int, bool, fun x -> x > 0                input int, output bool, body fun x -> x > 0
+read with another operator               raised FormatError (Filter_ocaml.dest_expr : unrecognized opname: Test!resource_def)
+old format: the bare expression          input Filter_ocaml.fake_ctyp_made_for_old_file_format_compatibility, output Filter_ocaml.fake_ctyp_made_for_old_file_format_compatibility, body List.rev

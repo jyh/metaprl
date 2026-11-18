@@ -1,0 +1,16 @@
+E by cutT F, posted; D by cutT E
+  E                          nodes (1, 4), partial, root rule cutT F/2
+  D                          nodes (1, 4), partial, root rule cutT E/2
+  cached for D [1]           2
+entry 0: nodes (1, 4), partial, root rule cutT F/2
+  pasted at D [1]            unjustified/2
+  refine the entry itself at [1] (F by cutT G)
+  result                     nodes (2, 7), partial, root rule cutT F/2
+  result [1]                 rule cutT G/2
+  the entry after            nodes (1, 4), partial, root rule cutT F/2
+entry 1: nodes (1, 4), partial, root rule cutT F/2
+  pasted at D [1]            rule cutT F/2
+  refine the entry itself at [1] (F by cutT G)
+  result                     nodes (2, 7), partial, root rule cutT F/2
+  result [1]                 rule cutT G/2
+  the entry after            nodes (1, 4), partial, root rule cutT F/2

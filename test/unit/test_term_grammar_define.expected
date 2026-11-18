@@ -1,0 +1,16 @@
+mk_type_term (named binder, then plain):
+  x: A -> B                          fun{A; 'x. B}
+  A -> B                             fun{A; B}
+  x: A * B                           prod{A; 'x. B}
+  A * B                              prod{A; B}
+  x: A isect B                       bisect{A; 'x. B}
+  A isect B                          bisect{A; B}
+parse_define:
+  d{'a} <--> f{'a; 'a}               d{'a<||>}  ==  f{'a<||>; 'a<||>}
+  d{'a} <--> g{d{'a}} (recursive)    refused: RefineError Definitional rewrite (not allowed to be recursive)
+  d{'a} <--> 'b (free variable)      refused: RefineError Rewrite_compile_contractum.compile_so_contractum_term
+  'a <--> c (a variable redex)       refused: RefineError Definitional rewrite (subterms must be SO variables)
+  d{f{'a}} <--> 'a (a nested redex)  refused: RefineError Definitional rewrite (subterms must be SO variables)
+parse_type_rewrite:
+  Opt{'a} <--> List{'a}              Opt{'a<||>}  ==  List{'a<||>}
+  Opt{'a} <--> 'b (free variable)    refused: RefineError Rewrite_compile_contractum.compile_so_contractum_term

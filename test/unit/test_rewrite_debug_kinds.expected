@@ -1,0 +1,375 @@
+== meta shape, operator and variable parameters
+Rewrite.apply_rewrite: match_redex on Rdk!h["Rdk!s[]{0}":sh, (Rdk!f{0; 1}):op, z:v]
+Rewrite.match_redex: 0
+ RWComposite Rdk!h@0:sh; @1:op; @2:v
+Rewrite.match_redex.RWComposite: Rdk!h[3](0)/Rdk!h["Rdk!s[]{0}":sh, (Rdk!f{0; 1}):op, z:v][3](0)
+Rewrite.match_redex_params.RWMShape: stack(0)/3 <- Rdk!s[]{0}
+Rewrite.match_redex_params.RWMOperator: stack(1)/3 <- Rdk!f[]{0;1}
+Rewrite.match_redex_params.RWMVar: stack(2)/3 <- z
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWComposite Rdk!k@0:sh; @1:op; @2:v
+    Bterm 0()
+       RWCompositeSimple Rdk!c
+Stack: 3
+	Shape Rdk!s[]{0}
+	Operator Rdk!f[]{0;1}
+	Var z
+
+Rewrite.apply_rewrite: done, result: [Rdk!k["Rdk!s[]{0}":sh, (Rdk!f{0; 1}):op, z:v]{Rdk!c}]
+-> Rdk!k["Rdk!s[]{0}":sh, (Rdk!f{0; 1}):op, z:v]{Rdk!c}
+== literal shape, operator and quote parameters, and object-id and list parameters beside a meta
+Rewrite.apply_rewrite: match_redex on Rdk!h[7:n, "Rdk!s[]{0}":sh, (Rdk!f{0; 1}):op, @]
+Rewrite.match_redex: 0
+ RWComposite Rdk!h@0:n; Rdk!s[]{0}:sh; Rdk!f[]{0;1}:op; q
+Rewrite.match_redex.RWComposite: Rdk!h[4](0)/Rdk!h[7:n, "Rdk!s[]{0}":sh, (Rdk!f{0; 1}):op, @][4](0)
+Rewrite.match_redex_params.RWMNumber: stack(0)/1 <- 7
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWComposite Rdk!k@0:n; ObId; [2:n; a:s]; Rdk!s[]{0}:sh; Rdk!f[]{0;1}:op; q
+Stack: 1
+	Number 7
+
+Rewrite.apply_rewrite: done, result: [Rdk!k[7:n, <object-id>, [2:n; "a":s], "Rdk!s[]{0}":sh, (Rdk!f{0; 1}):op, @]]
+-> Rdk!k[7:n, <object-id>, [2:n; "a":s], "Rdk!s[]{0}":sh, (Rdk!f{0; 1}):op, @]
+== a contractum whose parameters are all simple (number, string, token, quote, list)
+Rewrite.apply_rewrite: match_redex on Rdk!c
+Rewrite.match_redex: 0
+ RWComposite Rdk!c
+Rewrite.match_redex.RWComposite: Rdk!c[0](0)/Rdk!c[0](0)
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWCompositeSimple Rdk!k[3:n; s:s; Rdk!t:t; q; [2:n; a:s]]
+    Bterm 0()
+       RWCompositeSimple Rdk!d
+Stack: 0
+
+Rewrite.apply_rewrite: done, result: [Rdk!k[3:n, "s":s, "Rdk!t":t, @, [2:n; "a":s]]{Rdk!d}]
+-> Rdk!k[3:n, "s":s, "Rdk!t":t, @, [2:n; "a":s]]{Rdk!d}
+== a level meta-parameter with one variable
+Rewrite.apply_rewrite: match_redex on Rdk!h['j:l]
+Rewrite.match_redex: 0
+ RWComposite Rdk!h@0:l
+Rewrite.match_redex.RWComposite: Rdk!h[1](0)/Rdk!h['j:l][1](0)
+Rewrite.match_redex_params.RWMLevel1: stack(0)/1
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWComposite Rdk!k@0:l
+Stack: 1
+	Level
+
+Rewrite.apply_rewrite: done, result: [Rdk!k['j:l]]
+-> Rdk!k['j:l]
+== a second-order variable used twice
+Rewrite.apply_rewrite: match_redex on Rdk!f{Rdk!c; Rdk!c}
+Rewrite.match_redex: 0
+ RWComposite Rdk!f
+    Bterm 0()
+       RWSOVar (0, )
+    Bterm 0()
+       RWSOVar (0, )
+Rewrite.match_redex.RWComposite: Rdk!f[0](2)/Rdk!f{Rdk!c; Rdk!c}[0](2)
+Rewrite.match_redex.RWSOVar: stack(0)/1 with Rdk!c
+	RWSoVar: Void
+Rewrite.match_redex.RWSOVar: stack(0)/1 with Rdk!c
+	RWSOVar: Bterm: check_simple_match
+	RWSOVar: Bterm: check_simple_match: ok
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWSOInstance (0)
+Stack: 1
+	BTerm Rdk!c[]
+
+Rewrite.apply_rewrite: done, result: [Rdk!c]
+-> Rdk!c
+== a free first-order variable used twice
+Rewrite.apply_rewrite: match_redex on Rdk!f{'y; 'y}
+Rewrite.match_redex: 0
+ RWComposite Rdk!f
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+    Bterm 0()
+       RWMatchFreeFOVar <0> [] []
+Rewrite.match_redex.RWComposite: Rdk!f[0](2)/Rdk!f{'y; 'y}[0](2)
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWCompositeSimple Rdk!g
+    Bterm 0()
+       RWStackVar 0
+Stack: 1
+	Var y
+
+RWStackVar: 0
+Rewrite.apply_rewrite: done, result: [Rdk!g{'y}]
+-> Rdk!g{'y}
+== a binder the body ignores
+Rewrite.apply_rewrite: match_redex on Rdk!lam{'z. Rdk!c}
+Rewrite.match_redex: 0
+ RWComposite Rdk!lam
+    Bterm 1(stack:0 (default x))
+       RWSOVar (1, )
+Rewrite.match_redex.RWComposite: Rdk!lam[0](1)/Rdk!lam{'z. Rdk!c}[0](1)
+Rewrite.set_bvars 1/1
+Rewrite.set_bvars: stack(0)/2 with z
+Rewrite.match_redex.RWSOVar: stack(1)/2 with Rdk!c
+	RWSoVar: Void
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWCompositeSimple Rdk!g
+    Bterm 0()
+       RWSOInstance (1)
+Stack: 2
+	Var z
+	BTerm Rdk!c[]
+
+Rewrite.apply_rewrite: done, result: [Rdk!g{Rdk!c}]
+-> Rdk!g{Rdk!c}
+== a bound variable used in the body
+Rewrite.apply_rewrite: match_redex on Rdk!lam{'z. Rdk!g{'z}}
+Rewrite.match_redex: 0
+ RWComposite Rdk!lam
+    Bterm 1(stack:0 (default x))
+       RWComposite Rdk!g
+          Bterm 0()
+             RWCheckVar 0
+Rewrite.match_redex.RWComposite: Rdk!lam[0](1)/Rdk!lam{'z. Rdk!g{'z}}[0](1)
+Rewrite.set_bvars 1/1
+Rewrite.set_bvars: stack(0)/1 with z
+Rewrite.match_redex.RWComposite: Rdk!g[0](1)/Rdk!g{'z}[0](1)
+Rewrite.match_redex.RWCheckVar: 0/z
+Rewrite.match_redex.RWCheckVar: z/z
+Rewrite.match_redex.RWComposite done
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWCompositeSimple Rdk!c
+Stack: 1
+	Var z
+
+Rewrite.apply_rewrite: done, result: [Rdk!c]
+-> Rdk!c
+== a binder in the contractum
+Rewrite.apply_rewrite: match_redex on Rdk!lam{'z. Rdk!c}
+Rewrite.match_redex: 0
+ RWComposite Rdk!lam
+    Bterm 1(stack:0 (default x))
+       RWSOVar (1, )
+Rewrite.match_redex.RWComposite: Rdk!lam[0](1)/Rdk!lam{'z. Rdk!c}[0](1)
+Rewrite.set_bvars 1/1
+Rewrite.set_bvars: stack(0)/2 with z
+Rewrite.match_redex.RWSOVar: stack(1)/2 with Rdk!c
+	RWSoVar: Void
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWCompositeSimple Rdk!lam
+    Bterm 1(name:y)
+       RWSOInstance (1)
+Stack: 2
+	Var z
+	BTerm Rdk!c[]
+
+OldName y (avoid [])
+Rewrite.apply_rewrite: done, result: [Rdk!lam{'y. Rdk!c}]
+-> Rdk!lam{'y. Rdk!c}
+== a context
+Rewrite.apply_rewrite: match_redex on Rdk!f{Rdk!h{Rdk!g{Rdk!c}}}
+Rewrite.match_redex: 0
+ RWComposite Rdk!f
+    Bterm 0()
+       RWSOContext (0, 0, [])
+          RWComposite Rdk!g
+             Bterm 0()
+                RWSOVar (1, )
+Rewrite.match_redex.RWComposite: Rdk!f[0](1)/Rdk!f{Rdk!h{Rdk!g{Rdk!c}}}[0](1)
+Rewrite.match_redex.RWSOContext: Rdk!h{Rdk!g{Rdk!c}}@[1] under vars 
+Rewrite_match_redex.addr_fun: term Rdk!g{Rdk!c} under [] vars
+Rewrite.match_redex.RWSOContext: stack(0)/2
+Rewrite.match_redex.RWComposite: Rdk!g[0](1)/Rdk!g{Rdk!c}[0](1)
+Rewrite.match_redex.RWSOVar: stack(1)/2 with Rdk!c
+	RWSoVar: Void
+Rewrite.match_redex.RWComposite done
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWCompositeSimple Rdk!f
+    Bterm 0()
+       RWSOContextSubst 0
+          RWCompositeSimple Rdk!m
+             Bterm 0()
+                RWSOInstance (1)
+
+Stack: 2
+	Context (/Rdk!h{Perv!xnil}@[1][])
+	BTerm Rdk!c[]
+
+Rewrite.apply_rewrite: done, result: [Rdk!f{Rdk!h{Rdk!m{Rdk!c}}}]
+-> Rdk!f{Rdk!h{Rdk!m{Rdk!c}}}
+== a second-order variable with an argument, used twice
+Rewrite.apply_rewrite: match_redex on Rdk!pair{Rdk!lam{'u. Rdk!g{'u}}; Rdk!lam{'w. Rdk!g{'w}}}
+Rewrite.match_redex: 0
+ RWComposite Rdk!pair
+    Bterm 0()
+       RWComposite Rdk!lam
+          Bterm 1(stack:0 (default x))
+             RWSOVar (1, 0)
+    Bterm 0()
+       RWComposite Rdk!lam
+          Bterm 1(stack:2 (default y))
+             RWSOVar (1, 2)
+Rewrite.match_redex.RWComposite: Rdk!pair[0](2)/Rdk!pair{Rdk!lam{'u. Rdk!g{'u}}; Rdk!lam{'w. Rdk!g{'w}}}[0](2)
+Rewrite.match_redex.RWComposite: Rdk!lam[0](1)/Rdk!lam{'u. Rdk!g{'u}}[0](1)
+Rewrite.set_bvars 1/1
+Rewrite.set_bvars: stack(0)/3 with u
+Rewrite.match_redex.RWSOVar: stack(1)/3 with Rdk!g{'u}
+	RWSoVar: Void
+Rewrite.match_redex.RWComposite done
+Rewrite.match_redex.RWComposite: Rdk!lam[0](1)/Rdk!lam{'w. Rdk!g{'w}}[0](1)
+Rewrite.set_bvars 1/1
+Rewrite.set_bvars: stack(2)/3 with w
+Rewrite.match_redex.RWSOVar: stack(1)/3 with Rdk!g{'w}
+	RWSOVar: Bterm: check_simple_match
+	RWSOVar: Bterm: check_simple_match: ok
+Rewrite.match_redex.RWComposite done
+Rewrite.match_redex.RWComposite done
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWSOInstance (1)
+    RWCompositeSimple Rdk!c
+Stack: 3
+	Var u
+	BTerm Rdk!g{'u}[u]
+	Var w
+
+Rewrite.apply_rewrite: done, result: [Rdk!g{Rdk!c}]
+-> Rdk!g{Rdk!c}
+== a sequent
+Rewrite.apply_rewrite: match_redex on Arg: Rdk!arg
+Hyps:
+      1.u :Rdk!U
+      2.x :Rdk!X
+      3.y :Rdk!g{'x}
+Goal:Rdk!g{'x}
+Rewrite.match_redex: 0
+ RWSequent:
+ Arg:
+    RWComposite Rdk!arg
+ Hyps:
+    RWSeqContext (0, 0, [])
+    RWSeqHyp: stack:2 (default x)
+       RWSOVar (1, )
+    RWSeqContext (-1, 3, [2])
+ Goals:
+    RWSOVar (4, 2)
+Rewrite.match_redex.RWComposite: Rdk!arg[0](0)/Rdk!arg[0](0)
+Rewrite.match_redex.RWComposite done
+RWSeqContext/RWSeqFreeVarsContext (1, 0, [])
+RWSeqHyp (1 out of 3)
+Rewrite.set_bvars: stack(2)/5 with x
+Rewrite.match_redex.RWSOVar: stack(1)/5 with Rdk!X
+	RWSoVar: Void
+RWSeqContext/RWSeqFreeVarsContext (1, 3, [2])
+Rewrite.match_redex.RWSOVar: stack(4)/5 with Rdk!g{'x}
+	RWSoVar: Void
+Rewrite.apply_rewrite: build_contractum
+Rewrite.build_contractum:
+ RWSequent:
+ Arg:
+    RWCompositeSimple Rdk!arg
+ Hyps:
+    RWSeqContextInstance (0)
+    RWSeqHyp: stack:2 (default x)
+       RWSOInstance (1)
+    RWSeqContextInstance (3)
+       RWCheckVar 0
+ Goals:
+    RWSOInstance (4)
+       RWCheckVar 0
+Stack: 5
+	SeqContext (/(0,1))
+	BTerm Rdk!X[]
+	Var x
+	SeqContext (x/(2,1))
+	BTerm Rdk!g{'x}[x]
+
+-RWSeqContextInstance (0)
++RWSeqContextInstance (0)
+RWSeqHyp: (stack:2 (default x))
+StackName 2 (avoid [u, y])
+-RWSeqContextInstance (3)
+RWCheckVar: 0/1
++RWSeqContextInstance (3, 'x)
+RWCheckVar: 0/1
+Rewrite.apply_rewrite: done, result: [Arg: Rdk!arg
+Hyps:
+      1.u :Rdk!U
+      2.x :Rdk!X
+      3.y :Rdk!g{'x}
+Goal:Rdk!g{'x}]
+-> Arg: Rdk!arg
+Hyps:
+      1.u :Rdk!U
+      2.x :Rdk!X
+      3.y :Rdk!g{'x}
+Goal:Rdk!g{'x}
+== redex: meta-parameters
+Redex: Stack:
+          RStack: 2
+	PVar n:*
+	PVar s:*
+
+Terms:
+    RWComposite Rdk!h@0:n; @1:s
+
+== redex: a variable first seen inside an instance's argument
+Redex: Stack:
+          RStack: 3
+	SOVarPattern c<>[1]
+	SOVarMaybePattern b<>[0]
+	FOVar y
+
+Terms:
+    RWComposite Rdk!f
+    Bterm 0()
+       RWSOInstance (0)
+          RWSOVar (1, )
+    Bterm 0()
+       RWComposite Rdk!lam
+          Bterm 1(stack:2 (default y))
+             RWSOVar (0, 2)
+
+== redex: that variable then used as an instance, then as a pattern (rstack_downgrade)
+Redex: Stack:
+          RStack: 5
+	FOVar x
+	SOVarPattern c<>[1]
+	SOVarPattern b<>[1]
+	FOVar y
+	FOVar z
+
+Terms:
+    RWComposite Rdk!f
+    Bterm 0()
+       RWComposite Rdk!lam
+          Bterm 1(stack:0 (default x))
+             RWSOInstance (1)
+                RWSOVar (2, 0)
+    Bterm 0()
+       RWComposite Rdk!lam
+          Bterm 1(stack:3 (default y))
+             RWSOVar (1, 3)
+    Bterm 0()
+       RWSOInstance (2)
+          RWComposite Rdk!d
+    Bterm 0()
+       RWComposite Rdk!lam
+          Bterm 1(stack:4 (default z))
+             RWSOVar (2, 4)
+

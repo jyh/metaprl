@@ -1,0 +1,16 @@
+~l                                 Ocaml!lab[0:n, 0:n]{Ocaml!patt_if[0:n, 0:n]{Ocaml!patt_var[0:n, 0:n]{'l. Ocaml!none}}}
+      back: ~l
+~l:x                               Ocaml!lab[0:n, 0:n]{Ocaml!patt_if[0:n, 0:n]{Ocaml!patt_var[0:n, 0:n]{'l. Ocaml!some{Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}}}}}
+      back: ~l:(x)
+object declare end end             Ocaml!obj[0:n, 0:n]{Ocaml!no_pattern[0:n, 0:n]{Ocaml!ocons{Ocaml!class_dcl[0:n, 0:n]{Ocaml!onil}; Ocaml!onil}}}
+      back: object declare  end end
+object declare initializer x; end end Ocaml!obj[0:n, 0:n]{Ocaml!no_pattern[0:n, 0:n]{Ocaml!ocons{Ocaml!class_dcl[0:n, 0:n]{Ocaml!ocons{Ocaml!class_ini[0:n, 0:n]{Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}}; Ocaml!onil}}; Ocaml!onil}}}
+      back: object declare initializer x; end end
+object declare val a = 1; initializer x; end end Ocaml!obj[0:n, 0:n]{Ocaml!no_pattern[0:n, 0:n]{Ocaml!ocons{Ocaml!class_dcl[0:n, 0:n]{Ocaml!ocons{Ocaml!class_val[0:n, 0:n]{Ocaml!string["a":s]; Ocaml!false; Ocaml!false; Ocaml!int[0:n, 0:n, 1:n]}; Ocaml!ocons{Ocaml!class_ini[0:n, 0:n]{Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}}; Ocaml!onil}}}; Ocaml!onil}}}
+      back: object declare val a = 1; initializer x; end end
+object declare declare end end end Ocaml!obj[0:n, 0:n]{Ocaml!no_pattern[0:n, 0:n]{Ocaml!ocons{Ocaml!class_dcl[0:n, 0:n]{Ocaml!ocons{Ocaml!class_dcl[0:n, 0:n]{Ocaml!onil}; Ocaml!onil}}; Ocaml!onil}}}
+      back: object declare declare  end end end
+2005 form lab["l"]{none}           Ocaml!lab[0:n, 0:n, "l":s]{Ocaml!none}
+      back: ~l
+2005 form lab["l"]{some x}         Ocaml!lab[0:n, 0:n, "l":s]{Ocaml!some{Ocaml!lid[0:n, 0:n]{Ocaml!lid["x":s]}}}
+      back: ~l:(x)

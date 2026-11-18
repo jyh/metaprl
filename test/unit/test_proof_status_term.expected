@@ -1,0 +1,12 @@
+nthAssumT 1                          status complete
+   term before: status_incomplete
+   term after:  status_incomplete
+idT                                  status partial
+   term before: status_incomplete
+   term after:  status_incomplete
+cutT B                               status partial
+   term before: status_incomplete
+   term after:  status_incomplete
+cutT B thenLT [idT; nthAssumT 1]     status partial
+   term before: status_incomplete
+   term after:  status_incomplete

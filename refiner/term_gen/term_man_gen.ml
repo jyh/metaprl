@@ -338,8 +338,10 @@ struct
     * A term is first-order if it has no bvars.
     *)
    let is_fo_term t =
-      (* a sequent binds its hypotheses: not first-order (as term_ds) *)
+      (* a sequent binds its hypotheses, and a second-order variable is not
+       * first-order: neither is (as term_ds) *)
       not (is_simple_term_opname sequent_opname t)
+      && not (is_so_var_term t)
       && List.for_all is_simple_bterm (dest_term t).term_terms
 
    (*

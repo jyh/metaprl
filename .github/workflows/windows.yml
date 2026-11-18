@@ -96,11 +96,25 @@ jobs:
       # first-time setup. Both modules are pure Perl, so their .pm files are
       # copied from the CPAN tarballs (sha256-pinned) into Cygwin perl's
       # site_perl directory.
+      # Since 11-15 19:42Z a bash step running `opam install conf-perl` was killed
+      # in ~10 s (exit 3840, no output, not even an echo after the call), and its
+      # opam kept the switch lock. Measured on a branch: dropping the pipe does not
+      # help. Hypothesis: the Cygwin setup that opam runs for perl updates
+      # cygwin1.dll and terminates every Cygwin process, the step's bash included.
+      # So that one call runs from PowerShell, which is not a Cygwin process.
+      - name: conf-perl from PowerShell (Cygwin's setup may stop Cygwin processes)
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          opam install -y conf-perl *> "$env:RUNNER_TEMP\perl-opam.log"
+          $rc = $LASTEXITCODE
+          Write-Output "opam install conf-perl: rc=$rc"
+          Get-Content "$env:RUNNER_TEMP\perl-opam.log" -Tail 40
       - name: the two perl modules camlp5 needs, into Cygwin's perl
         continue-on-error: true
         run: |
           set -o pipefail
-          opam install -y conf-perl 2>&1 | tail -3 | tee "$RUNNER_TEMP/perl.log"
+          echo "conf-perl ran in the PowerShell step" | tee "$RUNNER_TEMP/perl.log"
           site=$(/usr/bin/perl -MConfig -e 'print $Config{installsitelib}')
           echo "site_perl: $site" | tee -a "$RUNNER_TEMP/perl.log"
           mkdir -p "$site/IPC/System" "$site/String"

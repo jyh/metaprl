@@ -1,0 +1,6 @@
+f{c; c; c; c; c}           std true  ds true
+f{c; c; c; c}              std false  ds false
+f{c; c; c; c; c; c}        std false  ds false
+g{c; c; c; c; c}           std false  ds false
+f{c; c; x. c; c; c}        std false  ds false
+f[1:n]{c; c; c; c; c}      std true  ds true

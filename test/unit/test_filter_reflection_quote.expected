@@ -1,0 +1,32 @@
+quote_term, no depth (sweep_quote0_term):
+a constant                 Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil}
+a variable                 'x
+pair{x; c}                 Reflect!mk_term{Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{'x; Reflect!cons{Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil}; Reflect!nil}}}
+lam{x. x}                  Reflect!mk_term{Reflect!operator[(Test!lam{1}):op]; Reflect!cons{Reflect!bind{'x. 'x}; Reflect!nil}}
+lam{x. pair{x; y}}         Reflect!mk_term{Reflect!operator[(Test!lam{1}):op]; Reflect!cons{Reflect!bind{'x. Reflect!mk_term{Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{'x; Reflect!cons{'y; Reflect!nil}}}}; Reflect!nil}}
+lam2{x, y. pair{x; y}}     Reflect!mk_term{Reflect!operator[(Test!lam2{2}):op]; Reflect!cons{Reflect!bind{'x. Reflect!bind{'y. Reflect!mk_term{Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{'x; Reflect!cons{'y; Reflect!nil}}}}}; Reflect!nil}}
+'a['x]                     'a<||>['x]
+'a['x; c]                  'a<||>['x; Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil}]
+a context <H>              refused (sweep_quote_term: contexts cannot be quoted currently)
+xunquote{c}                Test!c
+pair{xunquote{x}; c}       Reflect!mk_term{Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{'x; Reflect!cons{Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil}; Reflect!nil}}}
+sequent >- c               Arg: Reflect!bsequent{Reflect!mk_term{Reflect!operator[(Test!sa{}):op]; Reflect!nil}} Hyps: Goal:Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil}
+sequent x: c >- x          Arg: Reflect!bsequent{Reflect!mk_term{Reflect!operator[(Test!sa{}):op]; Reflect!nil}} Hyps: 1.x :Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil} Goal:'x
+sequent <J>; x: c >- x     Arg: Reflect!bsequent{Reflect!mk_term{Reflect!operator[(Test!sa{}):op]; Reflect!nil}} Hyps: 1.<J<||>> 2.x :Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil} Goal:'x
+sequent <J['c]> >- c       Arg: Reflect!bsequent{Reflect!mk_term{Reflect!operator[(Test!sa{}):op]; Reflect!nil}} Hyps: 1.<J<||>[Reflect!mk_term{Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil}; Reflect!cons{Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil}; Reflect!nil}}}]> Goal:Reflect!mk_term{Reflect!operator[(Test!c{}):op]; Reflect!nil}
+quote_term ~depth:d (sweep_quote_term):
+a constant                 Reflect!mk_bterm{'d; Reflect!operator[(Test!c{}):op]; Reflect!nil}
+a variable                 'x
+pair{x; c}                 Reflect!mk_bterm{'d; Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{'x; Reflect!cons{Reflect!mk_bterm{'d; Reflect!operator[(Test!c{}):op]; Reflect!nil}; Reflect!nil}}}
+lam{x. x}                  Reflect!mk_bterm{'d; Reflect!operator[(Test!lam{1}):op]; Reflect!cons{Reflect!bind{'x. 'x}; Reflect!nil}}
+lam{x. pair{x; y}}         Reflect!mk_bterm{'d; Reflect!operator[(Test!lam{1}):op]; Reflect!cons{Reflect!bind{'x. Reflect!mk_bterm{'d; Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{'x; Reflect!cons{'y; Reflect!nil}}}}; Reflect!nil}}
+lam2{x, y. pair{x; y}}     Reflect!mk_bterm{'d; Reflect!operator[(Test!lam2{2}):op]; Reflect!cons{Reflect!bind{'x. Reflect!bind{'y. Reflect!mk_bterm{'d; Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{'x; Reflect!cons{'y; Reflect!nil}}}}}; Reflect!nil}}
+'a['x]                     'a<||>['x]
+'a['x; c]                  'a<||>['x; Test!c]
+a context <H>              refused (sweep_quote_term: contexts cannot be quoted currently)
+xunquote{c}                Test!c
+pair{xunquote{x}; c}       Reflect!mk_bterm{'d; Reflect!operator[(Test!pair{0; 0}):op]; Reflect!cons{'x; Reflect!cons{Reflect!mk_bterm{'d; Reflect!operator[(Test!c{}):op]; Reflect!nil}; Reflect!nil}}}
+sequent >- c               Reflect!sequent{Reflect!mk_bterm{'d; Reflect!operator[(Test!sa{}):op]; Reflect!nil}; Reflect!nil; Reflect!mk_bterm{'d; Reflect!operator[(Test!c{}):op]; Reflect!nil}}
+sequent x: c >- x          refused (sweep_quote_term: hypotheses not supported yet)
+sequent <J>; x: c >- x     refused (sweep_quote_term: hypotheses not supported yet)
+sequent <J['c]> >- c       refused (sweep_quote_term: hypotheses not supported yet)

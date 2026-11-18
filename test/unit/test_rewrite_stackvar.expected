@@ -1,0 +1,5 @@
+== a contractum binder named by a meta parameter, and its bound occurrence
+h[@s:s] --> lam{s. g{'s}} on h["abc":s]      Rsv!lam{'abc. Rsv!g{'abc}}
+h[@n:n] --> lam{n. g{'n}} on h[7:n]          Rsv!lam{'n. Rsv!g{'n}}
+h[@t:t] --> lam{t. g{'t}} on h[k:t]          Rsv!lam{'t. Rsv!g{'t}}
+the first, Strict                            Rsv!lam{'abc. Rsv!g{'abc}}

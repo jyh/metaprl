@@ -1,0 +1,8 @@
+before save i    Incomplete
+before save d    Derived
+before save p    Primitive Fcp!axiom
+saved
+interface saved
+loaded      i    Incomplete
+loaded      d    Derived
+loaded      p    Primitive Fcp!axiom

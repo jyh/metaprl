@@ -1,7 +1,7 @@
 (* The tacticals of Tacticals_boot.Tacticals that the proof census runs and
    no unit test did (2026-11-11 reach census, 63 lines): the label filters
    thenWT, thenET, thenPT, thenMLT, ifWT, ifMT (ifET is reached through thenET); seqOnMT; repeatMForT;
-   orthenT; the assumption tacticals onSomeAssumT, onAllAssumT,
+   untilFailMT; orthenT; the assumption tacticals onSomeAssumT, onAllAssumT,
    onAllMAssumT and onSomeHypT; and the argument tacticals withT, selT,
    withIntT with get_with_arg, get_with_args, get_sel_arg, get_univ_arg and
    get_thinning_arg.  A "fan" tactic cuts the goal C into subgoals labelled
@@ -65,6 +65,8 @@ let () =
   run "repeatMForT 1 fan" (repeatMForT 1 fanT);
   run "repeatMForT 2 fan" (repeatMForT 2 fanT);
   run "repeatMT (cut P on main once)" (repeatMT (funT (fun p -> if Sequent.num_assums p = 0 then cutT (t "P") else failT)));
+  run "untilFailMT (cut P on main once)" (untilFailMT (funT (fun p -> if Sequent.num_assums p = 0 then cutT (t "P") else failT)));
+  run "untilFailMT failT" (untilFailMT failT);
   run "failT orthenT rec" (prefix_orthenT failT (recT "r"));
   run "rec orthenT failT" (prefix_orthenT (recT "a") failT);
   run "fan orthenT rec" (prefix_orthenT fanT (recT "r"));

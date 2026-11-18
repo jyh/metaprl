@@ -1,0 +1,6 @@
+t1                           Arg: Perv!xnil Hyps: Goal:lam{'x1. 'e<||>['x1]}
+u1 (by t1)                   Arg: Perv!xnil Hyps: Goal:lam{'x1. 'e<||>['x1]}
+t2                           Arg: Perv!xnil Hyps:       1.<J<||>> Goal:lam{'x1. 'e<|J|>['x1]}
+u2 (by t2)                   Arg: Perv!xnil Hyps:       1.<J<||>> Goal:lam{'x1. 'e<|J|>['x1]}
+n1                           kk{'e<||>}
+m1 (by n1)                   kk{'e<||>}

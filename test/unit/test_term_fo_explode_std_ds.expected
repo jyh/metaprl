@@ -1,0 +1,18 @@
+f{a}:
+  std is_fo_term true
+  std MatchTerm f 0 param(s) 1 subterm(s)
+f{x. a}:
+  std is_fo_term false
+  std MatchTerm f 0 param(s) 1 subterm(s)
+'x:
+  std is_fo_term true
+  std MatchTerm var 1 param(s) 0 subterm(s)
+'A['b]:
+  std is_fo_term false
+  std MatchTerm var 1 param(s) 1 subterm(s)
+'C<|J|>[a]{f{c}}:
+  std is_fo_term false
+  std MatchTerm context 1 param(s) 3 subterm(s)
+s{x: a >- b}:
+  std is_fo_term false
+  std MatchSequent sa 1 hyp(s)

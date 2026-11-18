@@ -102,21 +102,33 @@ let connect _t info out _inx _args header _body =
   Http_simple.print_success_page out OkCode (Buffer.create 1);
   info
 
+(* Read the reply to end of file, waiting at most 10 s for each chunk.  The
+   wait is a select, not SO_RCVTIMEO: on Windows (mingw, OCaml 4.14.4) a read
+   under SO_RCVTIMEO 10.0 gave up within the test's own ~6 s while the handler
+   was still printing, so the reply line read "(no reply)" and the handler's
+   lines then interleaved with the multipart section (#371's run 44103980357;
+   its re-run at the same head was green).  A reply that does not arrive now
+   names its cause instead of a bare "(no reply)". *)
 let request text =
   let s = Unix.socket Unix.PF_INET Unix.SOCK_STREAM 0 in
-  Unix.setsockopt_float s Unix.SO_RCVTIMEO 10.0;
   Unix.connect s (Unix.ADDR_INET (Unix.inet_addr_loopback, !port));
   ignore (Unix.write_substring s text 0 (String.length text));
   let b = Buffer.create 256 and chunk = Bytes.create 256 in
   let rec loop () =
-    let n = try Unix.read s chunk 0 256 with Unix.Unix_error _ -> 0 in
-    if n > 0 then (Buffer.add_subbytes b chunk 0 n; loop ())
+    match Unix.select [ s ] [] [] 10.0 with
+    | [], _, _ -> Some "no data for 10 s"
+    | _ -> (
+        match Unix.read s chunk 0 256 with
+        | 0 -> None
+        | n -> Buffer.add_subbytes b chunk 0 n; loop ()
+        | exception Unix.Unix_error (e, f, _) -> Some (f ^ ": " ^ Unix.error_message e))
   in
-  loop ();
+  let err = loop () in
   Unix.close s;
-  match String.split_on_char '\n' (Buffer.contents b) with
-  | status :: _ when status <> "" -> String.trim status
-  | _ -> "(no reply)"
+  match String.split_on_char '\n' (Buffer.contents b), err with
+  | status :: _, _ when status <> "" -> String.trim status
+  | _, Some e -> "(no reply: " ^ e ^ ")"
+  | _, None -> "(no reply)"
 
 let headers = [
   "Accept: text/html";

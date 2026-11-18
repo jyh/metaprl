@@ -1,0 +1,4 @@
+extract_term through the join, as the model says     60 of 60
+compute_dependencies through the join                60 of 60
+extract of f{g{c}; 'a} with 'a := 'ea                p{q{k}; 'ea<||>}
+extract of a theorem whose primitives are elsewhere  Invalid_argument Sentinals mismatch in extractor function

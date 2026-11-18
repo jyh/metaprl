@@ -47,3 +47,5 @@ printed with slot tags             Dft!num[1:n] + Dft!num[2:n] * Dft!num[3:n]
   tag slot1                        Dft!num[2:n] * Dft!num[3:n]
   tag slot2                        Dft!num[2:n]
   tag slot3                        Dft!num[3:n]
+== no display form, three parameters
+prl nodf[1; "s"; tok]              nodf[1:n, "s":s, "tok":t]

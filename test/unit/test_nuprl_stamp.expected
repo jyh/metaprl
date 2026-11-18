@@ -1,0 +1,10 @@
+round trip equal          true
+s1, s2 equal              false
+s1 in s1's transaction    true
+s1 before s2              true
+s2 before s1              false
+term_to_stamp c            Basic.Nuprl5_Exception(_) (stamp term invalid op)
+term_to_stamp pid number   Basic.Nuprl5_Exception(_) (stamp term invalid pid)
+term_to_stamp tseq token   Basic.Nuprl5_Exception(_) (stamp term invalid transaction)
+term_to_stamp seq token    Basic.Nuprl5_Exception(_) (stamp term invalid sequence)
+term_to_stamp a subterm    Basic.Nuprl5_Exception(_) (stamp term invalid term)

@@ -1,0 +1,24 @@
+well formed: <H> t
+  std: is_context_term true  dest_context v=H, 0 args, 0 context vars, body a term
+  ds:  is_context_term true  dest_context v=H, 0 args, 0 context vars, body a term
+well formed, one arg: <H> t [a]
+  std: is_context_term true  dest_context v=H, 1 args, 1 context vars, body a term
+  ds:  is_context_term true  dest_context v=H, 1 args, 1 context vars, body a term
+the main term binds nothing
+  std: is_context_term false dest_context refused: dest_context (wrong bvars)
+  ds:  the term is not built: Invalid_argument Term.base_ds.make_term with context_opname, but the term does not look like a context
+the main term binds two
+  std: is_context_term false dest_context refused: dest_context (wrong bvars)
+  ds:  the term is not built: Invalid_argument Term.base_ds.make_term with context_opname, but the term does not look like a context
+the parameter is a string
+  std: is_context_term false dest_context refused: dest_context (not a context)
+  ds:  the term is not built: Invalid_argument Term.base_ds.make_term with context_opname, but the term does not look like a context
+one subterm only
+  std: is_context_term false dest_context refused: dest_context (not a context)
+  ds:  the term is not built: Invalid_argument Term.base_ds.make_term with context_opname, but the term does not look like a context
+no parameter
+  std: is_context_term false dest_context refused: dest_context (not a context)
+  ds:  the term is not built: Invalid_argument Term.base_ds.make_term with context_opname, but the term does not look like a context
+the binder is another name, unused
+  std: is_context_term true  dest_context v=H, 0 args, 0 context vars, body a term
+  ds:  is_context_term true  dest_context v=H, 0 args, 0 context vars, body a term

@@ -10,8 +10,8 @@
 \"\\12\"     lexeme "\"\\12\"", string "\\12"
 \"x\\\\\"    lexeme "\"x\\\\\"", string "x\\\\"
 \"ab\\\"     lexeme "\"ab\\\"", string "ab\\"
-\"\\256\"    Invalid_argument Char.chr
-\"\\999\"    Invalid_argument Char.chr
+\"\\256\"    lexeme "\"\\256\"", string "\\256"
+\"\\999\"    lexeme "\"\\999\"", string "\\999"
 -- a token that takes its regex group, not the string argument
 \"a\\nb\"    lexeme "\"a\\nb\"", arg1 "a\\nb"
-\"\\999\"    Invalid_argument Char.chr
+\"\\999\"    lexeme "\"\\999\"", arg1 "\\999"

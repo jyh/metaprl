@@ -9,3 +9,10 @@ axiom c, sentinel of the refiner, not justified      refused
 check_sentinal: failed test_refine_rules!r202
 after prim_rule, the sentinel taken before           refused
 after prim_rule, a sentinel taken after              subgoals []
+check_rule  'a |- f{'a; c}                           ok
+check_rule  g{x}, parameter x (used)                 ok
+check_rule  g{x}, parameter y (unused)               refused (check_rule: Unused parameter y)
+check_rule  'b |- c ('b not in the goal)             refused (Rewrite_compile_contractum.compile_so_contractum_term)
+check_prim_rule  g{'a} |- g{'a}, one argument        ok
+check_prim_rule  same, no argument                   Invalid_argument List.iter2
+check_prim_rule  same, a first-order argument        refused (Refine.check_subgoal_arg)

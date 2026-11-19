@@ -933,7 +933,12 @@ let serve connect server info =
    let rec serve info =
       let client =
          try Some (Lm_ssl.accept server) with
-            Unix.Unix_error _
+            (* The socket is gone (closed): no accept can succeed again, so
+               stop serving rather than retry for ever (the outer handler
+               logs "service closed"). Other errors are retried. *)
+            Unix.Unix_error ((Unix.EBADF | Unix.ENOTSOCK), _, _) as exn ->
+               raise exn
+          | Unix.Unix_error _
           | Sys_error _
           | Failure _
           | SigPipe as exn ->

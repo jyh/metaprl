@@ -1,0 +1,55 @@
+same      let a = r.M.f
+   term   Ocaml!str_let[0:n, 13:n]{Ocaml!ocons{Ocaml!str_let[0:n, 13:n]{Ocaml!patt_var[4:n,
+5:n]{'a. Ocaml!patt_done[0:n, 13:n]};
+           Ocaml!proj[8:n, 13:n]{Ocaml!proj[8:n, 11:n]{Ocaml!lid[8:n, 9:n]{Ocaml!lid["r":s]};
+    Ocaml!uid[10:n, 11:n]{Ocaml!uid["M":s]}};
+        Ocaml!lid[12:n, 13:n]{Ocaml!lid["f":s]}}}; Ocaml!onil}}
+same      let b = r.M.N.f
+   term   Ocaml!str_let[0:n, 15:n]{Ocaml!ocons{Ocaml!str_let[0:n, 15:n]{Ocaml!patt_var[4:n,
+5:n]{'b. Ocaml!patt_done[0:n, 15:n]};
+           Ocaml!proj[8:n, 15:n]{Ocaml!proj[8:n, 13:n]{Ocaml!proj[8:n, 11:n]{Ocaml!lid[8:n,
+          9:n]{Ocaml!lid["r":s]}; Ocaml!uid[10:n, 11:n]{Ocaml!uid["M":s]}};
+    Ocaml!uid[12:n, 13:n]{Ocaml!uid["N":s]}};
+        Ocaml!lid[14:n, 15:n]{Ocaml!lid["f":s]}}}; Ocaml!onil}}
+same      let c = r.M.N.O.f
+   term   Ocaml!str_let[0:n, 17:n]{Ocaml!ocons{Ocaml!str_let[0:n, 17:n]{Ocaml!patt_var[4:n,
+5:n]{'c. Ocaml!patt_done[0:n, 17:n]};
+           Ocaml!proj[8:n, 17:n]{Ocaml!proj[8:n, 15:n]{Ocaml!proj[8:n, 13:n]{Ocaml!proj[8:n,
+           11:n]{Ocaml!lid[8:n, 9:n]{Ocaml!lid["r":s]};
+                  Ocaml!uid[10:n, 11:n]{Ocaml!uid["M":s]}};
+Ocaml!uid[12:n, 13:n]{Ocaml!uid["N":s]}};
+    Ocaml!uid[14:n, 15:n]{Ocaml!uid["O":s]}};
+        Ocaml!lid[16:n, 17:n]{Ocaml!lid["f":s]}}}; Ocaml!onil}}
+same      let d = (g x).M.f
+   term   Ocaml!str_let[0:n, 17:n]{Ocaml!ocons{Ocaml!str_let[0:n, 17:n]{Ocaml!patt_var[4:n,
+5:n]{'d. Ocaml!patt_done[0:n, 17:n]};
+           Ocaml!proj[8:n, 17:n]{Ocaml!proj[8:n, 15:n]{Ocaml!apply[8:n, 13:n]{Ocaml!lid[9:n,
+           10:n]{Ocaml!lid["g":s]}; Ocaml!lid[11:n, 12:n]{Ocaml!lid["x":s]}};
+    Ocaml!uid[14:n, 15:n]{Ocaml!uid["M":s]}};
+        Ocaml!lid[16:n, 17:n]{Ocaml!lid["f":s]}}}; Ocaml!onil}}
+same      let e = r.M.f.N.g
+   term   Ocaml!str_let[0:n, 17:n]{Ocaml!ocons{Ocaml!str_let[0:n, 17:n]{Ocaml!patt_var[4:n,
+5:n]{'e. Ocaml!patt_done[0:n, 17:n]};
+           Ocaml!proj[8:n, 17:n]{Ocaml!proj[8:n, 15:n]{Ocaml!proj[8:n, 13:n]{Ocaml!proj[8:n,
+           11:n]{Ocaml!lid[8:n, 9:n]{Ocaml!lid["r":s]};
+                  Ocaml!uid[10:n, 11:n]{Ocaml!uid["M":s]}};
+Ocaml!lid[12:n, 13:n]{Ocaml!lid["f":s]}};
+    Ocaml!uid[14:n, 15:n]{Ocaml!uid["N":s]}};
+        Ocaml!lid[16:n, 17:n]{Ocaml!lid["g":s]}}}; Ocaml!onil}}
+same      let h = r.M.f <- 1
+   term   Ocaml!str_let[0:n, 18:n]{Ocaml!ocons{Ocaml!str_let[0:n, 18:n]{Ocaml!patt_var[4:n,
+5:n]{'h. Ocaml!patt_done[0:n, 18:n]};
+           Ocaml!assign[8:n, 18:n]{Ocaml!proj[8:n, 13:n]{Ocaml!proj[8:n, 11:n]{Ocaml!lid[8:n,
+            9:n]{Ocaml!lid["r":s]}; Ocaml!uid[10:n, 11:n]{Ocaml!uid["M":s]}};
+      Ocaml!lid[12:n, 13:n]{Ocaml!lid["f":s]}}; Ocaml!int[17:n, 18:n, 1:n]}};
+            Ocaml!onil}}
+same      let k = {r with M.f = 1}.M.f
+   term   Ocaml!str_let[0:n, 30:n]{Ocaml!ocons{Ocaml!str_let[0:n, 30:n]{Ocaml!patt_var[4:n,
+5:n]{'k. Ocaml!patt_done[0:n, 30:n]};
+           Ocaml!proj[8:n, 30:n]{Ocaml!proj[8:n, 28:n]{Ocaml!record[8:n, 26:n]{Ocaml!ocons{Ocaml!ee{Ocaml!proj[17:n,
+        20:n]{Ocaml!uid[17:n, 20:n]{Ocaml!uid["M":s]};
+               Ocaml!lid[19:n, 20:n]{Ocaml!lid["f":s]}};
+                       Ocaml!int[23:n, 24:n, 1:n]}; Ocaml!onil};
+  Ocaml!some{Ocaml!lid[10:n, 11:n]{Ocaml!lid["r":s]}}};
+    Ocaml!uid[27:n, 28:n]{Ocaml!uid["M":s]}};
+        Ocaml!lid[29:n, 30:n]{Ocaml!lid["f":s]}}}; Ocaml!onil}}

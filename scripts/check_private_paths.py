@@ -344,6 +344,11 @@ _NASHOME = ("vol" + "ume1" + _SEPCLASS + "git" + _SEPCLASS + "Salt" + "works")
 # time of writing were 4 (salt), 3 (saltworks), 0 (jas), all pre-ruling
 # residue, all baselined in the same act that landed the shape.
 _ROOTLESS = ["bri" + "efs", "fle" + "et"]
+# desk AHE (2026-11-18): the private record's top-level directories, audited one by one. A directory is a rootless
+#   root only if its NAME is distinctive: an ordinary word (docs, tools, papers, memory, sources, watch, ...) would fire
+#   on ordinary public content, so of the record's 21 top-level directories these five join the two above. A PR body
+#   naming one of them passed every mode of check_pr_descriptions, the required --open arm included (measured 11-18).
+_ROOTLESS += ["mem" + "ory-seats", "salt-" + "memory", "salt-" + "memory-archive-0815", "h2c-" + "desk", "helm-" + "desk"]
 _ROOTLESS_ALT = "|".join(_ROOTLESS)
 _ROOTLESS_INTO = ("(?<![A-Za-z0-9_./" + _BS + _BS + "-])(?:"
                   + _ROOTLESS_ALT + ")" + _SEPCLASS + "[A-Za-z0-9_.-]+")
@@ -853,7 +858,11 @@ def self_test() -> int:
         ("r-rl-b", "ruled in " + _ROOTLESS[0] + "/2026-08-30-x.md"),
         ("r-rl-f", "the row in " + _ROOTLESS[1] + "/RULING-x.md"),
         ("r-rl-bs", "see " + _ROOTLESS[1] + chr(92) + "DESK.tsv"),
+        # desk AHE: one planted path PER MEMBER, generated, so a member added later is armed by construction.
+        *[(f"r-rl-each-{i}", "see " + w + "/x-1.md for the run") for i, w in enumerate(_ROOTLESS)],
     ]
+    if len(_ROOTLESS) != 7:
+        failures.append(f"the rootless list has {len(_ROOTLESS)} members, expected 7 (desk AHE): a change to it is a change to this arm")
     for ident, text in planted:
         if not scan([(ident, text)]):
             failures.append(f"planted shape {ident} must be caught")
@@ -913,6 +922,9 @@ def self_test() -> int:
         ("c-rl-bare", "the " + _ROOTLESS[0] + " directory holds the record"),
         ("c-rl-mid", "docs/" + _ROOTLESS[0] + "/x.md nests a PUBLIC dir"),
         ("c-rl-word", "a " + _ROOTLESS[1] + " of seats sailed at dawn"),
+        # desk AHE: the left guard, per member: a mid-path component and a bare name stay clean.
+        *[(f"c-rl-mid-{i}", "docs/" + w + "/x.md nests a PUBLIC dir") for i, w in enumerate(_ROOTLESS)],
+        *[(f"c-rl-bare-{i}", "the " + w + " directory holds the record") for i, w in enumerate(_ROOTLESS)],
     ]
     for ident, text in clean:
         got = scan([(ident, text)])

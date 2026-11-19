@@ -1,0 +1,10 @@
+>- k, subgoal q                                  2 subgoals: Rmc!c | Rmc!q; rewriter saw bvars {}
+>- k, no subgoals                                1 subgoals: Rmc!c; rewriter saw bvars {}
+>- f{k} at f.1, subgoal q                        2 subgoals: Rmc!f{Rmc!c} | Rmc!q; rewriter saw bvars {}
+>- lam x. k at lam.1, subgoal q                  2 subgoals: Rmc!lam{'x. Rmc!c} | Rmc!q; rewriter saw bvars {x}
+>- lam x. k at lam.1, subgoal x                  refused at apply_crwaddr at the address, from mlkc (Rewrite condition has free variable where it is not allowed: x); rewriter saw bvars {x}
+>- lam x. k at lam.1, subgoal f{y} (y free)      2 subgoals: Rmc!lam{'x. Rmc!c} | Rmc!f{'y}; rewriter saw bvars {x}
+>- k, subgoal x (no binder)                      2 subgoals: Rmc!c | 'x; rewriter saw bvars {}
+>- c (the rewriter refuses)                      refused at mlcrw (not k); rewriter saw bvars {}
+>- k under null_sentinal                         refused at Refine (refinements are not allowed with the null sentinal); rewriter saw bvars {}
+>- k under its refiner's sentinel                2 subgoals: Rmc!c | Rmc!q; rewriter saw bvars {}

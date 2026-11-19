@@ -1,0 +1,44 @@
+== saved and loaded as prla
+saved
+interface saved
+     DeclareTypeClass Fci!K
+     DeclareType Fci!T : Fci!K
+     DeclareType Fci!U : Fci!K
+     CondRewrite cr: Fci!ca => Fci!crr --> Fci!crc
+     InputForm ifm: Fci!ifr <--> Fci!ifc
+     Comment Fci!cm
+     DeclareTypeRewrite Fci!U --> Fci!T
+     DefineTerm Fci!dt : Fci!T = Fci!dv (opaque false)
+     DForm dft: Fci!dfr = Fci!dfd parens
+     DForm dfn: Fci!dfn no-def prec p
+     MLRewrite mr: Fci!mrt def mrdef
+     MLAxiom ma: Fci!mat def -
+     PrecRel pl < pr
+     Id 7
+     Improve im public: imx
+     MLGramUpd Infix +++
+     SummaryItem si
+     ToploopItem ti
+     MagicBlock mb: mb1; mb2
+== saved and loaded as prlb
+saved
+interface saved
+     DeclareTypeClass Fci!K
+     DeclareType Fci!T : Fci!K
+     DeclareType Fci!U : Fci!K
+     CondRewrite cr: Fci!ca => Fci!crr --> Fci!crc
+     InputForm ifm: Fci!ifr <--> Fci!ifc
+     Comment Fci!cm
+     DeclareTypeRewrite Fci!U --> Fci!T
+     DefineTerm Fci!dt : Fci!T = Fci!dv (opaque false)
+     DForm dft: Fci!dfr = Fci!dfd parens
+     DForm dfn: Fci!dfn no-def prec p
+     MLRewrite mr: Fci!mrt def mrdef
+     MLAxiom ma: Fci!mat def -
+     PrecRel pl < pr
+     Id 7
+     Improve im public: imx
+     MLGramUpd Infix +++
+     SummaryItem si
+     ToploopItem ti
+     MagicBlock mb: mb1; mb2

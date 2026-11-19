@@ -15,8 +15,10 @@ headers, as the handler receives them:
   CacheControl NoCache
   MaxForwards 0
   MaxForwards 3
+  IfUnmodifiedSince 784111777
   IfRange "e4"
   IfNoneMatch "e3"
+  IfModifiedSince 784111777
   IfMatch [e1; e2]
   IfMatch *
   Host unknown-host None
@@ -25,6 +27,7 @@ headers, as the handler receives them:
   Host localhost None
   From someone@example.org
   Expect
+  Date 784111777
   Cookies [a=1; b=x y; c=]
   ContentDisposition form-data [name="f"; filename="a b.txt"]
   ContentLength 0

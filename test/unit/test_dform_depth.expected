@@ -1,0 +1,11 @@
+dform_depth false wrap{leaf}         [Dfd!leaf]
+dform_depth false wrap{shut}         [shut]
+dform_depth false wrap{open}         Invalid_argument Lm_rformat.flush_formatting: unbalanced buffer (use debug_dform_depth to debug)
+dform_depth false wrap{wrap{open}}   Invalid_argument Lm_rformat.flush_formatting: unbalanced buffer (use debug_dform_depth to debug)
+dform_depth true  wrap{leaf}         [Dfd!leaf]
+dform_depth true  wrap{shut}         [shut]
+Unbalanced display form: Dfd!open
+dform_depth true  wrap{open}         Invalid_argument Lm_rformat.flush_formatting: unbalanced buffer (use debug_dform_depth to debug)
+Unbalanced display form: Dfd!open
+Unbalanced display form: Dfd!wrap{Dfd!open}
+dform_depth true  wrap{wrap{open}}   Invalid_argument Lm_rformat.flush_formatting: unbalanced buffer (use debug_dform_depth to debug)

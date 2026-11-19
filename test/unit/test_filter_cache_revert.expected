@@ -1,0 +1,14 @@
+files                  fcr.prlb fcr.cmiz
+before revert          d   Primitive Fcr!other
+before revert          p   Incomplete
+after revert           d   Incomplete
+after revert           p   Primitive Fcr!axiom
+files                  fcr.prlb fcr.cmiz fcr.cmoz
+loaded cmoz            d   Incomplete
+loaded cmoz            p   Primitive Fcr!axiom
+first load             d   Incomplete
+first load             p   Primitive Fcr!axiom
+load, file changed     d   Incomplete
+load, file changed     p   Primitive Fcr!axiom
+load after clear_info  d   Incomplete
+load after clear_info  p   Incomplete

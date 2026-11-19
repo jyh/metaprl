@@ -1,0 +1,35 @@
+string "17"      as number    Rpk!g[17:n] (Number)
+string "17"      as string    Rpk!g["17":s] (String)
+string "17"      as token     Rpk!g[17:t] (MToken)
+string "17"      as shape     Rpk!g[17:sh] (MShape)
+string "17"      as operator  Rpk!g[17:op] (MOperator)
+string "ab"      as number    Rpk!g[ab:n] (MNumber)
+string "ab"      as string    Rpk!g["ab":s] (String)
+string "ab"      as token     Rpk!g[ab:t] (MToken)
+string "ab"      as shape     Rpk!g[ab:sh] (MShape)
+string "ab"      as operator  Rpk!g[ab:op] (MOperator)
+number 42        as number    Rpk!g[42:n] (Number)
+number 42        as string    Rpk!g["42":s] (String)
+number 42        as token     INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+number 42        as shape     INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+number 42        as operator  INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+token t          as number    INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+token t          as string    INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+token t          as token     Rpk!g["Rpk!t":t] (Token)
+token t          as shape     Rpk!g["Rpk!t[]{}":sh] (Shape)
+token t          as operator  Rpk!g[(Rpk!t{}):op] (Operator)
+shape            as number    INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+shape            as string    Rpk!g["Rpk!sh[N]{0}":s] (String)
+shape            as token     INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+shape            as shape     Rpk!g["Rpk!sh[N]{0}":sh] (Shape)
+shape            as operator  INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+operator         as number    INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+operator         as string    Rpk!g["Rpk!oo[]{1}":s] (String)
+operator         as token     INVALID_ARGUMENT: Rewrite_build_contractum.build_contractum_param: stack entry is not valid
+operator         as shape     Rpk!g["Rpk!oo[]{1}":sh] (Shape)
+operator         as operator  Rpk!g[(Rpk!oo{1}):op] (Operator)
+meta-string y    as number    Rpk!g[y:n] (MNumber)
+meta-string y    as string    Rpk!g[y:s] (MString)
+meta-string y    as token     Rpk!g[y:t] (MToken)
+meta-string y    as shape     Rpk!g[y:sh] (MShape)
+meta-string y    as operator  Rpk!g[y:op] (MOperator)

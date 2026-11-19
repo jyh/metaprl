@@ -497,6 +497,48 @@ def msg_file_mode(path: str) -> int:
     return 0
 
 
+def body_file_mode(path: str, title: str = "") -> int:
+    """A PR description DRAFT, before `gh pr create` / `gh pr edit` (desk AGL).
+
+    The same four checks `--open` runs on a live PR (private paths through the
+    sibling's own rules, session trailers, infra names, lane words), on a file,
+    so a draft is refused BEFORE it is public. `--msg-file` is the commit-message
+    mode and does not run the private-path rules; checking a PR body with it
+    passed #923's first body, which named a rootless private-record path."""
+    tag = f"[pr-gate {self_id()}]"
+    try:
+        with open(path, encoding="utf-8", errors="replace") as fh:
+            text = fh.read()
+    except OSError as e:
+        print(f"REFUSED {tag}: cannot read the draft: {e}")
+        return 1
+    pr = {"number": "draft", "title": title, "body": text, "head": {"ref": ""}}
+    bad = scan_description("draft", title, text)
+    sess = scan_session("draft", title, text)
+    infra_f = scan_infra("draft", title, text)
+    words = subject_scan(pr_rows(pr))
+    if bad:
+        print(f"FAIL {tag}: {len(bad)} private-record path(s) in the PR draft.\n")
+        print("\n".join(gate.finding_lines(bad)))
+    if sess:
+        print(f"FAIL {tag}: {len(sess)} chat-session trailer/URL finding(s) in the PR "
+              "draft (matched text withheld).\n")
+        print("\n".join(session_finding_lines(sess)))
+    if infra_f:
+        print(f"FAIL {tag}: {len(infra_f)} infrastructure name(s) in the PR draft "
+              "(matched text withheld).\n")
+        print("\n".join(infra_finding_lines(infra_f)))
+    if words:
+        print(f"FAIL {tag}: the PR draft carries a refused word (withheld).\n")
+        print("\n".join(subject_finding_lines(words)))
+    if bad or sess or infra_f or words:
+        print("\nRewrite the draft before `gh pr create` / `gh pr edit`.")
+        return 1
+    print(f"check_pr_descriptions --body-file {tag}: OK -- the draft is clean "
+          "(the --open rules: private paths, session, infra names, lane words).")
+    return 0
+
+
 def ref_mode(name: str) -> int:
     """One ref name: a branch a push creates, or a PR's head. Subject-class,
     because a merge commit's subject quotes it and the forge writes that
@@ -910,6 +952,13 @@ def _subject_arms() -> list[str]:
         m_lane = bl("msg-lane.txt", "tidy " + w0 + "\n")
         m_kin = bl("msg-kin.txt", "the " + k0 + " agreed\n\nbody\n")
         m_clean = bl("msg-clean.txt", "clean\n\nbody\n")
+        # desk AGL: a PR body draft. The private path is built from pieces, as
+        # ARM 4 does, so this source carries no path of its own.
+        d_path = bl("body-path.md", "see " + "bri" + "efs" + "/2026-11-12-x/y.md here\n")
+        d_clean = bl("body-clean.md", "A clean description of a change.\n")
+        # desk AHA (2026-11-18): the shape a sibling seat planted on 11-17, which --msg-file passes by design;
+        # a PR body is checked with --body-file.
+        d_aha = bl("body-aha.md", "see " + "se" + "at " + "bri" + "efs" + "/2026-11-16-x-BANK-1.md for the run\n")
         # ASSEMBLED from the sibling gate's host pattern, never spelled out: this
         # file is itself scanned, and a literal fixture is caught by its own gate.
         m_sess = bl("msg-sess.txt", "clean subject\n\nhttps://"
@@ -947,6 +996,10 @@ def _subject_arms() -> list[str]:
             ("msg-file, a clean message", msg_file_mode, (m_clean,), 0),
             ("msg-file, a session URL in the BODY", msg_file_mode, (m_sess,), 1),
             ("msg-file, unreadable", msg_file_mode, (b_none,), 1),
+            ("body-file, a rootless private path (the #923 shape)", body_file_mode, (d_path,), 1),
+            ("body-file, a clean draft", body_file_mode, (d_clean,), 0),
+            ("body-file, unreadable", body_file_mode, (b_none,), 1),
+            ("body-file, a seat word and a rootless private dir (the desk AHA plant)", body_file_mode, (d_aha,), 1),
             ("ref, a lane word joined into a branch name", ref_mode, (ref,), 1),
             ("ref, a family word", ref_mode, ("refs/heads/tidy-" + k0,), 1),
             ("ref, clean", ref_mode, ("refs/heads/jas/tidy-branch",), 0),
@@ -1303,9 +1356,17 @@ def main() -> int:
                            "baseline, both directions (needs full depth)")
     mode.add_argument("--msg-file", metavar="PATH",
                       help="one commit-message file (the commit-msg hook)")
+    mode.add_argument("--body-file", metavar="PATH",
+                      help="a PR description DRAFT, checked BEFORE `gh pr create` or "
+                           "`gh pr edit` with the same rules --open applies on the forge "
+                           "(private paths, session trailers, infra names, lane words); "
+                           "--msg-file is the commit-message mode and does NOT run the "
+                           "private-path rules")
     mode.add_argument("--ref", metavar="NAME",
                       help="one ref name (the pushed branch, or a PR's head): a merge "
                            "subject will quote it")
+    ap.add_argument("--title", default="",
+                    help="with --body-file: the PR title the draft will carry")
     ap.add_argument("--baseline", metavar="PATH",
                     help="accepted-debt baseline for --range/--history "
                          "(default: subject_debt_baseline.tsv beside this file)")
@@ -1325,6 +1386,8 @@ def main() -> int:
         return history_mode(None, args.baseline)
     if args.msg_file is not None:
         return msg_file_mode(args.msg_file)
+    if args.body_file is not None:
+        return body_file_mode(args.body_file, args.title)
     if args.ref is not None:
         return ref_mode(args.ref)
     if args.open:

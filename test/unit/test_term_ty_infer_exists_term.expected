@@ -1,0 +1,7 @@
+infer earg: x: zero >- x                         Perv!Judgment
+infer larg: x: nil >- same{x; nil}               Perv!Judgment
+infer larg: x: cons{zero; nil} >- same{x; nil}   Perv!Judgment
+infer larg: x: zero >- x                         REFUSED: type error
+infer larg: x: nil; y: cons{tt; nil} >- same{x; y} Perv!Judgment
+infer larg: x: cons{zero; nil}; y: cons{tt; nil} >- same{x; y} REFUSED: type error
+infer larg: x: cons{zero; nil}; y: cons{tt; nil} >- x Perv!Judgment

@@ -1,0 +1,10 @@
+== Strict
+f{C[g{'b<||>}]} on f{lam y. g{y}}, hole at 1               REFUSED: restrict_context_vars (Variable appears free where it is not allowed to: y)
+f{C[g{'b<||>}]} on f{lam y. g{c}}, hole at 1               MATCH [-; Rcr!c]
+f{C[g{'b<|C|>}]} on f{lam y. g{y}}, hole at 1              MATCH [-; 'y]
+f{C[g{'b<||>}]} on f{g{c}}, hole at the top                MATCH [-; Rcr!c]
+== Relaxed
+f{C[g{'b<||>}]} on f{lam y. g{y}}, hole at 1               MATCH [-; 'y]
+f{C[g{'b<||>}]} on f{lam y. g{c}}, hole at 1               MATCH [-; Rcr!c]
+f{C[g{'b<|C|>}]} on f{lam y. g{y}}, hole at 1              MATCH [-; 'y]
+f{C[g{'b<||>}]} on f{g{c}}, hole at the top                MATCH [-; Rcr!c]

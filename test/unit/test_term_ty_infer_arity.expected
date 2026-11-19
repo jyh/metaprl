@@ -1,0 +1,12 @@
+infer succ{'a['x]}                               Perv!Term
+infer same{'a['x]; 'a['x]}                       Perv!Term
+infer same{'a['x]; 'a['x; 'y]}                   REFUSED: Term_ty_infer.infer_sovar_term: expected 0 cvars, 2 args
+infer same{'a['x; 'y]; 'a['x]}                   REFUSED: Term_ty_infer.infer_sovar_term: expected 0 cvars, 1 args
+infer same{'a; 'a['x]}                           Perv!Term
+infer same{'a['x]; 'a}                           Perv!Term
+infer same{'a<|H|>['x]; 'a['x]}                  REFUSED: Term_ty_infer.infer_sovar_term: expected 0 cvars, 1 args
+infer same{<H>[zero]; <H>[zero]}                 Perv!Term
+infer same{<H>[zero]; <H>[zero]['x]}             REFUSED: Term_ty_infer.infer_context_term: context arity mismatch
+infer same{<H>[zero]['x]; <H>[zero]}             REFUSED: Term_ty_infer.infer_context_term: context arity mismatch
+infer same{'H['x]; <H>[zero]}                    REFUSED: type error
+infer same{<H>[zero]; 'H['x]}                    REFUSED: type error

@@ -1,0 +1,19 @@
+foo{}()                      !nuprl5_implementation!["foo":t]
+foo{1:n}()                   !nuprl5_implementation!["foo":t, 1:n]
+foo{1:n,abc:t}(bar{}())      !nuprl5_implementation!["foo":t, 1:n, "abc":t]{!nuprl5_implementation!["bar":t]}
+foo{}(x.bar{}())             !nuprl5_implementation!["foo":t]{'x. !nuprl5_implementation!["bar":t]}
+foo{}(bar{}();baz{}())       !nuprl5_implementation!["foo":t]{!nuprl5_implementation!["bar":t];         !nuprl5_implementation!["baz":t]}
+read_term operator nuprl-light opname
+!metaprl_implementation{a:s}() Basic.Nuprl5_Exception(_)
+read_term operator nuprl-light opname string
+!metaprl_implementation{%Aa:t}() Basic.Nuprl5_Exception(_)
+session tfoo{}()t            !nuprl5_implementation!["foo":t]
+session read_term x
+session x                    Basic.Nuprl5_Exception(_)
+session t\192foo{}()t        !nuprl5_implementation!["foo":t]
+session t\192foo{}(\128\000{}())t !nuprl5_implementation!["foo":t]{!nuprl5_implementation!["foo":t]}
+session t\192foo{}(\128\000{1:n}();\128\000{}())t !nuprl5_implementation!["foo":t]{!nuprl5_implementation!["foo":t, 1:n];         !nuprl5_implementation!["foo":t]}
+scanner bump eof
+session t\197\007{}()t       Basic.Nuprl5_Exception(_)
+session t\196bar{}()t        !nuprl5_implementation!["bar":t]
+session t\128\000{}()t       Failure nth

@@ -65,6 +65,10 @@ same      let p = (module M : S)
 same      let f (module X : S) = X.x
 DIFFERS   let u = M.(x + y)
        ->  let u = M.(x+y)
+same      let f = function M.A -> 0 | _ -> 1
+same      let g M.(x, y) = x
+same      open A.B
+same      include A.B.C
 RAISES    type t += A
        ->  Refine_error.MakeRefineError(TermType)(ParamType).RefineError("mk_st", _)
 RAISES    type t += B of int

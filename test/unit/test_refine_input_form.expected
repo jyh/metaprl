@@ -1,0 +1,21 @@
+== create_input_form g{'a} --> lam{y.'a}
+Relaxed
+  g{'y}: rewrote to lam{'y. 'y}
+  f{'y}: refused at "Rewrite.apply_rewrite"
+Strict
+  g{'y}: rewrote to lam{'y1. 'y}
+  f{'y}: refused at "Rewrite.apply_rewrite"
+Relaxed, "refine" and "rewrites" on
+Refiner.create_input_form: iform
+Refiner: applying input form iform to g{'y}
+  g{'y}: rewrote to lam{'y. 'y}
+Refiner: applying input form iform to f{'y}
+  f{'y}: refused at "Rewrite.apply_rewrite"
+== mk_rewrite_hack
+  'a (no contexts)               Arg: Base_rewrite!sequent_arg | Hyps: | 1.<H<||>> | Goal:'a<|H|>
+  'a<|J|> (another context)      Arg: Base_rewrite!sequent_arg | Hyps: | 1.<H<||>> | Goal:'a<|H; J|>
+  'a<|H|> (H already there)      Arg: Base_rewrite!sequent_arg | Hyps: | 1.<H<||>> | Goal:'a<|H|>
+  'a<|J; H|>                     Arg: Base_rewrite!sequent_arg | Hyps: | 1.<H<||>> | Goal:'a<|J; H|>
+  f{'a; 'b<|H|>}                 Arg: Base_rewrite!sequent_arg | Hyps: | 1.<H<||>> | Goal:f{'a<|H|>; 'b<|H|>}
+  a context <J> t                Arg: Base_rewrite!sequent_arg | Hyps: | 1.<H<||>> | Goal:'J<|H|>[[t]]
+  a context <J<|H|>> t           Arg: Base_rewrite!sequent_arg | Hyps: | 1.<H<||>> | Goal:'J<|H|>[[t]]

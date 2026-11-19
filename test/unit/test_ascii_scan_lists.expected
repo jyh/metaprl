@@ -1,0 +1,18 @@
+"[]"         char []
+"[]"         byte []
+"[1]"        char [1]
+"[1]"        byte [1]
+"[1|22|3]"   char [1; 22; 3]
+"[1|22|3]"   byte [1; 22; 3]
+scanner delimited_list eof ]
+"[1|2"       char Basic.Nuprl5_Exception(_)
+scanner delimited_list eof ]
+"[1|2"       byte Basic.Nuprl5_Exception(_)
+scanner delimited_list ) ]
+"[1|2)"      char Basic.Nuprl5_Exception(_)
+scanner delimited_list ) ]
+"[1|2)"      byte Basic.Nuprl5_Exception(_)
+scanner char [ 1
+"1]"         char Basic.Nuprl5_Exception(_)
+scanner byte [ 1
+"1]"         byte Basic.Nuprl5_Exception(_)

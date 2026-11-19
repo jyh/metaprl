@@ -1,0 +1,126 @@
+i thenT i at []: goal main:A[], 1 subgoals, node_count 1/3
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: main:A[]
+    [0] identity, goal main:A[], 1 subgoals
+i thenT addTermT at []: goal main:A[], 1 subgoals, node_count 1/3
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: main:A[]
+    [0] annotate, goal main:A[], 1 subgoals
+i thenT wrapT (cutT X) at []: goal main:A[], 2 subgoals, node_count 1/5
+  find_subgoal 0: []
+  find_subgoal 1: [0]
+  find_subgoal 2: [0]
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: assertion:X[]
+  subgoal 2: main:A[X]
+    [0] wrapped, goal main:A[], 2 subgoals
+    [0.0] extract, goal main:A[], 2 subgoals
+wrapT (cutT X) thenT i at []: goal main:A[], 2 subgoals, node_count 1/5
+  find_subgoal 0: []
+  find_subgoal 1: [0]
+  find_subgoal 2: [0]
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: assertion:X[]
+  subgoal 2: main:A[X]
+    [0] wrapped, goal main:A[], 2 subgoals
+    [0.0] extract, goal main:A[], 2 subgoals
+addTermT thenT i at []: goal main:A[], 1 subgoals, node_count 1/3
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: main:A[]
+    [0] annotate, goal main:A[], 1 subgoals
+addTermT thenT cutT X at []: goal main:A[], 2 subgoals, node_count 1/6
+  find_subgoal 0: []
+  find_subgoal 1: [0]
+  find_subgoal 2: [0]
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: assertion:X[]
+  subgoal 2: main:A[X]
+    [0] compose(annotate), goal main:A[], 1 subgoals
+    [0.1] extract, goal main:A[], 2 subgoals
+wrapT (i thenT cutT X) at []: goal main:A[], 2 subgoals, node_count 1/5
+  find_subgoal 0: []
+  find_subgoal 1: [0]
+  find_subgoal 2: [0]
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: assertion:X[]
+  subgoal 2: main:A[X]
+    [0] wrapped, goal main:A[], 2 subgoals
+    [0.0] extract, goal main:A[], 2 subgoals
+wrapT (cutT X thenT i) at []: goal main:A[], 2 subgoals, node_count 1/5
+  find_subgoal 0: []
+  find_subgoal 1: [0]
+  find_subgoal 2: [0]
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: assertion:X[]
+  subgoal 2: main:A[X]
+    [0] wrapped, goal main:A[], 2 subgoals
+    [0.0] extract, goal main:A[], 2 subgoals
+(i thenT cutT X) thenT i at []: goal main:A[], 2 subgoals, node_count 1/4
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: []
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: assertion:X[]
+  subgoal 2: main:A[X]
+    [0] extract, goal main:A[], 2 subgoals
+cutT X thenLT [i; wrapT (cutT Y)] at []: goal main:A[], 3 subgoals, node_count 1/9
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: [0.2]
+  find_subgoal 3: [0.2]
+  find_subgoal 4: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: assertion:X[]
+  subgoal 2: assertion:Y[X]
+  subgoal 3: main:A[X,Y]
+    [0] compose(extract), goal main:A[], 2 subgoals
+    [0.1] identity, goal assertion:X[], 1 subgoals
+    [0.2] wrapped, goal main:A[X], 2 subgoals
+    [0.2.0] extract, goal main:A[X], 2 subgoals
+setLabelT l thenT i at []: goal l:A[], 1 subgoals, node_count 1/3
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: l:A[]
+    [0] identity, goal l:A[], 1 subgoals
+i thenT setLabelT l at []: goal main:A[], 1 subgoals, node_count 1/3
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: l:A[]
+    [0] identity, goal main:A[], 1 subgoals
+setLabelT l thenT wrapT (cutT X) at []: goal l:A[], 2 subgoals, node_count 1/5
+  find_subgoal 0: []
+  find_subgoal 1: [0]
+  find_subgoal 2: [0]
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: assertion:X[]
+  subgoal 2: main:A[X]
+    [0] wrapped, goal l:A[], 2 subgoals
+    [0.0] extract, goal l:A[], 2 subgoals
+wrapT (cutT X) thenT setLabelT l at []: goal main:A[], 2 subgoals, node_count 1/5
+  find_subgoal 0: []
+  find_subgoal 1: [0]
+  find_subgoal 2: [0]
+  find_subgoal 3: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: l:X[]
+  subgoal 2: l:A[X]
+    [0] wrapped, goal main:A[], 2 subgoals
+    [0.0] extract, goal main:A[], 2 subgoals
+addTermT thenT setLabelT l at []: goal main:A[], 1 subgoals, node_count 1/3
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: l:A[]
+    [0] annotate, goal main:A[], 1 subgoals
+setLabelT l thenT addTermT at []: goal l:A[], 1 subgoals, node_count 1/3
+  find_subgoal 0: []
+  find_subgoal 1: []
+  find_subgoal 2: Invalid_argument Proof_boot.find_subgoal
+  subgoal 1: l:A[]
+    [0] annotate, goal l:A[], 1 subgoals

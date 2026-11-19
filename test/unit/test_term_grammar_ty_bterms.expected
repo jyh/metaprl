@@ -1,0 +1,14 @@
+  foo{x}                     foo{x} : [$unknown!type]
+  foo{'x}                    foo{'x} : [$unknown!type]
+  foo{"s"}                   foo{s} : [$unknown!type]
+  foo{bar}                   foo{bar} : [$unknown!type]
+  foo{bar{x}}                foo{bar{x}} : [$unknown!type]
+  foo{x : T}                 foo{x} : [T]
+  foo{'x : T}                foo{'x} : [T]
+  foo{x; y : T}              foo{x; y} : [$unknown!type; T]
+  foo{x, y}                  refused: Filter_type.ParseError("illegal bterm")
+  foo{x : T, y}              refused: Filter_type.ParseError("illegal bterm")
+  foo{x. bar}                foo{'x. bar} : [$unknown!bvar. $unknown!type]
+  foo{x : T. bar}            foo{'x. bar} : [T. $unknown!type]
+  foo{. bar}                 foo{bar} : [$unknown!type]
+  foo{x. bar : U}            refused: Invalid_argument("Syntax Error: Named term where unnamed one is expected:\n'bar : U")

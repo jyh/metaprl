@@ -1,0 +1,9 @@
+[]                           Invalid_argument Filter_cache_fun.mk_opname
+[a]                          opname Fcd!a
+[a] as a token               Failure undeclared name: a{}:token
+[T]                          opname Fcd!T
+[K]                          opname Fcd!K
+[b] (undeclared)             Failure undeclared name: b{}
+[Fcd; a]                     Failure Filter_cache_fun.mk_opname: no object with name: Fcd!a
+[M; a]                       Failure Filter_cache_fun.mk_opname: no object with name: M!a
+[m; a]                       Failure Filter_cache_fun.mk_opname: no object with name: m!a

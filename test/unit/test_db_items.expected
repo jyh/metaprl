@@ -1,0 +1,14 @@
+session tfoo{}(\193x.bar{}())t     !nuprl5_implementation!["foo":t]{'x. !nuprl5_implementation!["bar":t]}
+session tfoo{}(\193x.bar{}();\128\000.baz{}())t !nuprl5_implementation!["foo":t]{'x. !nuprl5_implementation!["bar":t];         'x. !nuprl5_implementation!["baz":t]}
+session tfoo{\194abc:t}()t         !nuprl5_implementation!["foo":t, "abc":t]
+session tfoo{\194abc:t}(bar{\128\000}())t !nuprl5_implementation!["foo":t, "abc":t]{!nuprl5_implementation!["bar":t,                "abc":t]}
+session tfoo{\1947:n}(bar{\128\000}())t !nuprl5_implementation!["foo":t, 7:n]{!nuprl5_implementation!["bar":t, 7:n]}
+session t\195foo{1:n}()t           !nuprl5_implementation!["foo":t, 1:n]
+session t\195foo{1:n}(\128\000())t !nuprl5_implementation!["foo":t, 1:n]{!nuprl5_implementation!["foo":t, 1:n]}
+session t\195foo{1:n}(\128\000(bar{}()))t !nuprl5_implementation!["foo":t, 1:n]{!nuprl5_implementation!["foo":t, 1:n]{!nuprl5_implementation!["bar":t]}}
+session tfoo{}(\128\000.bar{}())t  Failure nth
+session tfoo{\128\000}()t          Failure nth
+Bindingscan_parameter not
+session tfoo{}(\193x.bar{\128\000}())t Basic.Nuprl5_Exception(_)
+read_term bound term
+session tfoo{\194abc:t}(\128\000.bar{}())t Basic.Nuprl5_Exception(_)

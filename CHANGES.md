@@ -110,7 +110,9 @@ against libmojave 1.1.1 or later:
   installed) and native Windows omake cannot run. It now copies with
   OMake's own `mkdir` and `cp`, following symbolic links to files and
   merging into an existing install; a link to a directory stops it with a
-  message. The install tests run on Linux, macOS and the Windows lane.
+  message. CI runs the install tests on Linux and on the Windows lane;
+  there is no macOS CI job, and on macOS they were run by hand for #100
+  (`install_space.sh` failed before the change and passes after it).
 
 - Two of `itt_int_ext`'s remainder rules were false as stated, so they
   could never be proved. `rem_neg` said `a %@ b ~ (-a) %@ (-b)`; at a = 7,

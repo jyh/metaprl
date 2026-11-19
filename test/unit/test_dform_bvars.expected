@@ -1,0 +1,5 @@
+f{a}                 Dfb!f{Dfb!a}
+f{x. a}              Dfb!f{x. Dfb!a}
+f{x, y. a}           Dfb!f{x, y. Dfb!a}
+f{x, y, z. 'x}       Dfb!f{x, y, z. 'x}
+f{x. a; y, z. a}     Dfb!f{x. Dfb!a; y, z. Dfb!a}

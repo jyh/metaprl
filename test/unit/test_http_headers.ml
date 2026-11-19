@@ -1,8 +1,7 @@
 (* Http_simple's request-header parsers and multipart form bodies.
 
    Part 1, over loopback as in test_http_serve: one request carrying every
-   header kind parse_header_entry names (but the dates, whose value is a
-   time-zone-dependent float and which test_ctime covers), and the
+   header kind parse_header_entry names, and the
    variants of Host, Cache-Control, If-Match and Referer; the handler
    prints the parsed entries in the order it receives them.  Part 2,
    direct: parse_post_body on multipart/form-data bodies, including the
@@ -10,6 +9,12 @@
    host, if-match, URI or content-disposition parsers, or the multipart
    path (bisect at c013b0579 for the unit tests; a theory build or proof
    replay at 008a9607e does not run the web server).
+   The three date headers (Date, If-Modified-Since, If-Unmodified-Since)
+   carry one instant in the three HTTP date forms and read as the same
+   seconds since the epoch.  They were left out until 2026-11-18 as
+   time-zone-dependent; parse_time reads in UTC since a0f83a3e5 (the same
+   answer under UTC0, PST8PDT and Asia/Tokyo, measured), and test_ctime
+   covers it across zones.
 
    The expected file is the output of the code as written.  Pinned as
    found (only RequestCookies and RequestContentType have a reader outside
@@ -73,16 +78,16 @@ let entry = function
   | RequestContentDisposition d ->
       Printf.sprintf "ContentDisposition %s %s" d.content_disposition_type (pairs d.content_disposition_params)
   | RequestCookies l -> "Cookies " ^ pairs l
-  | RequestDate _ -> "Date"
+  | RequestDate f -> Printf.sprintf "Date %.0f" f
   | RequestExpect -> "Expect"
   | RequestFrom s -> "From " ^ s
   | RequestHost (h, p) -> Printf.sprintf "Host %s %s" h (opt_int p)
   | RequestIfMatch None -> "IfMatch *"
   | RequestIfMatch (Some l) -> "IfMatch [" ^ String.concat "; " l ^ "]"
-  | RequestIfModifiedSince _ -> "IfModifiedSince"
+  | RequestIfModifiedSince f -> Printf.sprintf "IfModifiedSince %.0f" f
   | RequestIfNoneMatch s -> "IfNoneMatch " ^ s
   | RequestIfRange s -> "IfRange " ^ s
-  | RequestIfUnmodifiedSince _ -> "IfUnmodifiedSince"
+  | RequestIfUnmodifiedSince f -> Printf.sprintf "IfUnmodifiedSince %.0f" f
   | RequestMaxForwards i -> "MaxForwards " ^ string_of_int i
   | RequestProxyAuthorization s -> "ProxyAuthorization " ^ s
   | RequestReferer u ->
@@ -152,6 +157,7 @@ let headers = [
   "Content-Length: 0";
   "Content-Disposition: Form-Data; name=\"f\"; filename=\"a b.txt\"";
   "Cookie: a=1; b=x%20y; c";
+  "Date: Sun, 06 Nov 1994 08:49:37 GMT";
   "Expect: 100-continue";
   "From: someone@example.org";
   "Host: localhost";
@@ -160,8 +166,10 @@ let headers = [
   "Host: ";
   "If-Match: *";
   "If-Match: \"e1\" \"e2\"";
+  "If-Modified-Since: Sunday, 06-Nov-94 08:49:37 GMT";
   "If-None-Match: \"e3\"";
   "If-Range: \"e4\"";
+  "If-Unmodified-Since: Sun Nov  6 08:49:37 1994";
   "Max-Forwards: 3";
   "Max-Forwards: many";
   "Pragma: whatever";

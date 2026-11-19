@@ -180,6 +180,50 @@
    read back alpha-equal to the term saved: true
 == save: F's entry names other arguments
    write_term raised Invalid_argument("ASCII IO: invalid entry encountered by add_items")
+== save: F's argument t duplicated as t9
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt\to1
+   VF\tF\tF\\\\ \\\\ t
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt4\to b b3
+   read back alpha-equal to the term saved: true
+== save: F's argument t duplicated as t9, t9 first
+   Nf\tf\tf NIL
+   O\to\tf
+   Na\ta\ta NIL
+   O\to1\ta
+   T\tt9\to1
+   VF\tF\tF\\\\ \\\\ t9
+   B\tb\tF
+   NPerv\tPerv\tPerv NIL
+   NPerv!xnil\txnil\txnil Perv
+   O\to2\txnil
+   T\tt2\to2
+   H\th\tx t9
+   Nvar\tvar\tvar NIL
+   P\tp\tVar x
+   O\to3\tvar p
+   T\tt3\to3
+   VG\tG\tG\\\\ H\\\\ t3
+   S\ts\tt2\\\\ h\\\\ G
+   B\tb3\ts
+   T\tt4\to b b3
+   read back alpha-equal to the term saved: true
 == save: the sequent's entry names another conclusion
    Nf\tf\tf NIL
    O\to\tf

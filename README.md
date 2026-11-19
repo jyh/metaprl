@@ -78,6 +78,15 @@ stored proof on Linux and Windows. Two things would reopen the question: if
 OMake stops building from opam on a supported OCaml, or if an opam release of
 MetaPRL is decided.
 
+### The Nuprl-5 library link
+
+`library/` (with `support/editor/nuprl_eval.ml` and `nuprl_run.ml`) is the
+client side of MetaPRL's link to a Nuprl-5 library process: MathBus terms
+over a socket, broadcasts of definitions, and the library's database
+files. It builds and its pure parts have unit tests, but it is not
+maintained: using it needs a running Nuprl-5 library peer, which the 2026
+refresh did not have, so none of it was run against one in the refresh.
+
 The 2017 build targeted OCaml 4.05 with camlp5 7.02; its instructions are kept
 as they were in the plain-text [`README`](./README) (plus
 [`README.MACOSX`](./README.MACOSX) and [`README.WIN32`](./README.WIN32)).

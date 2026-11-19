@@ -1,0 +1,16 @@
+use_unicode false:
+constant                  53 bytes  ends /6vN7wA=     same
+strings, odd and even     86 bytes  ends AP+rze8A     same
+a long string            569 bytes  ends eP+rze8A     same
+a 17-bit number           65 bytes  ends q83vAA==     same
+a big number              65 bytes  ends FP+rze8A     same
+a binding                110 bytes  ends /6vN7wA=     same
+200 subterms            7638 bytes  ends q83vAA==     same
+use_unicode true:
+constant                  57 bytes  ends q83vAA==     same
+strings, odd and even     98 bytes  ends /6vN7wA=     same
+a long string            878 bytes  ends /6vN7wA=     same
+a 17-bit number           65 bytes  ends oP+rze8A     same
+a big number              70 bytes  ends 6vN\n7wA=    same
+a binding                118 bytes  ends AP+rze8A     same
+200 subterms            8182 bytes  ends q83vAA==     same

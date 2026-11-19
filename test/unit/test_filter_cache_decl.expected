@@ -1,0 +1,11 @@
+typeclass K : Ty                   ok
+type T : K                         ok
+type U : K                         ok
+term a : T                         ok
+term a : T again                   Failure Filter_cache_fun.check_redeclaration: redefining term: Fcd!a
+term b : Missing                   Failure declare_term m/Fcd!b[]{}: type 'Fcd!Missing[]{}' not found
+type rewrite T <--> U              ok
+hash changed by the type rewrite: true
+same declarations, same hash: true
+the rewrite reversed, a different hash: true
+no rewrite, a different hash: true

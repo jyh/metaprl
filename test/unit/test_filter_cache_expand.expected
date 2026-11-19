@@ -1,0 +1,20 @@
+interface fce saved
+== before inlining
+expand_path [Fce; a]                     Not_found
+inlined fce
+== after inlining fce
+expand_path [Fce; a]                     [Fce; a]
+expand_path [Fce; T]                     [Fce; T]
+expand_path [Fce; K]                     [Fce; K]
+expand_path [Fce; zz]                    Not_found
+expand_path [a]                          [Fce; a]
+expand_path [Other; a]                   Not_found
+expand_path []                           Invalid_argument expand_path
+mk_opname [a]                            opname Fce!a
+mk_opname [Fce; a]                       opname Fce!a
+mk_opname [Fce; zz]                      Failure Filter_cache_fun.mk_opname: no object with name: Fce!zz
+mk_opname [Other; a]                     Failure Filter_cache_fun.mk_opname: no object with name: Other!a
+== an undeclared name, each parameter kind and arities
+zz [S; N; V; L; T; Sh; Op; Q] {0; 2}     Failure undeclared name: zz[S; N; V; L; T; Sh; Op; Q]{<0>; <2>}
+zz [Q; S] (a leading quote dropped)      Failure undeclared name: zz[S]{<1>}
+zz [N] as a token                        Failure undeclared name: zz[N]{}:token

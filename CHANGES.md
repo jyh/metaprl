@@ -1004,6 +1004,155 @@ against libmojave 1.1.1 or later:
   - `test_term_grammar_params`: the `<:name< >>` quotations, each kind
     (#333).
   - `test_dform_slots`: Dform's built-in slot, every form (#334).
+- Tests added 2026-11-15 to 2026-11-19, one line per pull request; each
+  description gives the cases, what is pinned, and the mutants run against
+  the real source:
+  - Setup's hostname from the system, doc_dir kept, HOME's parent missing
+    (#338).
+  - Filter_grammar's lexer, and string_of_lexeme's escapes (#339).
+  - TermShape.short_string_of_shape (#341).
+  - Term_grammar with spelling on, and raise_spelling_error (#342).
+  - Ctime.parse_time in every zone it names, and name_of_month (#344).
+  - The rewrite debugger's shape, operator and sequent-context traces (#345).
+  - Http_simple.serve logs and goes on after End_of_file, Unix_error, Sys_error
+    (#346).
+  - The rewrite debugger's compiled-program forms (#347).
+  - Filter_summary reads the <= 1.0.24 resource form (#348).
+  - extract_term of a derived rewrite and of a derived conditional rewrite
+    (#349).
+  - context_vars, context_vars_info and so_vars_info over meta-terms (#351).
+  - quote_term and unquote_term in term_std and term_ds, side by side (#352).
+  - num_hyps, nth_hyp and explode_sequent on a damaged sequent encoding (#353).
+  - Arith's solver trace under its three debug flags (#354).
+  - TermAddr.subterm_exists on a context term, in term_std and term_ds (#355).
+  - JProver's S4 trace (ordering map, substitution) under s4prover (#356).
+  - Filter_summary.eprint_info on a module of every item kind (#357).
+  - Term_grammar.dest_xparam's typed forms (#358).
+  - TermOp's subterm-shape functions in term_std and term_ds, side by side
+    (#359).
+  - UntilFailMT, and Simple_print.string_of_bterm (#360).
+  - is_fo_term and explode_term on every kind of term, std beside ds (#361).
+  - The default printer's parameter list, two or more parameters (#363).
+  - Refine.check_rule and check_prim_rule (#364).
+  - Filter_grammar's save path (is_empty, is_modified, prepare_to_marshal,
+    unmarshal) (#365).
+  - create_rewrite under the "refine" and "rewrites" debug flags (#366).
+  - rstack_upgrade's free first-order arm (#367).
+  - The rule status a proof term records (pinned: always incomplete) (#368).
+  - create_input_form (Strict, debug flags) and mk_rewrite_hack (#369).
+  - Filter_grammar's printer (pinned: it turns the "grammar" flag on) (#370).
+  - The debug messages of five rewrite creators in Refine (#371).
+  - Filter_ocaml's resource encoders, and the old resource format (#372).
+  - The type reduction cases with each mechanism alone (#373).
+  - Term_grammar's parse_define, parse_type_rewrite and named type arrows
+    (#374).
+  - ops_eq on object ids and meta-string/token/operator parameters (#375).
+  - is_context_term and dest_context on damaged context terms (#376).
+  - JProver's Jordering.is_const and is_var on every position kind (#377).
+  - Supinf AF.value_of on a non-number raises Invalid_argument (#378).
+  - compile_so_redex_term's clash check and repeats; ds mk_var_param_term
+    (#379).
+  - Rewrite.print_rewrite_rule (print_contractum and print_strict) (#380).
+  - An address attribute in a proof's term form (mk_addr_term) (#381).
+  - Jordering.nodups, JProver's merge function for its position maps (#382).
+  - filter_ocaml round trip of a local open in a pattern and of A.B paths
+    (#383).
+  - Tacticals_boot.completeMT (#384).
+  - dest_simple_term_opname's refusals in term_std and term_ds (#385).
+  - `test_http_headers`: wait for the reply by select, and name why none came
+    (#387).
+  - ascii_io save over a file with an argument entry duplicated (#389).
+  - Rewrite_debug's printers on the kinds `test_rewrite_debug` misses (#391).
+  - Proof_boot.replace_child through a Pending node (#392).
+  - type_subst on existentials whose body is not a term; is_five_subterm (#393).
+  - TermOp's small destructors, std against ds (#394).
+  - Term_shape_gen's printers and opparam_of_term's refusal (#395).
+  - The std sequent's malformed-hypothesis refusals (#396).
+  - Rewrite_util.check_arity's refusals (#397).
+  - Supinf.treeMergeRight of a leaf and a pair with an Ignore side (#398).
+  - TermMan.dest_so_var on terms that are not second-order variables (#399).
+  - Ascii_scan's delimited-list readers (the Nuprl-5 link) (#400).
+  - Basic.term_to_stamp, the Nuprl-5 link's stamp reader (#401).
+  - Filter_cache's proof marshalling, a .prla round trip (#402).
+  - Rewrite_build_contractum.build_bname, a binder named by a meta parameter
+    (#403).
+  - Term_ty_infer's illegal-type guards; is_fo_term in std and ds (#404).
+  - Term_grammar.ty_param_of_param, a declaration's uncast parameters (#405).
+  - Extracts through a derived rule's wildcard arguments (#406).
+  - Filter_reflection.quote_term's sweeps, with and without a depth (#407).
+  - Filter_reflection's rule quoting, mk_rule_term and mk_intro_thm, on unquotes
+    and contexts (`test_filter_reflection_rule`) (#408).
+  - Db.string_to_parameter, the Nuprl-5 link's parameter reader (#409).
+  - Mbterm's MathBus encoding of terms, there and back (#410).
+  - Filter_ocaml's lowercase module-type paths, quotation and refusals (#412).
+  - Definition.apply_broadcast, the Nuprl-5 link's definition table: insert,
+    delete, commit and undo (`test_definition_broadcast`) (#413).
+  - Filter_ocaml on camlp5's own syntax nodes and class-path refusals (#414).
+  - MathBus's file form of a term, there and back (#416).
+  - Db.scan_level_expression, the Nuprl-5 link's level reader (#417).
+  - Db's reader of the Nuprl-5 link's term text, plain and compressed (#418).
+  - Mbterm.print_term, the Nuprl-5 link's debug printer (#419).
+  - Jtunify reads NewVar, NewVarQ and GammaPos positions as the kinds they stand
+    for; the rule trace pinned (`test_jtunify_kinds`) (#420).
+  - Filter_cache_fun's declarations: a term declared twice, a term of an
+    undeclared type, and the hash of a type rewrite (`test_filter_cache_decl`)
+    (#421).
+  - Proof.find_subgoal on a never-normalized box and past the last subgoal;
+    count_leaves through annotations and wrappers (`test_proof_find_subgoal`)
+    (#422).
+  - Proof.refine at a refined node replaces the step and matches the old
+    subgoals (`test_proof_boot_replace`) (#423).
+  - Filter_ocaml's camlp5 extension nodes do not come back from their terms
+    (`test_filter_ocaml_xtr`) (#424).
+  - Db's compressed bindings, parameters and operators in the Nuprl-5 link's
+    session term text (`test_db_items`) (#426).
+  - Registry's lookups, refusals and clear_registry (`test_registry_lookup`)
+    (#427).
+  - Term_grammar's typed subterms of a declaration, make_ty_term and
+    make_ty_bvar (`test_term_grammar_ty_bterms`) (#428).
+  - Term_ty_infer on a so-var or context used with two arities, and on one name
+    used as both (`test_term_ty_infer_arity`) (#429).
+  - Filter_ocaml's labelled arguments, their 2005 term form, and camlp5's
+    class-field groups (`test_filter_ocaml_lab_dcl`) (#430).
+  - Filter_cache_fun.mk_opname_kind, the parser's opname lookup, and its
+    refusals (`test_filter_cache_opname`) (#431).
+  - Refine.compute_dependencies over joined refiners, ML rules and rewrites
+    (`test_refine_deps`) (#432).
+  - Refine.extract_term and compute_dependencies through a joined refiner
+    (`test_refine_extract_join`) (#434).
+  - Term_ty_infer gives each hypothesis its own copy of an existential's
+    variable inside a term type (`test_term_ty_infer_exists_term`) (#436).
+  - Proof_boot's normalizer of composed steps, its replace_goal and replace_subg
+    arms (`test_proof_normalize`) (#438).
+  - Ascii_io's reader with its debug flag on, add_items_debug
+    (`test_ascii_io_debug`) (#439).
+  - Filter_cache's raw summary format, saved and loaded through summary_map
+    (`test_filter_cache_raw`) (#440).
+  - restrict_context_vars on a matched term context
+    (`test_rewrite_context_restrict`) (#442).
+  - Filter_cache_fun's revert_proofs and clear_info (`test_filter_cache_revert`)
+    (#444).
+  - Filter_cache_fun's expand_path and op-shape printing
+    (`test_filter_cache_expand`) (#445).
+  - Every summary item kind saved and loaded, as terms and raw
+    (`test_filter_cache_items`) (#446).
+  - An ML conditional rewrite, applied (`test_refine_ml_crw`) (#447).
+  - A rewrite parameter used as another kind (`test_rewrite_param_kinds`)
+    (#448).
+  - Filter_grammar's matched-pair lexer (`test_filter_grammar_pair`) (#449).
+  - `test_http_headers`: the three date headers (#450).
+  - Term_grammar's term-constructor antiquotations
+    (`test_term_grammar_con_anti`) (#451).
+  - Dform's default display of several bound variables (`test_dform_bvars`)
+    (#452).
+  - Dform's dform_depth check of unbalanced display forms (`test_dform_depth`)
+    (#453).
+  - Term_grammar's token casts, constant successor, [| |] sequent argument
+    (`test_term_grammar_casts`) (#454).
+  - Ascii_io's context hypotheses, read with the debug flag off and on
+    (`test_ascii_io_context`) (#455).
+  - Filter_ocaml's field through a module path, e.M.f
+    (`test_filter_ocaml_field_path`) (#456).
 
 ### Known not to work
 

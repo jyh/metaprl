@@ -1,0 +1,6 @@
+compute_dependencies ML rule mlr                             refused (test_refine_deps_ml!mlr: ML rules/rewrites can't be justified)
+compute_dependencies ML rewrite mlrw                         refused (test_refine_deps_ml!mlrw: ML rules/rewrites can't be justified)
+compute_dependencies rewrite pw                              [rewrite test_refine_deps_ml!pw]
+compute_dependencies rule ra (through the join)              [rule test_refine_deps_a!ra]
+compute_dependencies label A                                 Not_found
+compute_dependencies a name it does not have                 Not_found

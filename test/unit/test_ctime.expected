@@ -13,3 +13,17 @@ parse_time "Sun, 06 Nov 1994 08:49:37 GMT" = 784111777
 parse_time "Sun, 06 Nov 1994 03:49:37 EST" = 784111777
 parse_time "Sun, 06 Nov 1994 00:49:37 PST" = 784111777
 parse_time "not a date" = 0
+parse_time "Sun, 06 Nov 1994 04:49:37 EDT"  = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 02:49:37 CST"  = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 03:49:37 CDT"  = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 01:49:37 MST"  = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 02:49:37 MDT"  = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 01:49:37 PDT"  = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 08:49:37 gmt"  = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 08:49:37 UT"   = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 08:49:37 utc"  = 784111777 (the instant)
+parse_time "Sun, 06 Nov 1994 09:49:37 CET"  = 784115377
+parse_time "Sun, 06 Nov 1994 xx:49:37 GMT"  = 784082977
+parse_time "06 Dec 49 08 49 37 GMT"         = 2522393377
+parse_time "06 Dec 50 08 49 37 GMT"         = -601830623
+name_of_month 0-13: Unknown January February March April May June July August September October November December Unknown

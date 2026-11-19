@@ -1,0 +1,11 @@
+value TestLabelA StringId                28929
+identifier StringId 0x7101               TestLabelA
+value TestLabelB SubTypes                -1
+value TestLabelA SubTypes (not stored)   Failure undefined registry value for id: TestLabelA
+value Missing StringId                   Failure undefined registry value for id: Missing
+identifier StringId 0x7102 (missing)     Failure undefined identifier in registry table: StringId
+identifier SubTypes -1 (not bidirectional) Failure Not a bidirectional registry property
+value TestLabelA NoSuchType              Failure undefined registry value for id: TestLabelA
+after clear_registry false true          Failure undefined registry value for id: TestLabelA
+store after clear_registry false true    Not_found
+store after define_registry_type again   Not_found

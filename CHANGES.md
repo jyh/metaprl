@@ -60,6 +60,11 @@ against libmojave 1.1.1 or later:
   A `TERMS = std` proof census lost 8 proofs to these; it now loses none.
   term_std's `all_vars` also left out contexts-list names and `is_fo_term`
   called a sequent first-order (#72).
+- term_std's `is_fo_term` said a second-order variable (`'A['b]`) is
+  first-order, where term_ds says it is not; it now says it is not, as term_ds
+  does. Every caller in term_ty_infer tests `is_so_var_term` in the same
+  condition, so no type-inference decision changes, and a `TERMS = both`
+  refiner no longer sees two answers (#361 pins the old behaviour, #362).
 - term_ds's `match_terms` let a bound variable of the pattern match any
   subterm, so `lam x.f{'x}` matched `lam y.f{c}` (#63), and its `all_vars`
   left out the variables a bound term binds (#67).
@@ -221,6 +226,13 @@ against libmojave 1.1.1 or later:
   syntax error at the `}` of `<<foo{a; }>>` at characters 230-250 was
   reported at 239-260 instead of 239-240. It came in with the 2017 port
   from `Lexing.position` to `Ploc.t` (#271; pinned by #270).
+- `Filter_grammar.parse` raised `Invalid_argument "Char.chr"` on a quoted
+  lexeme with a decimal escape over 255 (`"\999"`): `string_of_lexeme` read
+  any three digits after a backslash as a character code, and it runs for
+  every token (`mk_lexer_term`), so a token that never reads the string
+  raised too. Such a backslash is now kept as written, as `"\q"` is. No
+  theory source has a decimal escape over 255 (#339 pins the old behaviour,
+  #340).
 - Three `Filter_exn` messages: `Bad command:` had no space before the
   command, `Bad_magic` said "that is is either", and `Bad_version` put a
   `, ` after the last supported version (#273; pinned by #272).
@@ -329,6 +341,23 @@ against libmojave 1.1.1 or later:
   two base-10^9 digits of a number, where `mb_number` writes them all, so a
   number of 19 digits or more lost its low digits on the way back (10^18 came
   back as 10^9).
+- The theory spelling check (`raise_spelling_error`) reported only the first
+  misspelled word of a comment: its printer called itself in one branch only,
+  so `"alpha wrold betta wrold"` reported `betta` alone. It now reports every
+  word, each with its locations. In a `doc` comment, which is parsed in math
+  mode, the words of `@url`, `@license` and `@comment` were checked and
+  `@spelling` added none; now `@spelling` adds its words and the other three
+  turn checking off. `topdoc` comments are unchanged, and a build that
+  reported no misspelled word still reports none (#342 pins the old
+  behaviour, #343).
+- `Refine.extract_term`'s error for a rule or rewrite that is not derived ran
+  the opname into the text (`...!ax_kcis not a derived rule/rewrite`); it now
+  has the space (#349 pins the old text, #350).
+- `Http_simple.serve` retried a failed `accept` for ever, so a server whose
+  listening socket had been closed spun, logging "accept failed", and never
+  returned. An `accept` that fails with `EBADF` or `ENOTSOCK` now ends the
+  service. On Windows (mingw) an accept on a closed socket neither fails nor
+  returns, so neither the spin nor the fix is checked there (#390).
 
 ### Tests
 

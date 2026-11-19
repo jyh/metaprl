@@ -1,0 +1,57 @@
+== read (debug false): the file written fresh
+   get_term alpha-equal to t1: true
+== read (debug false): an entry naming another that does not exist
+   get_term raised Invalid_argument("ASCII IO: invalid entry encountered by add_items")
+== read (debug false): an entry with an unknown label
+   get_term raised Invalid_argument("ASCII IO: invalid entry encountered by get_term: Q")
+== read (debug true): the file written fresh
+Nf f f NIL
+O o f
+Na a a NIL
+O o1 a
+T t o1
+VF F F\\ \\ t
+B b F
+NPerv Perv Perv NIL
+NPerv!xnil xnil xnil Perv
+O o2 xnil
+T t2 o2
+H h x t
+Nvar var var NIL
+P p Var x
+O o3 var p
+T t3 o3
+VG G G\\ H\\ t3
+S s t2\\ h\\ G
+B b3 s
+   get_term alpha-equal to t1: true
+== read (debug true): an entry naming another that does not exist
+Nf f f NIL
+O o f
+Na a a NIL
+O o1 a
+T t o1
+VF F F\\ \\ zz
+   get_term raised Invalid_argument("ASCII IO: invalid entry encountered by add_items_debug: VF F ...")
+== read (debug true): an entry with an unknown label
+Nf f f NIL
+O o f
+Na a a NIL
+O o1 a
+T t o1
+VF F F\\ \\ t
+B b F
+NPerv Perv Perv NIL
+NPerv!xnil xnil xnil Perv
+O o2 xnil
+T t2 o2
+H h x t
+Nvar var var NIL
+P p Var x
+O o3 var p
+T t3 o3
+VG G G\\ H\\ t3
+S s t2\\ h\\ G
+B b3 s
+T t4 o b b3
+   get_term raised Invalid_argument("ASCII IO: invalid entry encountered by get_term: Q")

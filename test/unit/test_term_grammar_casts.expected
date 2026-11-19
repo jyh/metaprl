@@ -1,0 +1,17 @@
+a token, an operator and a shape cast:
+  foo[a!b:sh]          [Shape b!a]
+  foo[a!b:op]          [Operator b!a]
+  foo[a!b!c:sh]        [Shape c!b!a]
+  foo[a!b:t]           [Token b!a]
+  foo[3:sh]            refused: Filter_type.BadParamCast(_, "sh")
+the successor of a constant:
+  foo[3']              [MLevel max(4)]
+  foo[3'']             [MLevel max(5)]
+  foo["s"']            refused: Filter_type.BadParamCast(_, "l")
+  foo[3' | x:l]        [MLevel max(4, x)]
+a sequent with an argument:
+  sequent [arg] { >- a }     arg
+  sequent [f{x}] { y: b >- a } f{x}
+  sequent [|arg|] { >- a }   sequent_arg{arg}
+  sequent [|f{x}|] { y: b >- a } sequent_arg{f{x}}
+  sequent { >- a }           sequent_arg
